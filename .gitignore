@@ -1,3 +1,13 @@
+BIKE/build/classes/.netbeans_automatic_build
+# NetBeans specific #
+BIKE/nbproject/private/
+BIKE/build/
+BIKE/nbbuild/
+BIKE/dist/
+BIKE/nbdist/
+BIKE/nbactions.xml
+BIKE/nb-configuration.xml
+
 *.class
 
 # Mobile Tools for Java (J2ME)
