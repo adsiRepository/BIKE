@@ -1,33 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//sena 2015 -- miguel gonzalez & ...
+
 package Modelo;
 
-import RecursosTemporales.ValidUser;
+import Vista.MenuPrincipal;
 
-/**
- *
- * @author Miguel
- */
 public class ClasePrincipal {
     
-    public static String usuario_session;
-    public static String rol;
-    public static String iduser;
-    public static ValidUser start;
-
-    /**
-     * @param args the command line arguments
-     */
+    public static String TITULO_DE_LA_APLICACION;//barra de titulo en la ventana pricipal
+    public static MenuPrincipal menu;
+    
+    //metodo principal o inicial de la aplicacion
     public static void main(String[] args) {
         // TODO code application logic here
-        
-        start = new ValidUser();
-        
-        start.setVisible(true);
-        
+        TITULO_DE_LA_APLICACION = "BIKEWORK";
+        menu = new MenuPrincipal();
+        menu.setVisible(true);
     }
     
 }

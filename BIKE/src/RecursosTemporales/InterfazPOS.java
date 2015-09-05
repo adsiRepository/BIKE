@@ -54,7 +54,7 @@ public class InterfazPOS extends javax.swing.JFrame {
         tblcnst.setModel(dtm);
         //--
         txtfch.setText(""+fecha.getDate());
-        txtcajero.setText(ClasePrincipal.usuario_session);
+        txtcajero.setText("");
         nofct = nofct+1;
         txtnfact.setText(""+nofct);
         //--

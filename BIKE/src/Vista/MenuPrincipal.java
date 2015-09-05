@@ -1,24 +1,89 @@
-                        
-                        // SENA BRETAÑA CALI //
 
 package Vista;
 
+import Controlador.Graficos;
+import static Modelo.ClasePrincipal.TITULO_DE_LA_APLICACION;
 import RecursosTemporales.GUsers;
-import RecursosTemporales.ReporteProductos;
-import RecursosTemporales.InterfazPOS;
-import Modelo.ClasePrincipal;
+import java.awt.Component;
+import java.awt.TextArea;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import org.pushingpixels.substance.api.shaper.StandardButtonShaper;
 
 /**
- * creation: 19/11/2014, 08:02:35 AM
- * author  : Aprendiz
+ * author  : miguel, braden, never
  */
 public class MenuPrincipal extends javax.swing.JFrame {
 
+    private final String[] columnas_tabla;
+    private final Class[] tiposCampos;
+    
     /** Creates new form MenuPrincipal */
     public MenuPrincipal() {
         initComponents();
+        
+//configuracion de la ventana
         this.setExtendedState(MAXIMIZED_BOTH);
-        setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
+        this.setTitle(TITULO_DE_LA_APLICACION);
+        //AQUI VA LA IMAGEN PARA EL ICONO DE LA APLICACION        //directorio     //nombre, al cambiar hay que tener en cuenta la extension del archivo
+        this.setIconImage(new ImageIcon(getClass().getResource("../Recursos/imgs/icon_program.png")).getImage());
+        //botones
+        this.btn_empleados_.putClientProperty(SubstanceLookAndFeel.BUTTON_SHAPER_PROPERTY, new StandardButtonShaper());
+        
+//configuracion de la tabla
+        tiposCampos = new Class[]{
+            java.lang.String.class,
+            java.lang.Boolean.class,
+            TextArea.class,
+            //Date.class,
+            java.lang.String.class,
+            java.lang.String.class,
+            JButton.class
+        };
+        columnas_tabla =  new String[]{
+            "Empleado", "Activo", "Última Tarea", "Inicio", "Entrega", "Accion" 
+        };
+        //uso del metodo
+        refrescarTablaActividades();
+        //--
+    }
+    
+    //definicion del metodo
+    private void refrescarTablaActividades(){
+        
+        Object[][] datos = new Object[][]{
+            {"Miguel Gonzalez", true, "5 '26 TT Tradicional", "27/may/15 10:30", "", new JButton("Clic aquí")},
+            {"Jerry Gutierrez", true, "30 Aros '20 Econo", "26/may/15 11:25", "", new JButton("Clic aquí")}
+        };
+        tabla_actividades.setModel(new DefaultTableModel(datos, columnas_tabla){
+            Class[] tipCampos = tiposCampos;
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return tipCampos[columnIndex];
+            }
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Sobrescribimos este método para evitar que la columna que contiene los botones sea editada.
+                return !(this.getColumnClass(column).equals(JButton.class));
+            }
+        });
+        tabla_actividades.setDefaultRenderer(JButton.class, new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable jtable, Object object, boolean isSelected, boolean hasFocus, int row, int col) {
+                /**
+                 * Observen que todo lo que hacemos en éste método es retornar el objeto que se va a dibujar en la 
+                 * celda. Esto significa que se dibujará en la celda el objeto que devuelva el TableModel. También 
+                 * significa que este renderer nos permitiría dibujar cualquier objeto gráfico en la grilla, pues 
+                 * retorna el objeto tal y como lo recibe.
+                 */
+                return (Component) object;
+            }
+        });
     }
 
     /** This method is called from within the constructor to
@@ -33,22 +98,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
-        Escritorio = new javax.swing.JDesktopPane();
-        jLabel1 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        escritorio = new Graficos.Escritorio();
+        scroll_tabla_acts = new javax.swing.JScrollPane();
+        tabla_actividades = new javax.swing.JTable();
+        btn_empleados_ = new javax.swing.JButton();
+        btn_produccion_ = new javax.swing.JButton();
+        btn_inventario_ = new javax.swing.JButton();
+        btn_revision_ = new javax.swing.JButton();
+        barraMenu_1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
-        GClientes_ = new javax.swing.JMenuItem();
+        mnuArchivo_newOrden = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         mnuMercancia_ = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         GestionMercancia_ = new javax.swing.JMenuItem();
         mnuProveedores_ = new javax.swing.JMenu();
         GestionProveedores_ = new javax.swing.JMenuItem();
         mnuGUsers_ = new javax.swing.JMenu();
         GestionUsuarios_ = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
-        GProductos_ = new javax.swing.JMenuItem();
-        ReporteProductos = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar2.add(jMenu1);
@@ -58,39 +126,97 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Escritorio.setBackground(new java.awt.Color(153, 153, 0));
+        escritorio.setBackground(new java.awt.Color(26, 105, 159));
+        escritorio.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+        escritorio.setAutoscrolls(true);
+        escritorio.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/MenuPrincipal.png"))); // NOI18N
+        scroll_tabla_acts.setAutoscrolls(true);
 
-        javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
-        Escritorio.setLayout(EscritorioLayout);
-        EscritorioLayout.setHorizontalGroup(
-            EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        tabla_actividades.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tabla_actividades.getTableHeader().setReorderingAllowed(false);
+        scroll_tabla_acts.setViewportView(tabla_actividades);
+
+        btn_empleados_.setText("Empleados");
+
+        btn_produccion_.setText("Produccion");
+        btn_produccion_.setPreferredSize(new java.awt.Dimension(100, 50));
+
+        btn_inventario_.setText("Inventario");
+        btn_inventario_.setPreferredSize(new java.awt.Dimension(100, 50));
+
+        btn_revision_.setText("Revisiones");
+        btn_revision_.setPreferredSize(new java.awt.Dimension(100, 50));
+
+        javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
+        escritorio.setLayout(escritorioLayout);
+        escritorioLayout.setHorizontalGroup(
+            escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(escritorioLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(104, 104, 104))
+            .addGroup(escritorioLayout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 789, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
-        EscritorioLayout.setVerticalGroup(
-            EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(EscritorioLayout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        escritorioLayout.setVerticalGroup(
+            escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
+                .addContainerGap(80, Short.MAX_VALUE)
+                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54)
+                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(97, 97, 97))
         );
-        Escritorio.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(scroll_tabla_acts, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(btn_empleados_, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(btn_produccion_, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(btn_inventario_, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(btn_revision_, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jMenu3.setText("Clientes");
+        jMenu3.setText("Archivo");
 
-        GClientes_.setText("Gestion Clientes");
-        GClientes_.addActionListener(new java.awt.event.ActionListener() {
+        mnuArchivo_newOrden.setText("Parametrizacion");
+        mnuArchivo_newOrden.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GClientes_ActionPerformed(evt);
+                mnuArchivo_newOrdenActionPerformed(evt);
             }
         });
-        jMenu3.add(GClientes_);
+        jMenu3.add(mnuArchivo_newOrden);
 
-        jMenuBar1.add(jMenu3);
+        jMenuItem1.setText("Nuevo Empleado");
+        jMenu3.add(jMenuItem1);
 
-        mnuMercancia_.setText("Mercancia");
+        jMenuItem3.setText("Cerrar");
+        jMenu3.add(jMenuItem3);
 
-        GestionMercancia_.setText("Control de Mercancia");
+        barraMenu_1.add(jMenu3);
+
+        mnuMercancia_.setText("Tareas");
+
+        jMenuItem4.setText("Nueva Orden");
+        mnuMercancia_.add(jMenuItem4);
+
+        GestionMercancia_.setText("Revisar Despachos");
         GestionMercancia_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GestionMercancia_ActionPerformed(evt);
@@ -98,11 +224,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         mnuMercancia_.add(GestionMercancia_);
 
-        jMenuBar1.add(mnuMercancia_);
+        barraMenu_1.add(mnuMercancia_);
 
-        mnuProveedores_.setText("Proveedores");
+        mnuProveedores_.setText("Almacen");
 
-        GestionProveedores_.setText("Gestion de Proveeedores");
+        GestionProveedores_.setText("Stock");
         GestionProveedores_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GestionProveedores_ActionPerformed(evt);
@@ -110,11 +236,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         mnuProveedores_.add(GestionProveedores_);
 
-        jMenuBar1.add(mnuProveedores_);
+        barraMenu_1.add(mnuProveedores_);
 
-        mnuGUsers_.setText("Usuarios");
+        mnuGUsers_.setText("Herramientas");
 
-        GestionUsuarios_.setText("Gestion Usuarios");
+        GestionUsuarios_.setText("Apariencia");
         GestionUsuarios_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GestionUsuarios_ActionPerformed(evt);
@@ -122,73 +248,41 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         mnuGUsers_.add(GestionUsuarios_);
 
-        jMenuBar1.add(mnuGUsers_);
+        barraMenu_1.add(mnuGUsers_);
 
-        jMenu4.setText("Facturacion");
-
-        jMenuItem1.setText("POS");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu4.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu4);
-
-        jMenu5.setText("Productos");
-
-        GProductos_.setText("Gestion Productos");
-        GProductos_.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GProductos_ActionPerformed(evt);
-            }
-        });
-        jMenu5.add(GProductos_);
-
-        ReporteProductos.setText("Reportes de Productos");
-        ReporteProductos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ReporteProductosActionPerformed(evt);
-            }
-        });
-        jMenu5.add(ReporteProductos);
-
-        jMenuBar1.add(jMenu5);
-
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(barraMenu_1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Escritorio, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(escritorio)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Escritorio, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(escritorio)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void GClientes_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GClientes_ActionPerformed
+    private void mnuArchivo_newOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivo_newOrdenActionPerformed
         // TODO add your handling code here:
         
         DespachoOrden clnt = new DespachoOrden();
-        Escritorio.add(clnt);
+        escritorio.add(clnt);
         clnt.setVisible(true);
         clnt.toFront();
         
 
-    }//GEN-LAST:event_GClientes_ActionPerformed
+    }//GEN-LAST:event_mnuArchivo_newOrdenActionPerformed
 
     private void GestionUsuarios_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GestionUsuarios_ActionPerformed
         // TODO add your handling code here:
         
         GUsers usr = new GUsers();
         //agrega al escritorio o mas bien desktoppane la ventana de clientes.
-        Escritorio.add(usr);
+        escritorio.add(usr);
         //Hace visible el formulario de clientes.
         usr.setVisible(true);
         //envia el formulario de clientes al frente.
@@ -200,7 +294,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         GestionEmpleados merc = new GestionEmpleados();
-        Escritorio.add(merc);
+        escritorio.add(merc);
         merc.setVisible(true);
         merc.toFront();
         
@@ -210,51 +304,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         Inventarios prov = new Inventarios();
-        Escritorio.add(prov);
+        escritorio.add(prov);
         prov.setVisible(true);
         prov.toFront();
         
     }//GEN-LAST:event_GestionProveedores_ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-        
-        InterfazPOS venta = new InterfazPOS();
-        //Escritorio.add(venta);
-        venta.setVisible(true);
-        venta.toFront();
-        
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void GProductos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GProductos_ActionPerformed
-        // TODO add your handling code here:
-        
-        Pagos compra = new Pagos();
-        Escritorio.add(compra);
-        compra.setVisible(true);
-        compra.toFront();
-        
-    }//GEN-LAST:event_GProductos_ActionPerformed
-
-    private void ReporteProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReporteProductosActionPerformed
-        // TODO add your handling code here:
-        
-        ReporteProductos report = new ReporteProductos();
-        Escritorio.add(report);
-        report.setVisible(true);
-        report.toFront();
-        
-    }//GEN-LAST:event_ReporteProductosActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+        // Set the Nimbus look and feel
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        // If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        // For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -262,45 +322,42 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MenuPrincipal().setVisible(true);
-            }
+        // Create and display the form
+        java.awt.EventQueue.invokeLater(() -> {
+            new MenuPrincipal().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane Escritorio;
-    private javax.swing.JMenuItem GClientes_;
-    private javax.swing.JMenuItem GProductos_;
     private javax.swing.JMenuItem GestionMercancia_;
     private javax.swing.JMenuItem GestionProveedores_;
     private javax.swing.JMenuItem GestionUsuarios_;
-    private javax.swing.JMenuItem ReporteProductos;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenuBar barraMenu_1;
+    private javax.swing.JButton btn_empleados_;
+    private javax.swing.JButton btn_inventario_;
+    private javax.swing.JButton btn_produccion_;
+    private javax.swing.JButton btn_revision_;
+    public static javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem mnuArchivo_newOrden;
     private javax.swing.JMenu mnuGUsers_;
     private javax.swing.JMenu mnuMercancia_;
     private javax.swing.JMenu mnuProveedores_;
+    private javax.swing.JScrollPane scroll_tabla_acts;
+    private javax.swing.JTable tabla_actividades;
     // End of variables declaration//GEN-END:variables
 
 }

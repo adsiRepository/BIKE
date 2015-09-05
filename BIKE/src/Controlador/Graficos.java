@@ -13,14 +13,14 @@ import javax.swing.JDesktopPane;
 
 public class Graficos {
     
-    public class Escritorio extends JDesktopPane{
+    public static class Escritorio extends JDesktopPane{
         
         private final Image fondo_escritorio;//variable de imagen de fondo
         
         public Escritorio(){
             super();  
             //justo en la siguiente linea, mediante codigo se aplica el fondo del escritorio señalando la ruta, el nombre y la extension del archivo.
-            fondo_escritorio = new ImageIcon(getClass().getResource("../Recursos/Imagenes/fondo_escritorio.png")).getImage();
+            fondo_escritorio = new ImageIcon(getClass().getResource("../Recursos/imgs/fondo_principal.png")).getImage();//hay que tener en cuenta la extension del archivo
         }
         
         @Override//mediante metodo propio de JDesktopPane
