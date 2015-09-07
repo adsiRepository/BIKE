@@ -52,10 +52,13 @@
             <Property name="text" type="java.lang.String" value="Tareas"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+            <MenuItem class="javax.swing.JMenuItem" name="mnuTareas_nuevaOrden_">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nueva Orden"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuTareas_nuevaOrden_ActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="GestionMercancia_">
               <Properties>

@@ -11,8 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.shaper.StandardButtonShaper;
 
 /**
  * author  : miguel, braden, never
@@ -33,7 +31,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         //AQUI VA LA IMAGEN PARA EL ICONO DE LA APLICACION        //directorio     //nombre, al cambiar hay que tener en cuenta la extension del archivo
         this.setIconImage(new ImageIcon(getClass().getResource("../Recursos/imgs/icon_program.png")).getImage());
         //botones
-        this.btn_empleados_.putClientProperty(SubstanceLookAndFeel.BUTTON_SHAPER_PROPERTY, new StandardButtonShaper());
         
 //configuracion de la tabla
         tiposCampos = new Class[]{
@@ -55,16 +52,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
     //definicion del metodo
     private void refrescarTablaActividades(){
-        
+        //tuto perfecto para aprender a insertar botones en una celda de cualquier tabla -> https://www.youtube.com/watch?v=bVknuhawXsI
         Object[][] datos = new Object[][]{
             {"Miguel Gonzalez", true, "5 '26 TT Tradicional", "27/may/15 10:30", "", new JButton("Clic aquí")},
             {"Jerry Gutierrez", true, "30 Aros '20 Econo", "26/may/15 11:25", "", new JButton("Clic aquí")}
         };
         tabla_actividades.setModel(new DefaultTableModel(datos, columnas_tabla){
-            Class[] tipCampos = tiposCampos;
             @Override
             public Class getColumnClass(int columnIndex) {
-                return tipCampos[columnIndex];
+                return tiposCampos[columnIndex];
             }
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -111,7 +107,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         mnuMercancia_ = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        mnuTareas_nuevaOrden_ = new javax.swing.JMenuItem();
         GestionMercancia_ = new javax.swing.JMenuItem();
         mnuProveedores_ = new javax.swing.JMenu();
         GestionProveedores_ = new javax.swing.JMenuItem();
@@ -213,8 +209,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         mnuMercancia_.setText("Tareas");
 
-        jMenuItem4.setText("Nueva Orden");
-        mnuMercancia_.add(jMenuItem4);
+        mnuTareas_nuevaOrden_.setText("Nueva Orden");
+        mnuTareas_nuevaOrden_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuTareas_nuevaOrden_ActionPerformed(evt);
+            }
+        });
+        mnuMercancia_.add(mnuTareas_nuevaOrden_);
 
         GestionMercancia_.setText("Revisar Despachos");
         GestionMercancia_.addActionListener(new java.awt.event.ActionListener() {
@@ -269,11 +270,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void mnuArchivo_newOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivo_newOrdenActionPerformed
         // TODO add your handling code here:
         
-        DespachoOrden clnt = new DespachoOrden();
+        OrdenProduccion clnt = new OrdenProduccion();
         escritorio.add(clnt);
         clnt.setVisible(true);
         clnt.toFront();
-        
 
     }//GEN-LAST:event_mnuArchivo_newOrdenActionPerformed
 
@@ -309,6 +309,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         prov.toFront();
         
     }//GEN-LAST:event_GestionProveedores_ActionPerformed
+
+    private void mnuTareas_nuevaOrden_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTareas_nuevaOrden_ActionPerformed
+        
+        OrdenProduccion orden = new OrdenProduccion();
+        escritorio.add(orden);
+        orden.setVisible(true);
+        orden.toFront();
+        
+    }//GEN-LAST:event_mnuTareas_nuevaOrden_ActionPerformed
 
     public static void main(String args[]) {
         // Set the Nimbus look and feel
@@ -351,11 +360,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem mnuArchivo_newOrden;
     private javax.swing.JMenu mnuGUsers_;
     private javax.swing.JMenu mnuMercancia_;
     private javax.swing.JMenu mnuProveedores_;
+    private javax.swing.JMenuItem mnuTareas_nuevaOrden_;
     private javax.swing.JScrollPane scroll_tabla_acts;
     private javax.swing.JTable tabla_actividades;
     // End of variables declaration//GEN-END:variables
