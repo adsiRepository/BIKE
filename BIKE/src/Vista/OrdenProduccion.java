@@ -3,6 +3,7 @@
 
 package Vista;
 
+import Modelo.ModeloTabla.SpinnCellTable;
 import static Vista.MenuPrincipal.escritorio;
 
 import java.awt.Dimension;
@@ -16,6 +17,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import java.util.EventObject;
 import java.awt.Component;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 
 /**
@@ -29,12 +32,63 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     private final String[] COLUMNAS_TABLA_DESPACHO;
     private final Class[] TIPOS_COLUMNAS_TABLA_DESPACHOS;
     private int fila_tabla, col_tabla;
-    //JComboBox combo;
+    // <editor-fold defaultstate="collapsed" desc="CLASES PARA LA CONFIGURACION DE COMPONENTES EDITORES DE LA TABLA DE DESPACHO">
+        //FUENTES
+        //insertar componentes en celdas de tabla ->
+        //http://www.java2s.com/Tutorial/Java/0240__Swing/UsingaJComboBoxinaCellinaJTableComponent.htm
+        //http://www.chuidiang.com/java/tablas/tablaeditor/tablaeditor.php
+    private static class ComponentCellRenderer implements TableCellRenderer{
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            return (Component) value;
+        }
+    }
+    private static class ComponentCellEditor implements TableCellEditor {
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            return (Component) value;
+        }
+        @Override
+        public Object getCellEditorValue() {
+            return "CellEditorValue";//combo.getSelectedItem().toString();
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        @Override
+        public boolean isCellEditable(EventObject anEvent) {
+            return true;
+        }
+        @Override
+        public boolean shouldSelectCell(EventObject anEvent) {
+            return true;
+        }
+        @Override
+        public boolean stopCellEditing() {
+            return true;
+        }
+        @Override
+        public void cancelCellEditing() {
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            System.out.println("Edicion Cancelada");
+        }
+        @Override
+        public void addCellEditorListener(CellEditorListener l) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            //System.out.println("addCellEditorListener");
+        }
+        @Override
+        public void removeCellEditorListener(CellEditorListener l) {
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            System.out.println("removeCellEditorListener");
+        }
+    }// </editor-fold>
     
     //constructor de ésta ventana
     public OrdenProduccion() {
         initComponents();
         
+        tabla_despacho_.setDefaultRenderer(Component.class, new ComponentCellRenderer());
+        tabla_despacho_.setDefaultEditor(Component.class, new ComponentCellEditor());
+
 //configuraciones de esta ventana
         this.title = "Despacho de Ordenes de Ensamble";
         this.closable = true;
@@ -47,7 +101,7 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         //inicializacion de variables
         COLUMNAS_TABLA_DESPACHO = new String[]{"Componentes", "Item Disponible", "Cantidad"};
         TIPOS_COLUMNAS_TABLA_DESPACHOS = new Class[]{
-            String.class, JComboBox.class, Integer.class //esto quiere decir que las celdas de la tabla serán: String, un combo con las partes seleccionables y la cantidad de estas 
+            String.class, JComboBox.class, SpinnCellTable.class //esto quiere decir que las celdas de la tabla serán: String, un combo con las partes seleccionables y la cantidad de estas 
         };
         fila_tabla = 0;  col_tabla = 0;
         
@@ -68,7 +122,7 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         scroll_items_selec = new javax.swing.JScrollPane();
         tabla_despacho_ = new javax.swing.JTable();
         btn_prueba_ = new javax.swing.JButton();
-        btn_retirar_accesorio = new javax.swing.JButton();
+        btn_selec_repuestos_ = new javax.swing.JButton();
         panel_primer_filtro_emsamble = new javax.swing.JPanel();
         combo_tipo_ensamble = new javax.swing.JComboBox();
         lbl_tipo_ensamble_ = new javax.swing.JLabel();
@@ -130,10 +184,10 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
             }
         });
 
-        btn_retirar_accesorio.setToolTipText("Despachar Mercancía para Orden Seleccionada");
-        btn_retirar_accesorio.addActionListener(new java.awt.event.ActionListener() {
+        btn_selec_repuestos_.setToolTipText("Despachar Mercancía para Orden Seleccionada");
+        btn_selec_repuestos_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_retirar_accesorioActionPerformed(evt);
+                btn_selec_repuestos_ActionPerformed(evt);
             }
         });
 
@@ -277,14 +331,20 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(578, 578, 578))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lbl_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lbl_hora_, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -300,15 +360,10 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btn_prueba_, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btn_retirar_accesorio, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lbl_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lbl_hora_, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(68, 68, 68))
+                            .addComponent(btn_selec_repuestos_, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addGap(18, 18, 18)
+                .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,7 +373,7 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(btn_retirar_accesorio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_selec_repuestos_, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btn_prueba_, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(97, 97, 97))
@@ -342,7 +397,7 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lbl_fecha_)
                             .addComponent(lbl_hora_))
-                        .addGap(38, 38, 38)
+                        .addGap(40, 40, 40)
                         .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
@@ -350,23 +405,27 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     //metodos del programador para esta clase (OrdenProduccion) ->
     //metodo para llenar la tabla de despachos
-    @SuppressWarnings("Convert2Lambda")
+    
     private void plasmarTablaDespacho(){
         
         JComboBox combo_1 = new JComboBox(new Object[]{"Marco Trad '26 disco", "Marco sin disco", "Marco Suspension"});
         JComboBox combo_2 = new JComboBox(new Object[]{"GW Suspension", "Exceed Suspension", "Logan"});
         
+        SpinnerNumberModel spinnummodel = new SpinnerNumberModel(1, 0, 10, 1); // Dato visualizado al inicio en el spinner// Límite inferior// Límite superior // incremento-decremento
+        SpinnCellTable spinnCell = new SpinnCellTable(spinnummodel);
+        /*TableColumn colSpinn = tabla_despacho_.getColumnModel().getColumn(2);
+        colSpinn.setCellRenderer(new SpinnCellRenderer());
+        colSpinn.setCellEditor(new );*/
+        
         Object[][] datosFict = new Object[][]{
-            {"Marco", combo_1, 5},
-            {"Tenedor", combo_2, 3}
+            {"Marco", /*"loco"*/combo_1, spinnCell},
+            {"Tenedor", /*"pedo"*/combo_2, spinnCell}
         };
         
-        //FUENTES
-        //insertar componentes en celdas de tabla ->
-        //http://www.java2s.com/Tutorial/Java/0240__Swing/UsingaJComboBoxinaCellinaJTableComponent.htm
-        //http://www.chuidiang.com/java/tablas/tablaeditor/tablaeditor.php
+        
         dtm = new DefaultTableModel(datosFict, COLUMNAS_TABLA_DESPACHO){//instanciamos un nuevo DefaultTableModel y redifinimos sus metodos basicos
             @Override//este metodo lo utiliza la propia clase(DefaultTableModel) para definir el tipo de campo para sus columnas  
             public Class getColumnClass(int columnIndex) {
@@ -374,72 +433,20 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
             }
             @Override// en este definimos las celdas editables y las no
             public boolean isCellEditable(int row, int column) {
-                return !(this.getColumnClass(column).equals(String.class));
+                return true;//!(this.getColumnClass(column).equals(String.class));
             }
         };
         tabla_despacho_.setModel(dtm);//aplicamos el modelo a la tabla
         //render = interprete => es el que dibujar el componente graficamente en la celda
-        tabla_despacho_.setDefaultRenderer(JComboBox.class, new TableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                return (Component)value;
-            }
-        });
-        //editor es el que hace que el combobox tenga la capacidad de determinar o editar el valor de la celda
-        tabla_despacho_.setDefaultEditor(JComboBox.class, new TableCellEditor(){
 
-            @Override
-            public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-                return (Component)value;
-            }
-
-            @Override
-            public Object getCellEditorValue() {
-                //System.out.print(combo.getSelectedItem());
-                return "CellEditorValue";//combo.getSelectedItem().toString();
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean isCellEditable(EventObject anEvent) {
-                return true;
-            }
-
-            @Override
-            public boolean shouldSelectCell(EventObject anEvent) {
-                return true;
-            }
-
-            @Override
-            public boolean stopCellEditing() {
-                return true;
-            }
-
-            @Override
-            public void cancelCellEditing() {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                System.out.println("Edicion Cancelada");
-            }
-
-            @Override
-            public void addCellEditorListener(CellEditorListener l) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                //System.out.println("addCellEditorListener");
-            }
-
-            @Override
-            public void removeCellEditorListener(CellEditorListener l) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                System.out.println("removeCellEditorListener");
-            }
-            
-        });
     }
     //--
 
+//--   
+    
 //--
     
-    public void LimpiarPantalla(){
+    public void limpiarPantalla(){
             combo_tipo_ensamble.setSelectedIndex(0);
         try{
             for( int i=0; i < tabla_despacho_.getRowCount(); i++ ){
@@ -460,15 +467,15 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     
     }//GEN-LAST:event_btn_Cancelar_DespachoActionPerformed
 
-    private void btn_retirar_accesorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_retirar_accesorioActionPerformed
+    private void btn_selec_repuestos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selec_repuestos_ActionPerformed
         
         System.out.println("fila 1 -> "+((JComboBox)dtm.getValueAt(0, 1)).getSelectedItem());
         
-    }//GEN-LAST:event_btn_retirar_accesorioActionPerformed
+    }//GEN-LAST:event_btn_selec_repuestos_ActionPerformed
 
     private void btn_prueba_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_prueba_ActionPerformed
         
-        System.out.println("fila 2 -> "+((JComboBox)dtm.getValueAt(1, 1)).getSelectedItem());
+        System.out.println("fila 2, col 3 -> "+((JSpinner)dtm.getValueAt(1, 2)).getValue());
         
     }//GEN-LAST:event_btn_prueba_ActionPerformed
 
@@ -495,8 +502,8 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     private javax.swing.JButton btn_Despachar_Orden;
     private javax.swing.JButton btn_add_accesorio1;
     private javax.swing.JButton btn_prueba_;
-    private javax.swing.JButton btn_retirar_accesorio;
     private javax.swing.JButton btn_retirar_accesorio1;
+    private javax.swing.JButton btn_selec_repuestos_;
     private javax.swing.JComboBox combo_ensamblador_selec;
     private javax.swing.JComboBox combo_ref_tamaño;
     private javax.swing.JComboBox combo_tipo_ensamble;
