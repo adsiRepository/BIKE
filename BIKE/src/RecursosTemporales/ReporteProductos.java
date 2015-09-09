@@ -15,7 +15,7 @@ import java.sql.Statement;//Permite recibir instrucciones Mysql en Java
 import java.sql.PreparedStatement;
 //import java.util.*;
 
-import Modelo.ClasePrincipal;
+import Modelo.ClaseRaiz;
 
 import ConexionBD.ConnBD;
 import Controlador.CtrData;

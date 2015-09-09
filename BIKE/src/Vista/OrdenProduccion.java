@@ -3,6 +3,8 @@
 
 package Vista;
 
+import Modelo.ClaseRaiz.ComponentCellEditor;
+import Modelo.ClaseRaiz.ComponentCellRenderer;
 import Modelo.ModeloTabla.SpinnCellTable;
 import static Vista.MenuPrincipal.escritorio;
 
@@ -32,55 +34,6 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     private final String[] COLUMNAS_TABLA_DESPACHO;
     private final Class[] TIPOS_COLUMNAS_TABLA_DESPACHOS;
     private int fila_tabla, col_tabla;
-    // <editor-fold defaultstate="collapsed" desc="CLASES PARA LA CONFIGURACION DE COMPONENTES EDITORES DE LA TABLA DE DESPACHO">
-        //FUENTES
-        //insertar componentes en celdas de tabla ->
-        //http://www.java2s.com/Tutorial/Java/0240__Swing/UsingaJComboBoxinaCellinaJTableComponent.htm
-        //http://www.chuidiang.com/java/tablas/tablaeditor/tablaeditor.php
-    private static class ComponentCellRenderer implements TableCellRenderer{
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            return (Component) value;
-        }
-    }
-    private static class ComponentCellEditor implements TableCellEditor {
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            return (Component) value;
-        }
-        @Override
-        public Object getCellEditorValue() {
-            return "CellEditorValue";//combo.getSelectedItem().toString();
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-        @Override
-        public boolean isCellEditable(EventObject anEvent) {
-            return true;
-        }
-        @Override
-        public boolean shouldSelectCell(EventObject anEvent) {
-            return true;
-        }
-        @Override
-        public boolean stopCellEditing() {
-            return true;
-        }
-        @Override
-        public void cancelCellEditing() {
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            System.out.println("Edicion Cancelada");
-        }
-        @Override
-        public void addCellEditorListener(CellEditorListener l) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            //System.out.println("addCellEditorListener");
-        }
-        @Override
-        public void removeCellEditorListener(CellEditorListener l) {
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            System.out.println("removeCellEditorListener");
-        }
-    }// </editor-fold>
     
     //constructor de ésta ventana
     public OrdenProduccion() {
@@ -421,8 +374,8 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         colSpinn.setCellEditor(new );*/
         
         Object[][] datosFict = new Object[][]{
-            {"Marco", /*"loco"*/combo_1, spinnCell},
-            {"Tenedor", /*"pedo"*/combo_2, spinnCell}
+            {"Marco", combo_1, spinnCell},
+            {"Tenedor", combo_2, spinnCell}
         };
         
         
@@ -433,7 +386,7 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
             }
             @Override// en este definimos las celdas editables y las no
             public boolean isCellEditable(int row, int column) {
-                return true;//!(this.getColumnClass(column).equals(String.class));
+                return !(this.getColumnClass(column).equals(String.class));
             }
         };
         tabla_despacho_.setModel(dtm);//aplicamos el modelo a la tabla

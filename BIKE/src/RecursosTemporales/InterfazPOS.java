@@ -3,7 +3,7 @@
 
 package RecursosTemporales;
 
-import Modelo.ClasePrincipal;
+import Modelo.ClaseRaiz;
 
 import Controlador.CtrData;
 import Modelo.MdlData;

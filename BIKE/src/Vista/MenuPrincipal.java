@@ -2,15 +2,13 @@
 package Vista;
 
 import Controlador.Graficos;
-import static Modelo.ClasePrincipal.TITULO_DE_LA_APLICACION;
+import Modelo.ClaseRaiz;
+import Modelo.ModeloTabla.CellTableButton;
 import RecursosTemporales.GUsers;
-import java.awt.Component;
 import java.awt.TextArea;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 /**
  * author  : miguel, braden, never
@@ -19,28 +17,34 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private final String[] columnas_tabla;
     private final Class[] tiposCampos;
+    private DefaultTableModel dtm_tabla_actividades;
+    private int fila_tabla, col_tabla;
+    //protected static Dimension dimensionMenu_Pantalla;
     
     /** Creates new form MenuPrincipal */
     public MenuPrincipal() {
         initComponents();
         
-//configuracion de la ventana
+        tabla_actividades.setDefaultRenderer(CellTableButton.class, new ClaseRaiz.ComponentCellRenderer());
+        //tabla_actividades.setDefaultEditor(CellTableButton.class, new ClaseRaiz.ComponentCellEditor());
+        TableColumn colButtons = tabla_actividades.getColumnModel().getColumn(5);
+        //CellTableButton boton_celda = new 
+        //colButtons.setCellEditor(null);
+        
+    // <editor-fold defaultstate="collapsed" desc="Configuracion de la Ventana">
         this.setExtendedState(MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
-        this.setTitle(TITULO_DE_LA_APLICACION);
-        //AQUI VA LA IMAGEN PARA EL ICONO DE LA APLICACION        //directorio     //nombre, al cambiar hay que tener en cuenta la extension del archivo
-        this.setIconImage(new ImageIcon(getClass().getResource("../Recursos/imgs/icon_program.png")).getImage());
-        //botones
-        
+    // </editor-fold>
+       
 //configuracion de la tabla
         tiposCampos = new Class[]{
-            java.lang.String.class,
-            java.lang.Boolean.class,
+            String.class,
+            Boolean.class,
             TextArea.class,
             //Date.class,
-            java.lang.String.class,
-            java.lang.String.class,
-            JButton.class
+            String.class,
+            String.class,
+            CellTableButton.class
         };
         columnas_tabla =  new String[]{
             "Empleado", "Activo", "Última Tarea", "Inicio", "Entrega", "Accion" 
@@ -54,8 +58,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void refrescarTablaActividades(){
         //tuto perfecto para aprender a insertar botones en una celda de cualquier tabla -> https://www.youtube.com/watch?v=bVknuhawXsI
         Object[][] datos = new Object[][]{
-            {"Miguel Gonzalez", true, "5 '26 TT Tradicional", "27/may/15 10:30", "", new JButton("Clic aquí")},
-            {"Jerry Gutierrez", true, "30 Aros '20 Econo", "26/may/15 11:25", "", new JButton("Clic aquí")}
+            {"Miguel Gonzalez", true, "5 '26 TT Tradicional", "27/may/15 10:30", "", new CellTableButton("Clic aquí")},
+            {"Jerry Gutierrez", true, "30 Aros '20 Econo", "26/may/15 11:25", "", new CellTableButton("Clic aquí")}
         };
         tabla_actividades.setModel(new DefaultTableModel(datos, columnas_tabla){
             @Override
@@ -68,18 +72,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 return !(this.getColumnClass(column).equals(JButton.class));
             }
         });
-        tabla_actividades.setDefaultRenderer(JButton.class, new TableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable jtable, Object object, boolean isSelected, boolean hasFocus, int row, int col) {
-                /**
-                 * Observen que todo lo que hacemos en éste método es retornar el objeto que se va a dibujar en la 
-                 * celda. Esto significa que se dibujará en la celda el objeto que devuelva el TableModel. También 
-                 * significa que este renderer nos permitiría dibujar cualquier objeto gráfico en la grilla, pues 
-                 * retorna el objeto tal y como lo recibe.
-                 */
-                return (Component) object;
-            }
-        });
+        
+        
+        
     }
 
     /** This method is called from within the constructor to
@@ -101,6 +96,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_produccion_ = new javax.swing.JButton();
         btn_inventario_ = new javax.swing.JButton();
         btn_revision_ = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        txtview_fecha_actual = new javax.swing.JTextField();
         barraMenu_1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         mnuArchivo_newOrden = new javax.swing.JMenuItem();
@@ -125,7 +123,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorio.setBackground(new java.awt.Color(26, 105, 159));
         escritorio.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         escritorio.setAutoscrolls(true);
-        escritorio.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        escritorio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         scroll_tabla_acts.setAutoscrolls(true);
 
@@ -138,56 +136,118 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         ));
         tabla_actividades.getTableHeader().setReorderingAllowed(false);
+        tabla_actividades.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_actividadesMouseClicked(evt);
+            }
+        });
         scroll_tabla_acts.setViewportView(tabla_actividades);
 
         btn_empleados_.setText("Empleados");
+        btn_empleados_.setMaximumSize(new java.awt.Dimension(150, 80));
+        btn_empleados_.setMinimumSize(new java.awt.Dimension(150, 80));
+        btn_empleados_.setPreferredSize(new java.awt.Dimension(150, 80));
 
         btn_produccion_.setText("Produccion");
-        btn_produccion_.setPreferredSize(new java.awt.Dimension(100, 50));
+        btn_produccion_.setMaximumSize(new java.awt.Dimension(150, 80));
+        btn_produccion_.setMinimumSize(new java.awt.Dimension(150, 80));
+        btn_produccion_.setPreferredSize(new java.awt.Dimension(150, 80));
 
         btn_inventario_.setText("Inventario");
-        btn_inventario_.setPreferredSize(new java.awt.Dimension(100, 50));
+        btn_inventario_.setMaximumSize(new java.awt.Dimension(150, 80));
+        btn_inventario_.setMinimumSize(new java.awt.Dimension(150, 80));
+        btn_inventario_.setPreferredSize(new java.awt.Dimension(150, 80));
 
         btn_revision_.setText("Revisiones");
-        btn_revision_.setPreferredSize(new java.awt.Dimension(100, 50));
+        btn_revision_.setMaximumSize(new java.awt.Dimension(150, 80));
+        btn_revision_.setMinimumSize(new java.awt.Dimension(150, 80));
+        btn_revision_.setPreferredSize(new java.awt.Dimension(150, 80));
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(210, 210));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 210, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 210, Short.MAX_VALUE)
+        );
+
+        txtview_fecha_actual.setEditable(false);
+        txtview_fecha_actual.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtview_fecha_actual.setText("23/07/2016");
+        txtview_fecha_actual.setToolTipText("Fecha de Hoy");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtview_fecha_actual, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtview_fecha_actual, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(escritorioLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
+                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(escritorioLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(escritorioLayout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 922, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
                 .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(43, 43, 43)
                 .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(43, 43, 43)
                 .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104))
-            .addGroup(escritorioLayout.createSequentialGroup()
-                .addGap(74, 74, 74)
-                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 789, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addGap(125, 125, 125))
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
-                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
+                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(escritorioLayout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43)
+                        .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(97, 97, 97))
+                .addGap(70, 70, 70))
         );
         escritorio.setLayer(scroll_tabla_acts, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_empleados_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_produccion_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_inventario_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_revision_, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jMenu3.setText("Archivo");
 
@@ -319,6 +379,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_mnuTareas_nuevaOrden_ActionPerformed
 
+    private void tabla_actividadesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_actividadesMouseClicked
+        
+        fila_tabla = tabla_actividades.rowAtPoint(evt.getPoint());
+        col_tabla = tabla_actividades.columnAtPoint(evt.getPoint());
+        
+    }//GEN-LAST:event_tabla_actividadesMouseClicked
+
     public static void main(String args[]) {
         // Set the Nimbus look and feel
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -360,6 +427,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JMenuItem mnuArchivo_newOrden;
     private javax.swing.JMenu mnuGUsers_;
     private javax.swing.JMenu mnuMercancia_;
@@ -367,6 +436,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuTareas_nuevaOrden_;
     private javax.swing.JScrollPane scroll_tabla_acts;
     private javax.swing.JTable tabla_actividades;
+    private javax.swing.JTextField txtview_fecha_actual;
     // End of variables declaration//GEN-END:variables
 
 }

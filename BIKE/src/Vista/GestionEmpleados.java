@@ -3,7 +3,7 @@
 
 package Vista;
 
-import Modelo.ClasePrincipal;
+import Modelo.ClaseRaiz;
 
 import Controlador.CtrData;
 import Controlador.Fechas;
