@@ -3,8 +3,8 @@
 
 package Vista;
 
-import Modelo.ClaseRaiz.ComponentCellEditor;
-import Modelo.ClaseRaiz.ComponentCellRenderer;
+import Modelo.ModeloTabla.ComponentCellEditor;
+import Modelo.ModeloTabla.ComponentCellRenderer;
 import Modelo.ModeloTabla.SpinnCellTable;
 import static Vista.MenuPrincipal.escritorio;
 
@@ -13,11 +13,6 @@ import java.awt.Dimension;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.event.CellEditorListener;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import java.util.EventObject;
 import java.awt.Component;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;

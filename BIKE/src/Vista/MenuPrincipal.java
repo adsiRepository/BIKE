@@ -2,13 +2,23 @@
 package Vista;
 
 import Controlador.Graficos;
-import Modelo.ClaseRaiz;
-import Modelo.ModeloTabla.CellTableButton;
 import RecursosTemporales.GUsers;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.TextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.EventObject;
+import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
 /**
  * author  : miguel, braden, never
@@ -19,24 +29,217 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private final Class[] tiposCampos;
     private DefaultTableModel dtm_tabla_actividades;
     private int fila_tabla, col_tabla;
-    //protected static Dimension dimensionMenu_Pantalla;
+    
+    private class PanelBotonesCelda extends JPanel {
+        // <editor-fold defaultstate="collapsed" desc="JPANEL PARA CELDA DE TABLA">
+        
+        // Variables declaration                    
+        private final CellTableButton btncell_cancel_orden_;
+        private final CellTableButton btncell_edit_orden_;
+        private final CellTableButton btncell_ok_orden_;
+        public int miFila, miCol;
+        // End of variables declaration 
+        
+        /**
+         * Creates new form PanelBotonesCelda
+         */
+        public PanelBotonesCelda() {
+            btncell_cancel_orden_ = new CellTableButton();
+            btncell_edit_orden_ = new CellTableButton();
+            btncell_ok_orden_ = new CellTableButton();
+            inicializacion();
+        }
+
+        /**
+         * este metodo es llamado al inicializar el panel
+         * este configura las cosas basicas
+         */
+        @SuppressWarnings("unchecked")
+        private void inicializacion() {
+            // <editor-fold defaultstate="collapsed" desc="Codigo Generado Automaticamente por el Disenador Netbeans">                          
+            try {
+                setLayout(new java.awt.GridLayout());
+                
+                //btncell_cancel_orden_.setIcon(new javax.swing.ImageIcon(getClass().getResource("../Recursos/imgs/imgbtn_cancel.png"))); // NOI18N
+                btncell_cancel_orden_.setPreferredSize(new java.awt.Dimension(35, 35));
+                add(btncell_cancel_orden_);
+
+                //btncell_edit_orden_.setIcon(new javax.swing.ImageIcon(getClass().getResource("../Recursos/imgs/imgbtn_edit.png"))); // NOI18N
+                btncell_edit_orden_.setPreferredSize(new java.awt.Dimension(35, 35));
+                add(btncell_edit_orden_);
+
+                //btncell_ok_orden_.setIcon(new javax.swing.ImageIcon(getClass().getResource("../Recursos/imgs/imgbtn_ok.png"))); // NOI18N
+                btncell_ok_orden_.setPreferredSize(new java.awt.Dimension(35, 35));
+                add(btncell_ok_orden_);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }// </editor-fold>
+        }                       
+
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="CLASES INTERNAS DEL PANEL">
+        private class CellTableButton extends JButton implements /*TableCellEditor,*/ ActionListener {
+            // <editor-fold defaultstate="collapsed" desc="CLASE EXTENDIDA DE JBUTTON CONFIGURADA PARA INSERTAR BOTONES EN CELDAS DE UNA TABLA">
+            //fuentes
+            //http://www.edu4java.com/es/swing/swing4.html
+            //http://stackoverflow.com/questions/1475543/how-to-add-button-in-a-row-of-jtable-in-swing-java
+
+            //private int fil, col;
+            //<editor-fold defaultstate="collapsed" desc="METODOS DE CONSTRUCCION Y CONFIGURACION DE ESTA CLASE DE BOTON">
+            public CellTableButton() {
+                super();
+                metodoConstructorGeneral();
+            }
+            
+            public CellTableButton(String text) {
+                super(text);
+                metodoConstructorGeneral();
+            }
+            
+            private void metodoConstructorGeneral() {
+                addActionListener(this);
+            }
+            
+            @Override
+            public void paint(Graphics grf) {
+                super.paint(grf);
+            }
+            
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(15, 10);
+            }
+//</editor-fold>
+
+            //Action Listener => metodo que se desata al accionar el boton u oprimirlo
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                JOptionPane.showMessageDialog(null, "Haz oprimido el boton de la celda (" + miFila + ", " + miCol + ")");
+            }
+
+            // <editor-fold defaultstate="collapsed" desc="METODOS IMPLEMENTADOS DE LA INTERFAZ TableCellEditor del Boton">
+        /*@Override
+             public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+             MenuPrincipal.fila_tabla = row;
+             MenuPrincipal.col_tabla = column;
+             return this;
+             }
+
+             @Override
+             public Object getCellEditorValue() {
+             return "Configurado";
+             }
+
+             @Override
+             public boolean isCellEditable(EventObject anEvent) {
+             return true;
+             }
+
+             @Override
+             public boolean shouldSelectCell(EventObject anEvent) {
+             return true;
+             }
+
+             @Override
+             public boolean stopCellEditing() {
+             return true;
+             }
+
+             @Override
+             public void cancelCellEditing() {
+             }
+
+             @Override
+             public void addCellEditorListener(CellEditorListener l) {
+             }
+
+             @Override
+             public void removeCellEditorListener(CellEditorListener l) {
+             }
+             */
+            // </editor-fold>
+            // </editor-fold>
+        }
+
+// </editor-fold>
+    }
+    
+    private static class ComponentCellRenderer implements TableCellRenderer {
+        // <editor-fold defaultstate="collapsed" desc="CLASE QUE DIBUJA EL COMPONENTE DENTRO DE LA CELDA DE LA TABLA">
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            /*if(hasFocus == true){
+             table.repaint();
+             }*/
+            return (Component) value;
+        }
+
+        // </editor-fold>
+    }
+    
+    private static class ComponentCellEditor extends AbstractCellEditor implements TableCellEditor/*, ActionListener*/ {
+        // <editor-fold defaultstate="collapsed" desc="CLASE QUE LE DA LA CAPACIDAD AL COMPONENTE DE EDITAR EL VALOR DE LA CELDA">
+
+        public ComponentCellEditor(){
+            
+        }
+        
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            if(column == 5){
+                ((PanelBotonesCelda)value).miFila = row;
+                ((PanelBotonesCelda)value).miCol = column;
+                return (Component) value;
+            }
+            return (Component) value;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return "CellEditorValue";//combo.getSelectedItem().toString();
+        }
+
+        @Override
+        public boolean isCellEditable(EventObject anEvent) {
+            return true;
+        }
+
+        @Override
+        public boolean shouldSelectCell(EventObject anEvent) {
+            return true;
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            return true;
+        }
+
+        @Override
+        public void cancelCellEditing() {
+            System.out.println("Edicion Cancelada");
+        }
+
+        @Override
+        public void addCellEditorListener(CellEditorListener l) {
+        
+        }
+
+        @Override
+        public void removeCellEditorListener(CellEditorListener l) {
+            System.out.println("removeCellEditorListener");
+        }
+
+// </editor-fold>
+    }
     
     /** Creates new form MenuPrincipal */
     public MenuPrincipal() {
         initComponents();
         
-        tabla_actividades.setDefaultRenderer(CellTableButton.class, new ClaseRaiz.ComponentCellRenderer());
-        //tabla_actividades.setDefaultEditor(CellTableButton.class, new ClaseRaiz.ComponentCellEditor());
-        TableColumn colButtons = tabla_actividades.getColumnModel().getColumn(5);
-        //CellTableButton boton_celda = new 
-        //colButtons.setCellEditor(null);
-        
-    // <editor-fold defaultstate="collapsed" desc="Configuracion de la Ventana">
-        this.setExtendedState(MAXIMIZED_BOTH);
-        this.setLocationRelativeTo(null);
-    // </editor-fold>
-       
-//configuracion de la tabla
+        //configuracion de la tabla
         tiposCampos = new Class[]{
             String.class,
             Boolean.class,
@@ -44,11 +247,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
             //Date.class,
             String.class,
             String.class,
-            CellTableButton.class
+            PanelBotonesCelda.class
         };
         columnas_tabla =  new String[]{
             "Empleado", "Activo", "Última Tarea", "Inicio", "Entrega", "Accion" 
         };
+        
+        tabla_actividades.setDefaultRenderer(PanelBotonesCelda.class, new ComponentCellRenderer());
+        tabla_actividades.setDefaultEditor(PanelBotonesCelda.class, new ComponentCellEditor());
+
+        // <editor-fold defaultstate="collapsed" desc="Configuracion de la Ventana">
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.setLocationRelativeTo(null);
+    // </editor-fold>
+       
         //uso del metodo
         refrescarTablaActividades();
         //--
@@ -58,8 +270,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void refrescarTablaActividades(){
         //tuto perfecto para aprender a insertar botones en una celda de cualquier tabla -> https://www.youtube.com/watch?v=bVknuhawXsI
         Object[][] datos = new Object[][]{
-            {"Miguel Gonzalez", true, "5 '26 TT Tradicional", "27/may/15 10:30", "", new CellTableButton("Clic aquí")},
-            {"Jerry Gutierrez", true, "30 Aros '20 Econo", "26/may/15 11:25", "", new CellTableButton("Clic aquí")}
+            {"Miguel Gonzalez", true, "5 '26 TT Tradicional", "27/may/15 10:30", "", new PanelBotonesCelda()},
+            {"Jerry Gutierrez", true, "30 Aros '20 Econo", "26/may/15 11:25", "", new PanelBotonesCelda()},
+            {"David Murcia Guzman", true, "20 Aros '20 Econo", "26/may/15 11:25", "", new PanelBotonesCelda()},
+            {"Carlos Trujillo", true, "20 Aros '20 Econo", "26/may/15 11:25", "", new PanelBotonesCelda()}
         };
         tabla_actividades.setModel(new DefaultTableModel(datos, columnas_tabla){
             @Override
@@ -72,9 +286,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 return !(this.getColumnClass(column).equals(JButton.class));
             }
         });
-        
-        
-        
+
     }
 
     /** This method is called from within the constructor to
@@ -89,7 +301,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
-        escritorio = new Graficos.Escritorio();
         scroll_tabla_acts = new javax.swing.JScrollPane();
         tabla_actividades = new javax.swing.JTable();
         btn_empleados_ = new javax.swing.JButton();
@@ -222,7 +433,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
                 .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(125, 125, 125))
+                .addGap(129, 129, 129))
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,13 +444,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
                         .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(70, 70, 70))
+                .addGap(50, 50, 50))
         );
         escritorio.setLayer(scroll_tabla_acts, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_empleados_, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -420,7 +631,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_inventario_;
     private javax.swing.JButton btn_produccion_;
     private javax.swing.JButton btn_revision_;
-    public static javax.swing.JDesktopPane escritorio;
+    public static final javax.swing.JDesktopPane escritorio = new Graficos.Escritorio();
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
