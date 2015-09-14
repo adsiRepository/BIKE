@@ -3,9 +3,11 @@
 
 package Vista;
 
-import Modelo.ModeloTabla.ComponentCellEditor;
-import Modelo.ModeloTabla.ComponentCellRenderer;
-import Modelo.ModeloTabla.SpinnCellTable;
+import Modelo.EditorTabla.ComponentCellEditor;
+import Modelo.EditorTabla.ComponentCellRenderer;
+import Modelo.EditorTabla.SpinnCellTable;
+import static Modelo.Parametros.Tablas.COLUMNAS_TABLA_DESPACHO;
+import static Modelo.Parametros.Tablas.TIPOS_COLUMNAS_TABLA_DESPACHOS;
 import static Vista.MenuPrincipal.escritorio;
 
 import java.awt.Dimension;
@@ -25,37 +27,84 @@ import javax.swing.SpinnerNumberModel;
 public class OrdenProduccion extends javax.swing.JInternalFrame {
     
     //atributos
-    private DefaultTableModel dtm;
-    private final String[] COLUMNAS_TABLA_DESPACHO;
-    private final Class[] TIPOS_COLUMNAS_TABLA_DESPACHOS;
+    @SuppressWarnings("FieldMayBeFinal")
+    private ModeloTabla modeloTabla;
+    private Object[][] data; // estos datos son la variable global para el manejo de datos de la tabla, esta instanciada para todo el formulario no solo para el modelo, asi se puede manipular constantemente
     private int fila_tabla, col_tabla;
     
-    //constructor de ésta ventana
+    //constructor de Esta ventana
     public OrdenProduccion() {
         initComponents();
-        
-        tabla_despacho_.setDefaultRenderer(Component.class, new ComponentCellRenderer());
-        tabla_despacho_.setDefaultEditor(Component.class, new ComponentCellEditor());
-
-//configuraciones de esta ventana
+        // <editor-fold defaultstate="collapsed" desc="CONFIGURACION DE LA VENTANA COMO TAMANO, TITULO..">
         this.title = "Despacho de Ordenes de Ensamble";
         this.closable = true;
         this.iconable = true;
         Dimension ScreenSpace = escritorio.getSize(), mySpc = this.getSize();
-        this.setLocation( ( ScreenSpace.width / 18 ), ( ( ScreenSpace.height - mySpc.height ) / 2 ) );
+        this.setLocation((ScreenSpace.width / 18), ((ScreenSpace.height - mySpc.height) / 2));
         //this.setFrameIcon(new ImageIcon(getClass().getResource("/Recursos/Imagenes/iconUsers.png")));
         this.setToolTipText("Modulo de Control de Ordenes de Ensamble");
-//--
-        //inicializacion de variables
-        COLUMNAS_TABLA_DESPACHO = new String[]{"Componentes", "Item Disponible", "Cantidad"};
-        TIPOS_COLUMNAS_TABLA_DESPACHOS = new Class[]{
-            String.class, JComboBox.class, SpinnCellTable.class //esto quiere decir que las celdas de la tabla serán: String, un combo con las partes seleccionables y la cantidad de estas 
-        };
+    // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="CONFIGURACION DE LA TABLA DE SELECCION DE PARTES">
+        data = new Object[][]{};
+        modeloTabla = new ModeloTabla();//
+        tabla_despacho_.setModel(modeloTabla);
+        tabla_despacho_.setDefaultRenderer(Component.class, new ComponentCellRenderer());
+        tabla_despacho_.setDefaultEditor(Component.class, new ComponentCellEditor());
+        formatearTabla();
+    // </editor-fold>
+
         fila_tabla = 0;  col_tabla = 0;
         
         plasmarTablaDespacho();
         
     }
+    
+    private void formatearTabla(){
+        //int anchoContenedor = scroll_items_selec.getWidth();
+        int[] anchos = new int[]{120, 250, 83};
+        /*int[] anchos = new int[]{ ((int)((anchoContenedor*30)/100)), ((int)((anchoContenedor*50)/100)), ((int)((anchoContenedor*20)/100)) };*/
+        for(int i = 0; i < tabla_despacho_.getColumnCount(); i++){
+            tabla_despacho_.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+            tabla_despacho_.getColumnModel().getColumn(i).setMinWidth(anchos[i]);
+            tabla_despacho_.getColumnModel().getColumn(i).setMaxWidth(anchos[i]);
+        }
+        tabla_despacho_.setRowHeight(20);
+    }
+    
+    //metodos del programador para esta clase (OrdenProduccion) ->
+    //metodo para llenar la tabla de despachos
+    
+    private void plasmarTablaDespacho(){
+        
+        JComboBox combo_1 = new JComboBox(new Object[]{"Marco Trad '26 disco", "Marco sin disco", "Marco Suspension"});
+        JComboBox combo_2 = new JComboBox(new Object[]{"GW Suspension", "Exceed Suspension", "Logan"});
+        
+        SpinnerNumberModel spinnummodel = new SpinnerNumberModel(1, 0, 10, 1);// Dato visualizado al inicio en el spinner// Límite inferior// Límite superior // incremento-decremento
+
+        /*Object[][]*/ data = new Object[][]{
+            {"Marco", combo_1, new SpinnCellTable(spinnummodel)},
+            {"Tenedor", combo_2, new SpinnCellTable(spinnummodel)}
+        };
+        
+        modeloTabla.setDatosTabla(data);
+
+    }
+    //--
+
+    public void limpiarPantalla(){
+            combo_tipo_ensamble.setSelectedIndex(0);
+        try{
+            for( int i=0; i < tabla_despacho_.getRowCount(); i++ ){
+//                dtm.removeRow(i);
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(rootPane, "Error: "+e.getLocalizedMessage(), title, 0);
+        }
+    }
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,14 +135,18 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         lbl_cant_m_ = new javax.swing.JLabel();
         scroll_txtArea_detalles_ = new javax.swing.JScrollPane();
         txtArea_detalles_ = new javax.swing.JTextArea();
-        lbl_fecha_ = new javax.swing.JLabel();
-        lbl_hora_ = new javax.swing.JLabel();
         combo_ensamblador_selec = new javax.swing.JComboBox();
         lbl_ensamblador_ = new javax.swing.JLabel();
         btn_retirar_accesorio1 = new javax.swing.JButton();
         btn_add_accesorio1 = new javax.swing.JButton();
+        btn_selec_repuestos_1 = new javax.swing.JButton();
+        btn_selec_repuestos_2 = new javax.swing.JButton();
+        scroll_tabla_ordenes_ = new javax.swing.JScrollPane();
+        tabla_ordenes_ = new javax.swing.JTable();
 
         setClosable(true);
+        setMaximumSize(new java.awt.Dimension(915, 424));
+        setMinimumSize(new java.awt.Dimension(915, 424));
         setName("GClientes"); // NOI18N
 
         btn_Despachar_Orden.setText("Ingresar");
@@ -126,13 +179,14 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         });
         scroll_items_selec.setViewportView(tabla_despacho_);
 
+        btn_prueba_.setToolTipText("Cancelar Entrega");
         btn_prueba_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_prueba_ActionPerformed(evt);
             }
         });
 
-        btn_selec_repuestos_.setToolTipText("Despachar Mercancía para Orden Seleccionada");
+        btn_selec_repuestos_.setToolTipText("Alistar Entrega");
         btn_selec_repuestos_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_selec_repuestos_ActionPerformed(evt);
@@ -159,20 +213,40 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
 
         lbl_genero_.setText("Género:");
 
+        slider_cant_genero.setMinimum(0);
+        slider_cant_genero.setMaximum(10);
+        slider_cant_genero.setValue(0);
         slider_cant_genero.setToolTipText("Desliza para Repartir Cantidad");
+        slider_cant_genero.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                slider_cant_generoStateChanged(evt);
+            }
+        });
 
         lbl_cantidad_ensamble_.setText("Cantidad:");
 
         txt_cant_ensamble.setMaximumSize(new java.awt.Dimension(2147483647, 25));
         txt_cant_ensamble.setMinimumSize(new java.awt.Dimension(6, 25));
         txt_cant_ensamble.setPreferredSize(new java.awt.Dimension(6, 25));
+        txt_cant_ensamble.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_cant_ensambleKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_cant_ensambleKeyTyped(evt);
+            }
+        });
 
+        txt_cant_f.setEditable(false);
+        txt_cant_f.setBackground(new java.awt.Color(255, 255, 255));
         txt_cant_f.setMaximumSize(new java.awt.Dimension(2147483647, 25));
         txt_cant_f.setMinimumSize(new java.awt.Dimension(6, 25));
         txt_cant_f.setPreferredSize(new java.awt.Dimension(6, 25));
 
         lbl_cant_f_.setText("F:");
 
+        txt_cant_m.setEditable(false);
+        txt_cant_m.setBackground(new java.awt.Color(255, 255, 255));
         txt_cant_m.setMaximumSize(new java.awt.Dimension(2147483647, 25));
         txt_cant_m.setMinimumSize(new java.awt.Dimension(6, 25));
         txt_cant_m.setPreferredSize(new java.awt.Dimension(6, 25));
@@ -183,6 +257,7 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         txtArea_detalles_.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         txtArea_detalles_.setRows(3);
         txtArea_detalles_.setText("Detalles:\nSe Clasificará el tipo de Articulo\n(Bicicleta / Aro / Otro)\nen la lista de disponibilidad\npara la venta, según los Componentes\nelegidos en la siguiente lista.\nEs decir (ejemplo):\nUsted seleccionaría Bicicleta \ntipo Cross, al seleccionar el tipo\nde Marco determinaría\nla carasterística de la Bicicleta\ntipo Cross (marco GW, Nacional, etc) \ny asi se clasificarán en la lista\nde Articulos disponibles para\nla Venta.   \n\n ");
+        txtArea_detalles_.setMaximumSize(new java.awt.Dimension(263, 293));
         scroll_txtArea_detalles_.setViewportView(txtArea_detalles_);
 
         javax.swing.GroupLayout panel_primer_filtro_emsambleLayout = new javax.swing.GroupLayout(panel_primer_filtro_emsamble);
@@ -254,10 +329,6 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        lbl_fecha_.setText("Fecha:  15 Noviembre 2015");
-
-        lbl_hora_.setText("Hora:  03:30 p.m.");
-
         combo_ensamblador_selec.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         lbl_ensamblador_.setText("Ensamblador:");
@@ -275,26 +346,46 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
             }
         });
 
+        btn_selec_repuestos_1.setText("agregar orden");
+        btn_selec_repuestos_1.setToolTipText("Despachar Mercancía para Orden Seleccionada");
+        btn_selec_repuestos_1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_selec_repuestos_1ActionPerformed(evt);
+            }
+        });
+
+        btn_selec_repuestos_2.setText("quitar orden");
+        btn_selec_repuestos_2.setToolTipText("Despachar Mercancía para Orden Seleccionada");
+        btn_selec_repuestos_2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_selec_repuestos_2ActionPerformed(evt);
+            }
+        });
+
+        tabla_ordenes_.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        tabla_ordenes_.getTableHeader().setReorderingAllowed(false);
+        tabla_ordenes_.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_ordenes_MouseClicked(evt);
+            }
+        });
+        scroll_tabla_ordenes_.setViewportView(tabla_ordenes_);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lbl_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lbl_hora_, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(66, 66, 66))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(panel_primer_filtro_emsamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
@@ -305,107 +396,132 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
                                 .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_prueba_, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btn_selec_repuestos_, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addGap(18, 18, 18)
-                .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
+                            .addComponent(btn_selec_repuestos_)
+                            .addComponent(btn_prueba_))
+                        .addGap(18, 18, 18)
+                        .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btn_selec_repuestos_1)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_selec_repuestos_2)
+                                .addGap(151, 151, 151))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(44, 44, 44)
+                                .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(112, 112, 112)
+                                .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)))))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btn_selec_repuestos_, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_prueba_, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(97, 97, 97))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(63, 63, 63)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(lbl_ensamblador_)
-                                        .addComponent(combo_ensamblador_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(panel_primer_filtro_emsamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbl_fecha_)
-                            .addComponent(lbl_hora_))
-                        .addGap(40, 40, 40)
-                        .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(48, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(btn_selec_repuestos_, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btn_prueba_, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(114, 114, 114))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lbl_ensamblador_)
+                                    .addComponent(combo_ensamblador_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(panel_primer_filtro_emsamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(10, 10, 10)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_selec_repuestos_1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_selec_repuestos_2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     
-    //metodos del programador para esta clase (OrdenProduccion) ->
-    //metodo para llenar la tabla de despachos
-    
-    private void plasmarTablaDespacho(){
+    private class ModeloTabla extends DefaultTableModel {
+    // <editor-fold defaultstate="collapsed" desc="Codigo que Define un Modelo Abstracto de Tabla implementado por el programador">
+
+        /**
+         * Constructor de la Clase que se esta heredando de AbstractTableModel
+         */
+        public ModeloTabla() {
+            super(data, COLUMNAS_TABLA_DESPACHO);
+        }
+
+        /*public EditorTabla(Object[][] data, Object[] columnNames) {
+            super(data, columnNames);
+        }*/
+
+        /*@Override
+        public void setColumnIdentifiers(Object[] newIdentifiers) {
+            super.setColumnIdentifiers(newIdentifiers); //To change body of generated methods, choose Tools | Templates.
+        }*/
         
-        JComboBox combo_1 = new JComboBox(new Object[]{"Marco Trad '26 disco", "Marco sin disco", "Marco Suspension"});
-        JComboBox combo_2 = new JComboBox(new Object[]{"GW Suspension", "Exceed Suspension", "Logan"});
-        
-        SpinnerNumberModel spinnummodel = new SpinnerNumberModel(1, 0, 10, 1); // Dato visualizado al inicio en el spinner// Límite inferior// Límite superior // incremento-decremento
-        SpinnCellTable spinnCell = new SpinnCellTable(spinnummodel);
-        /*TableColumn colSpinn = tabla_despacho_.getColumnModel().getColumn(2);
-        colSpinn.setCellRenderer(new SpinnCellRenderer());
-        colSpinn.setCellEditor(new );*/
-        
-        Object[][] datosFict = new Object[][]{
-            {"Marco", combo_1, spinnCell},
-            {"Tenedor", combo_2, spinnCell}
-        };
-        
-        
-        dtm = new DefaultTableModel(datosFict, COLUMNAS_TABLA_DESPACHO){//instanciamos un nuevo DefaultTableModel y redifinimos sus metodos basicos
-            @Override//este metodo lo utiliza la propia clase(DefaultTableModel) para definir el tipo de campo para sus columnas  
-            public Class getColumnClass(int columnIndex) {
-                return TIPOS_COLUMNAS_TABLA_DESPACHOS[columnIndex];
-            }
-            @Override// en este definimos las celdas editables y las no
-            public boolean isCellEditable(int row, int column) {
-                return !(this.getColumnClass(column).equals(String.class));
-            }
-        };
-        tabla_despacho_.setModel(dtm);//aplicamos el modelo a la tabla
-        //render = interprete => es el que dibujar el componente graficamente en la celda
+        public void setDatosTabla(Object[][] datos) {
+            data = datos;
+            fireTableDataChanged();
+        }
+
+        /*@Override//notifica a todos los listeners que todos los datos de la tabla han cambiado por lo que se redibujara la tabla conservando la estructura con los nuevos datos
+         public void fireTableDataChanged() {
+         super.fireTableDataChanged(); //To change body of generated methods, choose Tools | Templates.
+         }*/
+        @Override//determina la clase de componentes que iran en cada celda
+        public Class getColumnClass(int noCol) {
+            return TIPOS_COLUMNAS_TABLA_DESPACHOS[noCol];
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int col) {
+            return col > 0; // con esto le indico que no dejara modificar la primer columna de la tabla
+        }
+
+        @Override
+        public int getRowCount() {
+            return data.length;
+        }
+
+        @Override
+        public int getColumnCount() {
+            //return data[0].length;
+            return COLUMNAS_TABLA_DESPACHO.length;
+        }
+
+        @Override
+        public Object getValueAt(int row, int col) {
+            return data[row][col];
+        }
+
+        @Override
+        public void setValueAt(Object value, int row, int col) {
+            data[row][col] = value;
+            this.fireTableCellUpdated(row, col);//notifica a todos los listeners que el valor de la celda ha sido editado
+        }
 
     }
-    //--
 
-//--   
-    
-//--
-    
-    public void limpiarPantalla(){
-            combo_tipo_ensamble.setSelectedIndex(0);
-        try{
-            for( int i=0; i < tabla_despacho_.getRowCount(); i++ ){
-//                dtm.removeRow(i);
-            }
-        }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(rootPane, "Error: "+e.getLocalizedMessage(), title, 0);
-        }
-    }
-    
     
     private void btn_Despachar_OrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Despachar_OrdenActionPerformed
             
@@ -413,17 +529,18 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
 
     private void btn_Cancelar_DespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cancelar_DespachoActionPerformed
     
+        
     }//GEN-LAST:event_btn_Cancelar_DespachoActionPerformed
 
     private void btn_selec_repuestos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selec_repuestos_ActionPerformed
         
-        System.out.println("fila 1 -> "+((JComboBox)dtm.getValueAt(0, 1)).getSelectedItem());
+        System.out.println("fila 1 -> "+((JComboBox)modeloTabla.getValueAt(0, 1)).getSelectedItem());
         
     }//GEN-LAST:event_btn_selec_repuestos_ActionPerformed
 
     private void btn_prueba_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_prueba_ActionPerformed
         
-        System.out.println("fila 2, col 3 -> "+((JSpinner)dtm.getValueAt(1, 2)).getValue());
+        System.out.println("fila 2, col 3 -> "+((JSpinner)modeloTabla.getValueAt(1, 2)).getValue());
         
     }//GEN-LAST:event_btn_prueba_ActionPerformed
 
@@ -432,19 +549,96 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_retirar_accesorio1ActionPerformed
 
     private void btn_add_accesorio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_add_accesorio1ActionPerformed
-        // TODO add your handling code here:
+
+        JOptionPane.showMessageDialog(null, "ancho scroll: " + scroll_items_selec.getWidth() + "\n"
+                + "30% = " + ((int) ((scroll_items_selec.getWidth() * 30) / 100)) + "\n"
+                + "50% = " + ((int) ((scroll_items_selec.getWidth() * 50) / 100)) + "\n"
+                + "20% = " + ((int) ((scroll_items_selec.getWidth() * 20) / 100))
+        );
+
     }//GEN-LAST:event_btn_add_accesorio1ActionPerformed
 
     private void tabla_despacho_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_despacho_MouseClicked
+       
         fila_tabla = tabla_despacho_.rowAtPoint(evt.getPoint());
         col_tabla = tabla_despacho_.columnAtPoint(evt.getPoint());
         /*if( fila_tabla > -1 && col_tabla > -1 ){
             this.obs = dtm.getValueAt(fila, 0);
             txtcodpro.setText(""+obs);
         }*/
+        
     }//GEN-LAST:event_tabla_despacho_MouseClicked
 
+    private void btn_selec_repuestos_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selec_repuestos_1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_selec_repuestos_1ActionPerformed
 
+    private void btn_selec_repuestos_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selec_repuestos_2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_selec_repuestos_2ActionPerformed
+
+    private void slider_cant_generoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_slider_cant_generoStateChanged
+
+        txt_cant_m.setText(""+(slider_cant_genero.getMaximum() - slider_cant_genero.getValue()));
+        txt_cant_f.setText(""+slider_cant_genero.getValue());
+        
+        /*if (slider_cant_genero.getMaximum() > 1) {
+            if ((slider_cant_genero.getMaximum() % 2) != 0) {
+                txt_cant_m.setText("" + (((slider_cant_genero.getMaximum() - 1) / 2) + 1));
+                txt_cant_f.setText("" + ((slider_cant_genero.getMaximum() - 1) / 2));
+            } else {
+                txt_cant_m.setText("" + (slider_cant_genero.getMaximum() / 2));
+                txt_cant_f.setText("" + (slider_cant_genero.getMaximum() / 2));
+            }
+        } else {
+            if (slider_cant_genero.getValue() > 0) {
+                if (slider_cant_genero.getValue() <= 0.5) {
+                    txt_cant_m.setText("1");
+                    txt_cant_f.setText("");
+                } else {
+                    txt_cant_m.setText("");
+                    txt_cant_f.setText("1");
+                }
+            } else {
+                txt_cant_m.setText("");
+                txt_cant_f.setText("");
+            }
+        }*/
+
+    }//GEN-LAST:event_slider_cant_generoStateChanged
+
+    private void txt_cant_ensambleKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensambleKeyTyped
+
+        char typ = evt.getKeyChar();
+        if ((typ < '0' || typ > '9')) {
+            evt.consume();
+        }
+
+    }//GEN-LAST:event_txt_cant_ensambleKeyTyped
+
+    private void txt_cant_ensambleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensambleKeyReleased
+
+        slider_cant_genero.setMinimum(0);
+        if(txt_cant_ensamble.getText().isEmpty()){
+            slider_cant_genero.setMaximum(10);
+            slider_cant_genero.setValue(0);
+            txt_cant_m.setText("");
+            txt_cant_f.setText("");
+        }
+        else{
+            slider_cant_genero.setMaximum(Integer.parseInt(txt_cant_ensamble.getText()));
+            slider_cant_genero.setValue(slider_cant_genero.getMaximum()/2);
+        }
+  
+    }//GEN-LAST:event_txt_cant_ensambleKeyReleased
+
+    private void tabla_ordenes_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_ordenes_MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabla_ordenes_MouseClicked
+
+    
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Cancelar_Despacho;
     private javax.swing.JButton btn_Despachar_Orden;
@@ -452,6 +646,8 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     private javax.swing.JButton btn_prueba_;
     private javax.swing.JButton btn_retirar_accesorio1;
     private javax.swing.JButton btn_selec_repuestos_;
+    private javax.swing.JButton btn_selec_repuestos_1;
+    private javax.swing.JButton btn_selec_repuestos_2;
     private javax.swing.JComboBox combo_ensamblador_selec;
     private javax.swing.JComboBox combo_ref_tamaño;
     private javax.swing.JComboBox combo_tipo_ensamble;
@@ -459,16 +655,16 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_cant_m_;
     private javax.swing.JLabel lbl_cantidad_ensamble_;
     private javax.swing.JLabel lbl_ensamblador_;
-    private javax.swing.JLabel lbl_fecha_;
     private javax.swing.JLabel lbl_genero_;
-    private javax.swing.JLabel lbl_hora_;
     private javax.swing.JLabel lbl_ref_tamaño_;
     private javax.swing.JLabel lbl_tipo_ensamble_;
     private javax.swing.JPanel panel_primer_filtro_emsamble;
     private javax.swing.JScrollPane scroll_items_selec;
+    private javax.swing.JScrollPane scroll_tabla_ordenes_;
     private javax.swing.JScrollPane scroll_txtArea_detalles_;
     private javax.swing.JSlider slider_cant_genero;
     private javax.swing.JTable tabla_despacho_;
+    private javax.swing.JTable tabla_ordenes_;
     private javax.swing.JTextArea txtArea_detalles_;
     private javax.swing.JTextField txt_cant_ensamble;
     private javax.swing.JTextField txt_cant_f;

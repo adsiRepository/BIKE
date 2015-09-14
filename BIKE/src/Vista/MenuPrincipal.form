@@ -214,6 +214,12 @@
         <Container class="javax.swing.JScrollPane" name="scroll_tabla_acts">
           <Properties>
             <Property name="autoscrolls" type="boolean" value="true"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[452, 402]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[452, 402]"/>
+            </Property>
           </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
