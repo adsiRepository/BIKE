@@ -3,6 +3,7 @@
 
 package Vista;
 
+import Modelo.Artefacto;
 import Modelo.EditorTabla.ComponentCellEditor;
 import Modelo.EditorTabla.ComponentCellRenderer;
 import Modelo.EditorTabla.SpinnCellTable;
@@ -16,6 +17,8 @@ import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
@@ -43,8 +46,9 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         this.setLocation((ScreenSpace.width / 18), ((ScreenSpace.height - mySpc.height) / 2));
         //this.setFrameIcon(new ImageIcon(getClass().getResource("/Recursos/Imagenes/iconUsers.png")));
         this.setToolTipText("Modulo de Control de Ordenes de Ensamble");
+        panel_tipoTT_.setVisible(false);
     // </editor-fold>
-        
+        slider_cant_genero_.setMinimum(0);
         // <editor-fold defaultstate="collapsed" desc="CONFIGURACION DE LA TABLA DE SELECCION DE PARTES">
         data = new Object[][]{};
         modeloTabla = new ModeloTabla();//
@@ -55,14 +59,12 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     // </editor-fold>
 
         fila_tabla = 0;  col_tabla = 0;
-        
-        plasmarTablaDespacho();
-        
+ 
     }
     
     private void formatearTabla(){
         //int anchoContenedor = scroll_items_selec.getWidth();
-        int[] anchos = new int[]{120, 250, 83};
+        int[] anchos = new int[]{120, 250, 63};
         /*int[] anchos = new int[]{ ((int)((anchoContenedor*30)/100)), ((int)((anchoContenedor*50)/100)), ((int)((anchoContenedor*20)/100)) };*/
         for(int i = 0; i < tabla_despacho_.getColumnCount(); i++){
             tabla_despacho_.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
@@ -74,26 +76,11 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     
     //metodos del programador para esta clase (OrdenProduccion) ->
     //metodo para llenar la tabla de despachos
-    
-    private void plasmarTablaDespacho(){
-        
-        JComboBox combo_1 = new JComboBox(new Object[]{"Marco Trad '26 disco", "Marco sin disco", "Marco Suspension"});
-        JComboBox combo_2 = new JComboBox(new Object[]{"GW Suspension", "Exceed Suspension", "Logan"});
-        
-        SpinnerNumberModel spinnummodel = new SpinnerNumberModel(1, 0, 10, 1);// Dato visualizado al inicio en el spinner// Límite inferior// Límite superior // incremento-decremento
 
-        /*Object[][]*/ data = new Object[][]{
-            {"Marco", combo_1, new SpinnCellTable(spinnummodel)},
-            {"Tenedor", combo_2, new SpinnCellTable(spinnummodel)}
-        };
-        
-        modeloTabla.setDatosTabla(data);
-
-    }
     //--
 
     public void limpiarPantalla(){
-            combo_tipo_ensamble.setSelectedIndex(0);
+            combo_tipo_ensamble_.setSelectedIndex(0);
         try{
             for( int i=0; i < tabla_despacho_.getRowCount(); i++ ){
 //                dtm.removeRow(i);
@@ -103,7 +90,7 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(rootPane, "Error: "+e.getLocalizedMessage(), title, 0);
         }
     }
-    
+ 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -114,27 +101,31 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup_tipoTT_ = new javax.swing.ButtonGroup();
         btn_Despachar_Orden = new javax.swing.JButton();
         btn_Cancelar_Despacho = new javax.swing.JButton();
         scroll_items_selec = new javax.swing.JScrollPane();
         tabla_despacho_ = new javax.swing.JTable();
-        btn_prueba_ = new javax.swing.JButton();
-        btn_selec_repuestos_ = new javax.swing.JButton();
-        panel_primer_filtro_emsamble = new javax.swing.JPanel();
-        combo_tipo_ensamble = new javax.swing.JComboBox();
+        panel_primer_filtro_emsamble_ = new javax.swing.JPanel();
+        combo_tipo_ensamble_ = new javax.swing.JComboBox();
         lbl_tipo_ensamble_ = new javax.swing.JLabel();
         combo_ref_tamaño = new javax.swing.JComboBox();
         lbl_ref_tamaño_ = new javax.swing.JLabel();
-        lbl_genero_ = new javax.swing.JLabel();
-        slider_cant_genero = new javax.swing.JSlider();
         lbl_cantidad_ensamble_ = new javax.swing.JLabel();
         txt_cant_ensamble = new javax.swing.JTextField();
-        txt_cant_f = new javax.swing.JTextField();
-        lbl_cant_f_ = new javax.swing.JLabel();
-        txt_cant_m = new javax.swing.JTextField();
-        lbl_cant_m_ = new javax.swing.JLabel();
         scroll_txtArea_detalles_ = new javax.swing.JScrollPane();
         txtArea_detalles_ = new javax.swing.JTextArea();
+        panel_cantidad_genero_ = new javax.swing.JPanel();
+        lbl_genero_ = new javax.swing.JLabel();
+        lbl_cant_m_ = new javax.swing.JLabel();
+        txt_cant_m = new javax.swing.JTextField();
+        slider_cant_genero_ = new javax.swing.JSlider();
+        lbl_cant_f_ = new javax.swing.JLabel();
+        txt_cant_f = new javax.swing.JTextField();
+        panel_tipoTT_ = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
         combo_ensamblador_selec = new javax.swing.JComboBox();
         lbl_ensamblador_ = new javax.swing.JLabel();
         btn_retirar_accesorio1 = new javax.swing.JButton();
@@ -143,6 +134,8 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         btn_selec_repuestos_2 = new javax.swing.JButton();
         scroll_tabla_ordenes_ = new javax.swing.JScrollPane();
         tabla_ordenes_ = new javax.swing.JTable();
+        btn_alistar_despacho_ = new javax.swing.JButton();
+        btn_cancelar_despacho_ = new javax.swing.JButton();
 
         setClosable(true);
         setMaximumSize(new java.awt.Dimension(915, 424));
@@ -179,27 +172,18 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         });
         scroll_items_selec.setViewportView(tabla_despacho_);
 
-        btn_prueba_.setToolTipText("Cancelar Entrega");
-        btn_prueba_.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_prueba_ActionPerformed(evt);
+        panel_primer_filtro_emsamble_.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        combo_tipo_ensamble_.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Rines o Aros", "Bici. s/c Econo", "Tipo Cross", "Todo Terreno", "Turismo", "Playero", "Alta Gama", "Importado", "Otro" }));
+        combo_tipo_ensamble_.setToolTipText("Al Seleccionar se filtraran en la lista los Items correspondientes a esta clase de Articulo");
+        combo_tipo_ensamble_.setMaximumSize(new java.awt.Dimension(32767, 25));
+        combo_tipo_ensamble_.setMinimumSize(new java.awt.Dimension(74, 25));
+        combo_tipo_ensamble_.setPreferredSize(new java.awt.Dimension(74, 25));
+        combo_tipo_ensamble_.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                combo_tipo_ensamble_ItemStateChanged(evt);
             }
         });
-
-        btn_selec_repuestos_.setToolTipText("Alistar Entrega");
-        btn_selec_repuestos_.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_selec_repuestos_ActionPerformed(evt);
-            }
-        });
-
-        panel_primer_filtro_emsamble.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        combo_tipo_ensamble.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Rines o Aros", "Bicicleta Tradicional", "Tipo Cross", "Todo Terreno", "Turismo", "Playero", "Alta Gama", "Importado", "Otro" }));
-        combo_tipo_ensamble.setToolTipText("Al Seleccionar se filtraran en la lista los Items correspondientes a esta clase de Articulo");
-        combo_tipo_ensamble.setMaximumSize(new java.awt.Dimension(32767, 25));
-        combo_tipo_ensamble.setMinimumSize(new java.awt.Dimension(74, 25));
-        combo_tipo_ensamble.setPreferredSize(new java.awt.Dimension(74, 25));
 
         lbl_tipo_ensamble_.setText("Ensamble: ");
 
@@ -210,18 +194,6 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         combo_ref_tamaño.setPreferredSize(new java.awt.Dimension(74, 25));
 
         lbl_ref_tamaño_.setText("Tamaño:");
-
-        lbl_genero_.setText("Género:");
-
-        slider_cant_genero.setMinimum(0);
-        slider_cant_genero.setMaximum(10);
-        slider_cant_genero.setValue(0);
-        slider_cant_genero.setToolTipText("Desliza para Repartir Cantidad");
-        slider_cant_genero.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                slider_cant_generoStateChanged(evt);
-            }
-        });
 
         lbl_cantidad_ensamble_.setText("Cantidad:");
 
@@ -237,22 +209,6 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
             }
         });
 
-        txt_cant_f.setEditable(false);
-        txt_cant_f.setBackground(new java.awt.Color(255, 255, 255));
-        txt_cant_f.setMaximumSize(new java.awt.Dimension(2147483647, 25));
-        txt_cant_f.setMinimumSize(new java.awt.Dimension(6, 25));
-        txt_cant_f.setPreferredSize(new java.awt.Dimension(6, 25));
-
-        lbl_cant_f_.setText("F:");
-
-        txt_cant_m.setEditable(false);
-        txt_cant_m.setBackground(new java.awt.Color(255, 255, 255));
-        txt_cant_m.setMaximumSize(new java.awt.Dimension(2147483647, 25));
-        txt_cant_m.setMinimumSize(new java.awt.Dimension(6, 25));
-        txt_cant_m.setPreferredSize(new java.awt.Dimension(6, 25));
-
-        lbl_cant_m_.setText("M:");
-
         txtArea_detalles_.setColumns(1);
         txtArea_detalles_.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         txtArea_detalles_.setRows(3);
@@ -260,73 +216,162 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         txtArea_detalles_.setMaximumSize(new java.awt.Dimension(263, 293));
         scroll_txtArea_detalles_.setViewportView(txtArea_detalles_);
 
-        javax.swing.GroupLayout panel_primer_filtro_emsambleLayout = new javax.swing.GroupLayout(panel_primer_filtro_emsamble);
-        panel_primer_filtro_emsamble.setLayout(panel_primer_filtro_emsambleLayout);
-        panel_primer_filtro_emsambleLayout.setHorizontalGroup(
-            panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_primer_filtro_emsambleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel_primer_filtro_emsambleLayout.createSequentialGroup()
-                        .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbl_cantidad_ensamble_)
-                            .addComponent(lbl_genero_))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panel_primer_filtro_emsambleLayout.createSequentialGroup()
-                                .addComponent(lbl_cant_m_)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txt_cant_m, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(slider_cant_genero, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lbl_cant_f_)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txt_cant_f, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 24, Short.MAX_VALUE))
-                    .addGroup(panel_primer_filtro_emsambleLayout.createSequentialGroup()
-                        .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scroll_txtArea_detalles_)
-                            .addGroup(panel_primer_filtro_emsambleLayout.createSequentialGroup()
-                                .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbl_tipo_ensamble_)
-                                    .addComponent(lbl_ref_tamaño_))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(combo_tipo_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+        lbl_genero_.setText("Género:");
+
+        lbl_cant_m_.setText("M:");
+
+        txt_cant_m.setEditable(false);
+        txt_cant_m.setBackground(new java.awt.Color(255, 255, 255));
+        txt_cant_m.setMaximumSize(new java.awt.Dimension(2147483647, 25));
+        txt_cant_m.setMinimumSize(new java.awt.Dimension(6, 25));
+        txt_cant_m.setPreferredSize(new java.awt.Dimension(6, 25));
+
+        slider_cant_genero_.setMinimum(0);
+        slider_cant_genero_.setMaximum(10);
+        slider_cant_genero_.setValue(0);
+        slider_cant_genero_.setToolTipText("Desliza para Repartir Cantidad");
+        slider_cant_genero_.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                slider_cant_genero_StateChanged(evt);
+            }
+        });
+
+        lbl_cant_f_.setText("F:");
+
+        txt_cant_f.setEditable(false);
+        txt_cant_f.setBackground(new java.awt.Color(255, 255, 255));
+        txt_cant_f.setMaximumSize(new java.awt.Dimension(2147483647, 25));
+        txt_cant_f.setMinimumSize(new java.awt.Dimension(6, 25));
+        txt_cant_f.setPreferredSize(new java.awt.Dimension(6, 25));
+
+        javax.swing.GroupLayout panel_cantidad_genero_Layout = new javax.swing.GroupLayout(panel_cantidad_genero_);
+        panel_cantidad_genero_.setLayout(panel_cantidad_genero_Layout);
+        panel_cantidad_genero_Layout.setHorizontalGroup(
+            panel_cantidad_genero_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_cantidad_genero_Layout.createSequentialGroup()
+                .addComponent(lbl_genero_)
+                .addGap(28, 28, 28)
+                .addComponent(lbl_cant_m_)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txt_cant_m, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(slider_cant_genero_, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl_cant_f_)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txt_cant_f, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        panel_primer_filtro_emsambleLayout.setVerticalGroup(
-            panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_primer_filtro_emsambleLayout.createSequentialGroup()
+        panel_cantidad_genero_Layout.setVerticalGroup(
+            panel_cantidad_genero_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_cantidad_genero_Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_tipo_ensamble_)
-                    .addComponent(combo_tipo_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_ref_tamaño_)
-                    .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_cantidad_ensamble_))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(slider_cant_genero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panel_cantidad_genero_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(slider_cant_genero_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panel_cantidad_genero_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbl_cant_f_)
                         .addComponent(txt_cant_f, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panel_primer_filtro_emsambleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(panel_cantidad_genero_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbl_cant_m_)
                         .addComponent(txt_cant_m, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lbl_genero_)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel1.setText("Tipo:");
+
+        buttonGroup_tipoTT_.add(jRadioButton1);
+        jRadioButton1.setText("Tradicional");
+        jRadioButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        buttonGroup_tipoTT_.add(jRadioButton2);
+        jRadioButton2.setText("Suspension");
+        jRadioButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        javax.swing.GroupLayout panel_tipoTT_Layout = new javax.swing.GroupLayout(panel_tipoTT_);
+        panel_tipoTT_.setLayout(panel_tipoTT_Layout);
+        panel_tipoTT_Layout.setHorizontalGroup(
+            panel_tipoTT_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_tipoTT_Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_tipoTT_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_tipoTT_Layout.createSequentialGroup()
+                        .addComponent(jRadioButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButton2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_tipoTT_Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1)
+                        .addGap(64, 64, 64)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panel_tipoTT_Layout.setVerticalGroup(
+            panel_tipoTT_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_tipoTT_Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scroll_txtArea_detalles_)
-                .addContainerGap())
+                .addGroup(panel_tipoTT_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2)))
+        );
+
+        javax.swing.GroupLayout panel_primer_filtro_emsamble_Layout = new javax.swing.GroupLayout(panel_primer_filtro_emsamble_);
+        panel_primer_filtro_emsamble_.setLayout(panel_primer_filtro_emsamble_Layout);
+        panel_primer_filtro_emsamble_Layout.setHorizontalGroup(
+            panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
+                        .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scroll_txtArea_detalles_)
+                            .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
+                                .addComponent(lbl_tipo_ensamble_)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
+                        .addGap(73, 73, 73)
+                        .addComponent(combo_tipo_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panel_tipoTT_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
+                        .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
+                                .addGap(73, 73, 73)
+                                .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(panel_cantidad_genero_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_ref_tamaño_)
+                            .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
+                                .addComponent(lbl_cantidad_ensamble_)
+                                .addGap(26, 26, 26)
+                                .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        panel_primer_filtro_emsamble_Layout.setVerticalGroup(
+            panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
+                .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_tipo_ensamble_)
+                            .addComponent(combo_tipo_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(panel_tipoTT_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_ref_tamaño_)
+                    .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_cantidad_ensamble_))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_cantidad_genero_, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scroll_txtArea_detalles_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         combo_ensamblador_selec.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -378,82 +423,96 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         });
         scroll_tabla_ordenes_.setViewportView(tabla_ordenes_);
 
+        btn_alistar_despacho_.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/imgs/imgbtn_preparar_mercancia.png"))); // NOI18N
+        btn_alistar_despacho_.setToolTipText("Alistar Despacho");
+        btn_alistar_despacho_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_alistar_despacho_ActionPerformed(evt);
+            }
+        });
+
+        btn_cancelar_despacho_.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/imgs/imgbtn_cancelar_despacho.png"))); // NOI18N
+        btn_cancelar_despacho_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelar_despacho_ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(panel_primer_filtro_emsamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lbl_ensamblador_)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(combo_ensamblador_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_selec_repuestos_)
-                            .addComponent(btn_prueba_))
-                        .addGap(18, 18, 18)
-                        .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btn_selec_repuestos_1)
-                                .addGap(18, 18, 18)
-                                .addComponent(btn_selec_repuestos_2)
-                                .addGap(151, 151, 151))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44)
-                                .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(112, 112, 112)
-                                .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)))))
-                .addContainerGap(47, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(lbl_ensamblador_)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(combo_ensamblador_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panel_primer_filtro_emsamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(95, 95, 95)
+                        .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52)
+                        .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_alistar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_cancelar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_selec_repuestos_1)
+                            .addGap(18, 18, 18)
+                            .addComponent(btn_selec_repuestos_2))
+                        .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(btn_selec_repuestos_, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btn_prueba_, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(114, 114, 114))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lbl_ensamblador_)
-                                    .addComponent(combo_ensamblador_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(panel_primer_filtro_emsamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(10, 10, 10)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_selec_repuestos_1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_selec_repuestos_2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                        .addComponent(lbl_ensamblador_)
+                        .addComponent(combo_ensamblador_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(panel_primer_filtro_emsamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btn_selec_repuestos_1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_selec_repuestos_2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(48, 48, 48))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(67, 67, 67)
+                            .addComponent(btn_alistar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btn_cancelar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
         );
 
         pack();
@@ -484,10 +543,6 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
             fireTableDataChanged();
         }
 
-        /*@Override//notifica a todos los listeners que todos los datos de la tabla han cambiado por lo que se redibujara la tabla conservando la estructura con los nuevos datos
-         public void fireTableDataChanged() {
-         super.fireTableDataChanged(); //To change body of generated methods, choose Tools | Templates.
-         }*/
         @Override//determina la clase de componentes que iran en cada celda
         public Class getColumnClass(int noCol) {
             return TIPOS_COLUMNAS_TABLA_DESPACHOS[noCol];
@@ -529,20 +584,7 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
 
     private void btn_Cancelar_DespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cancelar_DespachoActionPerformed
     
-        
     }//GEN-LAST:event_btn_Cancelar_DespachoActionPerformed
-
-    private void btn_selec_repuestos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selec_repuestos_ActionPerformed
-        
-        System.out.println("fila 1 -> "+((JComboBox)modeloTabla.getValueAt(0, 1)).getSelectedItem());
-        
-    }//GEN-LAST:event_btn_selec_repuestos_ActionPerformed
-
-    private void btn_prueba_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_prueba_ActionPerformed
-        
-        System.out.println("fila 2, col 3 -> "+((JSpinner)modeloTabla.getValueAt(1, 2)).getValue());
-        
-    }//GEN-LAST:event_btn_prueba_ActionPerformed
 
     private void btn_retirar_accesorio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_retirar_accesorio1ActionPerformed
         // TODO add your handling code here:
@@ -577,35 +619,12 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_selec_repuestos_2ActionPerformed
 
-    private void slider_cant_generoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_slider_cant_generoStateChanged
+    private void slider_cant_genero_StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_slider_cant_genero_StateChanged
 
-        txt_cant_m.setText(""+(slider_cant_genero.getMaximum() - slider_cant_genero.getValue()));
-        txt_cant_f.setText(""+slider_cant_genero.getValue());
-        
-        /*if (slider_cant_genero.getMaximum() > 1) {
-            if ((slider_cant_genero.getMaximum() % 2) != 0) {
-                txt_cant_m.setText("" + (((slider_cant_genero.getMaximum() - 1) / 2) + 1));
-                txt_cant_f.setText("" + ((slider_cant_genero.getMaximum() - 1) / 2));
-            } else {
-                txt_cant_m.setText("" + (slider_cant_genero.getMaximum() / 2));
-                txt_cant_f.setText("" + (slider_cant_genero.getMaximum() / 2));
-            }
-        } else {
-            if (slider_cant_genero.getValue() > 0) {
-                if (slider_cant_genero.getValue() <= 0.5) {
-                    txt_cant_m.setText("1");
-                    txt_cant_f.setText("");
-                } else {
-                    txt_cant_m.setText("");
-                    txt_cant_f.setText("1");
-                }
-            } else {
-                txt_cant_m.setText("");
-                txt_cant_f.setText("");
-            }
-        }*/
+        txt_cant_m.setText(""+(slider_cant_genero_.getMaximum() - slider_cant_genero_.getValue()));
+        txt_cant_f.setText(""+slider_cant_genero_.getValue());
 
-    }//GEN-LAST:event_slider_cant_generoStateChanged
+    }//GEN-LAST:event_slider_cant_genero_StateChanged
 
     private void txt_cant_ensambleKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensambleKeyTyped
 
@@ -618,16 +637,16 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
 
     private void txt_cant_ensambleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensambleKeyReleased
 
-        slider_cant_genero.setMinimum(0);
+        
         if(txt_cant_ensamble.getText().isEmpty()){
-            slider_cant_genero.setMaximum(10);
-            slider_cant_genero.setValue(0);
+            slider_cant_genero_.setMaximum(10);
+            slider_cant_genero_.setValue(0);
             txt_cant_m.setText("");
             txt_cant_f.setText("");
         }
         else{
-            slider_cant_genero.setMaximum(Integer.parseInt(txt_cant_ensamble.getText()));
-            slider_cant_genero.setValue(slider_cant_genero.getMaximum()/2);
+            slider_cant_genero_.setMaximum(Integer.parseInt(txt_cant_ensamble.getText()));
+            slider_cant_genero_.setValue(slider_cant_genero_.getMaximum()/2);
         }
   
     }//GEN-LAST:event_txt_cant_ensambleKeyReleased
@@ -636,6 +655,68 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tabla_ordenes_MouseClicked
 
+    private void btn_alistar_despacho_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_alistar_despacho_ActionPerformed
+
+        panel_primer_filtro_emsamble_.setEnabled(false);
+        SpinnerNumberModel spinnummodel = new SpinnerNumberModel(1, 0, 10, 1);
+        String ensamble = combo_tipo_ensamble_.getSelectedItem().toString();
+
+        if (!ensamble.equals("Rines o Aros") && !ensamble.equals("Importado")) {
+            try {
+                Artefacto.Bicicleta bici = new Artefacto.Bicicleta(ensamble);
+                // Dato visualizado al inicio en el spinner// Límite inferior// Límite superior // incremento-decremento
+                
+                data = new Object[bici.componentes.size()][3];
+                for (int i = 0; i < bici.componentes.size(); i++) {
+                    data[i] = new Object[]{bici.componentes.get(i), new JComboBox(), new SpinnCellTable(spinnummodel)};
+                }
+
+                /*JComboBox combo_1 = new JComboBox(new Object[]{"Marco Trad '26 disco", "Marco sin disco", "Marco Suspension"});
+                 JComboBox combo_2 = new JComboBox(new Object[]{"GW Suspension", "Exceed Suspension", "Logan"});
+
+                 data = new Object[][]{
+                 {"Marco", combo_1, },
+                 {"Tenedor", combo_2, new SpinnCellTable(spinnummodel)}
+                 };*/
+                modeloTabla.setDatosTabla(data);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.toString());
+            }
+        } else {
+            if(ensamble.equals("Rines o Aros")){
+                Artefacto.Aro aro = new Artefacto.Aro();
+                data = new Object[aro.componentes.size()][3];
+                for (int i = 0; i < aro.componentes.size(); i++) {
+                    data[i] = new Object[]{aro.componentes.get(i), new JComboBox(), new SpinnCellTable(spinnummodel)};
+                }
+            }
+        }
+
+    }//GEN-LAST:event_btn_alistar_despacho_ActionPerformed
+
+    private void combo_tipo_ensamble_ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_combo_tipo_ensamble_ItemStateChanged
+        
+        Object itemSelec;
+        
+        if(evt.getStateChange() == java.awt.event.ItemEvent.SELECTED){
+            itemSelec = evt.getItem();
+            if(itemSelec.toString().equals("Todo Terreno")){
+                panel_tipoTT_.setVisible(true);
+            }
+            else{
+                panel_tipoTT_.setVisible(false);
+            }
+        }
+        
+    }//GEN-LAST:event_combo_tipo_ensamble_ItemStateChanged
+
+    private void btn_cancelar_despacho_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelar_despacho_ActionPerformed
+        
+        data = new Object[][]{};
+        modeloTabla.setDatosTabla(data);
+        
+    }//GEN-LAST:event_btn_cancelar_despacho_ActionPerformed
+
     
 
     
@@ -643,14 +724,18 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     private javax.swing.JButton btn_Cancelar_Despacho;
     private javax.swing.JButton btn_Despachar_Orden;
     private javax.swing.JButton btn_add_accesorio1;
-    private javax.swing.JButton btn_prueba_;
+    private javax.swing.JButton btn_alistar_despacho_;
+    private javax.swing.JButton btn_cancelar_despacho_;
     private javax.swing.JButton btn_retirar_accesorio1;
-    private javax.swing.JButton btn_selec_repuestos_;
     private javax.swing.JButton btn_selec_repuestos_1;
     private javax.swing.JButton btn_selec_repuestos_2;
+    private javax.swing.ButtonGroup buttonGroup_tipoTT_;
     private javax.swing.JComboBox combo_ensamblador_selec;
     private javax.swing.JComboBox combo_ref_tamaño;
-    private javax.swing.JComboBox combo_tipo_ensamble;
+    private javax.swing.JComboBox combo_tipo_ensamble_;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JLabel lbl_cant_f_;
     private javax.swing.JLabel lbl_cant_m_;
     private javax.swing.JLabel lbl_cantidad_ensamble_;
@@ -658,11 +743,13 @@ public class OrdenProduccion extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_genero_;
     private javax.swing.JLabel lbl_ref_tamaño_;
     private javax.swing.JLabel lbl_tipo_ensamble_;
-    private javax.swing.JPanel panel_primer_filtro_emsamble;
+    private javax.swing.JPanel panel_cantidad_genero_;
+    private javax.swing.JPanel panel_primer_filtro_emsamble_;
+    private javax.swing.JPanel panel_tipoTT_;
     private javax.swing.JScrollPane scroll_items_selec;
     private javax.swing.JScrollPane scroll_tabla_ordenes_;
     private javax.swing.JScrollPane scroll_txtArea_detalles_;
-    private javax.swing.JSlider slider_cant_genero;
+    private javax.swing.JSlider slider_cant_genero_;
     private javax.swing.JTable tabla_despacho_;
     private javax.swing.JTable tabla_ordenes_;
     private javax.swing.JTextArea txtArea_detalles_;
