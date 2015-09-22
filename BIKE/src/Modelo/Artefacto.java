@@ -88,10 +88,7 @@ public class Artefacto {
                 });
                 break;
         }
-
-        
-               
-        
+   
     }
     
 }
