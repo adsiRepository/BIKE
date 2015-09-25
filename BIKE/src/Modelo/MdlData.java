@@ -4,7 +4,7 @@
 
 package Modelo;
 
-import ConexionBD.ConnBD;//Me conecto con el paquete de conexion
+import Controlador.ConexionBD;//Me conecto con el paquete de conexion
 import java.sql.Connection;//Permite establecer una conexion SQL
 import java.sql.ResultSet;//Muestra resultados en la base de datos.
 import java.sql.ResultSetMetaData;
@@ -28,7 +28,7 @@ public class MdlData {
     
     //Constructor
     public MdlData() {
-        this.miCndb = ConnBD.connect_BD();
+        this.miCndb = ConexionBD.obtenerConexion();
     }
     
     

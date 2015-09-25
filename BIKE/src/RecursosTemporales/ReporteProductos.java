@@ -5,7 +5,7 @@
  */
 package RecursosTemporales;
 
-//import ConexionBD.ConnBD;//Me conecto con el paquete de conexion
+//import ConexionBD.ConexionBD;//Me conecto con el paquete de conexion
 import java.sql.Connection;//Permite establecer una conexion SQL
 import java.sql.ResultSet;//Muestra resultados en la base de datos.
 import java.sql.ResultSetMetaData;
@@ -15,13 +15,13 @@ import java.sql.Statement;//Permite recibir instrucciones Mysql en Java
 import java.sql.PreparedStatement;
 //import java.util.*;
 
-import Modelo.ClaseRaiz;
+import Modelo.MainClass;
 
-import ConexionBD.ConnBD;
-import Controlador.CtrData;
+import Controlador.ConexionBD;
+import Controlador.ConsultaSQL;
 import Modelo.MdlData;
 import Controlador.Fechas;
-import Vista.Pagos;
+import Vista.ControlRepuestos;
 import java.util.*;//Maneja el ArrayList
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
@@ -46,7 +46,7 @@ public class ReporteProductos extends javax.swing.JInternalFrame {
         dtm.setColumnIdentifiers(headers);
         tblprods.setModel(dtm);
         tblprods.setAutoResizeMode(tblprods.AUTO_RESIZE_ALL_COLUMNS);
-        myConex = ConnBD.connect_BD();
+        myConex = ConexionBD.obtenerConexion();
     }
 
     /**
@@ -129,7 +129,7 @@ public class ReporteProductos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         
         //MdlData exe = new MdlData();
-        //CtrData data = new CtrData("productos");
+        //CtrData data = new ConsultaSQL("productos");
         
         
         try{
@@ -180,7 +180,7 @@ public class ReporteProductos extends javax.swing.JInternalFrame {
     private void GestionarProductos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GestionarProductos_ActionPerformed
         // TODO add your handling code here:
         
-        Pagos gestion = new Pagos();
+        ControlRepuestos gestion = new ControlRepuestos();
         this.getDesktopPane().add(gestion);
         gestion.setVisible(true);
         //report.setVisible(true);

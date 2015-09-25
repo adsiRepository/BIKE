@@ -3,9 +3,9 @@
 
 package Vista;
 
-import Modelo.ClaseRaiz;
+import Modelo.MainClass;
 
-import Controlador.CtrData;
+import Controlador.ConsultaSQL;
 import Modelo.MdlData;
 //import Controlador.Fechas;
 import java.util.ArrayList;//Maneja el ArrayList
@@ -264,13 +264,13 @@ public class Inventarios extends javax.swing.JInternalFrame {
     }
     
     public void miBusca(){
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         MdlData exe = new MdlData();
         
         try{
             String camp = "codprov";
             
-            exe.Search(data.ExtWhere( camp, ""+obs ) );
+            exe.Search(data.extWhere( camp, ""+obs ) );
             
             if(!exe.getResults().isEmpty()){
                 dtm.addRow(exe.getResults().toArray());
@@ -296,7 +296,7 @@ public class Inventarios extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         
         MdlData exe = new MdlData();
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         
         String codprov;
         
@@ -317,7 +317,7 @@ public class Inventarios extends javax.swing.JInternalFrame {
         newreg.add(txttl.getText());
         newreg.add(txtmil.getText());
         
-        exe.SaveToBD(data.ArrayToBD(newreg));
+        exe.SaveToBD(data.arrayToBD(newreg));
         
         LimpiarPantalla();
         
@@ -347,7 +347,7 @@ public class Inventarios extends javax.swing.JInternalFrame {
     private void Modificar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Modificar_ActionPerformed
         // TODO add your handling code here:
         
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         MdlData exe = new MdlData();
         
         String camps[] = {"codprov","idprov","idtipo","nombre","direccion","telefono","mail"};
@@ -363,7 +363,7 @@ public class Inventarios extends javax.swing.JInternalFrame {
             newdata.add(txttl.getText());
             newdata.add(txtmil.getText());
 
-            exe.Update(data.ChangeReg( "codprov", ""+obs, newdata, camps ));
+            exe.Update(data.changeReg( "codprov", ""+obs, newdata, camps ));
             
             LimpiarPantalla();
             
@@ -389,9 +389,9 @@ public class Inventarios extends javax.swing.JInternalFrame {
         
         
         MdlData exe = new MdlData();
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         
-        exe.Delete(data.EraseIt("iduser", ""+obs));
+        exe.Delete(data.eraseIt("iduser", ""+obs));
         
         LimpiarPantalla();
         

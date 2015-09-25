@@ -3,9 +3,9 @@
 
 package RecursosTemporales;
 
-import Modelo.ClaseRaiz;
+import Modelo.MainClass;
 
-import Controlador.CtrData;
+import Controlador.ConsultaSQL;
 import Modelo.MdlData;
 import Controlador.Fechas;
 import javax.swing.JOptionPane;
@@ -42,10 +42,10 @@ public class InterfazPOS extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         //this.setExtendedState(MAXIMIZED_BOTH);
         //--
-        CtrData data = new CtrData("ventas");
+        ConsultaSQL data = new ConsultaSQL("ventas");
         MdlData exe = new MdlData();
 //                                  -->
-        exe.Search(data.ExtractAll());
+        exe.Search(data.extractAll());
         int nofct = exe.getNumRegs();
         
         //--
@@ -453,11 +453,11 @@ public class InterfazPOS extends javax.swing.JFrame {
                 //this.obs = txtsearch.getText();
             //}
 
-            CtrData data = new CtrData(mitabla);
+            ConsultaSQL data = new ConsultaSQL(mitabla);
             MdlData exe = new MdlData();
 
             try{
-                exe.Search(data.ExtWhere( "codpro", ""+obs ) );
+                exe.Search(data.extWhere( "codpro", ""+obs ) );
 
                 ArrayList<Object> cap = new ArrayList<>();
 
@@ -545,7 +545,7 @@ public class InterfazPOS extends javax.swing.JFrame {
         //String cmp = null;
         //String tabla = null;
         
-                //CtrData data = new CtrData(tabla);
+                //CtrData data = new ConsultaSQL(tabla);
                 //MdlData exe = new MdlData();
         
             try{
@@ -554,10 +554,10 @@ public class InterfazPOS extends javax.swing.JFrame {
                     //tabla = mitabla;
                     //cmp = "codpro";
                     
-                CtrData data = new CtrData(mitabla);
+                ConsultaSQL data = new ConsultaSQL(mitabla);
                 MdlData exe = new MdlData();
                     
-                exe.Search(data.ExtWhere( micampo, ""+srch ) );
+                exe.Search(data.extWhere( micampo, ""+srch ) );
 
                 if(!exe.getResults().isEmpty()){
                     txtdescprod.setText(""+exe.getResults().get(2));
@@ -573,10 +573,10 @@ public class InterfazPOS extends javax.swing.JFrame {
                     //tabla = "clientes";
                     //cmp = "idclientes";
                     
-                CtrData data = new CtrData("clientes");
+                ConsultaSQL data = new ConsultaSQL("clientes");
                 MdlData exe = new MdlData();
                     
-                exe.Search(data.ExtWhere( "idcliente", ""+srch ) );
+                exe.Search(data.extWhere( "idcliente", ""+srch ) );
 
                 if(!exe.getResults().isEmpty()){
                     txtcliente.setText(""+exe.getResults().get(2));
@@ -604,11 +604,11 @@ public class InterfazPOS extends javax.swing.JFrame {
             
                 this.obs = txtcodpro.getText();
 
-                CtrData data = new CtrData(mitabla);
                 MdlData exe = new MdlData();
 
+
                 try{
-                    exe.Search(data.ExtWhere( micampo, ""+obs ) );
+                    //exe.Search(data.extWhere( micampo, ""+obs ) );
 
                     ArrayList<Object> cap = new ArrayList<>();
 
@@ -664,11 +664,11 @@ public class InterfazPOS extends javax.swing.JFrame {
                 
                 this.obs = txtcodpro.getText();
 
-                CtrData data = new CtrData(mitabla);
+                ConsultaSQL data = new ConsultaSQL(mitabla);
                 MdlData exe = new MdlData();
 
                 try{
-                    exe.Search(data.ExtWhere( micampo, ""+obs ) );
+                    exe.Search(data.extWhere( micampo, ""+obs ) );
 
                     ArrayList<Object> cap = new ArrayList<>();
 
@@ -732,7 +732,7 @@ public class InterfazPOS extends javax.swing.JFrame {
         
         
         MdlData exe = new MdlData();
-        CtrData data = new CtrData("ventas");
+        ConsultaSQL data = new ConsultaSQL("ventas");
         ArrayList<Object> newsale = new ArrayList<>();
         ArrayList<Object> prods = new ArrayList<>();
         String strprods = "";
@@ -783,7 +783,7 @@ public class InterfazPOS extends javax.swing.JFrame {
         newsale.add(txtcajero.getText());
         
         
-        exe.SaveToBD( data.ArrayToBD( newsale ) );/**/
+        exe.SaveToBD( data.arrayToBD( newsale ) );/**/
         
         
         }

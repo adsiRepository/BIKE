@@ -2,7 +2,6 @@
 package Vista;
 
 import Controlador.Graficos;
-import Recursos.dialogo1;
 import RecursosTemporales.GUsers;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -32,6 +31,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private final Class[] tiposCampos;
     private DefaultTableModel dtm_tabla_actividades;
     private int fila_tabla, col_tabla;
+    
+    //VENTANAS INTERNAS
+    private OrdenProduccion ordenProduccion;
+    private ControlRepuestos controlRepuestos;
+    //----
     
     /** Creates new form MenuPrincipal */
     public MenuPrincipal() {
@@ -108,36 +112,31 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar2 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
         scroll_tabla_acts = new javax.swing.JScrollPane();
         tabla_actividades = new javax.swing.JTable();
         btn_empleados_ = new javax.swing.JButton();
         btn_produccion_ = new javax.swing.JButton();
         btn_inventario_ = new javax.swing.JButton();
         btn_revision_ = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        panel_reloj_ = new javax.swing.JPanel();
+        panel_fecha_ = new javax.swing.JPanel();
         txtview_fecha_actual = new javax.swing.JTextField();
-        barraMenu_1 = new javax.swing.JMenuBar();
-        jMenu3 = new javax.swing.JMenu();
-        mnuArchivo_newOrden = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        mnuMercancia_ = new javax.swing.JMenu();
-        mnuTareas_nuevaOrden_ = new javax.swing.JMenuItem();
-        GestionMercancia_ = new javax.swing.JMenuItem();
-        mnuProveedores_ = new javax.swing.JMenu();
-        GestionProveedores_ = new javax.swing.JMenuItem();
-        mnuGUsers_ = new javax.swing.JMenu();
-        GestionUsuarios_ = new javax.swing.JMenuItem();
-
-        jMenu1.setText("File");
-        jMenuBar2.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar2.add(jMenu2);
+        barra_menu_1 = new javax.swing.JMenuBar();
+        menu_archivo_ = new javax.swing.JMenu();
+        menu_item_parametrizacion_ = new javax.swing.JMenuItem();
+        menu_item_cerrar_ = new javax.swing.JMenuItem();
+        menu_tareas_ = new javax.swing.JMenu();
+        menu_item_nueva_orden_ = new javax.swing.JMenuItem();
+        menu_item_despachos_ = new javax.swing.JMenuItem();
+        menu_almacen_ = new javax.swing.JMenu();
+        menu_item_productos_ = new javax.swing.JMenuItem();
+        menu_item_repuestos_ = new javax.swing.JMenuItem();
+        menu_item_articulos_ = new javax.swing.JMenuItem();
+        menu_ensambladores_ = new javax.swing.JMenu();
+        menu_item_reg_ensam_ = new javax.swing.JMenuItem();
+        menu_item_supervis_ensam_ = new javax.swing.JMenuItem();
+        menu_herramientas_ = new javax.swing.JMenu();
+        menu_item_servidores_ = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -186,16 +185,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_revision_.setMinimumSize(new java.awt.Dimension(150, 80));
         btn_revision_.setPreferredSize(new java.awt.Dimension(150, 80));
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(210, 210));
+        panel_reloj_.setPreferredSize(new java.awt.Dimension(210, 210));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panel_reloj_Layout = new javax.swing.GroupLayout(panel_reloj_);
+        panel_reloj_.setLayout(panel_reloj_Layout);
+        panel_reloj_Layout.setHorizontalGroup(
+            panel_reloj_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 210, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panel_reloj_Layout.setVerticalGroup(
+            panel_reloj_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 210, Short.MAX_VALUE)
         );
 
@@ -204,18 +203,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
         txtview_fecha_actual.setText("23/07/2016");
         txtview_fecha_actual.setToolTipText("Fecha de Hoy");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout panel_fecha_Layout = new javax.swing.GroupLayout(panel_fecha_);
+        panel_fecha_.setLayout(panel_fecha_Layout);
+        panel_fecha_Layout.setHorizontalGroup(
+            panel_fecha_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_fecha_Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtview_fecha_actual, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        panel_fecha_Layout.setVerticalGroup(
+            panel_fecha_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_fecha_Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtview_fecha_actual, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
                 .addContainerGap())
@@ -229,13 +228,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(escritorioLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(escritorioLayout.createSequentialGroup()
                         .addGap(63, 63, 63)
                         .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 922, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)))
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -251,9 +250,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(escritorioLayout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
                         .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
@@ -269,72 +268,90 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorio.setLayer(btn_produccion_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_inventario_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_revision_, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        escritorio.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        escritorio.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(panel_reloj_, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(panel_fecha_, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jMenu3.setText("Archivo");
+        menu_archivo_.setText("Archivo");
 
-        mnuArchivo_newOrden.setText("Parametrizacion");
-        mnuArchivo_newOrden.addActionListener(new java.awt.event.ActionListener() {
+        menu_item_parametrizacion_.setText("Parametrizacion");
+        menu_item_parametrizacion_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuArchivo_newOrdenActionPerformed(evt);
+                menu_item_parametrizacion_ActionPerformed(evt);
             }
         });
-        jMenu3.add(mnuArchivo_newOrden);
+        menu_archivo_.add(menu_item_parametrizacion_);
 
-        jMenuItem1.setText("Nuevo Empleado");
-        jMenu3.add(jMenuItem1);
+        menu_item_cerrar_.setText("Cerrar");
+        menu_archivo_.add(menu_item_cerrar_);
 
-        jMenuItem3.setText("Cerrar");
-        jMenu3.add(jMenuItem3);
+        barra_menu_1.add(menu_archivo_);
 
-        barraMenu_1.add(jMenu3);
+        menu_tareas_.setText("Tareas");
 
-        mnuMercancia_.setText("Tareas");
-
-        mnuTareas_nuevaOrden_.setText("Nueva Orden");
-        mnuTareas_nuevaOrden_.addActionListener(new java.awt.event.ActionListener() {
+        menu_item_nueva_orden_.setText("Nueva Orden");
+        menu_item_nueva_orden_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuTareas_nuevaOrden_ActionPerformed(evt);
+                menu_item_nueva_orden_ActionPerformed(evt);
             }
         });
-        mnuMercancia_.add(mnuTareas_nuevaOrden_);
+        menu_tareas_.add(menu_item_nueva_orden_);
 
-        GestionMercancia_.setText("Revisar Despachos");
-        GestionMercancia_.addActionListener(new java.awt.event.ActionListener() {
+        menu_item_despachos_.setText("Revisar Despachos");
+        menu_item_despachos_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GestionMercancia_ActionPerformed(evt);
+                menu_item_despachos_ActionPerformed(evt);
             }
         });
-        mnuMercancia_.add(GestionMercancia_);
+        menu_tareas_.add(menu_item_despachos_);
 
-        barraMenu_1.add(mnuMercancia_);
+        barra_menu_1.add(menu_tareas_);
 
-        mnuProveedores_.setText("Almacen");
+        menu_almacen_.setText("Almacen");
 
-        GestionProveedores_.setText("Stock");
-        GestionProveedores_.addActionListener(new java.awt.event.ActionListener() {
+        menu_item_productos_.setText("Productos");
+        menu_item_productos_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GestionProveedores_ActionPerformed(evt);
+                menu_item_productos_ActionPerformed(evt);
             }
         });
-        mnuProveedores_.add(GestionProveedores_);
+        menu_almacen_.add(menu_item_productos_);
 
-        barraMenu_1.add(mnuProveedores_);
-
-        mnuGUsers_.setText("Herramientas");
-
-        GestionUsuarios_.setText("Apariencia");
-        GestionUsuarios_.addActionListener(new java.awt.event.ActionListener() {
+        menu_item_repuestos_.setText("Repuestos");
+        menu_item_repuestos_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GestionUsuarios_ActionPerformed(evt);
+                menu_item_repuestos_ActionPerformed(evt);
             }
         });
-        mnuGUsers_.add(GestionUsuarios_);
+        menu_almacen_.add(menu_item_repuestos_);
 
-        barraMenu_1.add(mnuGUsers_);
+        menu_item_articulos_.setText("Articulos");
+        menu_almacen_.add(menu_item_articulos_);
 
-        setJMenuBar(barraMenu_1);
+        barra_menu_1.add(menu_almacen_);
+
+        menu_ensambladores_.setText("Ensambladores");
+
+        menu_item_reg_ensam_.setText("Registro");
+        menu_ensambladores_.add(menu_item_reg_ensam_);
+
+        menu_item_supervis_ensam_.setText("Supervision");
+        menu_ensambladores_.add(menu_item_supervis_ensam_);
+
+        barra_menu_1.add(menu_ensambladores_);
+
+        menu_herramientas_.setText("Herramientas");
+
+        menu_item_servidores_.setText("Servidor");
+        menu_item_servidores_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_item_servidores_ActionPerformed(evt);
+            }
+        });
+        menu_herramientas_.add(menu_item_servidores_);
+
+        barra_menu_1.add(menu_herramientas_);
+
+        setJMenuBar(barra_menu_1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -350,17 +367,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mnuArchivo_newOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivo_newOrdenActionPerformed
+   
+    private void menu_item_parametrizacion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_parametrizacion_ActionPerformed
         // TODO add your handling code here:
         
-        OrdenProduccion clnt = new OrdenProduccion();
-        escritorio.add(clnt);
-        clnt.setVisible(true);
-        clnt.toFront();
+        
 
-    }//GEN-LAST:event_mnuArchivo_newOrdenActionPerformed
+    }//GEN-LAST:event_menu_item_parametrizacion_ActionPerformed
 
-    private void GestionUsuarios_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GestionUsuarios_ActionPerformed
+    private void menu_item_servidores_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_servidores_ActionPerformed
         // TODO add your handling code here:
         
         GUsers usr = new GUsers();
@@ -371,9 +386,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         //envia el formulario de clientes al frente.
         usr.toFront();
         
-    }//GEN-LAST:event_GestionUsuarios_ActionPerformed
+    }//GEN-LAST:event_menu_item_servidores_ActionPerformed
 
-    private void GestionMercancia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GestionMercancia_ActionPerformed
+    private void menu_item_despachos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_despachos_ActionPerformed
         // TODO add your handling code here:
         
         GestionEmpleados merc = new GestionEmpleados();
@@ -381,9 +396,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         merc.setVisible(true);
         merc.toFront();
         
-    }//GEN-LAST:event_GestionMercancia_ActionPerformed
+    }//GEN-LAST:event_menu_item_despachos_ActionPerformed
 
-    private void GestionProveedores_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GestionProveedores_ActionPerformed
+    private void menu_item_productos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_productos_ActionPerformed
         // TODO add your handling code here:
         
         Inventarios prov = new Inventarios();
@@ -391,16 +406,26 @@ public class MenuPrincipal extends javax.swing.JFrame {
         prov.setVisible(true);
         prov.toFront();
         
-    }//GEN-LAST:event_GestionProveedores_ActionPerformed
+    }//GEN-LAST:event_menu_item_productos_ActionPerformed
 
-    private void mnuTareas_nuevaOrden_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTareas_nuevaOrden_ActionPerformed
+    private void menu_item_nueva_orden_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_nueva_orden_ActionPerformed
+
+        try {
+            if (ordenProduccion != null && ordenProduccion.isVisible()) {
+                if (ordenProduccion.isIcon()) {
+                    ordenProduccion.setIcon(false);
+                }
+            } else {
+                ordenProduccion = new OrdenProduccion();
+                escritorio.add(ordenProduccion);
+                ordenProduccion.setVisible(true);
+            }
+            ordenProduccion.toFront();
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
         
-        OrdenProduccion orden = new OrdenProduccion();
-        escritorio.add(orden);
-        orden.setVisible(true);
-        orden.toFront();
-        
-    }//GEN-LAST:event_mnuTareas_nuevaOrden_ActionPerformed
+    }//GEN-LAST:event_menu_item_nueva_orden_ActionPerformed
 
     private void tabla_actividadesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_actividadesMouseClicked
         
@@ -408,6 +433,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
         col_tabla = tabla_actividades.columnAtPoint(evt.getPoint());
         
     }//GEN-LAST:event_tabla_actividadesMouseClicked
+
+    private void menu_item_repuestos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_repuestos_ActionPerformed
+
+        try {
+            if (controlRepuestos != null && controlRepuestos.isVisible()) {
+                if (controlRepuestos.isIcon()) {
+                    controlRepuestos.setIcon(false);
+                }
+            } else {
+                controlRepuestos = new ControlRepuestos();
+                escritorio.add(controlRepuestos);
+                controlRepuestos.setVisible(true);
+            }
+            controlRepuestos.toFront();
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+
+    }//GEN-LAST:event_menu_item_repuestos_ActionPerformed
    
 //CLASES INTERNAS DE ESTA CLASE "MenuPrincipal"
     
@@ -664,8 +708,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             MenuPrincipal menu = new MenuPrincipal();
             menu.setVisible(true);
-            dialogo1 dialg1 = new dialogo1(menu, true);
-            dialg1.setVisible(true);
+            /*dialogo1 dialg1 = new dialogo1(menu, true);
+            dialg1.setVisible(true);*/
         });
     }
 
@@ -673,28 +717,29 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem GestionMercancia_;
-    private javax.swing.JMenuItem GestionProveedores_;
-    private javax.swing.JMenuItem GestionUsuarios_;
-    private javax.swing.JMenuBar barraMenu_1;
+    private javax.swing.JMenuBar barra_menu_1;
     private javax.swing.JButton btn_empleados_;
     private javax.swing.JButton btn_inventario_;
     private javax.swing.JButton btn_produccion_;
     private javax.swing.JButton btn_revision_;
     public static final javax.swing.JDesktopPane escritorio = new Graficos.Escritorio();
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JMenuItem mnuArchivo_newOrden;
-    private javax.swing.JMenu mnuGUsers_;
-    private javax.swing.JMenu mnuMercancia_;
-    private javax.swing.JMenu mnuProveedores_;
-    private javax.swing.JMenuItem mnuTareas_nuevaOrden_;
+    private javax.swing.JMenu menu_almacen_;
+    private javax.swing.JMenu menu_archivo_;
+    private javax.swing.JMenu menu_ensambladores_;
+    private javax.swing.JMenu menu_herramientas_;
+    private javax.swing.JMenuItem menu_item_articulos_;
+    private javax.swing.JMenuItem menu_item_cerrar_;
+    private javax.swing.JMenuItem menu_item_despachos_;
+    private javax.swing.JMenuItem menu_item_nueva_orden_;
+    private javax.swing.JMenuItem menu_item_parametrizacion_;
+    private javax.swing.JMenuItem menu_item_productos_;
+    private javax.swing.JMenuItem menu_item_reg_ensam_;
+    private javax.swing.JMenuItem menu_item_repuestos_;
+    private javax.swing.JMenuItem menu_item_servidores_;
+    private javax.swing.JMenuItem menu_item_supervis_ensam_;
+    private javax.swing.JMenu menu_tareas_;
+    private javax.swing.JPanel panel_fecha_;
+    private javax.swing.JPanel panel_reloj_;
     private javax.swing.JScrollPane scroll_tabla_acts;
     private javax.swing.JTable tabla_actividades;
     private javax.swing.JTextField txtview_fecha_actual;

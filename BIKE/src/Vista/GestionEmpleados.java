@@ -3,9 +3,9 @@
 
 package Vista;
 
-import Modelo.ClaseRaiz;
+import Modelo.MainClass;
 
-import Controlador.CtrData;
+import Controlador.ConsultaSQL;
 import Controlador.Fechas;
 import Modelo.MdlData;
 import java.util.ArrayList;
@@ -237,8 +237,8 @@ public class GestionEmpleados extends javax.swing.JInternalFrame {
 
     public final void ExtractItemsExt(){
         MdlData ext = new MdlData();
-        CtrData itemsx = new CtrData("proveedores");
-        ext.ViewForKey(itemsx.ExtractAll(), "codprov");
+        ConsultaSQL itemsx = new ConsultaSQL("proveedores");
+        ext.ViewForKey(itemsx.extractAll(), "codprov");
         if( ext.getResults().size() > 0 ){
             for(int i=0; i<ext.getResults().size(); i++){
                 cmbcodprov.addItem(""+ext.getResults().toArray()[i]);
@@ -264,13 +264,13 @@ public class GestionEmpleados extends javax.swing.JInternalFrame {
     }
     
     public void miBusca(){
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         MdlData exe = new MdlData();
         
         try{
             String camp = "codpro";
             
-            exe.Search( data.ExtWhere( camp, ""+obs) );
+            exe.Search( data.extWhere( camp, ""+obs) );
             
             if(!exe.getResults().isEmpty()){
                 dtm.addRow(exe.getResults().toArray());
@@ -291,7 +291,7 @@ public class GestionEmpleados extends javax.swing.JInternalFrame {
     private void Ingresar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Ingresar_ActionPerformed
         // TODO add your handling code here:
         
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         ArrayList<Object> newreg = new ArrayList<>();
         Fechas fecha = new Fechas();
         MdlData exe = new MdlData();//
@@ -303,7 +303,7 @@ public class GestionEmpleados extends javax.swing.JInternalFrame {
             codprov = String.valueOf(cmbcodprov.getSelectedItem());
             codprod = String.valueOf(cmbcodprod.getSelectedItem());
             
-            exe.ViewForKey(data.ExtWhere("codpro", codprod), "inv");
+            exe.ViewForKey(data.extWhere("codpro", codprod), "inv");
             
             if( !exe.getResults().isEmpty() ){
                 cant = Integer.parseInt(""+exe.getResults().get(0));
@@ -315,7 +315,7 @@ public class GestionEmpleados extends javax.swing.JInternalFrame {
             
             String[] campos = {"inv","fechasurtido","horasurtido"};
             
-            exe.Update(data.ChangeReg("codpro", codprod, newreg, campos ));
+            exe.Update(data.changeReg("codpro", codprod, newreg, campos ));
             
             LimpiarPantalla();
             
@@ -337,8 +337,8 @@ public class GestionEmpleados extends javax.swing.JInternalFrame {
         cmbcodprod.removeAllItems();
         
         MdlData exe = new MdlData();
-        CtrData data = new CtrData("productos");
-        exe.ViewForKey(data.ExtWhere("codprov", ""+cmbcodprov.getSelectedItem()), "codpro");
+        ConsultaSQL data = new ConsultaSQL("productos");
+        exe.ViewForKey(data.extWhere("codprov", ""+cmbcodprov.getSelectedItem()), "codpro");
         for(int i=0; i<exe.getResults().size(); i++){
             cmbcodprod.addItem(""+exe.getResults().toArray()[i]);
         } 
@@ -360,7 +360,7 @@ public class GestionEmpleados extends javax.swing.JInternalFrame {
     private void Modificar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Modificar_ActionPerformed
         // TODO add your handling code here:
         
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         ArrayList<Object> list = new ArrayList<>();
         MdlData exe = new MdlData();//
         
@@ -377,7 +377,7 @@ public class GestionEmpleados extends javax.swing.JInternalFrame {
             
             String[] campos = {"inv","fechasurtido","horasurtido"};
             
-            exe.Update(data.ChangeReg( "codpro", codprod, list, campos ));
+            exe.Update(data.changeReg( "codpro", codprod, list, campos ));
             
             LimpiarPantalla();
             

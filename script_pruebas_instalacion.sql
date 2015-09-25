@@ -1,15 +1,26 @@
 /* FUENTES -> http://agcapa.es/mysql-comandos-basicos-consola-en-gnulinux/ */
 show databases; /*mostrar todas las bases*/
-use mysql;
-show tables;
 
-desc ensamblador;
+/*CONFIGURACION DE USUARIOS Y ACCESO*/
+
+create user 'user_storebike'@'localhost' identified by 'user_storebike'; /*CREAMOS EL USUARIO POR DEFECTO DEL PROGRAMA*/
+grant all privileges on storebike.* to 'user_storebike'@'localhost'; /*LE OTORGAMOS TODAS LAS CREDENCIALES UNICAMENTE EN LA BASE DE DATOS QUE LE CONCIERNE A ESTE PROGRAMA*/
+/*PARA OTORGAR PERMISOS DE ACCESO A USUARIOS DESDE OTRO EQUIPO DEBEMOS HACERLO CON LA SGTE LINEA:*/
+grant all privileges on storebike.* to 'user_storebike'@'nombre_equipo_desde_donde_conecta'; /*EL USUARIO ES 'user_storebike' SIEMPRE PUES ES EL USUARIO DEFINIDO PARA Y EN EL PROGRAMA Y NO TIENE NECESIDAD DE ESTARSE CAMBIANDO*/
+drop user 'user_storebike'@'localhost';
+/*----*/
+
 use storebike;
-desc ensambladores;
-use pruebas;
+show tables;
 drop database storebike;
-insert into ensambladores values ('AQ4530','117657732','Sebastian','Muñoz','3173547440',
-'Cra 29 no. 38-25','2015-01-07',null);
+
+SET SQL_SAFE_UPDATES=0;/*hay que poner esta linea en el sql del programa*/
+set foreign_key_checks = 1;
+
+desc ensambladores;
+insert into ensambladores values 
+('AQ4530','1107057722','Miguel','Gonzalez','3173547440','Cra 29 no. 38-25','2015-01-07',null),
+('AQ4083','117657732','Sebastian','Muñoz','3173547441','Cra 29 no. 38-25','2015-10-09',null);
 select * from ensambladores;
 
 desc componentes;
@@ -23,10 +34,18 @@ insert into componentes values ('001','Marco/Cuadro'),('002','Aro/Rin'),('015','
 ('099','Tensor'),			('014','Neumaticos'),			('046','Protectores'),		('050','Llantas'),
 ('006','Eje Centro'),		('018','Copas Centro'),			('423','Juego Frente'),		('030','Seguro Sillin'),
 ('026','Biela BMX'),		('022','Juego Manzanas'),		('024','Manzana Delantera'),('031','Manzana Trasera'),
-('048','Triplato'),			('049','Relacion Cuadrante'),	('051','Relacion Cuña');
+('048','Triplato'),			('049','Relacion Cuadrante'),	('051','Relacion Cuña'),	('332','Cuña Plato');
+delete from componentes;
 select * from componentes;
 
-SET SQL_SAFE_UPDATES=0;/*hay que poner esta linea en el sql del programa*/
+/*desc marcas;
+alter table marcas change id_marca id_marca char(2);
+insert into marcas values ('MI','MILLENIUM',null),('NE','NECO',null),('HI','SHIMANO',null),('R','RALEIGH',null),('SH','SH',null),
+('GW','GW',null),('PH','PHILIPS',null),('ES','EASTMAN',null),('ST','SUNTOUR',null),('FN','FEIMIN',null),('FV','FIVESTAR',null),
+('MY','MAYA',null),('KT','KMC-TEC',null),('KM','KMC',null),('CH','CHINO',null),('PW','POWER',null),('KY','KYLIN',null);
+delete from marcas;
+select * from marcas;*/
+
 
 desc repuestos;
 alter table repuestos change marca marca char(2) not null;
@@ -80,9 +99,35 @@ insert into repuestos values ('305337','CD MXR 12" 28D Negro','009',15,'R'),
 ('403431','BMX A222 Eje 3/8 Alum Negro Balinera','022',15,'GW'),
 ('403435','Acero Parallex C/Eje Cromadas','022',15,'PW'),
 ('403334','MTB A201 Eje 3/8 Alum Natural','022',15,'PW'),
-('403345','MTB A203 C/Puntilla Alum Natural','031',15,'GW');
+('403345','MTB A203 C/Puntilla Alum Natural','031',15,'GW'),
+('311104','Cuña Relacion Hierro 9.3mm','332',15,'CH'),
+('407533','16 x 2.125 Negra Pistera F116','050',15,'KY'),/*las llantas se referenciran por tamaño, que necesariamente debe ir escrito de primero en el campo de descripcion. Al usuario debera indicarsele esta precuacion */
+('407528','24 x 2.125 Negra F125','050',15,'KY'),
+('407547','12-1 x 2-1/4 Negra F146','050',15,'KY');
+
+update repuestos set plu = '305141' where plu = '305140'; 
+delete from repuestos;
 select * from repuestos;
 
+desc articulos;
+insert into articulos (id_articulo, articulo, descripcion) values 
+('ARO','Ruedas/Rines',			'Componentes: Manzana, Aro, Radios.'),
+('BSC','Bicicleta S/Cambios',	'Bicicleta de Relacion Fija, Cualquier tipo de Modelo y Tamaño'),
+('MTB','MTB/Todo-Terreno',		'Bicicleta con Cambios, amplio rango, su categoria se basa en sus componentes.'),
+('AMT','MTB Alta Gama',			'MTB Profesional o Semiprofesional, Bicicletas con componentes de Alta Gama.'),
+('BMX','BMX o Cross',			'Bicicleta #20 o #16 de tipo BMX o Cross, Economica o Alta Gama.'),
+('PLY','Playera',				'Direccion amplia o playera, postura erguida, por lo general para el género Femenino, utilitaria, con canasta y/o parrilla.'),
+('TUR','Turismo',				'Bicicleta Monomarcha o de Cambios Internos, ruedas de 28", frenos mediante accionamiento de varillas, muy utilitaria.'),
+('IMP','Importado',				'Articulo pre-ensamblado.'),
+('A01','Otro Articulo',			'Articulo ensamblado sin mucha Regularidad.');
+rename table artefacto to articulos;
+select * from articulos;
+
+/*FUENTES RESTRICCIONES Y RELACIONES
+http://blog.openalfa.com/como-trabajar-con-restricciones-de-clave-externa-en-mysql
+https://tomatoma.wordpress.com/manual-de-php/14-trabajar-con-mas-de-una-tabla/
+https://www.youtube.com/watch?v=nAH1pjCBVnI
+*/
 
 desc repuesto_articulo;
 insert into repuesto_articulo (articulo, plu_repuesto) values /*el siguiente orden en los registros no implica nada, solo es por visualizacion*/
@@ -92,6 +137,7 @@ insert into repuesto_articulo (articulo, plu_repuesto) values /*el siguiente ord
 ('BMX','303321'),						('MTB','403401'),	('AMT','403401'),
 ('BMX','305334'),                       ('MTB','403334'),	('AMT','403334'),
                                         ('MTB','403345'),	('AMT','403345'),
+                                        ('MTB','407528'),	('AMT','407528'),
 					('BSC','305126'),	('MTB','305438'),					
 					('BSC','104106'),	('MTB','104106'),
 					('BSC','104104'),	('MTB','104104'),
@@ -115,9 +161,9 @@ insert into repuesto_articulo (articulo, plu_repuesto) values /*el siguiente ord
 										('MTB','305408'),
 ('BMX','303323'),						('MTB','305469'),
                     ('BSC','303326'),   ('MTB','301219'),
-('BMX','600382'),						('MTB','303402'),
-('BMX','305133'),                       ('MTB','304444'),
-('BMX','305136'),                       ('MTB','304452'),
+					('BSC','311104'),	('MTB','303402'),
+('BMX','305133'),   ('BSC','407533'),   ('MTB','304444'),
+('BMX','305136'),   ('BSC','407547'),   ('MTB','304452'),
 ('BMX','403343'),						('MTB','306424'),
 ('BMX','403431'),                       ('MTB','306423'),
                                         ('MTB','307425'),
@@ -125,25 +171,12 @@ insert into repuesto_articulo (articulo, plu_repuesto) values /*el siguiente ord
                                         
 ;
 
-
-desc articulos;
-insert into articulos (id_articulo, articulo, descripcion) values
-('ARO','Ruedas/Rines','Componentes: Manzana, Aro, Radios.'),
-('BSC','Bicicleta S/Cambios','Bicicleta de Relacion Fija, Cualquier tipo de Modelo y Tamaño'),
-('MTB','MTB/Todo-Terreno','Bicicleta con Cambios, amplio rango, su categoria se basa en sus componentes.'),
-('AMT','MTB Profesional o Semiprofesional, Bicicletas con componentes de Alta Gama.'),
-('BMX','BMX','Bicicleta #20 o #16 de tipo BMX o Cross, Economica o Alta Gama.'),
-('PLY','Playera','Direccion amplia o playera, postura erguida, por lo general para el género Femenino, utilitaria, con canasta y/o parrilla.'),
-('TUR','Turismo','Bicicleta Monomarcha o de Cambios Internos, ruedas de 28", frenos mediante accionamiento de varillas, muy utilitaria.'),
-('IMP','Importado','Articulo pre-ensamblado.'),
-('A01','Otro Articulo');
-rename table artefacto to articulos;
-select * from articulos;
+delete from repuesto_articulo where plu_repuesto = '600382';
+select * from repuesto_articulo;
 
 
-desc marcas;
-alter table marcas change id_marca id_marca char(2);
-insert into marcas values ('MI','MILLENIUM',null),('NE','NECO',null),('HI','SHIMANO',null),('R','RALEIGH',null),('SH','SH',null),
-('GW','GW',null),('PH','PHILIPS',null),('ES','EASTMAN',null),('ST','SUNTOUR',null),('FN','FEIMIN',null),('FV','FIVESTAR',null),
-('MY','MAYA',null),('KT','KMC-TEC',null),('KM','KMC',null),('CH','CHINO',null),('PW','POWER',null);
-select * from marcas;
+select articulo from articulos inner join 
+
+
+
+

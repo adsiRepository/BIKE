@@ -5,9 +5,9 @@
  */
 package RecursosTemporales;
 
-import Modelo.ClaseRaiz;
+import Modelo.MainClass;
 
-import Controlador.CtrData;
+import Controlador.ConsultaSQL;
 import Modelo.MdlData;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -325,7 +325,7 @@ public class GUsers extends javax.swing.JInternalFrame {
     private void Agregar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Agregar_ActionPerformed
         // TODO add your handling code here:
         
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         MdlData exe = new MdlData();//
         
         String nknme, pass;
@@ -346,7 +346,7 @@ public class GUsers extends javax.swing.JInternalFrame {
         subida.add(cmbdept.getSelectedItem());
         subida.add(cmbrol.getSelectedItem());
         
-        exe.SaveToBD(data.ArrayToBD(subida));
+        exe.SaveToBD(data.arrayToBD(subida));
         
         LimpiarPantalla();
         
@@ -355,7 +355,7 @@ public class GUsers extends javax.swing.JInternalFrame {
     private void Modificar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Modificar_ActionPerformed
         // TODO add your handling code here:
         
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         MdlData exe = new MdlData();
         
         String camps[] = {"iduser","nombre","dir","telf","mail","nikuser","contrasena","dept","rol"};
@@ -373,7 +373,7 @@ public class GUsers extends javax.swing.JInternalFrame {
             newdata.add(cmbdept.getSelectedItem());
             newdata.add(cmbrol.getSelectedItem());
 
-            exe.Update(data.ChangeReg("iduser", ""+obs, newdata, camps ));
+            exe.Update(data.changeReg("iduser", ""+obs, newdata, camps ));
 
             txtnknme.setVisible(false);
             txtpass.setVisible(false); 
@@ -393,13 +393,13 @@ public class GUsers extends javax.swing.JInternalFrame {
             this.obs = txtsearch.getText();
         }
         
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         MdlData exe = new MdlData();
         
         try{
             String camp = "iduser";
             
-            exe.Search(data.ExtWhere(camp, ""+obs) );
+            exe.Search(data.extWhere(camp, ""+obs) );
             
             if(!exe.getResults().isEmpty()){
                 dtm.addRow(exe.getResults().toArray());
@@ -437,9 +437,9 @@ public class GUsers extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         
         MdlData exe = new MdlData();
-        CtrData data = new CtrData(mitabla);
+        ConsultaSQL data = new ConsultaSQL(mitabla);
         
-        exe.Delete(data.EraseIt("iduser", ""+obs));
+        exe.Delete(data.eraseIt("iduser", ""+obs));
         
         LimpiarPantalla();
         

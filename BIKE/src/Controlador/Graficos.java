@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 
 /*@author bik*/
 
@@ -31,5 +33,67 @@ public class Graficos {
             grf.drawImage(fondo_escritorio, 0 , 0, getWidth(), getHeight(), null, this);//-(getHeight()/8)
         }
     }
+   
+    
+    public static class VentanaInterna extends JInternalFrame {
+        
+        private PanelFondoVentanaInterna pi;
+        private Image fondo;
+        
+        public VentanaInterna(){
+            //this.fondo = new ImageIcon(getClass().getResource("../Recursos/imgs/fondo_ord_prod.png")).getImage();
+            pi = new PanelFondoVentanaInterna();
+            setContentPane(pi);
+        }
+        
+        /*public void setImagenFondo(String nomImage){
+            pi.setImage(nomImage);
+        }*/
+
+        /*@Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
+            //super.paint(g); //To change body of generated methods, choose Tools | Templates.
+        }*/
+     
+    }
+    
+    
+    public static class PanelFondoVentanaInterna extends JPanel {
+
+        private Image fondo;
+        
+        public PanelFondoVentanaInterna(){
+            this.fondo = new ImageIcon(getClass().getResource("../Recursos/imgs/fondo_ord_prod.png")).getImage();
+        }
+        
+        public PanelFondoVentanaInterna(String nombreImagen){
+            if(nombreImagen != null){
+                this.fondo = new ImageIcon(getClass().getResource("../Recursos/imgs/"+nombreImagen+".png")).getImage();
+            }
+            else{
+                this.fondo = new ImageIcon(getClass().getResource("../Recursos/imgs/fondo_ord_prod.png")).getImage();
+            }
+        }
+        
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+            g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
+            //super.paint(g);
+        }
+        
+        public void setImage(String nombreImagen){
+            if(nombreImagen != null){
+                this.fondo = new ImageIcon(getClass().getResource("../Recursos/imgs/"+nombreImagen+".png")).getImage();
+            }
+            else{
+                this.fondo = new ImageIcon(getClass().getResource("../Recursos/imgs/fondo_ord_prod.png")).getImage();
+            }
+        }
+        
+    }
+    
     
 }
