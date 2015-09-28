@@ -2,13 +2,15 @@
 show databases; /*mostrar todas las bases*/
 
 /*CONFIGURACION DE USUARIOS Y ACCESO*/
-
 create user 'user_storebike'@'localhost' identified by 'user_storebike'; /*CREAMOS EL USUARIO POR DEFECTO DEL PROGRAMA*/
 grant all privileges on storebike.* to 'user_storebike'@'localhost'; /*LE OTORGAMOS TODAS LAS CREDENCIALES UNICAMENTE EN LA BASE DE DATOS QUE LE CONCIERNE A ESTE PROGRAMA*/
 /*PARA OTORGAR PERMISOS DE ACCESO A USUARIOS DESDE OTRO EQUIPO DEBEMOS HACERLO CON LA SGTE LINEA:*/
 grant all privileges on storebike.* to 'user_storebike'@'nombre_equipo_desde_donde_conecta'; /*EL USUARIO ES 'user_storebike' SIEMPRE PUES ES EL USUARIO DEFINIDO PARA Y EN EL PROGRAMA Y NO TIENE NECESIDAD DE ESTARSE CAMBIANDO*/
 drop user 'user_storebike'@'localhost';
 /*----*/
+
+use world;
+select * from city;
 
 use storebike;
 show tables;
@@ -19,24 +21,82 @@ set foreign_key_checks = 1;
 
 desc ensambladores;
 insert into ensambladores values 
-('AQ4530','1107057722','Miguel','Gonzalez','3173547440','Cra 29 no. 38-25','2015-01-07',null),
-('AQ4083','117657732','Sebastian','Muñoz','3173547441','Cra 29 no. 38-25','2015-10-09',null);
+('1107057722','Miguel','Gonzalez','3173547440','Cra 29 no. 38-25','2015-01-07',null),
+('117657732','Sebastian','Muñoz','3173547441','Cra 29 no. 38-25','2015-10-09',null);
 select * from ensambladores;
 
+/** http://labicikleta.com/11-tipos-de-freno-para-bicicleta/ */
 desc componentes;
-alter table componentes change componente componente varchar(20) not null;
+/**la sigte linea sirve para cambiar el tipo de dato de un campo nada mas*/
+alter table componentes change desc_comp desc_comp varchar(100);
 delete from componentes;
-insert into componentes values ('001','Marco/Cuadro'),('002','Aro/Rin'),('015','Radios'),
-('020','Horquilla'),		('003','Manubrio'),				('151','Manubrio Playa'),	('004','Espigo'),
-('005','Poste Delantero'),	('056','Codo'),					('037','Sillin'),			('016','Caña'),
-('043','Pedales'),			('009','Compact Disc'),			('010','Piñon'),			('023','Pacha'),
-('011','Cadena'),			('021','Cadenilla'),			('012','Freno'),			('013','Cambios'),
-('099','Tensor'),			('014','Neumaticos'),			('046','Protectores'),		('050','Llantas'),
-('006','Eje Centro'),		('018','Copas Centro'),			('423','Juego Frente'),		('030','Seguro Sillin'),
-('026','Biela BMX'),		('022','Juego Manzanas'),		('024','Manzana Delantera'),('031','Manzana Trasera'),
-('048','Triplato'),			('049','Relacion Cuadrante'),	('051','Relacion Cuña'),	('332','Cuña Plato');
+insert into componentes (id_comp, nom_comp) values 
+/*('001','Cuadro/Marco'),		('002','Aro/Rin'),					('015','Radios'),					('076','Horquilla de Suspensión Roscada'),
+('081','Cuadro Suspensión'),('557','Cuadro Ahead'),				('088','Cuadro BMX'),				('057','Cuadro Playero'),
+('020','Horquilla Roscada'),('003','Manubrio MTB'),				('151','Manubrio Playero'),			('795','Manubrio Ahead'),
+('244','Manubrio BMX'),		('095','Horquilla BMX'),			('019','Horquilla Ahead Suspensión'),
+('004','Espigo MTB'),		('423','Copas Direccion Rosca'),	('222','Copas Direccion Ahead'),	('745','Horquilla Ahead'),
+('005','Poste Delantero'),	('056','Codo MTB'),					('061','Codo BMX'),					('366','Abrazadera Marco'),
+('043','Pedal 9/16'),		('009','Compact Disc'),				('010','Piñón'),					('023','Pacha'),
+('045','Pedal 1/2'),		('038','Juego Freno Disco'),		('013','Juego de Cambios'),			('016','Caña/Tija 22.2'),
+('084','Espigo BMX'),		('127','Juego de Centro BMX'),		('277','Caña/Tija Ahead'),			
+('011','Cadena'),			('021','Cadenilla'),				('037','Sillin'),					('361','Abrazadera Marco Ahead'),							
+('099','Tensor'),			('014','Neumáticos'),				('046','Protector Rin'),			('050','Llanta'),
+('006','Eje Centro MTB'),	('018','Juego de Centro'),			('331','Mangos'),					('030','Tornillo Marco'),
+('026','Biela Enteriza'),	('022','Juego Manzanas'),			('024','Manzana Delantera'),		('031','Manzana Trasera'),
+('048','Triple-plato'),		('049','Relacion Cuadrante'),		('051','Relacion Cuña'),			('332','Cuña Plato'),*/
+('856','Eje Centro Cuña')
+;
+
+insert into componentes values ('844','Freno Cáliper','Toda las clases de freno de \'Herradura\'.'),
+('843','Freno Cantilever','Todo tipo de freno de doble Pivote, entre ellos el V-brake.');
 delete from componentes;
 select * from componentes;
+
+desc articulos;
+insert into articulos (id_articulo, articulo, descripcion) values 
+('ARO','Aros/Rines',			'Componentes: Manzana, Aro, Radios.'),
+('BSC','Bicicleta S/Cambios',	'Bicicleta de Relacion Fija, Cualquier tipo de Modelo y Tamaño'),
+('MTB','MTB/Todo-Terreno',		'Bicicleta con Cambios, amplio rango, su categoria se basa en sus componentes.'),
+('MTS','MTB Suspensión',		'Mountain Bike con Cuadro de Suspesión, esta clasificacion engloba cualquier tamaño.'),
+('AMT','MTB Ahead',				'Downhill, Profesional o Semiprofesional; Bicicletas Ahead con componentes de Alta Gama.'),
+('BMX','BMX o Cross',			'Bicicleta #20 o #16 de tipo BMX o Cross, Economica o Especial.'),
+('PLY','Playera',				'Direccion amplia o playera, postura erguida, por lo general para el género Femenino, utilitaria, con canasta y/o parrilla.'),
+('TUR','Turismo',				'Bicicleta Monomarcha o de Cambios Internos, ruedas de 28", frenos mediante accionamiento de varillas, muy utilitaria.'),
+('IMP','Importado',				'Articulo pre-ensamblado.'),
+('A01','Otro Articulo',			'Articulo ensamblado sin mucha Regularidad.');
+rename table artefacto to articulos;
+select * from articulos;
+
+
+desc componente_articulo;
+insert into componente_articulo values
+('ARO','002'), 	('BSC','020'),	('MTB','001'),	('MTS','081'),	('AMT','557'),	('BMX','088'),
+('ARO','015'),	('BSC','001'),	('MTB','076'),	('MTS','076'),	('AMT','795'),	('BMX','095'),
+('ARO','022'),	('BSC','003'),	('MTB','081'),	('MTS','003'),	('AMT','019'),	('BMX','244'),
+('ARO','031'),	('BSC','151'),	('MTB','020'),	('MTS','151'),	('AMT','004'),	('BMX','222'),
+('ARO','024'),	('BSC','056'),	('MTB','003'),	('MTS','423'),	('AMT','222'),	('BMX','005'),
+                ('BSC','037'),	('MTB','423'),	('MTS','056'),	('AMT','745'),	('BMX','061'),
+                ('BSC','016'),	('MTB','056'),	('MTS','043'),	('AMT','043'),	('BMX','366'),
+                ('BSC','043'),	('MTB','043'),	('MTS','023'),	('AMT','023'),	('BMX','009'),
+                ('BSC','011'),	('MTB','023'),	('MTS','038'),	('AMT','038'),	('BMX','010'),
+                ('BSC','843'),	('MTB','013'),	('MTS','843'),	('AMT','013'),	('BMX','045'),
+                ('BSC','014'),	('MTB','021'),	('MTS','013'),	('AMT','277'),	('BMX','038'),
+                ('BSC','006'),	('MTB','037'),	('MTS','021'),	('AMT','021'),	('BMX','076'),
+                ('BSC','050'),	('MTB','016'),	('MTS','037'),	('AMT','037'),	('BMX','843'),
+                ('BSC','018'),	('MTB','014'),	('MTS','016'),	('AMT','014'),	('BMX','016'),
+                ('BSC','030'),	('MTB','046'),	('MTS','014'),	('AMT','046'),	('BMX','084'),
+                ('BSC','049'),	('MTB','050'),	('MTS','046'),	('AMT','050'),	('BMX','011'),
+                ('BSC','051'),	('MTB','006'),	('MTS','050'),	('AMT','006'),	('BMX','037'),
+                ('BSC','332'),	('MTB','018'),	('MTS','006'),	('AMT','018'),	('BMX','014'),
+                ('BSC','010'),	('MTB','331'),	('MTS','018'),	('AMT','331'),	('BMX','046'),
+				('BSC','423'),	('MTB','030'),	('MTS','331'),	('AMT','361'),	('BMX','050'),
+								('MTB','151'),	('MTS','030'),	('AMT','048'),	('BMX','127'),
+								('MTB','005'),	('MTS','005'),	('AMT','843'),	('BMX','331'),
+                                ('MTB','004'),	('MTS','004'),					('BMX','026'),
+								('MTB','048'),	('MTS','048'),					('BMX','423')
+;
+select * from componente_articulo;
 
 /*desc marcas;
 alter table marcas change id_marca id_marca char(2);
@@ -62,7 +122,7 @@ insert into repuestos values ('305337','CD MXR 12" 28D Negro','009',15,'R'),
 ('104106','3 Piezas Negro','018',15,'ES'),
 ('104104','3 Piezas Cromo','018',15,'PH'),
 ('104204','3 Piezas Rosca Inglesa','018',15,'NE'),
-('104416','AHead Acero 1-1/8 CC845 Negro','423',15,'NE'),
+('104416','AHead Acero 1-1/8 CC845 Negro','222',15,'NE'),
 ('105306','Acero Negro','423',15,'MI'),
 ('105107','Acero FP501 Cromado','423',15,'MI'),
 ('105101','Acero CC800 Cromado','423',15,'NE'),
@@ -70,13 +130,13 @@ insert into repuestos values ('305337','CD MXR 12" 28D Negro','009',15,'R'),
 ('301121','1/2 X 1/8 114L C410','011',15,'MY'),
 ('301219','1/2 X 3/32 C30','021',15,'KT'),
 ('301206','1/2 X 3/32 HP20','021',15,'KT'),
-('302104','Centro Y-5 36-54-46','006',15,'CH'),
+('302104','Centro Y-5 36-54-46','856',15,'CH'),
 ('302209','Eje Cuadrante Tuercas','006',15,'CH'),
 ('302210','Eje Cuadrante Tornillos','006',15,'CH'),
 ('302411','Cartucho Acero Negro 910BK','006',15,'NE'),
 ('303326','Niño PVC Negro','043',15,'MI'),
-('303323','BMX PVC FP-808 Negro','043',15,'FN'),
-('303321','BMX FreeStyle Alum FP-965 Natural','043',15,'FN'),
+('303323','BMX PVC FP-808 Negro','045',15,'FN'),
+('303321','BMX FreeStyle Alum FP-965 Natural','045',15,'FN'),
 ('303414','MTB PVC F-815 Negro','043',15,'FN'),
 ('303402','MTB Aluminio','043',15,'FN'),
 ('304444','6 Vel 14-28 MTB Marron','023',15,'MI'),
@@ -85,7 +145,7 @@ insert into repuestos values ('305337','CD MXR 12" 28D Negro','009',15,'R'),
 ('304107','18 Dientes Marron','010',15,'PW'),
 ('304124','20 Dientes Marron','010',15,'PW'),
 ('304119','16 Dientes Cromado','010',15,'MI'),
-('600382','Acero Lancer FreeStyle Disc/V-Brake','001',15,'GW'),
+('600382','Acero Lancer FreeStyle Disc/V-Brake','088',15,'GW'),
 ('305133','OPC-101 89x16mm Negra','026',15,''),
 ('305136','OPC-101 114x16mm Negra','026',15,''),
 ('306424','MTB Palanca Resina','013',15,'MI'),
@@ -105,23 +165,14 @@ insert into repuestos values ('305337','CD MXR 12" 28D Negro','009',15,'R'),
 ('407528','24 x 2.125 Negra F125','050',15,'KY'),
 ('407547','12-1 x 2-1/4 Negra F146','050',15,'KY');
 
-update repuestos set plu = '305141' where plu = '305140'; 
+update repuestos set componente = '856' where cod_rep = '302104'; 
 delete from repuestos;
 select * from repuestos;
 
-desc articulos;
-insert into articulos (id_articulo, articulo, descripcion) values 
-('ARO','Ruedas/Rines',			'Componentes: Manzana, Aro, Radios.'),
-('BSC','Bicicleta S/Cambios',	'Bicicleta de Relacion Fija, Cualquier tipo de Modelo y Tamaño'),
-('MTB','MTB/Todo-Terreno',		'Bicicleta con Cambios, amplio rango, su categoria se basa en sus componentes.'),
-('AMT','MTB Alta Gama',			'MTB Profesional o Semiprofesional, Bicicletas con componentes de Alta Gama.'),
-('BMX','BMX o Cross',			'Bicicleta #20 o #16 de tipo BMX o Cross, Economica o Alta Gama.'),
-('PLY','Playera',				'Direccion amplia o playera, postura erguida, por lo general para el género Femenino, utilitaria, con canasta y/o parrilla.'),
-('TUR','Turismo',				'Bicicleta Monomarcha o de Cambios Internos, ruedas de 28", frenos mediante accionamiento de varillas, muy utilitaria.'),
-('IMP','Importado',				'Articulo pre-ensamblado.'),
-('A01','Otro Articulo',			'Articulo ensamblado sin mucha Regularidad.');
-rename table artefacto to articulos;
-select * from articulos;
+/***/
+select c.nom_comp as Componente, r.repuesto as Repuesto from repuestos r inner join componentes c inner join componente_articulo ca
+where ca.componente = r.componente and ca.componente = c.id_comp and ca.articulo = 'MTB';
+/***/
 
 /*FUENTES RESTRICCIONES Y RELACIONES
 http://blog.openalfa.com/como-trabajar-con-restricciones-de-clave-externa-en-mysql
@@ -129,8 +180,8 @@ https://tomatoma.wordpress.com/manual-de-php/14-trabajar-con-mas-de-una-tabla/
 https://www.youtube.com/watch?v=nAH1pjCBVnI
 */
 
-desc repuesto_articulo;
-insert into repuesto_articulo (articulo, plu_repuesto) values /*el siguiente orden en los registros no implica nada, solo es por visualizacion*/
+/*desc repuesto_articulo;
+insert into repuesto_articulo (articulo, plu_repuesto) values /*el siguiente orden en los registros no implica nada, solo es por visualizacion/
 ('BMX','600382'),	('BSC','305140'),	('MTB','305451'),	('AMT','104416'),
 ('BMX','305337'),						('MTB','302411'),	('AMT','302411'),
 ('BMX','305309'),						('MTB','301206'),	('AMT','301206'),
@@ -171,12 +222,17 @@ insert into repuesto_articulo (articulo, plu_repuesto) values /*el siguiente ord
                                         
 ;
 
-delete from repuesto_articulo where plu_repuesto = '600382';
+delete from repuesto_articulo where 1;
 select * from repuesto_articulo;
+select articulo from repuesto_articulo where plu_repuesto = '600381';*/
 
+/**CODIGO PARA BUSCAR REPUESTOS POR FAMILIA O COMPONENTE Y POR ARTICULO*/
+select r.descripcion as Descripcion_Repuesto, c.componente as Tipo_de_Componente from repuestos r inner join repuesto_articulo ra inner join componentes c 
+where r.cod_rep = ra.plu_repuesto and r.componente = c.id_comp and ra.articulo = 'MTB' and c.id_comp = '026';
+/***/
 
-select articulo from articulos inner join 
+/**CONSULTA PARA EXTRAER REPUESTOS POR COMPONENTES Y POR ARTICULO*/
+select c.componente as Componente, r.descripcion as Articulo from repuestos r inner join componentes c where r.componente = c.id_comp and c.id_comp = '018';
 
-
-
+select descripcion from repuestos where descripcion like '24%';
 

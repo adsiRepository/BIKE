@@ -41,9 +41,7 @@ public class EditorTabla extends AbstractTableModel{
     public EditorTabla(){
         this.claseComponente = Object.class;
         this.data = new Object[][]{};
-        if(data.length > 0){
-            
-        }
+
     }
     
     public void setDatosTabla(Object[][] datos){
@@ -106,6 +104,45 @@ public class EditorTabla extends AbstractTableModel{
         private final SpinnerModel myspinnerNumModel;
         private JSpinner.DefaultEditor editor;
         
+        /**
+         * Constructor Spinner
+         */
+        public SpinnCellTable() {
+            super();
+            myspinnerNumModel = new SpinnerNumberModel(1, 0, 10, 1);
+            constructorGeneral();
+        }
+        
+        /**
+         * Constructor Spinner con Modelo
+         * @param spinnerModel
+         */
+        public SpinnCellTable(SpinnerModel spinnerModel) {
+            super();
+            if (spinnerModel == null) {
+                //throw new NullPointerException("model cannot be null");
+                this.myspinnerNumModel = new SpinnerNumberModel(1, 0, 10, 1);// Dato visualizado al inicio en el spinner, minimo, maximo, paso
+            }
+            else{
+                this.myspinnerNumModel = spinnerModel;
+            }
+            constructorGeneral();
+        }
+        
+        public SpinnCellTable(int porDefecto, int min, int max, int paso) {
+            super();
+            this.myspinnerNumModel = new SpinnerNumberModel(porDefecto, min, max, paso);
+            constructorGeneral();
+        }
+        
+        private void constructorGeneral(){
+            this.setModel(myspinnerNumModel);
+            editor = ((JSpinner.DefaultEditor)this.getEditor());
+            editor.getTextField().addKeyListener(new VigiaTecleoDigitos());//aqui aplico la clase que implementa los listener del teclado para impedir la insercion de letras
+        }
+        
+        // </editor-fold>
+        
         private static class VigiaTecleoDigitos implements KeyListener {//clase regular que implementa el escucha o vigia de teclas oprimidas. Aqui se usa para evitar el ingreso de letras en un campo numerico
             // <editor-fold defaultstate="collapsed" desc="metodos abstractos del keylistener implementados y sobreescritos">
             
@@ -158,37 +195,6 @@ public class EditorTabla extends AbstractTableModel{
 // </editor-fold>
         }
         
-        private void constructorGeneral(){
-            this.setModel(myspinnerNumModel);
-            editor = ((JSpinner.DefaultEditor)this.getEditor());
-            editor.getTextField().addKeyListener(new VigiaTecleoDigitos());//aqui aplico la clase que implementa los listener del teclado para impedir la insercion de letras
-        }
-        
-        /**
-         * Constructor Spinner
-         */
-        public SpinnCellTable() {
-            super();
-            myspinnerNumModel = new SpinnerNumberModel(1, 0, 10, 1);
-            constructorGeneral();
-        }
-        
-        /**
-         * Constructor Spinner con Modelo
-         * @param spinnerModel
-         */
-        public SpinnCellTable(SpinnerModel spinnerModel) {
-            super();
-            if (spinnerModel == null) {
-                //throw new NullPointerException("model cannot be null");
-                this.myspinnerNumModel = new SpinnerNumberModel(1, 0, 10, 1);
-            }
-            else{
-                this.myspinnerNumModel = spinnerModel;
-            }
-            constructorGeneral();
-        }
-        // </editor-fold>
     }
     //</editor-fold>
 

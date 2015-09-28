@@ -5,13 +5,12 @@ package Vista;
 
 import Controlador.ConsultaSQL;
 import Controlador.Graficos.PanelFondoVentanaInterna;
-import Controlador.Graficos.VentanaInterna;
 import Modelo.Artefacto;
 import Modelo.EditorTabla.ComponentCellEditor;
 import Modelo.EditorTabla.ComponentCellRenderer;
 import Modelo.EditorTabla.SpinnCellTable;
 import Modelo.ItemComboBox;
-import Modelo.ItemComboBox.ItemComboBoxRenderer;
+import Modelo.ItemComboBox.RenderItemComboBox;
 import static Modelo.Parametros.Tablas.COLUMNAS_TABLA_DESPACHO;
 import static Modelo.Parametros.Tablas.TIPOS_COLUMNAS_TABLA_DESPACHOS;
 import static Vista.MenuPrincipal.escritorio;
@@ -43,7 +42,6 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         this.setLocation((ScreenSpace.width / 18), ((ScreenSpace.height - mySpc.height) / 2));
         //this.setFrameIcon(new ImageIcon(getClass().getResource("/Recursos/Imagenes/iconUsers.png")));
         this.setToolTipText("Modulo de Control de Ordenes de Ensamble");
-        panel_tipoTT_.setVisible(false);
     // </editor-fold>
         slider_cant_genero_.setMinimum(0);
         // <editor-fold defaultstate="collapsed" desc="CONFIGURACION DE LA TABLA DE SELECCION DE PARTES">
@@ -52,7 +50,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         tabla_despacho_.setModel(modeloTabla);
         tabla_despacho_.setDefaultRenderer(Component.class, new ComponentCellRenderer());
         tabla_despacho_.setDefaultEditor(Component.class, new ComponentCellEditor());
-        formatearTabla();
+        formatearTablaDespacho();
     // </editor-fold>
 
         fila_tabla = 0;  col_tabla = 0;
@@ -61,7 +59,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         
     }
     
-    private void formatearTabla(){
+    private void formatearTablaDespacho(){
         //int anchoContenedor = scroll_items_selec.getWidth();
         int[] anchos = new int[]{120, 250, 63};
         /*int[] anchos = new int[]{ ((int)((anchoContenedor*30)/100)), ((int)((anchoContenedor*50)/100)), ((int)((anchoContenedor*20)/100)) };*/
@@ -93,8 +91,8 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     
     private void configCombobox(){
         
-        combo_ensambladores_.setRenderer(new ItemComboBoxRenderer());
-        combo_catalogo_ensamble_.setRenderer(new ItemComboBoxRenderer());
+        combo_ensambladores_.setRenderer(new RenderItemComboBox());
+        combo_catalogo_ensamble_.setRenderer(new RenderItemComboBox());
         
         ConsultaSQL.ConsultorBD.obtenerListaEnsambladores().entrySet().stream().map((registro) -> new ItemComboBox(registro.getKey(), registro.getValue())).forEach((item) -> {
             combo_ensambladores_.addItem(item);
@@ -116,7 +114,6 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup_tipoTT_ = new javax.swing.ButtonGroup();
         panel_principal_ = new PanelFondoVentanaInterna();
         lbl_ensamblador_ = new javax.swing.JLabel();
         btn_retirar_accesorio1 = new javax.swing.JButton();
@@ -138,10 +135,6 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         slider_cant_genero_ = new javax.swing.JSlider();
         lbl_cant_f_ = new javax.swing.JLabel();
         txt_cant_f = new javax.swing.JTextField();
-        panel_tipoTT_ = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
         btn_alistar_despacho_ = new javax.swing.JButton();
         btn_cancelar_despacho_ = new javax.swing.JButton();
         scroll_items_selec = new javax.swing.JScrollPane();
@@ -154,6 +147,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         btn_Cancelar_Despacho = new javax.swing.JButton();
 
         setClosable(true);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMaximumSize(new java.awt.Dimension(915, 424));
         setMinimumSize(new java.awt.Dimension(915, 424));
         setName(""); // NOI18N
@@ -256,9 +250,9 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         panel_cantidad_genero_.setLayout(panel_cantidad_genero_Layout);
         panel_cantidad_genero_Layout.setHorizontalGroup(
             panel_cantidad_genero_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_cantidad_genero_Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_cantidad_genero_Layout.createSequentialGroup()
                 .addComponent(lbl_genero_)
-                .addGap(28, 28, 28)
+                .addGap(18, 18, 18)
                 .addComponent(lbl_cant_m_)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_cant_m, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -268,12 +262,11 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
                 .addComponent(lbl_cant_f_)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_cant_f, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         panel_cantidad_genero_Layout.setVerticalGroup(
             panel_cantidad_genero_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_cantidad_genero_Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(panel_cantidad_genero_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(slider_cant_genero_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panel_cantidad_genero_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -283,45 +276,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
                         .addComponent(lbl_cant_m_)
                         .addComponent(txt_cant_m, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lbl_genero_)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLabel1.setText("Tipo:");
-
-        buttonGroup_tipoTT_.add(jRadioButton1);
-        jRadioButton1.setText("Tradicional");
-        jRadioButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        buttonGroup_tipoTT_.add(jRadioButton2);
-        jRadioButton2.setText("Suspension");
-        jRadioButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        javax.swing.GroupLayout panel_tipoTT_Layout = new javax.swing.GroupLayout(panel_tipoTT_);
-        panel_tipoTT_.setLayout(panel_tipoTT_Layout);
-        panel_tipoTT_Layout.setHorizontalGroup(
-            panel_tipoTT_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_tipoTT_Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panel_tipoTT_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel_tipoTT_Layout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton2))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_tipoTT_Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1)
-                        .addGap(64, 64, 64)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panel_tipoTT_Layout.setVerticalGroup(
-            panel_tipoTT_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_tipoTT_Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel_tipoTT_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panel_primer_filtro_emsamble_Layout = new javax.swing.GroupLayout(panel_primer_filtro_emsamble_);
@@ -329,57 +284,41 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         panel_primer_filtro_emsamble_Layout.setHorizontalGroup(
             panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panel_cantidad_genero_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
                         .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scroll_txtArea_detalles_)
-                            .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
-                                .addComponent(lbl_tipo_ensamble_)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(combo_catalogo_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panel_tipoTT_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
-                        .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
-                                .addGap(73, 73, 73)
-                                .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(panel_cantidad_genero_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_ref_tamaño_)
-                            .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
-                                .addComponent(lbl_cantidad_ensamble_)
-                                .addGap(26, 26, 26)
-                                .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(lbl_cantidad_ensamble_)
+                            .addComponent(lbl_tipo_ensamble_)
+                            .addComponent(lbl_ref_tamaño_))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combo_catalogo_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(scroll_txtArea_detalles_, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         panel_primer_filtro_emsamble_Layout.setVerticalGroup(
             panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
-                .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel_primer_filtro_emsamble_Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbl_tipo_ensamble_)
-                            .addComponent(combo_catalogo_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(panel_tipoTT_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_tipo_ensamble_)
+                    .addComponent(combo_catalogo_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_ref_tamaño_)
-                    .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_ref_tamaño_))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_cantidad_ensamble_))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panel_cantidad_genero_, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel_cantidad_genero_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scroll_txtArea_detalles_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         btn_alistar_despacho_.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/imgs/imgbtn_preparar_mercancia.png"))); // NOI18N
@@ -464,50 +403,57 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         panel_principal_Layout.setHorizontalGroup(
             panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_principal_Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
                 .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_principal_Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panel_principal_Layout.createSequentialGroup()
-                                .addComponent(lbl_ensamblador_)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(combo_ensambladores_, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(panel_principal_Layout.createSequentialGroup()
-                                .addComponent(panel_primer_filtro_emsamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btn_alistar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btn_cancelar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(scroll_items_selec, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE))))
+                        .addComponent(lbl_ensamblador_)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(combo_ensambladores_, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panel_primer_filtro_emsamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panel_principal_Layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
+                        .addGap(59, 59, 59)
                         .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(62, 62, 62)
-                        .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(136, 136, 136)
+                        .addGap(30, 30, 30)
+                        .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_principal_Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panel_principal_Layout.createSequentialGroup()
-                                .addComponent(btn_selec_repuestos_1)
-                                .addGap(30, 30, 30)
-                                .addComponent(btn_selec_repuestos_2))
-                            .addGroup(panel_principal_Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap())
+                            .addComponent(btn_alistar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_cancelar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panel_principal_Layout.createSequentialGroup()
+                        .addGap(115, 115, 115)
+                        .addComponent(btn_selec_repuestos_1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_selec_repuestos_2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_principal_Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         panel_principal_Layout.setVerticalGroup(
             panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_principal_Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_selec_repuestos_1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_selec_repuestos_2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(panel_principal_Layout.createSequentialGroup()
+                .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_principal_Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
                         .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(lbl_ensamblador_)
@@ -515,28 +461,17 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
                             .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panel_principal_Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(panel_primer_filtro_emsamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panel_principal_Layout.createSequentialGroup()
-                                .addGap(48, 48, 48)
-                                .addComponent(btn_alistar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_cancelar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel_principal_Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btn_selec_repuestos_1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_selec_repuestos_2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(panel_primer_filtro_emsamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel_principal_Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(76, 76, 76)
+                        .addComponent(btn_alistar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_cancelar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(38, 38, 38)
+                .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -544,13 +479,11 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panel_principal_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(panel_principal_, javax.swing.GroupLayout.DEFAULT_SIZE, 915, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel_principal_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panel_principal_, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -696,17 +629,26 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     private void btn_alistar_despacho_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_alistar_despacho_ActionPerformed
 
         panel_primer_filtro_emsamble_.setEnabled(false);
+        
+        String cod_objeto_ensamble = ((ItemComboBox)combo_catalogo_ensamble_.getSelectedItem()).getCod();
+        int total = Integer.parseInt(txt_cant_ensamble.getText());
+        int cant_masculino = Integer.parseInt(txt_cant_m.getText());
+        int cant_femenino = Integer.parseInt(txt_cant_f.getText());
+        
+        
+        
         SpinnerNumberModel spinnummodel = new SpinnerNumberModel(1, 0, 10, 1);
+        
         String ensamble = combo_catalogo_ensamble_.getSelectedItem().toString();
 
         if (!ensamble.equals("Rines o Aros") && !ensamble.equals("Importado")) {
             try {
                 Artefacto.Bicicleta bici = new Artefacto.Bicicleta(ensamble);
-                // Dato visualizado al inicio en el spinner// Límite inferior// Límite superior // incremento-decremento
+                
                 
                 data = new Object[bici.componentes.size()][3];
                 for (int i = 0; i < bici.componentes.size(); i++) {
-                    data[i] = new Object[]{bici.componentes.get(i), new JComboBox(), new SpinnCellTable(spinnummodel)};
+                    data[i] = new Object[]{bici.componentes.get(i), new JComboBox(), new SpinnCellTable()};
                 }
 
                 /*JComboBox combo_1 = new JComboBox(new Object[]{"Marco Trad '26 disco", "Marco sin disco", "Marco Suspension"});
@@ -739,10 +681,8 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         if(evt.getStateChange() == java.awt.event.ItemEvent.SELECTED){
             itemSelec = evt.getItem();
             if(itemSelec.toString().equals("Todo Terreno")){
-                panel_tipoTT_.setVisible(true);
             }
             else{
-                panel_tipoTT_.setVisible(false);
             }
         }
         
@@ -767,13 +707,9 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     private javax.swing.JButton btn_retirar_accesorio1;
     private javax.swing.JButton btn_selec_repuestos_1;
     private javax.swing.JButton btn_selec_repuestos_2;
-    private javax.swing.ButtonGroup buttonGroup_tipoTT_;
     private javax.swing.JComboBox combo_catalogo_ensamble_;
     private javax.swing.JComboBox combo_ensambladores_;
     private javax.swing.JComboBox combo_ref_tamaño;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JLabel lbl_cant_f_;
     private javax.swing.JLabel lbl_cant_m_;
     private javax.swing.JLabel lbl_cantidad_ensamble_;
@@ -784,7 +720,6 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     private javax.swing.JPanel panel_cantidad_genero_;
     private javax.swing.JPanel panel_primer_filtro_emsamble_;
     private javax.swing.JPanel panel_principal_;
-    private javax.swing.JPanel panel_tipoTT_;
     private javax.swing.JScrollPane scroll_items_selec;
     private javax.swing.JScrollPane scroll_tabla_ordenes_;
     private javax.swing.JScrollPane scroll_txtArea_detalles_;
