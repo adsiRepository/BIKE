@@ -1,14 +1,20 @@
 
 package Vista;
 
+import Controlador.Fechas;
 import Controlador.Graficos;
+import Controlador.PanelReloj;
 import RecursosTemporales.GUsers;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.EventObject;
 import javax.swing.AbstractCellEditor;
 import javax.swing.Icon;
@@ -29,7 +35,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private final String[] columnas_tabla;
     private final Class[] tiposCampos;
-    private DefaultTableModel dtm_tabla_actividades;
+    //private DefaultTableModel dtm_tabla_actividades;
     private int fila_tabla, col_tabla;
     
     //VENTANAS INTERNAS
@@ -40,6 +46,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     /** Creates new form MenuPrincipal */
     public MenuPrincipal() {
         initComponents();
+        
+        ((PanelReloj)panel_reloj_).start();
         
         //configuracion de la tabla
         tiposCampos = new Class[]{
@@ -118,7 +126,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_produccion_ = new javax.swing.JButton();
         btn_inventario_ = new javax.swing.JButton();
         btn_revision_ = new javax.swing.JButton();
-        panel_reloj_ = new javax.swing.JPanel();
+        panel_reloj_ = new Controlador.PanelReloj();
         panel_fecha_ = new javax.swing.JPanel();
         txtview_fecha_actual = new javax.swing.JTextField();
         barra_menu_1 = new javax.swing.JMenuBar();
@@ -185,23 +193,27 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_revision_.setMinimumSize(new java.awt.Dimension(150, 80));
         btn_revision_.setPreferredSize(new java.awt.Dimension(150, 80));
 
+        panel_reloj_.setBackground(new java.awt.Color(102, 102, 102));
+        panel_reloj_.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        panel_reloj_.setEnabled(false);
         panel_reloj_.setPreferredSize(new java.awt.Dimension(210, 210));
 
         javax.swing.GroupLayout panel_reloj_Layout = new javax.swing.GroupLayout(panel_reloj_);
         panel_reloj_.setLayout(panel_reloj_Layout);
         panel_reloj_Layout.setHorizontalGroup(
             panel_reloj_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 210, Short.MAX_VALUE)
+            .addGap(0, 206, Short.MAX_VALUE)
         );
         panel_reloj_Layout.setVerticalGroup(
             panel_reloj_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 210, Short.MAX_VALUE)
+            .addGap(0, 206, Short.MAX_VALUE)
         );
 
         txtview_fecha_actual.setEditable(false);
         txtview_fecha_actual.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtview_fecha_actual.setText("23/07/2016");
-        txtview_fecha_actual.setToolTipText("Fecha de Hoy");
+        txtview_fecha_actual.setFont(getFuenteFecha());
+        txtview_fecha_actual.setText(Fechas.getStringFechaActual());
+        txtview_fecha_actual.setToolTipText("Hoy: ");
 
         javax.swing.GroupLayout panel_fecha_Layout = new javax.swing.GroupLayout(panel_fecha_);
         panel_fecha_.setLayout(panel_fecha_Layout);
@@ -209,14 +221,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
             panel_fecha_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_fecha_Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtview_fecha_actual, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addComponent(txtview_fecha_actual, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panel_fecha_Layout.setVerticalGroup(
             panel_fecha_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_fecha_Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtview_fecha_actual, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                .addComponent(txtview_fecha_actual, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -225,15 +237,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
+                .addGap(0, 24, Short.MAX_VALUE)
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(escritorioLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(escritorioLayout.createSequentialGroup()
-                        .addGap(63, 63, 63)
-                        .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 922, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)))
+                    .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 781, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panel_fecha_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -244,24 +252,24 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
                 .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(129, 129, 129))
+                .addGap(131, 131, 131))
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
+            .addGroup(escritorioLayout.createSequentialGroup()
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(escritorioLayout.createSequentialGroup()
                         .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                         .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addGap(37, 37, 37)
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50))
+                .addGap(68, 68, 68))
         );
         escritorio.setLayer(scroll_tabla_acts, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_empleados_, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -367,7 +375,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-   
+    //METODOS DEL PROGRAMADOR =>
+    
+    private Font getFuenteFecha(){
+        Font letter;
+        String source = "../Recursos/fuentes/DS-DIGI.ttf";
+                //LiquidCrystal-Bold.otf";
+        try{
+            InputStream upload = getClass().getResourceAsStream(source);
+            letter = Font.createFont(Font.TRUETYPE_FONT, upload);
+            letter = letter.deriveFont(0, 58);
+        }
+        catch(FontFormatException | IOException ex){
+            System.out.println(ex.toString());
+            letter = new Font("cursive", Font.PLAIN, 18);
+        }
+        return letter;
+    }
+
+    
     private void menu_item_parametrizacion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_parametrizacion_ActionPerformed
         // TODO add your handling code here:
         

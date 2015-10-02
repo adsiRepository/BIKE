@@ -1,66 +1,56 @@
 package Modelo;
 
-import java.awt.Component;
-import javax.swing.JList;
-import javax.swing.plaf.basic.BasicComboBoxEditor;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import static Modelo.CellTableComboBox.TEXTO_MOSTRADO_ITEMCOMBOBOX;
+import java.util.HashMap;
+import javax.swing.JTextField;
 
 /**
  *
  * @author Miguel
  */
-public class ItemComboBox {
+public class ItemComboBox extends JTextField{
 
     private String cod;
-    private String nombre;
-    private String desc;
+    private HashMap<String, String> atributos;
 
-    public ItemComboBox(String id, String desc) {
+    public ItemComboBox(String id, HashMap<String, String> atributos) {
         this.cod = id;
-        this.desc = desc;
+        this.atributos = atributos;
     }
 
+    @Override
+    public String getText() {
+        return atributos.get(TEXTO_MOSTRADO_ITEMCOMBOBOX);
+    }
+
+    @Override
+    public void setText(String t) {
+        super.setText(t); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isEditable() {
+        return super.isEditable(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    // <editor-fold defaultstate="collapsed" desc=" GETTERS n SETTERS ">
     public String getCod() {
         return cod;
     }
-
-    public String getDesc() {
-        return desc;
-    }
-
+    
     public void setCod(String cod) {
         this.cod = cod;
     }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
+    
+    public void setAtributos(HashMap<String, String> atributos) {
+        this.atributos = atributos;
     }
     
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public HashMap<String, String> getAtributos() {
+        return atributos;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-    
+// </editor-fold>
 
-    public static class RenderItemComboBox extends BasicComboBoxRenderer {
-
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-            if (value != null) {
-                setText(((ItemComboBox) value).getDesc());
-            }
-
-            return this;
-        }
-    }
-    
-    public static class RenderItemComboBox2 extends BasicComboBoxEditor {
-
-    }
-    
 }

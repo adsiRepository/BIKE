@@ -31,7 +31,7 @@ desc componentes;
 alter table componentes change desc_comp desc_comp varchar(100);
 delete from componentes;
 insert into componentes (id_comp, nom_comp) values 
-/*('001','Cuadro/Marco'),		('002','Aro/Rin'),					('015','Radios'),					('076','Horquilla de Suspensión Roscada'),
+('001','Cuadro/Marco'),		('002','Aro/Rin'),					('015','Radios'),					('076','Horquilla de Suspensión Roscada'),
 ('081','Cuadro Suspensión'),('557','Cuadro Ahead'),				('088','Cuadro BMX'),				('057','Cuadro Playero'),
 ('020','Horquilla Roscada'),('003','Manubrio MTB'),				('151','Manubrio Playero'),			('795','Manubrio Ahead'),
 ('244','Manubrio BMX'),		('095','Horquilla BMX'),			('019','Horquilla Ahead Suspensión'),
@@ -44,7 +44,7 @@ insert into componentes (id_comp, nom_comp) values
 ('099','Tensor'),			('014','Neumáticos'),				('046','Protector Rin'),			('050','Llanta'),
 ('006','Eje Centro MTB'),	('018','Juego de Centro'),			('331','Mangos'),					('030','Tornillo Marco'),
 ('026','Biela Enteriza'),	('022','Juego Manzanas'),			('024','Manzana Delantera'),		('031','Manzana Trasera'),
-('048','Triple-plato'),		('049','Relacion Cuadrante'),		('051','Relacion Cuña'),			('332','Cuña Plato'),*/
+('048','Triple-plato'),		('049','Relacion Cuadrante'),		('051','Relacion Cuña'),			('332','Cuña Plato'),
 ('856','Eje Centro Cuña')
 ;
 
@@ -97,6 +97,12 @@ insert into componente_articulo values
 								('MTB','048'),	('MTS','048'),					('BMX','423')
 ;
 select * from componente_articulo;
+
+select c.nom_comp from componentes c inner join componente_articulo ca where ca.componente = c.id_comp and ca.articulo = 'MTB';
+
+select c.id_comp, c.nom_comp from componentes c inner join componente_articulo ca 
+where ca.componente = c.id_comp and ca.articulo = 'MTS';
+
 
 /*desc marcas;
 alter table marcas change id_marca id_marca char(2);
@@ -168,11 +174,14 @@ insert into repuestos values ('305337','CD MXR 12" 28D Negro','009',15,'R'),
 update repuestos set componente = '856' where cod_rep = '302104'; 
 delete from repuestos;
 select * from repuestos;
+select cod_rep, repuesto from repuestos where componente = '010';
+
 
 /***/
 select c.nom_comp as Componente, r.repuesto as Repuesto from repuestos r inner join componentes c inner join componente_articulo ca
 where ca.componente = r.componente and ca.componente = c.id_comp and ca.articulo = 'MTB';
 /***/
+
 
 /*FUENTES RESTRICCIONES Y RELACIONES
 http://blog.openalfa.com/como-trabajar-con-restricciones-de-clave-externa-en-mysql

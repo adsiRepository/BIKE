@@ -1,7 +1,7 @@
 
 //code
 
-package Modelo;
+package Controlador;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
@@ -22,7 +22,7 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author 
  */
-public class EditorTabla extends AbstractTableModel{
+public class ControladorTabla extends AbstractTableModel{
     
     // <editor-fold defaultstate="collapsed" desc="Codigo que Define un Modelo Abstracto de Tabla implementado por el programador">
     //FUENTES
@@ -38,7 +38,7 @@ public class EditorTabla extends AbstractTableModel{
     /**
      * Constructor de la Clase que se esta heredando de AbstractTableModel
      */
-    public EditorTabla(){
+    public ControladorTabla(){
         this.claseComponente = Object.class;
         this.data = new Object[][]{};
 
@@ -102,7 +102,7 @@ public class EditorTabla extends AbstractTableModel{
         // <editor-fold defaultstate="collapsed" desc="Codigo de la Clase SpinnCellTable">
         
         private final SpinnerModel myspinnerNumModel;
-        private JSpinner.DefaultEditor editor;
+        
         
         /**
          * Constructor Spinner
@@ -137,36 +137,27 @@ public class EditorTabla extends AbstractTableModel{
         
         private void constructorGeneral(){
             this.setModel(myspinnerNumModel);
+            JSpinner.DefaultEditor editor;
             editor = ((JSpinner.DefaultEditor)this.getEditor());
-            editor.getTextField().addKeyListener(new VigiaTecleoDigitos());//aqui aplico la clase que implementa los listener del teclado para impedir la insercion de letras
+            editor.getTextField().addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char typ = e.getKeyChar();
+                    if ((typ < '0' || typ > '9')) {
+                        e.consume();
+                    }
+                }
+                @Override
+                public void keyPressed(KeyEvent e) {
+                }
+                @Override
+                public void keyReleased(KeyEvent e) {
+                }
+            });//aqui aplico la clase que implementa los listener del teclado para impedir la insercion de letras
         }
         
         // </editor-fold>
-        
-        private static class VigiaTecleoDigitos implements KeyListener {//clase regular que implementa el escucha o vigia de teclas oprimidas. Aqui se usa para evitar el ingreso de letras en un campo numerico
-            // <editor-fold defaultstate="collapsed" desc="metodos abstractos del keylistener implementados y sobreescritos">
-            
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char typ = e.getKeyChar();
-                if ((typ < '0' || typ > '9')) {
-                    e.consume();
-                }
-            }
-            
-            @Override
-            public void keyPressed(KeyEvent e) {
-                
-            }
-            
-            @Override
-            public void keyReleased(KeyEvent e) {
-                
-            }
-            
-// </editor-fold>
-        }
-        
+
         private static class MyModel extends AbstractSpinnerModel{
             // <editor-fold defaultstate="collapsed" desc="MODELO DEL SPINNER (no implementado aun)">
 //FUENTES
@@ -206,14 +197,14 @@ public class EditorTabla extends AbstractTableModel{
         //insertar componentes en celdas de tabla ->
         //http://www.java2s.com/Tutorial/Java/0240__Swing/UsingaJComboBoxinaCellinaJTableComponent.htm
         //http://www.chuidiang.com/java/tablas/tablaeditor/tablaeditor.php
-    public static class ComponentCellRenderer implements TableCellRenderer{
+    public static class RenderComponenteCelda implements TableCellRenderer{
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             return (Component) value;
         }
     }
     
-    public static class ComponentCellEditor extends AbstractCellEditor implements TableCellEditor {
+    public static class EditorComponenteCelda extends AbstractCellEditor implements TableCellEditor {
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
             return (Component) value;

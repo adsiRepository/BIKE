@@ -23,6 +23,7 @@ public class MainClass {
     //metodo principal o inicial de la aplicacion
     public static void main(String[] args) {
 
+        //SETEO DE VARIABLES ENCARGADAS DE LA CONEXION A LA BASE DE DATOS
         ConexionBD.setUsuario("user_storebike");
         ConexionBD.setPassword("user_storebike");
         ConexionBD.setHost("localhost");
