@@ -1,0 +1,108 @@
+//code
+package controller.componentes;
+
+import model.componentes.ItemOfCollection;
+import controller.ConsultaSQL;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.JCheckBox;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.ListCellRenderer;
+
+/**
+ *
+ * @author
+ */
+public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOfCollection>*/ {
+
+    private final transient ItemOfCollection my_item;
+
+    /**
+     * @param item
+     */
+    public CheckBoxItem(ItemOfCollection item) {
+        this.my_item = item;
+    }
+
+    public ItemOfCollection getMyItem() {
+        return my_item;
+    }
+
+    /*@Override
+     public Component getListCellRendererComponent(JList<? extends ItemOfCollection> list, ItemOfCollection value, int index, boolean isSelected, boolean cellHasFocus) {
+     this.setText(value.getAtributos().get(ItemOfCollection.TEXTO_A_MOSTRAR));
+     this.setSelected(isSelected);
+     this.setBackground(list.getBackground());
+     return this;
+     }*/
+    
+    
+    public static class ListadoCheckBox extends JList<CheckBoxItem> {
+
+        private ModeloListaArticulos my_data_model;
+
+        /**
+         *
+         */
+        public ListadoCheckBox() {
+            //FUENTES
+            //http://swing-facil.blogspot.com.co/2012/01/jbutton-jcheckbox-jcombobox-en-jtable.html
+            my_data_model = new ModeloListaArticulos();
+            this.setModel(my_data_model);
+            this.setCellRenderer(new ListCellRenderer<CheckBoxItem>() {
+                @Override
+                public Component getListCellRendererComponent(JList<? extends CheckBoxItem> list, CheckBoxItem value, int index, boolean isSelected, boolean cellHasFocus) {
+                    value.setText(value.getMyItem().getAtributos().get(ItemOfCollection.TEXTO_A_MOSTRAR));
+                    value.setBackground(isSelected ? getSelectionBackground() : getBackground());
+                    value.setForeground(isSelected ? getSelectionForeground() : getForeground());
+                    return value;
+                }
+            });
+            this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    int index = locationToIndex(e.getPoint());
+                    if (index != -1) {
+                        CheckBoxItem checkbox = getModel().getElementAt(index);
+                        checkbox.setSelected(!checkbox.isSelected());
+                        repaint();
+                    }
+                }
+            }
+            );
+            this.setSelectionMode(DefaultListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        }
+
+// </editor-fold>
+    }
+
+    private static class ModeloListaArticulos extends DefaultListModel<CheckBoxItem> {
+
+        public ModeloListaArticulos() {
+            try {
+                HashMap<String, HashMap<String, String>> map = ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos();
+                map.entrySet().stream().map((reg) -> new ItemOfCollection(reg.getKey(), reg.getValue())).forEach((item) -> {
+                    this.addElement(new CheckBoxItem(item));
+                });
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.toString(), "Cons ModeloListaArts", 0);
+            }
+        }
+
+        @Override
+        public int getSize() {
+            return super.size();
+        }
+
+        @Override
+        public CheckBoxItem getElementAt(int index) {
+            return super.get(index);
+        }
+    }
+
+}
