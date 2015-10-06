@@ -1,6 +1,8 @@
 /* FUENTES -> http://agcapa.es/mysql-comandos-basicos-consola-en-gnulinux/ */
 show databases; /*mostrar todas las bases*/
 
+use mysql;/*mysql es la base de datos de configuraciones. En ella se guardan datos como los usuarios del servidor mysql.*/
+select user from user;
 /*CONFIGURACION DE USUARIOS Y ACCESO*/
 create user 'user_storebike'@'localhost' identified by 'user_storebike'; /*CREAMOS EL USUARIO POR DEFECTO DEL PROGRAMA*/
 grant all privileges on storebike.* to 'user_storebike'@'localhost'; /*LE OTORGAMOS TODAS LAS CREDENCIALES UNICAMENTE EN LA BASE DE DATOS QUE LE CONCIERNE A ESTE PROGRAMA*/
@@ -15,14 +17,15 @@ select * from city;
 use storebike;
 show tables;
 drop database storebike;
+drop table configuraciones;
 
 SET SQL_SAFE_UPDATES=0;/*hay que poner esta linea en el sql del programa*/
 set foreign_key_checks = 1;
 
 desc ensambladores;
 insert into ensambladores values 
-('1107057722','Miguel','Gonzalez','3173547440','Cra 29 no. 38-25','2015-01-07',null),
-('117657732','Sebastian','Muñoz','3173547441','Cra 29 no. 38-25','2015-10-09',null);
+('1107057722','Miguel','González','3173547440','Cra 29 no. 38-25','2015-01-07',null,1),
+('117657732','Sebastian','Muñoz','3173547441','Cra 29 no. 38-25','2015-10-09',null,1);
 select * from ensambladores;
 
 /** http://labicikleta.com/11-tipos-de-freno-para-bicicleta/ */
@@ -41,15 +44,17 @@ insert into componentes (id_comp, nom_comp) values
 ('045','Pedal 1/2'),		('038','Juego Freno Disco'),		('013','Juego de Cambios'),			('016','Caña/Tija 22.2'),
 ('084','Espigo BMX'),		('127','Juego de Centro BMX'),		('277','Caña/Tija Ahead'),			
 ('011','Cadena'),			('021','Cadenilla'),				('037','Sillin'),					('361','Abrazadera Marco Ahead'),							
-('099','Tensor'),			('014','Neumáticos'),				('046','Protector Rin'),			('050','Llanta'),
+('099','Tensor'),			
 ('006','Eje Centro MTB'),	('018','Juego de Centro'),			('331','Mangos'),					('030','Tornillo Marco'),
 ('026','Biela Enteriza'),	('022','Juego Manzanas'),			('024','Manzana Delantera'),		('031','Manzana Trasera'),
 ('048','Triple-plato'),		('049','Relacion Cuadrante'),		('051','Relacion Cuña'),			('332','Cuña Plato'),
 ('856','Eje Centro Cuña')
 ;
 
-insert into componentes values ('844','Freno Cáliper','Toda las clases de freno de \'Herradura\'.'),
-('843','Freno Cantilever','Todo tipo de freno de doble Pivote, entre ellos el V-brake.');
+
+insert into componentes values ('844','Freno Cáliper','Toda las clases de freno de \'Herradura\'.',0),
+('843','Freno Cantilever','Todo tipo de freno de doble Pivote, entre ellos el V-brake.',0),
+('014','Neumáticos','',1),('046','Protector Rin','',1),('050','Llanta','',1);
 delete from componentes;
 select * from componentes;
 
@@ -66,6 +71,7 @@ insert into articulos (id_articulo, articulo, descripcion) values
 ('IMP','Importado',				'Articulo pre-ensamblado.'),
 ('A01','Otro Articulo',			'Articulo ensamblado sin mucha Regularidad.');
 rename table artefacto to articulos;
+delete from articulos where id_articulo = 'A01';
 select * from articulos;
 
 
@@ -103,73 +109,90 @@ select c.nom_comp from componentes c inner join componente_articulo ca where ca.
 select c.id_comp, c.nom_comp from componentes c inner join componente_articulo ca 
 where ca.componente = c.id_comp and ca.articulo = 'MTS';
 
+desc tallas;
+insert into tallas values
+/*('001','12'), ('002','16'), ('003','20'), ('004','24'), ('005','26'), ('006','28')*/
+('12'), ('16'), ('20'), ('24'), ('26'), ('28')
+;
+select * from tallas;
 
-/*desc marcas;
-alter table marcas change id_marca id_marca char(2);
-insert into marcas values ('MI','MILLENIUM',null),('NE','NECO',null),('HI','SHIMANO',null),('R','RALEIGH',null),('SH','SH',null),
-('GW','GW',null),('PH','PHILIPS',null),('ES','EASTMAN',null),('ST','SUNTOUR',null),('FN','FEIMIN',null),('FV','FIVESTAR',null),
-('MY','MAYA',null),('KT','KMC-TEC',null),('KM','KMC',null),('CH','CHINO',null),('PW','POWER',null),('KY','KYLIN',null);
-delete from marcas;
-select * from marcas;*/
+desc tallas_articulos;
+insert into talla_articulo values
+/*('AMT','004'), 	('ARO','001'),	('BMX','002'),	('BSC', '001'),	('MTB', '003'),	('MTS', '002'),	('PLY', '002'), ('TUR', '28'),
+('AMT','005'),	('ARO','002'),	('BMX','003'),	('BSC', '002'),	('MTB', '004'),	('MTS', '003'),	('PLY', '003'),
+				('ARO','003'),					('BSC', '003'),	('MTB', '005'),	('MTS', '004'),	('PLY', '004'),
+                ('ARO','004'),					('BSC', '004'),					('MTS', '005'),	('PLY', '005'),
+                ('ARO','005'),					('BSC', '005'),
+				('ARO','006')*/
+
+('AMT','24'), 	('ARO','12'),	('BMX','16'),	('BSC', '12'),	('MTB', '20'),	('MTS', '16'),	('PLY', '16'), ('TUR', '28'),
+('AMT','26'),	('ARO','16'),	('BMX','20'),	('BSC', '16'),	('MTB', '24'),	('MTS', '20'),	('PLY', '20'),
+				('ARO','20'),					('BSC', '20'),	('MTB', '26'),	('MTS', '24'),	('PLY', '24'),
+                ('ARO','24'),					('BSC', '24'),					('MTS', '26'),	('PLY', '26'),
+                ('ARO','26'),					('BSC', '26'),
+				('ARO','28')
+;
+select * from talla_articulo;
 
 
 desc repuestos;
 alter table repuestos change marca marca char(2) not null;
-/*pagina catalogo => http://habicicletas.com/iframe.php?pag=bicicletas2.html*/
-insert into repuestos values ('305337','CD MXR 12" 28D Negro','009',15,'R'),
-('305140','28x89 Negra Cuadrante','049',15,'SH'),
-('305309','BMX Aluminio PRO4-A530 Profnal Negro','009',15,'GW'),
-('305126','Relacion 28x89mm Cuña, Biela Reforzada','051',15,'GW'),
-('305451','Acero 24/34/42T-Biela Alum','048',15,'MI'),
-('305334','Acero 36T 314-1 (Estrella)','009',15,'CH'),
-('305438','Biela Acero Plastificada S/P','048',15,'MI'),
-('305408','Biela Acero Plastificada C/P','048',15,'MI'),
-('305469','Acero XCC-T208 28/38/48','048',15,'ST'),
-('104106','3 Piezas Negro','018',15,'ES'),
-('104104','3 Piezas Cromo','018',15,'PH'),
-('104204','3 Piezas Rosca Inglesa','018',15,'NE'),
-('104416','AHead Acero 1-1/8 CC845 Negro','222',15,'NE'),
-('105306','Acero Negro','423',15,'MI'),
-('105107','Acero FP501 Cromado','423',15,'MI'),
-('105101','Acero CC800 Cromado','423',15,'NE'),
-('301101','1/2 X 1/8 114L','011',15,'FV'),
-('301121','1/2 X 1/8 114L C410','011',15,'MY'),
-('301219','1/2 X 3/32 C30','021',15,'KT'),
-('301206','1/2 X 3/32 HP20','021',15,'KT'),
-('302104','Centro Y-5 36-54-46','856',15,'CH'),
-('302209','Eje Cuadrante Tuercas','006',15,'CH'),
-('302210','Eje Cuadrante Tornillos','006',15,'CH'),
-('302411','Cartucho Acero Negro 910BK','006',15,'NE'),
-('303326','Niño PVC Negro','043',15,'MI'),
-('303323','BMX PVC FP-808 Negro','045',15,'FN'),
-('303321','BMX FreeStyle Alum FP-965 Natural','045',15,'FN'),
-('303414','MTB PVC F-815 Negro','043',15,'FN'),
-('303402','MTB Aluminio','043',15,'FN'),
-('304444','6 Vel 14-28 MTB Marron','023',15,'MI'),
-('304452','6 Vel 14-34 MTB MegaRange','023',15,'SH'),
-('304131','16 Dientes Marron','010',15,'PW'),
-('304107','18 Dientes Marron','010',15,'PW'),
-('304124','20 Dientes Marron','010',15,'PW'),
-('304119','16 Dientes Cromado','010',15,'MI'),
-('600382','Acero Lancer FreeStyle Disc/V-Brake','088',15,'GW'),
-('305133','OPC-101 89x16mm Negra','026',15,''),
-('305136','OPC-101 114x16mm Negra','026',15,''),
-('306424','MTB Palanca Resina','013',15,'MI'),
-('306423','MTB Palanca Resina','013',15,'PW'),
-('307425','MTB RD-25','013',15,'PW'),
-('403436','Acero C/Eje C/Espaciador','022',15,'PW'),
-('403401','Acero C/Puntilla C/Espaciador','022',15,'CH'),
-('403439','Acero Parallex C/Eje S/Espaciador','031',15,'PW'),
-('403438','Acero Parallex C/Puntilla C/Espaciador','031',15,'CH'),
-('403343','BMX A209 Eje 3/8 Alum Natural','022',15,'GW'),
-('403431','BMX A222 Eje 3/8 Alum Negro Balinera','022',15,'GW'),
-('403435','Acero Parallex C/Eje Cromadas','022',15,'PW'),
-('403334','MTB A201 Eje 3/8 Alum Natural','022',15,'PW'),
-('403345','MTB A203 C/Puntilla Alum Natural','031',15,'GW'),
-('311104','Cuña Relacion Hierro 9.3mm','332',15,'CH'),
-('407533','16 x 2.125 Negra Pistera F116','050',15,'KY'),/*las llantas se referenciran por tamaño, que necesariamente debe ir escrito de primero en el campo de descripcion. Al usuario debera indicarsele esta precuacion */
-('407528','24 x 2.125 Negra F125','050',15,'KY'),
-('407547','12-1 x 2-1/4 Negra F146','050',15,'KY');
+/*pagina catalogo => http://habicicletas.com/iframe..php?pag=bicicletas2.html*/
+insert into repuestos values 
+('305337','CD MXR 12" 28D Negro Raleigh','009',15,'20'),
+('305140','28x89 Negra Cuadrante','049',15,null);
+('305309','BMX Aluminio PRO4-A530 Profnal Negro GW','009',15),
+('305126','Relacion 28x89mm Cuña, Biela Reforzada','051',15),
+('305451','Acero 24/34/42T-Biela Alum','048',15),
+('305334','Acero 36T 314-1 (Estrella)','009',15),
+('305438','Biela Acero Plastificada S/P','048',15),
+('305408','Biela Acero Plastificada C/P','048',15),
+('305469','Acero XCC-T208 28/38/48','048',15),
+('104106','3 Piezas Negro','018',15),
+('104104','3 Piezas Cromo','018',15),
+('104204','3 Piezas Rosca Inglesa','018',15),
+('104416','AHead Acero 1-1/8 CC845 Negro','222',15),
+('105306','Acero Negro','423',15),
+('105107','Acero FP501 Cromado','423',15),
+('105101','Acero CC800 Cromado','423',15),
+('301101','1/2 X 1/8 114L','011',15),
+('301121','1/2 X 1/8 114L C410','011',15),
+('301219','1/2 X 3/32 C30','021',15),
+('301206','1/2 X 3/32 HP20','021',15),
+('302104','Centro Y-5 36-54-46','856',15),
+('302209','Eje Cuadrante Tuercas','006',15),
+('302210','Eje Cuadrante Tornillos','006',15),
+('302411','Cartucho Acero Negro 910BK','006',15),
+('303326','Niño PVC Negro','043',15),
+('303323','BMX PVC FP-808 Negro','045',15),
+('303321','BMX FreeStyle Alum FP-965 Natural','045',15),
+('303414','MTB PVC F-815 Negro','043',15),
+('303402','MTB Aluminio','043',15),
+('304444','6 Vel 14-28 MTB Marron','023',15),
+('304452','6 Vel 14-34 MTB MegaRange','023',15),
+('304131','16 Dientes Marron','010',15),
+('304107','18 Dientes Marron','010',15),
+('304124','20 Dientes Marron','010',15),
+('304119','16 Dientes Cromado','010',15),
+('600382','Acero Lancer FreeStyle Disc/V-Brake','088',15),
+('305133','OPC-101 89x16mm Negra','026',15),
+('305136','OPC-101 114x16mm Negra','026',15),
+('306424','MTB Palanca Resina','013',15),
+('306423','MTB Palanca Resina','013',15),
+('307425','MTB RD-25','013',15),
+('403436','Acero C/Eje C/Espaciador','022',15),
+('403401','Acero C/Puntilla C/Espaciador','022',15),
+('403439','Acero Parallex C/Eje S/Espaciador','031',15),
+('403438','Acero Parallex C/Puntilla C/Espaciador','031',15),
+('403343','BMX A209 Eje 3/8 Alum Natural','022',15),
+('403431','BMX A222 Eje 3/8 Alum Negro Balinera','022',15),
+('403435','Acero Parallex C/Eje Cromadas','022',15),
+('403334','MTB A201 Eje 3/8 Alum Natural','022',15),
+('403345','MTB A203 C/Puntilla Alum Natural','031',15),
+('311104','Cuña Relacion Hierro 9.3mm','332',15),
+('407533','16 x 2.125 Negra Pistera F116','050',15),/*las llantas se referenciran por tamaño, que necesariamente debe ir escrito de primero en el campo de descripcion. Al usuario debera indicarsele esta precuacion */
+('407528','24 x 2.125 Negra F125','050',15),
+('407547','12-1 x 2-1/4 Negra F146','050',15);
 
 update repuestos set componente = '856' where cod_rep = '302104'; 
 delete from repuestos;
@@ -182,6 +205,28 @@ select c.nom_comp as Componente, r.repuesto as Repuesto from repuestos r inner j
 where ca.componente = r.componente and ca.componente = c.id_comp and ca.articulo = 'MTB';
 /***/
 
+desc ordenes_produccion;
+insert into ordenes_produccion (ensamblador, hora_desp, entregado, std_actividad) values 
+('1107057722', '2015-10-05 21:41:36', null, 1);
+select * from ordenes_produccion;
+
+desc detalle_despacho;
+insert into detalle_despacho values
+(1, '407533', 3);
+delete from detalle_despacho;
+select * from detalle_despacho;
+
+desc produccion;
+insert into produccion values
+(1, 'BMX', 3);
+
+/*desc marcas;
+alter table marcas change id_marca id_marca char(2);
+insert into marcas values ('MI','MILLENIUM',null),('NE','NECO',null),('HI','SHIMANO',null),('R','RALEIGH',null),('SH','SH',null),
+('GW','GW',null),('PH','PHILIPS',null),('ES','EASTMAN',null),('ST','SUNTOUR',null),('FN','FEIMIN',null),('FV','FIVESTAR',null),
+('MY','MAYA',null),('KT','KMC-TEC',null),('KM','KMC',null),('CH','CHINO',null),('PW','POWER',null),('KY','KYLIN',null);
+delete from marcas;
+select * from marcas;*/
 
 /*FUENTES RESTRICCIONES Y RELACIONES
 http://blog.openalfa.com/como-trabajar-con-restricciones-de-clave-externa-en-mysql

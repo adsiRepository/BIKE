@@ -70,6 +70,12 @@ public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOf
                     if (index != -1) {
                         CheckBoxItem checkbox = getModel().getElementAt(index);
                         checkbox.setSelected(!checkbox.isSelected());
+                        if(checkbox.isSelected()){
+                            checkbox.setBackground(getSelectionBackground());
+                        }
+                        else{
+                            checkbox.setBackground(getBackground());
+                        }
                         repaint();
                     }
                 }
@@ -78,7 +84,6 @@ public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOf
             this.setSelectionMode(DefaultListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         }
 
-// </editor-fold>
     }
 
     private static class ModeloListaArticulos extends DefaultListModel<CheckBoxItem> {

@@ -36,8 +36,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private int fila_tabla, col_tabla;
     
     //VENTANAS INTERNAS
-    private OrdenProduccion ordenProduccion;
-    private ArticulosComponentes controlRepuestos;
+    public OrdenProduccion ordenProduccion;
+    public ComponenteArticulo controlRepuestos;
     //----
     
     /** Creates new form MenuPrincipal */
@@ -134,8 +134,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menu_item_nueva_orden_ = new javax.swing.JMenuItem();
         menu_item_despachos_ = new javax.swing.JMenuItem();
         menu_almacen_ = new javax.swing.JMenu();
-        menu_item_productos_ = new javax.swing.JMenuItem();
-        menu_item_repuestos_ = new javax.swing.JMenuItem();
+        menu_item_componentes_ = new javax.swing.JMenuItem();
         menu_item_articulos_ = new javax.swing.JMenuItem();
         menu_ensambladores_ = new javax.swing.JMenu();
         menu_item_reg_ensam_ = new javax.swing.JMenuItem();
@@ -145,7 +144,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        escritorio.setBackground(new java.awt.Color(26, 105, 159));
+        escritorio.setBackground(new java.awt.Color(204, 204, 204));
         escritorio.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         escritorio.setAutoscrolls(true);
         escritorio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -190,7 +189,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_revision_.setMinimumSize(new java.awt.Dimension(150, 80));
         btn_revision_.setPreferredSize(new java.awt.Dimension(150, 80));
 
-        panel_reloj_.setBackground(new java.awt.Color(102, 102, 102));
+        panel_reloj_.setBackground(new java.awt.Color(204, 204, 204));
         panel_reloj_.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         panel_reloj_.setEnabled(false);
         panel_reloj_.setPreferredSize(new java.awt.Dimension(210, 210));
@@ -313,21 +312,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         menu_almacen_.setText("Almacen");
 
-        menu_item_productos_.setText("Productos");
-        menu_item_productos_.addActionListener(new java.awt.event.ActionListener() {
+        menu_item_componentes_.setText("Componentes");
+        menu_item_componentes_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menu_item_productos_ActionPerformed(evt);
+                menu_item_componentes_ActionPerformed(evt);
             }
         });
-        menu_almacen_.add(menu_item_productos_);
-
-        menu_item_repuestos_.setText("Repuestos");
-        menu_item_repuestos_.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menu_item_repuestos_ActionPerformed(evt);
-            }
-        });
-        menu_almacen_.add(menu_item_repuestos_);
+        menu_almacen_.add(menu_item_componentes_);
 
         menu_item_articulos_.setText("Articulos");
         menu_almacen_.add(menu_item_articulos_);
@@ -404,16 +395,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_menu_item_despachos_ActionPerformed
 
-    private void menu_item_productos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_productos_ActionPerformed
-        // TODO add your handling code here:
-        
-        Inventarios prov = new Inventarios();
-        escritorio.add(prov);
-        prov.setVisible(true);
-        prov.toFront();
-        
-    }//GEN-LAST:event_menu_item_productos_ActionPerformed
-
     private void menu_item_nueva_orden_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_nueva_orden_ActionPerformed
 
         try {
@@ -428,7 +409,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
             ordenProduccion.toFront();
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            System.out.print("Excepcion localizada en: MenuPrincipal.menu_item_nueva_orden_ActionPerformed => \n"+ex.toString());
         }
         
     }//GEN-LAST:event_menu_item_nueva_orden_ActionPerformed
@@ -440,7 +421,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_tabla_actividadesMouseClicked
 
-    private void menu_item_repuestos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_repuestos_ActionPerformed
+    private void menu_item_componentes_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_componentes_ActionPerformed
 
         try {
             if (controlRepuestos != null && controlRepuestos.isVisible()) {
@@ -448,7 +429,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     controlRepuestos.setIcon(false);
                 }
             } else {
-                controlRepuestos = new ArticulosComponentes();
+                controlRepuestos = new ComponenteArticulo();
                 escritorio.add(controlRepuestos);
                 controlRepuestos.setVisible(true);
             }
@@ -457,7 +438,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             System.out.println(ex.toString());
         }
 
-    }//GEN-LAST:event_menu_item_repuestos_ActionPerformed
+    }//GEN-LAST:event_menu_item_componentes_ActionPerformed
    
 //CLASES INTERNAS DE ESTA CLASE "MenuPrincipal"
     private class PanelBotonesCelda extends JPanel {
@@ -730,12 +711,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menu_herramientas_;
     private javax.swing.JMenuItem menu_item_articulos_;
     private javax.swing.JMenuItem menu_item_cerrar_;
+    private javax.swing.JMenuItem menu_item_componentes_;
     private javax.swing.JMenuItem menu_item_despachos_;
     private javax.swing.JMenuItem menu_item_nueva_orden_;
     private javax.swing.JMenuItem menu_item_parametrizacion_;
-    private javax.swing.JMenuItem menu_item_productos_;
     private javax.swing.JMenuItem menu_item_reg_ensam_;
-    private javax.swing.JMenuItem menu_item_repuestos_;
     private javax.swing.JMenuItem menu_item_servidores_;
     private javax.swing.JMenuItem menu_item_supervis_ensam_;
     private javax.swing.JMenu menu_tareas_;

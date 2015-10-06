@@ -89,8 +89,7 @@ public class PanelReloj extends JPanel{
         seconds = Tiempo.getNow().get(Calendar.SECOND);
         millis = Tiempo.getNow().get(Calendar.MILLISECOND);
 
-        g2.drawImage(clockImage, null, 0, 0);
-        //g.drawImage(clockImage, 0, 0, null);
+        //g2.drawImage(clockImage, null, 0, 0);
 
         dibujarManecillas(g2);
 
@@ -102,23 +101,27 @@ public class PanelReloj extends JPanel{
         int largoMinutero = largoSegundero * 3 / 4;
         int largoHora = largoSegundero / 2;
 
-        g2.setStroke(anchoAgujaSeg);
         float fseconds = seconds + (float) millis / 1000;
         float secondAngle = tresPI - (radPerSecMin * fseconds);
-        dibujarLinea(g2, centerX, centerY, secondAngle, 0, largoSegundero);
-
-        g2.setStroke(anchoAgujaMin);
         float fminutes = (float) (minutes + fseconds / 60.0);
         float minuteAngle = tresPI - (radPerSecMin * fminutes);
-        dibujarLinea(g2, centerX, centerY, minuteAngle, 0, largoMinutero);
-
-        g2.setStroke(anchoAgujaHor);
         float fhours = (float) (hours + fminutes / 60.0);
         float hourAngle = tresPI - (5 * radPerSecMin * fhours);
+        
+        g2.setStroke(anchoAgujaHor);
+        g2.setColor(new Color(2, 13, 194, 255));
         dibujarLinea(g2, centerX, centerY, hourAngle, 0, largoHora);
+        
+        g2.setStroke(anchoAgujaMin);
+        g2.setColor(new Color(12, 138, 32, 255));
+        dibujarLinea(g2, centerX, centerY, minuteAngle, 0, largoMinutero);
 
+        g2.setStroke(anchoAgujaSeg);
+        g2.setColor(Color.BLACK);
+        dibujarLinea(g2, centerX, centerY, secondAngle, 0, largoSegundero);
+        
         //las sgtes 2 lineas dibujan el circulo del centro donde se originan las agujas
-        g2.setColor(Color.orange);
+        g2.setColor(new Color(167, 32, 23));
         g2.fillOval(centerX - 5, centerY - 5, 10, 10);
         
         numerales(g2);
@@ -162,7 +165,7 @@ public class PanelReloj extends JPanel{
     
     private void numerales(Graphics2D g) {
         Font font = new Font("Arial", Font.BOLD, 16);
-        g.setColor(Color.BLACK);
+        g.setColor(new Color(212, 157, 98, 255));
         g.setFont(font);
         g.drawString("12", getWidth() / 2 - 8, getHeight() / 8 + 6);
         g.drawString("1", (getWidth() / 2 + getWidth() / 4) - 16, getHeight() / 5);
