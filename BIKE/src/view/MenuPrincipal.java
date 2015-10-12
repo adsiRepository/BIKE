@@ -136,6 +136,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menu_almacen_ = new javax.swing.JMenu();
         menu_item_componentes_ = new javax.swing.JMenuItem();
         menu_item_articulos_ = new javax.swing.JMenuItem();
+        menu_item_repuestos_ = new javax.swing.JMenuItem();
         menu_ensambladores_ = new javax.swing.JMenu();
         menu_item_reg_ensam_ = new javax.swing.JMenuItem();
         menu_item_supervis_ensam_ = new javax.swing.JMenuItem();
@@ -323,6 +324,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menu_item_articulos_.setText("Articulos");
         menu_almacen_.add(menu_item_articulos_);
 
+        menu_item_repuestos_.setText("Repuestos");
+        menu_item_repuestos_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_item_repuestos_ActionPerformed(evt);
+            }
+        });
+        menu_almacen_.add(menu_item_repuestos_);
+
         barra_menu_1.add(menu_almacen_);
 
         menu_ensambladores_.setText("Ensambladores");
@@ -439,6 +448,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_menu_item_componentes_ActionPerformed
+
+    private void menu_item_repuestos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_repuestos_ActionPerformed
+        
+        
+        
+    }//GEN-LAST:event_menu_item_repuestos_ActionPerformed
    
 //CLASES INTERNAS DE ESTA CLASE "MenuPrincipal"
     private class PanelBotonesCelda extends JPanel {
@@ -716,6 +731,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem menu_item_nueva_orden_;
     private javax.swing.JMenuItem menu_item_parametrizacion_;
     private javax.swing.JMenuItem menu_item_reg_ensam_;
+    private javax.swing.JMenuItem menu_item_repuestos_;
     private javax.swing.JMenuItem menu_item_servidores_;
     private javax.swing.JMenuItem menu_item_supervis_ensam_;
     private javax.swing.JMenu menu_tareas_;

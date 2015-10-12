@@ -1,13 +1,14 @@
 //code
 package controller;
 
-import model.componentes.ItemOfCollection;
+import model.componentes.ItemDeLista;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;//Maneja el ArrayList
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import javax.swing.JOptionPane;
 
 /**
@@ -53,10 +54,10 @@ public class ConsultaSQL {
 
     public String arrayToBD(ArrayList<Object> newreg) {
         this.datos = newreg;
-        /*ArrayList<Object> aux = new ArrayList<>();
+        /*ArrayList<Object> atrbs_item = new ArrayList<>();
         //String[] reg = new String[datos.size()];
         for (int i=0; i<datos.size(); i++) {
-         aux.add(i) = "'"+datos.get(i)+"'";
+         atrbs_item.add(i) = "'"+datos.get(i)+"'";
          }*/
         String query = "insert into " + tabla + " values " + implodeArL(datos) + "";
         return query;
@@ -86,7 +87,9 @@ public class ConsultaSQL {
         return qry;
     }
 
-    
+    /**
+     * Clase de acceso publico dedicada a las ejecuciones de consultas a la Base de Datos
+     */
     public static class ConsultorBD {
 
         /**
@@ -98,12 +101,12 @@ public class ConsultaSQL {
          * ESTE METODO EN PARTICULAR OBTIENE EL LISTADO DE REPUESTOS DISPONIBLES PARA CADA COMPONENTE 
          * DEL ARTICULO, O MANUFATURA O ENSAMBLE QUE SE REALICE.
          */
-        public static HashMap<String, ArrayList<ItemOfCollection>> obtenerComponentesDeArticulo(String cod_articulo){
+        public static HashMap<String, ArrayList<ItemDeLista>> obtenerComponentesDeArticulo(String cod_articulo){
             
             Connection connbd = ConexionBD.obtenerConexion();
-            HashMap<String, ArrayList<ItemOfCollection>> retorno = new HashMap<>();
-            ArrayList<ItemOfCollection> items;
-            HashMap<String, String> aux;
+            HashMap<String, ArrayList<ItemDeLista>> retorno = new HashMap<>();
+            ArrayList<ItemDeLista> items;
+            HashMap<String, Object> atrbs_item;
           
             if (connbd != null) {
                 
@@ -116,24 +119,24 @@ public class ConsultaSQL {
                     while (result_a.next()) {
                         ResultSet result_b;
                         try (java.sql.PreparedStatement sentencia_b = connbd.prepareStatement(
-                                    "select cod_rep, repuesto from repuestos where componente = '" + result_a.getString(1) + "';")) {
+                                    "select cod_rep, repuesto from repuestos where componente = '" + result_a.getString(1) + "';")) {//al hacer getString(n) al resultset. n = 1 será, en este caso, cod_rep
+                                //es decir el indice del resultset empieza por 1 sobre el primer campo que pedimos en el select
                             result_b = sentencia_b.executeQuery();
                             items = new ArrayList<>();
                             
-                            while (result_b.next()) {        //al hacer getString(n) al resultset. n = 1 será, en este caso, cod_rep
-                                //es decir el indice del resultset empieza por 1 sobre el primer campo que pedimos en el select
-                                aux = new HashMap<>();
-                                //un ItemOfCollection tiene como propiedades el id o cod del objeto, mas un HashMap (que es un arraylist a modo de
-                                //  llave - valor; tanto la llave como el valor pueden ser de cualquier clase, pero la primera siempre referenciará
-                                // y será la unica "llave" de acceso a la segunda, su referencia), que contiene los atributos de cada item.
-                                aux.put(ItemOfCollection.TEXTO_A_MOSTRAR, result_b.getString(2));//aquí lleno el HashMap de atributos
-                                //en el cosntructor de ItemOfCollection va el String id o cod, y el HashMap de atributos
-                                items.add(new ItemOfCollection(result_b.getString(1), aux));
+                            while (result_b.next()) {        
+                                atrbs_item = new HashMap<>();
+                                //un ItemDeLista tiene como propiedades el id o cod del objeto, mas un HashMap, que es un arraylist a modo de
+                                //clave - valor; tanto la llave como el valor pueden ser de cualquier clase, pero la primera siempre referenciará
+                                // y será la unica "llave" de acceso a la segunda, su referencia. Este HashMap contiene los atributos de cada item.
+                                atrbs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, result_b.getString(2));//aquí lleno el HashMap de atributos
+                                //en el cosntructor de ItemDeLista va el String id o cod, y el HashMap de atributos
+                                items.add(new ItemDeLista(result_b.getString(1), atrbs_item));
                             }
-                            /*items = new ArrayList<>();
-                             aux = new HashMap<>();
-                             aux.put(ComboBoxCeldaTabla.TEXTO_A_MOSTRAR, "..su madre.");
-                             items.add(new ItemOfCollection("item1", aux));*/
+                            /*retorno = new ArrayList<>();
+                             atrbs_item = new HashMap<>();
+                             atrbs_item.put(ComboBoxCeldaTabla.TEXTO_A_MOSTRAR, "..su madre.");
+                             retorno.add(new ItemDeLista("item1", atrbs_item));*/
                             retorno.put(result_a.getString(2), items);
                         }
                         result_b.close();
@@ -145,10 +148,11 @@ public class ConsultaSQL {
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, ex.toString(), "Error en Consulta Componentes", 0);
                     items = new ArrayList<>();
-                    aux = new HashMap<>();
-                    aux.put(ItemOfCollection.TEXTO_A_MOSTRAR, "Problemas en BD.");
-                    items.add(new ItemOfCollection("error", aux));
+                    atrbs_item = new HashMap<>();
+                    atrbs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, "Problemas en BD.");
+                    items.add(new ItemDeLista("error", atrbs_item));
                     retorno.put("error", items);
+                    return retorno;
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "No Existe Conexión a la Base de Datos", "Error Busquda Repuestos", 0);
@@ -164,34 +168,62 @@ public class ConsultaSQL {
          * El primer String es el codigo o id del Item, este a su vez es la clave dentro del HashMap.
          * El HashMap anidado seria el valor de esa clave, este HashMap contiene los atributos del Item.
          */
-        public static HashMap<String, HashMap<String, String>> obtenerCatalogoArticulos() {
+        public static HashMap<String, HashMap<String, Object>> obtenerCatalogoArticulos() {
 
             Connection connbd = ConexionBD.obtenerConexion();
-            HashMap<String, HashMap<String, String>> contenedor = new HashMap<>();
-            HashMap<String, String> ox = new HashMap<>();
-            
+            //HashMap<String, HashMap<String, String>> retorno = new HashMap<>();
+            HashMap<String, HashMap<String, Object>> retorno = new HashMap<>();
+            HashMap<String, Object> atrbs_item = new HashMap<>();
+
             if (connbd != null) {
                 ResultSet resultados;
-                try (java.sql.PreparedStatement sentencia = connbd.prepareStatement("select id_articulo, articulo, descripcion from articulos;")) {
+                try (java.sql.PreparedStatement sentencia = connbd.prepareStatement(
+                        /*"select id_articulo, articulo, descripcion from articulos;"*/
+                        "select a.id_articulo, a.articulo, a.descripcion, ta.talla from articulos a left join talla_articulo ta "
+                        + "on ta.articulo = a.id_articulo;")) {
                     resultados = sentencia.executeQuery();
-                    while (resultados.next()) {
-                        ox.put(ItemOfCollection.TEXTO_A_MOSTRAR, resultados.getString(2));
-                        ox.put("descripcion", resultados.getString(3));
-                        contenedor.put(resultados.getString(1), ox);
-                        ox = new HashMap<>();
+                    String cod_temporal;
+                    
+                    if (resultados.next()) {
+                        cod_temporal = resultados.getString(1);
+                        ArrayList<Object> tallas = new ArrayList<>();
+                        resultados.previous();
+                        while (resultados.next()) {
+                            if(resultados.getString(1).equals(cod_temporal)){
+                                tallas.add(resultados.getString(4));
+                            }
+                            else{
+                                resultados.previous();
+                                atrbs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, resultados.getString(2));
+                                atrbs_item.put("descripcion", resultados.getString(3));
+                                atrbs_item.put("tallas", tallas);
+                                retorno.put(resultados.getString(1), atrbs_item);
+                                atrbs_item = new HashMap<>();
+                                tallas = new ArrayList<>();
+                                
+                                resultados.next();
+                                cod_temporal = resultados.getString(1);
+                                resultados.previous();
+                            }
+                        }
                     }
+               
                     resultados.close();
                     connbd.close();
+                  
+                } catch (RuntimeException ex) {
+                    throw ex;
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.toString(), "Error Consulta de Catalogo", 0);
-                    ox.put("error", "Problemas en BD.");
-                    contenedor.put("Error", ox);
+                    atrbs_item.put("error", "Problemas en BD.");
+                    retorno.put("Error", atrbs_item);
+                    return retorno;
                 }
             } else {
-                ox.put("error", "No hay Conexion a BD.");
-                contenedor.put("Error", ox);
+                atrbs_item.put("error", "No hay Conexion a BD.");
+                retorno.put("Error", atrbs_item);
             }
-            return contenedor;
+            return retorno;
         }
         
         
@@ -200,37 +232,104 @@ public class ConsultaSQL {
          * El primer String es el codigo o id del Item, este a su vez es la clave dentro del HashMap.
          * El HashMap anidado seria el valor de esa clave, este HashMap contiene los atributos del Item.
          */
-        public static HashMap<String, HashMap<String, String>> obtenerListaEnsambladores() {
+        public static HashMap<String, HashMap<String, Object>> obtenerListaEnsambladores() {
 
             Connection connbd = ConexionBD.obtenerConexion();
-            HashMap<String, HashMap<String, String>> retorno = new HashMap<>();
-            HashMap<String, String> ox = new HashMap<>(); // ESTE HASHMAP AUXILIAR ES EL QUE SE USARA EN EL CONSTRUCTOR DE CADA ITEMCOMBOBOX
+            HashMap<String, HashMap<String, Object>> retorno = new HashMap<>();
+            HashMap<String, Object> atributosItem = new HashMap<>(); // ESTE HASHMAP AUXILIAR ES EL QUE SE USARA EN EL CONSTRUCTOR DE CADA ITEMCOMBOBOX
             
             if(connbd != null){
                 ResultSet resultados;
                 try (Statement sentencia = connbd.createStatement()) {
                     resultados = sentencia.executeQuery("select id_emp, nom_emp, ape_emp from ensambladores;");
-                    while (resultados.next()) {
-                        // EL PRIMER PUT DENTRO DEL HASHMAP SIEMPRE SERA EL TEXTO A MOSTRAR EN EL ITEM DEL COMBOBOX
-                        ox.put(ItemOfCollection.TEXTO_A_MOSTRAR,  resultados.getString(2) + " " + resultados.getString(3));
-                        retorno.put(resultados.getString(1),  ox);
-                        ox = new HashMap<>();//AL TERMINAR DE AGREGAR EL HASHMAP, LO REDEFINO COMO UN NUEVO OBJETO PARA EVITAR INTERFERENCIAS CON EL PROXIMO ITEMCOMBOBOX
+                    
+                    if (resultados.next()) {//para comprobar que hay datos debo usar next() que avanzar una fila; si no hay datos no lo hace.
+                        resultados.previous();//como avancé una fila para comprobar que habian registros, debo retroceder para recorrerlos todos.
+                        while (resultados.next()) {
+                            // EL PRIMER PUT DENTRO DEL HASHMAP SIEMPRE SERA EL TEXTO A MOSTRAR EN EL ITEM DEL COMBOBOX
+                            atributosItem.put(ItemDeLista.TEXTO_A_MOSTRAR, resultados.getString(2) + " " + resultados.getString(3));
+                            retorno.put(resultados.getString(1), atributosItem);
+                            atributosItem = new HashMap<>();//AL TERMINAR DE AGREGAR EL HASHMAP, LO REDEFINO COMO UN NUEVO OBJETO PARA EVITAR INTERFERENCIAS CON EL PROXIMO ITEMCOMBOBOX
+                        }
+                    }
+                    else{//si no hubo registros:
+                        atributosItem.put(ItemDeLista.TEXTO_A_MOSTRAR, "Sin Datos en el Sistema");
+                        retorno.put("null", atributosItem);
                     }
                     resultados.close();
                     connbd.close();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.toString(), "Error en Consulta Ensambladores", 0);
-                    ox.put(ItemOfCollection.TEXTO_A_MOSTRAR, "Problemas en BD.");
-                    retorno.put("Error", ox);
+                    atributosItem.put(ItemDeLista.TEXTO_A_MOSTRAR, "Problemas en BD.");
+                    retorno.put("Error", atributosItem);
+                    return retorno;
                 }
             }
             else{
-                ox.put(ItemOfCollection.TEXTO_A_MOSTRAR, "No hay Conexion a BD.");
-                retorno.put("Error", ox);
+                atributosItem.put(ItemDeLista.TEXTO_A_MOSTRAR, "No hay Conexion a BD.");
+                retorno.put("Error", atributosItem);
             }
             return retorno;
         }
 
+        
+        /**
+         * Segunda Version Obtencion de Repuestos Disponibles por Articulo.
+         * @param cod_articulo
+         * @param talla
+         * @return 
+         */
+        public static LinkedHashMap<String, ArrayList<ItemDeLista>> obtenerRepuestos_Articulo(String cod_articulo, String talla){
+            Connection connbd = ConexionBD.obtenerConexion();
+            LinkedHashMap<String, ArrayList<ItemDeLista>> retorno = new LinkedHashMap<>();
+            ArrayList<ItemDeLista> items;
+            HashMap<String, Object> attrs_item;
+          
+            if (connbd != null) {
+
+                ResultSet result_componentes;
+                try (java.sql.PreparedStatement sentencia = connbd.prepareStatement(
+                        "select c.id_comp, c.componente from componentes c inner join componente_articulo ca "
+                        + "where ca.componente = c.id_comp and ca.articulo = '" + cod_articulo + "' order by c.familia;")) {
+
+                    result_componentes = sentencia.executeQuery();
+
+                    while (result_componentes.next()) {
+                        ResultSet results_repuestos;
+                        try (java.sql.PreparedStatement sntnc_reps = connbd.prepareStatement(
+                                "select cod_rep, repuesto, talla from repuestos "
+                                + "where componente = '" + result_componentes.getString(1) + "' and talla is null "
+                                + "or componente = '" + result_componentes.getString(1) + "' and talla = '" + talla + "';")) {
+                            results_repuestos = sntnc_reps.executeQuery();
+                            items = new ArrayList<>();
+                            while (results_repuestos.next()) {
+                                attrs_item = new HashMap<>();
+                                attrs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, results_repuestos.getString("repuesto"));
+                                items.add(new ItemDeLista(results_repuestos.getString("cod_rep"), attrs_item));
+                            }
+                            retorno.put(result_componentes.getString(2), items);
+                        }
+
+                        results_repuestos.close();
+                    }
+                    result_componentes.close();
+                    connbd.close();
+
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.toString(), "Error en Consulta Componentes", 0);
+                    items = new ArrayList<>();
+                    attrs_item = new HashMap<>();
+                    attrs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, "Problemas en BD.");
+                    items.add(new ItemDeLista("error", attrs_item));
+                    retorno.put("error", items);
+                    return retorno;
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No Existe Conexión a la Base de Datos", "Error Busquda Repuestos", 0);
+            }
+            return retorno;
+        }
+      
     }
 
 }

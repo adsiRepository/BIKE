@@ -1,6 +1,6 @@
 package controller.componentes;
 
-import model.componentes.ItemOfCollection;
+import model.componentes.ItemDeLista;
 import controller.ConsultaSQL;
 import view.OrdenProduccion;
 import java.awt.Component;
@@ -14,7 +14,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
-public class ComboBoxItem extends JComboBox<ItemOfCollection> {
+public class ComboBoxItem extends JComboBox<ItemDeLista> {
 
     /**
      * Constructor
@@ -22,12 +22,12 @@ public class ComboBoxItem extends JComboBox<ItemOfCollection> {
     public ComboBoxItem(String combobox) {
         super();
         if (combobox.equals(OrdenProduccion.COD_CMBOX_ENSAMBLADORES)) {
-            ConsultaSQL.ConsultorBD.obtenerListaEnsambladores().entrySet().stream().map((registro) -> new ItemOfCollection(registro.getKey(), registro.getValue())).forEach((item) -> {
+            ConsultaSQL.ConsultorBD.obtenerListaEnsambladores().entrySet().stream().map((registro) -> new ItemDeLista(registro.getKey(), registro.getValue())).forEach((item) -> {
                 this.addItem(item);
             });
         }
         if (combobox.equals(OrdenProduccion.COD_CMBOX_ARTICULOS)) {
-            ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos().entrySet().stream().map((registro) -> new ItemOfCollection(registro.getKey(), registro.getValue())).forEach((item) -> {
+            ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos().entrySet().stream().map((registro) -> new ItemDeLista(registro.getKey(), registro.getValue())).forEach((item) -> {
                 this.addItem(item);
             });
         }
@@ -37,14 +37,14 @@ public class ComboBoxItem extends JComboBox<ItemOfCollection> {
     /**
      * Constructor
      * @param objItems
-     * Recibe el objeto valor del HashMap obtenido en la consulta SQL.
+     * Cuando sus items vienen en un ArrayList
      */
     public ComboBoxItem(Object objItems) {
         super();
         if (((ArrayList) objItems).size() > 0) {
             Iterator it = ((ArrayList) objItems).iterator();
             while (it.hasNext()) {
-                this.addItem((ItemOfCollection) it.next());
+                this.addItem((ItemDeLista) it.next());
             }
         }
         constructor();
@@ -56,17 +56,18 @@ public class ComboBoxItem extends JComboBox<ItemOfCollection> {
 
     // <editor-fold defaultstate="collapsed" desc="RENDERIZADOR (O DIBUJANTE) DE LOS ITEMS Y SUS CARACTERISTICAS VISUALES DENTRO DEL COMBOBOX">
 
-    public static class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemOfCollection>{
+    public static class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista>{
      
         public RenderItemComboBox() {
             this.setBorder(null);
         }
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends ItemOfCollection> list, ItemOfCollection value, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<? extends ItemDeLista> list, ItemDeLista value, int index, boolean isSelected, boolean cellHasFocus) {
             if (value != null) {
-                HashMap<String, String> attrs = ((ItemOfCollection) value).getAtributos();
-                setText(attrs.get(ItemOfCollection.TEXTO_A_MOSTRAR));
+                //HashMap<String, String> attrs = ((ItemDeLista) value).getAtributos();
+                HashMap<String, Object> attrs = ((ItemDeLista) value).getAtributos();
+                setText(String.valueOf(attrs.get(ItemDeLista.TEXTO_A_MOSTRAR)));
             }
             return this;
         }
@@ -77,7 +78,7 @@ public class ComboBoxItem extends JComboBox<ItemOfCollection> {
     
     private static class EditorComboBox implements ComboBoxEditor {
         
-        private ItemOfCollection itcombo;
+        private ItemDeLista itcombo;
         private JTextField field;
         
         public EditorComboBox() {
@@ -120,23 +121,23 @@ public class ComboBoxItem extends JComboBox<ItemOfCollection> {
 
     /*public static class ModeloComboBox extends AbstractListModel<ItemOfCollection> implements ComboBoxModel<ItemOfCollection> {
 
-        private static ItemOfCollection item_actual;
+        private static ItemDeLista item_actual;
         private static int pos_actual;
         private static ArrayList<ItemOfCollection> items;
         
         public ModeloComboBox() {
             items = new ArrayList<>();
             HashMap<String, String> im = new HashMap<>();
-            im.put(ItemOfCollection.TEXTO_A_MOSTRAR, "tu madre");
-            im.put(ItemOfCollection.TEXTO_A_MOSTRAR, "la tuya");
-            items.add(new ItemOfCollection("primer", im));
+            im.put(ItemDeLista.TEXTO_A_MOSTRAR, "tu madre");
+            im.put(ItemDeLista.TEXTO_A_MOSTRAR, "la tuya");
+            items.add(new ItemDeLista("primer", im));
         }
 
         public ModeloComboBox(ArrayList<ItemOfCollection> itms) {
             items = itms;
         }
         
-        public void añadirElemento(ItemOfCollection item){
+        public void añadirElemento(ItemDeLista item){
             items.add(item);
             fireContentsChanged(this, -1, -1);
         }
@@ -147,7 +148,7 @@ public class ComboBoxItem extends JComboBox<ItemOfCollection> {
         }
 
         @Override
-        public ItemOfCollection getElementAt(int index) {
+        public ItemDeLista getElementAt(int index) {
             pos_actual = index;
             item_actual = items.get(pos_actual);
             return item_actual;

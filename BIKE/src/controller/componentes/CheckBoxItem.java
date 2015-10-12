@@ -1,7 +1,7 @@
 //code
 package controller.componentes;
 
-import model.componentes.ItemOfCollection;
+import model.componentes.ItemDeLista;
 import controller.ConsultaSQL;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
@@ -20,22 +20,22 @@ import javax.swing.ListCellRenderer;
  */
 public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOfCollection>*/ {
 
-    private final transient ItemOfCollection my_item;
+    private final transient ItemDeLista my_item;
 
     /**
      * @param item
      */
-    public CheckBoxItem(ItemOfCollection item) {
+    public CheckBoxItem(ItemDeLista item) {
         this.my_item = item;
     }
 
-    public ItemOfCollection getMyItem() {
+    public ItemDeLista getMyItem() {
         return my_item;
     }
 
     /*@Override
-     public Component getListCellRendererComponent(JList<? extends ItemOfCollection> list, ItemOfCollection value, int index, boolean isSelected, boolean cellHasFocus) {
-     this.setText(value.getAtributos().get(ItemOfCollection.TEXTO_A_MOSTRAR));
+     public Component getListCellRendererComponent(JList<? extends ItemDeLista> list, ItemDeLista value, int index, boolean isSelected, boolean cellHasFocus) {
+     this.setText(value.getAtributos().get(ItemDeLista.TEXTO_A_MOSTRAR));
      this.setSelected(isSelected);
      this.setBackground(list.getBackground());
      return this;
@@ -57,7 +57,7 @@ public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOf
             this.setCellRenderer(new ListCellRenderer<CheckBoxItem>() {
                 @Override
                 public Component getListCellRendererComponent(JList<? extends CheckBoxItem> list, CheckBoxItem value, int index, boolean isSelected, boolean cellHasFocus) {
-                    value.setText(value.getMyItem().getAtributos().get(ItemOfCollection.TEXTO_A_MOSTRAR));
+                    value.setText(String.valueOf(value.getMyItem().getAtributos().get(ItemDeLista.TEXTO_A_MOSTRAR)));
                     value.setBackground(isSelected ? getSelectionBackground() : getBackground());
                     value.setForeground(isSelected ? getSelectionForeground() : getForeground());
                     return value;
@@ -90,8 +90,8 @@ public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOf
 
         public ModeloListaArticulos() {
             try {
-                HashMap<String, HashMap<String, String>> map = ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos();
-                map.entrySet().stream().map((reg) -> new ItemOfCollection(reg.getKey(), reg.getValue())).forEach((item) -> {
+                HashMap<String, HashMap<String, Object>> map = ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos();
+                map.entrySet().stream().map((reg) -> new ItemDeLista(reg.getKey(), reg.getValue())).forEach((item) -> {
                     this.addElement(new CheckBoxItem(item));
                 });
             } catch (Exception e) {

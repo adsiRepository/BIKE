@@ -3,8 +3,6 @@
 
 package view;
 
-import model.MainClass;
-
 import controller.ConsultaSQL;
 import model.MdlData;
 //import Controlador.Fechas;

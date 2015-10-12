@@ -206,7 +206,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="txt_cant_ensamble" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
-                                  <Component id="combo_ref_tamaño" min="-2" pref="41" max="-2" attributes="0"/>
+                                  <Component id="combo_ref_tamaño_" min="-2" pref="41" max="-2" attributes="0"/>
                                   <Component id="combo_catalogo_ensamble_" min="-2" pref="146" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -225,7 +225,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="combo_ref_tamaño" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="combo_ref_tamaño_" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_ref_tamaño_" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -266,23 +266,14 @@
                 <Property name="text" type="java.lang.String" value="Ensamble: "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="combo_ref_tama&#xf1;o">
+            <Component class="javax.swing.JComboBox" name="combo_ref_tama&#xf1;o_">
               <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="8">
-                    <StringItem index="0" value="12"/>
-                    <StringItem index="1" value="16"/>
-                    <StringItem index="2" value="20"/>
-                    <StringItem index="3" value="24"/>
-                    <StringItem index="4" value="26"/>
-                    <StringItem index="5" value="27"/>
-                    <StringItem index="6" value="28"/>
-                    <StringItem index="7" value="29"/>
-                  </StringArray>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="modelo_combo_tallas" type="code"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Referencia de Tama&#xf1;o"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[32767, 25]"/>
+                  <Dimension value="[74, 25]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[74, 25]"/>
@@ -293,6 +284,7 @@
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox()"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="modelo_combo_tallas = new ModeloComboBoxTallas();"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="lbl_ref_tama&#xf1;o_">

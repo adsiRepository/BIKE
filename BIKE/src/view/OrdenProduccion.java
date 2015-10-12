@@ -5,7 +5,7 @@ package view;
 
 import controller.ConsultaSQL;
 import controller.Graficos.PanelFondoVentanaInterna;
-import model.componentes.ItemOfCollection;
+import model.componentes.ItemDeLista;
 import controller.componentes.ComboBoxItem;
 import controller.componentes.Tabla.EditorComponenteCelda;
 import controller.componentes.Tabla.RenderComponenteCelda;
@@ -19,6 +19,12 @@ import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 
 /**
@@ -31,6 +37,13 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
 
     public static final String COD_CMBOX_ENSAMBLADORES = "ensambladores";
     public static final String COD_CMBOX_ARTICULOS = "articulos";
+    
+    //declaracion variables =>
+    @SuppressWarnings("FieldMayBeFinal")
+    private ModeloTabla modeloTabla;
+    private Object[][] data; // estos datos son la variable global para el manejo de datos de la Tabla, esta instanciada para todo el formulario no solo para el modelo, asi se puede manipular constantemente
+    private int fila_tabla, col_tabla;   
+    private ModeloComboBoxTallas modelo_combo_tallas;
     
     //constructor de Esta ventana
     public OrdenProduccion() {
@@ -88,7 +101,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         panel_primer_filtro_emsamble_ = new javax.swing.JPanel();
         combo_catalogo_ensamble_ = new controller.componentes.ComboBoxItem(COD_CMBOX_ARTICULOS);
         lbl_tipo_ensamble_ = new javax.swing.JLabel();
-        combo_ref_tamaño = new javax.swing.JComboBox();
+        combo_ref_tamaño_ = new javax.swing.JComboBox();
         lbl_ref_tamaño_ = new javax.swing.JLabel();
         lbl_cantidad_ensamble_ = new javax.swing.JLabel();
         txt_cant_ensamble = new javax.swing.JTextField();
@@ -145,11 +158,12 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
 
         lbl_tipo_ensamble_.setText("Ensamble: ");
 
-        combo_ref_tamaño.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "12", "16", "20", "24", "26", "27", "28", "29" }));
-        combo_ref_tamaño.setToolTipText("Referencia de Tamaño");
-        combo_ref_tamaño.setMaximumSize(new java.awt.Dimension(32767, 25));
-        combo_ref_tamaño.setMinimumSize(new java.awt.Dimension(74, 25));
-        combo_ref_tamaño.setPreferredSize(new java.awt.Dimension(74, 25));
+        modelo_combo_tallas = new ModeloComboBoxTallas();
+        combo_ref_tamaño_.setModel(modelo_combo_tallas);
+        combo_ref_tamaño_.setToolTipText("Referencia de Tamaño");
+        combo_ref_tamaño_.setMaximumSize(new java.awt.Dimension(74, 25));
+        combo_ref_tamaño_.setMinimumSize(new java.awt.Dimension(74, 25));
+        combo_ref_tamaño_.setPreferredSize(new java.awt.Dimension(74, 25));
 
         lbl_ref_tamaño_.setText("Tamaño:");
 
@@ -193,7 +207,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combo_ref_tamaño_, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(combo_catalogo_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
@@ -206,7 +220,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
                     .addComponent(combo_catalogo_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(combo_ref_tamaño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(combo_ref_tamaño_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_ref_tamaño_))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -440,7 +454,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     private void btn_retirar_accesorio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_retirar_accesorio1ActionPerformed
         
         
-        JOptionPane.showMessageDialog(null, ((ItemOfCollection)combo_catalogo_ensamble_.getSelectedItem()).getCod());
+        JOptionPane.showMessageDialog(null, ((ItemDeLista)combo_catalogo_ensamble_.getSelectedItem()).getCod());
         
         
     }//GEN-LAST:event_btn_retirar_accesorio1ActionPerformed
@@ -495,20 +509,18 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
 
         try {
 
-            panel_primer_filtro_emsamble_.setEnabled(false);
+           panel_primer_filtro_emsamble_.setEnabled(false);
 
-            /*int total = Integer.parseInt(txt_cant_ensamble.getText());
-            int cant_masculino = Integer.parseInt(txt_cant_m.getText());
-            int cant_femenino = Integer.parseInt(txt_cant_f.getText());*/
+            /*int total = Integer.parseInt(txt_cant_ensamble.getText());*/
             
-            //AQUI UTILIZO EL METODO DE CONSULTA A LA BASE DE DATOS
-            String cod_objeto_ensamble = ((ItemOfCollection) combo_catalogo_ensamble_.getSelectedItem()).getCod();
-            HashMap<String, ArrayList<ItemOfCollection>> informacion_bd = ConsultaSQL.ConsultorBD.obtenerComponentesDeArticulo(cod_objeto_ensamble);
+            String cod_objeto_ensamble = ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).getCod();
+            String talla = combo_ref_tamaño_.getSelectedItem().toString();
+            
+            LinkedHashMap<String, ArrayList<ItemDeLista>> informacion_bd = ConsultaSQL.ConsultorBD.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla);
 
             data = new Object[informacion_bd.size()][3]; // reinstancio a data como un nuevo arreglo de objetos bidimensional
             int i = 0;
             for (HashMap.Entry en : informacion_bd.entrySet()) {
-                //en cada indice (data[n] n = numero fila) data albergara un arreglo de objetos
                 data[i] = new Object[]{en.getKey().toString(), new ComboBoxItem(en.getValue()), new SpinnerCeldaTabla()};
                 i++;
             }
@@ -526,13 +538,10 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         
         if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
             itemSelec = evt.getItem();
-            txtArea_detalles_.setText((((ItemOfCollection) itemSelec).getAtributos()).get("descripcion") );//lo que se hace aqui es parsear el objeto (el paréntesis con el nombre de la clase parsea el objeto hacia ese tipo o esa clase)
-                                                                    //a ItemCombobox (clase creada por el programador) y accedo a el atributo descripción
-            /*if(itemSelec.toString().equals("Todo Terreno")){
-                
-            }
-            else{
-            }*/
+            txtArea_detalles_.setText(String.valueOf((((ItemDeLista) itemSelec).getAtributos()).get("descripcion")) );//lo que se hace aqui es parsear el objeto (el paréntesis con el nombre de la clase parsea el objeto hacia ese tipo o esa clase)
+           
+            modelo_combo_tallas.cambiarItems((((ItemDeLista) itemSelec).getAtributos()).get("tallas"));
+            //combo_ref_tamaño_.setSelectedIndex(0);
         }
         
     }//GEN-LAST:event_combo_catalogo_ensamble_ItemStateChanged
@@ -544,7 +553,53 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         
     }//GEN-LAST:event_btn_cancelar_despacho_ActionPerformed
 
-    
+    /**
+     * Modelo ComboBox Tamaños.
+     */
+    private class ModeloComboBoxTallas extends AbstractListModel<Object> implements ComboBoxModel<Object>{
+
+        private Object[] mis_elementos;
+        private int posicion;
+        
+        @SuppressWarnings("OverridableMethodCallInConstructor")
+        public ModeloComboBoxTallas() {
+            cambiarItems(((ItemDeLista)combo_catalogo_ensamble_.getItemAt(0)).getAtributos().get("tallas"));
+        }
+        
+        @Override
+        public int getSize() {
+            return mis_elementos.length;
+        }
+        
+        @Override
+        public Object getElementAt(int index) {
+            posicion = index;
+            return mis_elementos[index];
+        }
+
+        @Override
+        public void setSelectedItem(Object anItem) {
+            mis_elementos[posicion] = anItem;
+        }
+
+        @Override
+        public Object getSelectedItem() {
+            return mis_elementos[posicion];
+        }
+
+        public void cambiarItems(Object arrayList_tallas){
+            Iterator it = ((ArrayList) arrayList_tallas).iterator();
+            mis_elementos = new Object[((ArrayList) arrayList_tallas).size()];
+            int i = 0;
+            while (it.hasNext()) {
+                mis_elementos[i] = it.next();
+                i++;
+            }
+            posicion = (mis_elementos.length - 1);
+            //fireContentsChanged(this, 0, mis_elementos.length);
+        }
+        
+    }
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -558,7 +613,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     private javax.swing.JButton btn_selec_repuestos_2;
     private javax.swing.JComboBox combo_catalogo_ensamble_;
     private javax.swing.JComboBox combo_ensambladores_;
-    private javax.swing.JComboBox combo_ref_tamaño;
+    private javax.swing.JComboBox combo_ref_tamaño_;
     private javax.swing.JLabel lbl_cantidad_ensamble_;
     private javax.swing.JLabel lbl_ensamblador_;
     private javax.swing.JLabel lbl_ref_tamaño_;
@@ -573,10 +628,5 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     private javax.swing.JTextArea txtArea_detalles_;
     private javax.swing.JTextField txt_cant_ensamble;
     // End of variables declaration//GEN-END:variables
-    //declaration variables a mano =>
-    @SuppressWarnings("FieldMayBeFinal")
-    private ModeloTabla modeloTabla;
-    private Object[][] data; // estos datos son la variable global para el manejo de datos de la Tabla, esta instanciada para todo el formulario no solo para el modelo, asi se puede manipular constantemente
-    private int fila_tabla, col_tabla;   
 
 }

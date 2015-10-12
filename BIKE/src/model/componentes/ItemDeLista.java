@@ -6,13 +6,13 @@ import java.util.HashMap;
  *
  * @author Miguel
  */
-public class ItemOfCollection{
+public class ItemDeLista{
     public static final String TEXTO_A_MOSTRAR = "texto";
   
     private String cod;
-    private HashMap<String, String> atributos;
+    private HashMap<String, Object> atributos;
 
-    public ItemOfCollection(String codigoId, HashMap<String, String> atributos) {
+    public ItemDeLista(String codigoId, HashMap<String, Object> atributos) {
         this.cod = codigoId;
         this.atributos = atributos;
     }
@@ -26,11 +26,11 @@ public class ItemOfCollection{
         this.cod = cod;
     }
     
-    public void setAtributos(HashMap<String, String> atributos) {
+    public void setAtributos(HashMap<String, Object> atributos) {
         this.atributos = atributos;
     }
     
-    public HashMap<String, String> getAtributos() {
+    public HashMap<String, Object> getAtributos() {
         return atributos;
     }
 
