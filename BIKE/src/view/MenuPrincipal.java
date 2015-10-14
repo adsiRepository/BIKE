@@ -406,10 +406,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void menu_item_nueva_orden_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_nueva_orden_ActionPerformed
 
-        try {
+        //try {
             if (ordenProduccion != null && ordenProduccion.isVisible()) {
                 if (ordenProduccion.isIcon()) {
-                    ordenProduccion.setIcon(false);
+                   // ordenProduccion.setIcon(false);
                 }
             } else {
                 ordenProduccion = new OrdenProduccion();
@@ -417,9 +417,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 ordenProduccion.setVisible(true);
             }
             ordenProduccion.toFront();
-        } catch (Exception ex) {
-            System.out.print("Excepcion localizada en: MenuPrincipal.menu_item_nueva_orden_ActionPerformed => \n"+ex.toString());
-        }
+        /*} catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.toString());
+            //System.out.print("Excepcion localizada en: MenuPrincipal.menu_item_nueva_orden_ActionPerformed => \n"+ex.toString());
+        }*/
         
     }//GEN-LAST:event_menu_item_nueva_orden_ActionPerformed
 

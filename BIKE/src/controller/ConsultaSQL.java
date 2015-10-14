@@ -297,7 +297,7 @@ public class ConsultaSQL {
                     while (result_componentes.next()) {
                         ResultSet results_repuestos;
                         try (java.sql.PreparedStatement sntnc_reps = connbd.prepareStatement(
-                                "select cod_rep, repuesto, talla from repuestos "
+                                "select cod_rep, repuesto, cant_disp from repuestos "
                                 + "where componente = '" + result_componentes.getString(1) + "' and talla is null "
                                 + "or componente = '" + result_componentes.getString(1) + "' and talla = '" + talla + "';")) {
                             results_repuestos = sntnc_reps.executeQuery();
@@ -305,6 +305,7 @@ public class ConsultaSQL {
                             while (results_repuestos.next()) {
                                 attrs_item = new HashMap<>();
                                 attrs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, results_repuestos.getString("repuesto"));
+                                attrs_item.put("stock", results_repuestos.getInt("cant_disp"));
                                 items.add(new ItemDeLista(results_repuestos.getString("cod_rep"), attrs_item));
                             }
                             retorno.put(result_componentes.getString(2), items);

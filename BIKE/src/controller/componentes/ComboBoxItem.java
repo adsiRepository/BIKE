@@ -4,11 +4,9 @@ import model.componentes.ItemDeLista;
 import controller.ConsultaSQL;
 import view.OrdenProduccion;
 import java.awt.Component;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import javax.swing.ComboBoxEditor;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JTextField;
@@ -16,11 +14,49 @@ import javax.swing.ListCellRenderer;
 
 public class ComboBoxItem extends JComboBox<ItemDeLista> {
 
+    public boolean i_have_items;
+    
     /**
      * Constructor
-     * @param combobox => constante aplicada en el constructor, dependiente del combobox a construir*/
+     * @param combobox
+     * constante aplicada en el constructor, dependiente del combobox a construir*/
     public ComboBoxItem(String combobox) {
         super();
+        seleccionaComboBox(combobox);
+        constructor();
+    }
+
+    /**
+     * Constructor
+     * @param objItems
+     * Cuando sus my_items vienen en un ArrayList*/
+    public ComboBoxItem(Object objItems) {
+        super();
+        if (((ArrayList) objItems).size() > 0) {
+            Iterator it = ((ArrayList) objItems).iterator();
+            while (it.hasNext()) {
+                this.addItem((ItemDeLista) it.next());
+            }
+            i_have_items = true;
+        }
+        else{
+            i_have_items = false;
+        }
+        constructor();
+    }
+
+    private void constructor(){
+        this.setRenderer(new RenderItemComboBox());
+    } 
+    
+    public ItemDeLista getMyFirstItem(){
+        if(i_have_items){
+            return this.getItemAt(0);
+        }
+        return null;
+    }
+    
+    private void seleccionaComboBox(String combobox){
         if (combobox.equals(OrdenProduccion.COD_CMBOX_ENSAMBLADORES)) {
             ConsultaSQL.ConsultorBD.obtenerListaEnsambladores().entrySet().stream().map((registro) -> new ItemDeLista(registro.getKey(), registro.getValue())).forEach((item) -> {
                 this.addItem(item);
@@ -31,33 +67,46 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
                 this.addItem(item);
             });
         }
-        constructor();
     }
-
-    /**
-     * Constructor
-     * @param objItems
-     * Cuando sus items vienen en un ArrayList
-     */
-    public ComboBoxItem(Object objItems) {
-        super();
-        if (((ArrayList) objItems).size() > 0) {
-            Iterator it = ((ArrayList) objItems).iterator();
-            while (it.hasNext()) {
-                this.addItem((ItemDeLista) it.next());
-            }
+    
+    // <editor-fold defaultstate="collapsed" desc="MODELO COMBOBOX, NO IMPLEMENTADO">
+    /*private class ModeloComboBox extends AbstractListModel<ItemDeLista> implements ComboBoxModel<ItemDeLista> {
+        
+        private ItemDeLista item_actual;
+        //private static int pos_actual;
+        
+        public ModeloComboBox() {
+            my_items = new ArrayList<>();
         }
-        constructor();
-    }
 
-    private void constructor(){
-        this.setRenderer(new RenderItemComboBox());
-    } 
+        public ModeloComboBox(ArrayList<ItemDeLista> itms) {
+            my_items = itms;
+        }
 
-    // <editor-fold defaultstate="collapsed" desc="RENDERIZADOR (O DIBUJANTE) DE LOS ITEMS Y SUS CARACTERISTICAS VISUALES DENTRO DEL COMBOBOX">
+        @Override
+        public int getSize() {
+            return my_items.size();
+        }
 
-    public static class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista>{
-     
+        @Override
+        public ItemDeLista getElementAt(int index) {
+            return my_items.get(index);
+        }
+
+        @Override
+        public void setSelectedItem(Object anItem) {
+            item_actual = (ItemDeLista)anItem;
+        }
+
+        @Override
+        public Object getSelectedItem() {
+            return item_actual;
+        }
+        
+    }*/// </editor-fold>
+
+    private class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista>{
+        // <editor-fold defaultstate="collapsed" desc="RENDERIZADOR (O DIBUJANTE) DE LOS ITEMS Y SUS CARACTERISTICAS VISUALES DENTRO DEL COMBOBOX">
         public RenderItemComboBox() {
             this.setBorder(null);
         }
@@ -71,11 +120,11 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
             }
             return this;
         }
-
+        // </editor-fold>
     }
-
-    // <editor-fold defaultstate="collapsed" desc=" IMPLEMENTACION DE COMPONENTE (COMO TEXTFIELD) PARA EDITAR LOS VALORES DE UN ITEM DE COMBOBOX ">
     
+    // <editor-fold defaultstate="collapsed" desc=" IMPLEMENTACION DE COMPONENTE (COMO TEXTFIELD) PARA EDITAR LOS VALORES DE UN ITEM DE COMBOBOX ">
+  /*  
     private static class EditorComboBox implements ComboBoxEditor {
         
         private ItemDeLista itcombo;
@@ -111,67 +160,8 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
         public void removeActionListener(ActionListener l) {
         }
         
-    }
-
-// </editor-fold>
-
-// </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="MODELO COMBOBOX, NO IMPLEMENTADO">
-
-    /*public static class ModeloComboBox extends AbstractListModel<ItemOfCollection> implements ComboBoxModel<ItemOfCollection> {
-
-        private static ItemDeLista item_actual;
-        private static int pos_actual;
-        private static ArrayList<ItemOfCollection> items;
-        
-        public ModeloComboBox() {
-            items = new ArrayList<>();
-            HashMap<String, String> im = new HashMap<>();
-            im.put(ItemDeLista.TEXTO_A_MOSTRAR, "tu madre");
-            im.put(ItemDeLista.TEXTO_A_MOSTRAR, "la tuya");
-            items.add(new ItemDeLista("primer", im));
-        }
-
-        public ModeloComboBox(ArrayList<ItemOfCollection> itms) {
-            items = itms;
-        }
-        
-        public void añadirElemento(ItemDeLista item){
-            items.add(item);
-            fireContentsChanged(this, -1, -1);
-        }
-        
-        @Override
-        public int getSize() {
-            return items.size();
-        }
-
-        @Override
-        public ItemDeLista getElementAt(int index) {
-            pos_actual = index;
-            item_actual = items.get(pos_actual);
-            return item_actual;
-        }
-
-        @Override
-        public void setSelectedItem(Object anItem) {
-        }
-
-        @Override
-        public Object getSelectedItem() {
-            return item_actual.getCod();
-        }
-
-        @Override
-        public void addListDataListener(ListDataListener l) {
-        }
-
-        @Override
-        public void removeListDataListener(ListDataListener l) {
-        }
-
     }*/
+
 // </editor-fold>
 
 }
