@@ -4,7 +4,7 @@
 package view;
 
 import controller.ConsultaSQL;
-import controller.Graficos.PanelFondoVentanaInterna;
+import controller.componentes.Paneles.PanelFondoVentanaInterna;
 import model.componentes.ItemDeLista;
 import controller.componentes.TablaAlistamiento;
 import static view.MenuPrincipal.escritorio;
@@ -23,15 +23,15 @@ import javax.swing.ComboBoxModel;
  */
 public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFrame {
     
+    private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_orden_produccion";
+    
     public static final String COD_CMBOX_ENSAMBLADORES = "ensambladores";
     public static final String COD_CMBOX_ARTICULOS = "articulos";
-    
-    //private ModeloTablaAlistamiento modeloTabla_Alistamiento;
     
     private int fila_tabla, col_tabla;   
     private ModeloComboBoxTallas modelo_combo_tallas;
     
-    //constructor de Esta ventana
+    /**Constructor.*/
     public OrdenProduccion() {
         initComponents();
         // <editor-fold defaultstate="collapsed" desc="CONFIGURACION DE LA VENTANA COMO TAMANO, TITULO..">
@@ -55,7 +55,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panel_principal_ = new PanelFondoVentanaInterna();
+        panel_principal_ = new PanelFondoVentanaInterna(NOMBRE_MI_IMAGEN_FONDO);
         lbl_ensamblador_ = new javax.swing.JLabel();
         btn_retirar_accesorio1 = new javax.swing.JButton();
         btn_add_accesorio1 = new javax.swing.JButton();
@@ -66,7 +66,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         combo_ref_tamaño_ = new javax.swing.JComboBox();
         lbl_ref_tamaño_ = new javax.swing.JLabel();
         lbl_cantidad_ensamble_ = new javax.swing.JLabel();
-        txt_cant_ensamble = new javax.swing.JTextField();
+        txt_cant_ensamble_ = new javax.swing.JTextField();
         scroll_txtArea_detalles_ = new javax.swing.JScrollPane();
         txtArea_detalles_ = new javax.swing.JTextArea();
         btn_alistar_despacho_ = new javax.swing.JButton();
@@ -131,15 +131,15 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
 
         lbl_cantidad_ensamble_.setText("Cantidad:");
 
-        txt_cant_ensamble.setMaximumSize(new java.awt.Dimension(2147483647, 25));
-        txt_cant_ensamble.setMinimumSize(new java.awt.Dimension(6, 25));
-        txt_cant_ensamble.setPreferredSize(new java.awt.Dimension(6, 25));
-        txt_cant_ensamble.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_cant_ensamble_.setMaximumSize(new java.awt.Dimension(2147483647, 25));
+        txt_cant_ensamble_.setMinimumSize(new java.awt.Dimension(6, 25));
+        txt_cant_ensamble_.setPreferredSize(new java.awt.Dimension(6, 25));
+        txt_cant_ensamble_.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txt_cant_ensambleKeyReleased(evt);
+                txt_cant_ensamble_KeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txt_cant_ensambleKeyTyped(evt);
+                txt_cant_ensamble_KeyTyped(evt);
             }
         });
 
@@ -168,7 +168,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
                             .addComponent(lbl_ref_tamaño_))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_cant_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(combo_ref_tamaño_, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(combo_catalogo_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
@@ -186,7 +186,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
                     .addComponent(lbl_ref_tamaño_))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_primer_filtro_emsamble_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_cant_ensamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_cant_ensamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_cantidad_ensamble_))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scroll_txtArea_detalles_, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -348,7 +348,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel_principal_, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+            .addComponent(panel_principal_, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
         );
 
         pack();
@@ -446,18 +446,25 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_selec_repuestos_2ActionPerformed
 
-    private void txt_cant_ensambleKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensambleKeyTyped
+    private void txt_cant_ensamble_KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensamble_KeyTyped
 
         char typ = evt.getKeyChar();
-        if ((typ < '0' || typ > '9')) {
-            evt.consume();
+ 
+        if (txt_cant_ensamble_.getText().isEmpty()) {
+            if (typ == '0' || (typ < '1' || typ > '9')) {
+                evt.consume();
+            }
+        } else {
+            if ((typ < '0' || typ > '9')) {
+                evt.consume();
+            }
         }
 
-    }//GEN-LAST:event_txt_cant_ensambleKeyTyped
+    }//GEN-LAST:event_txt_cant_ensamble_KeyTyped
 
-    private void txt_cant_ensambleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensambleKeyReleased
+    private void txt_cant_ensamble_KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensamble_KeyReleased
 
-    }//GEN-LAST:event_txt_cant_ensambleKeyReleased
+    }//GEN-LAST:event_txt_cant_ensamble_KeyReleased
 
     private void tabla_ordenes_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_ordenes_MouseClicked
         // TODO add your handling code here:
@@ -466,19 +473,27 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     private void btn_alistar_despacho_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_alistar_despacho_ActionPerformed
 
         try {
-            panel_primer_filtro_emsamble_.setEnabled(false);
 
-            /*int total = Integer.parseInt(txt_cant_ensamble.getText());*/
-            String cod_objeto_ensamble = ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).getCod();
-            String talla = combo_ref_tamaño_.getSelectedItem().toString();
+            if (!txt_cant_ensamble_.getText().isEmpty()) {
 
-            LinkedHashMap<String, ArrayList<ItemDeLista>> informacion_bd = ConsultaSQL.ConsultorBD.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla);
+                panel_primer_filtro_emsamble_.setEnabled(false);
 
-            //modeloTabla_Alistamiento.actualizaTabla(informacion_bd);
-            ((TablaAlistamiento)tabla_alistamiento_).actualizaTabla(informacion_bd);
+                String cod_objeto_ensamble = ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).getCod();
+                String talla = combo_ref_tamaño_.getSelectedItem().toString();
+                int cantidad = Integer.parseInt(txt_cant_ensamble_.getText());
+                
+                LinkedHashMap<String, Object[]>/*ArrayList<ItemDeLista>*/ informacion_bd = ConsultaSQL.ConsultorBD.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla);
+
+                if (informacion_bd != null) {
+                    ((TablaAlistamiento) tabla_alistamiento_).actualizaTabla(informacion_bd, cantidad);
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Antes, debe especificar la cantidad de Artículos.", "Orden de Producción", 0);
+            }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.toString(), "error despachar articulos", 0);
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error en Alistamiento", 0);
         }
 
     }//GEN-LAST:event_btn_alistar_despacho_ActionPerformed
@@ -527,7 +542,7 @@ public class OrdenProduccion extends /*VentanaInterna*/javax.swing.JInternalFram
     private javax.swing.JTable tabla_alistamiento_;
     private javax.swing.JTable tabla_ordenes_;
     private javax.swing.JTextArea txtArea_detalles_;
-    private javax.swing.JTextField txt_cant_ensamble;
+    private javax.swing.JTextField txt_cant_ensamble_;
     // End of variables declaration//GEN-END:variables
 
 }

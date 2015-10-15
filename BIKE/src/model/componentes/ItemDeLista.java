@@ -1,13 +1,12 @@
 package model.componentes;
 
-import java.awt.Component;
 import java.util.HashMap;
 
 /**
  *
  * @author Miguel
  */
-public class ItemDeLista extends Component{
+public class ItemDeLista {
     public static final String TEXTO_A_MOSTRAR = "texto";
   
     private String cod;

@@ -22,24 +22,25 @@ public class ConexionBD {
     private static String port;
 
     public static Connection obtenerConexion(){
-        Connection conex;
         try{
+            Connection conex;
             Class.forName("com.mysql.jdbc.Driver");//libreria mysql connector
             //ESTAS VARIABLES SE ESTAN SETEANDO EN LA CLASE PRINCIPAL. SE SETEAN EN OTRA PARTE POR SU CONDICION CAMBIANTE
             conex = DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/storebike", usuario, password);
+            return conex;
         }
         catch(ClassNotFoundException ex){//
             JOptionPane.showMessageDialog(null, "Excepcion "+ex.toString()+" que no permiten la Conexión a Base de Datos\n"
                     + "Detalle: "+ex.getMessage(), "ConnBD", JOptionPane.ERROR_MESSAGE);
-            conex = null;
+            return null;
         }
-        catch(SQLException ex){
+       catch (SQLException ex) {
             if (ex.getErrorCode() == 0) {
-                JOptionPane.showMessageDialog(null, "No se Estableció la Conexion con el Servidor", "ConnBD", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "No Hubo Conexion a la Base de Datos. \n Verifique su Conexión y "
+                        + "vuela a intentarlo.", "Servidor", 0);
             }
-            conex = null;
+            return null;
         }
-        return conex;
     }
     
     // <editor-fold defaultstate="collapsed" desc="//   SETTERS Y GETTERS">

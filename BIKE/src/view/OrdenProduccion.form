@@ -37,7 +37,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="panel_principal_" alignment="0" pref="441" max="32767" attributes="0"/>
+          <Component id="panel_principal_" alignment="0" pref="449" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -60,7 +60,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PanelFondoVentanaInterna()"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PanelFondoVentanaInterna(NOMBRE_MI_IMAGEN_FONDO)"/>
       </AuxValues>
 
       <Layout>
@@ -210,7 +210,7 @@
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="txt_cant_ensamble" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
+                                  <Component id="txt_cant_ensamble_" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
                                   <Component id="combo_ref_tamaño_" min="-2" pref="41" max="-2" attributes="0"/>
                                   <Component id="combo_catalogo_ensamble_" min="-2" pref="146" max="-2" attributes="0"/>
                               </Group>
@@ -235,7 +235,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txt_cant_ensamble" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txt_cant_ensamble_" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_cantidad_ensamble_" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -303,7 +303,7 @@
                 <Property name="text" type="java.lang.String" value="Cantidad:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txt_cant_ensamble">
+            <Component class="javax.swing.JTextField" name="txt_cant_ensamble_">
               <Properties>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[2147483647, 25]"/>
@@ -316,8 +316,8 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_cant_ensambleKeyReleased"/>
-                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_cant_ensambleKeyTyped"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_cant_ensamble_KeyReleased"/>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_cant_ensamble_KeyTyped"/>
               </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="scroll_txtArea_detalles_">

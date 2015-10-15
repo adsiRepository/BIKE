@@ -1,7 +1,7 @@
 
 package view;
 
-import controller.Graficos;
+import controller.componentes.Paneles;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -720,7 +720,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_inventario_;
     private javax.swing.JButton btn_produccion_;
     private javax.swing.JButton btn_revision_;
-    public static final javax.swing.JDesktopPane escritorio = new Graficos.Escritorio();
+    public static final javax.swing.JDesktopPane escritorio = new Paneles.Escritorio();
     private javax.swing.JMenu menu_almacen_;
     private javax.swing.JMenu menu_archivo_;
     private javax.swing.JMenu menu_ensambladores_;

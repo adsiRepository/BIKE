@@ -278,19 +278,24 @@ public class ConsultaSQL {
          * @param cod_articulo
          * @param talla
          * @return 
+         * @throws java.lang.Exception 
          */
-        public static LinkedHashMap<String, ArrayList<ItemDeLista>> obtenerRepuestos_Articulo(String cod_articulo, String talla){
+        public static LinkedHashMap<String, Object[]>/*ArrayList<ItemDeLista>*/ obtenerRepuestos_Articulo(String cod_articulo, String talla) throws Exception {
+
             Connection connbd = ConexionBD.obtenerConexion();
-            LinkedHashMap<String, ArrayList<ItemDeLista>> retorno = new LinkedHashMap<>();
-            ArrayList<ItemDeLista> items;
-            HashMap<String, Object> attrs_item;
-          
+
             if (connbd != null) {
+
+                LinkedHashMap<String, Object[]>/*ArrayList<ItemDeLista>*/ retorno = new LinkedHashMap<>();
+                ArrayList<ItemDeLista> items;
+                HashMap<String, Object> atributos_item_temp;
 
                 ResultSet result_componentes;
                 try (java.sql.PreparedStatement sentencia = connbd.prepareStatement(
-                        "select c.id_comp, c.componente from componentes c inner join componente_articulo ca "
-                        + "where ca.componente = c.id_comp and ca.articulo = '" + cod_articulo + "' order by c.familia;")) {
+                        "select c.id_comp, c.componente, fc.comp_x_par from "
+                        + "componentes c inner join familia_componente fc inner join componente_articulo ca "
+                        + "where c.familia = fc.cod_fam and c.id_comp = ca.componente and ca.articulo = '" + cod_articulo + "' "
+                        + "order by c.familia;")) {
 
                     result_componentes = sentencia.executeQuery();
 
@@ -301,36 +306,39 @@ public class ConsultaSQL {
                                 + "where componente = '" + result_componentes.getString(1) + "' and talla is null "
                                 + "or componente = '" + result_componentes.getString(1) + "' and talla = '" + talla + "';")) {
                             results_repuestos = sntnc_reps.executeQuery();
-                            items = new ArrayList<>();
-                            while (results_repuestos.next()) {
-                                attrs_item = new HashMap<>();
-                                attrs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, results_repuestos.getString("repuesto"));
-                                attrs_item.put("stock", results_repuestos.getInt("cant_disp"));
-                                items.add(new ItemDeLista(results_repuestos.getString("cod_rep"), attrs_item));
+                            items = new ArrayList<>();//ESTE ARRAYLIST ALMACENA LOS ITEMS QUE APARECERAN EN EL COMBOBOX DE LA CELDA DE LA TABLA
+                            while (results_repuestos.next()) {//SI HAY REPUESTOS, SE LLENA; SINO, EVITA ESTE WHILE Y SE VA VACIO
+                                atributos_item_temp = new HashMap<>();
+                                atributos_item_temp.put(ItemDeLista.TEXTO_A_MOSTRAR, results_repuestos.getString(2));//ESTOS NUMEROS EQUIVALEN AL ORDEN EN QUE SE 
+                                atributos_item_temp.put("stock", results_repuestos.getInt(3));// PIDIERON LAS COLUMNAS EN EL SELECT
+                                items.add(new ItemDeLista(results_repuestos.getString(1), atributos_item_temp));// LA 1 ES "cod_rep"
                             }
-                            retorno.put(result_componentes.getString(2), items);
+                            retorno.put(result_componentes.getString(2), new Object[]{items, result_componentes.getBoolean(3)});
                         }
 
                         results_repuestos.close();
                     }
+
                     result_componentes.close();
                     connbd.close();
 
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.toString(), "Error en Consulta Componentes", 0);
-                    items = new ArrayList<>();
-                    attrs_item = new HashMap<>();
-                    attrs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, "Problemas en BD.");
-                    items.add(new ItemDeLista("error", attrs_item));
-                    retorno.put("error", items);
                     return retorno;
+
+                } catch (SQLException ex) {
+                    //JOptionPane.showMessageDialog(null, ex.toString(), "Error en Consulta Componentes", 0);
+                    /*items = new ArrayList<>();
+                     atributos_item_temp = new HashMap<>();
+                     atributos_item_temp.put(ItemDeLista.TEXTO_A_MOSTRAR, "Problemas en BD.");
+                     items.add(new ItemDeLista("error", atributos_item_temp));
+                     retorno.put("error", new Object[]{items});*/
+                    throw new Exception("Se ha presentado un problema cuando se Buscaban los Componentes\n"
+                            + "Detalle: " + ex.toString() + "\n Base de Datos: " + ex.getSQLState());
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "No Existe Conexión a la Base de Datos", "Error Busquda Repuestos", 0);
+                return null;
             }
-            return retorno;
         }
-      
+
     }
 
 }

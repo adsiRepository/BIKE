@@ -262,7 +262,7 @@ select a.id_articulo, a.articulo, a.descripcion, ta.talla from articulos a left 
 on ta.articulo = a.id_articulo;
 
 
-select cod_rep, repuesto, talla from repuestos 
+select cod_rep, repuesto, cant_disp from repuestos 
 where componente = '050' and talla is null 
 or componente = '050' and talla = '24';
 
@@ -283,15 +283,19 @@ insert into detalle_despacho values
 (3, '403436', 5),
 (3, '690733', 10)
 ;
-delete from detalle_despacho;
+delete from detalle_despacho where repuesto = '690733';
 select * from detalle_despacho;
 
 desc produccion;
 insert into produccion values
 (3,'RDP','26',5);
 
+select * from familia_componente;
 
+update familia_componente set comp_x_par = true where cod_fam = '046';
 
+select c.id_comp, c.componente, fc.comp_x_par from componentes c inner join familia_componente fc inner join componente_articulo ca
+where c.familia = fc.cod_fam and c.id_comp = ca.componente and ca.articulo = 'MTB' order by c.familia;
 
 
 /*desc componente_talla;

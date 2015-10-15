@@ -33,7 +33,9 @@ public class TablaAlistamiento extends JTable{
     
     private ModeloTablaAlistamiento mi_modelo;
     private Object[][] data;
+    //private int rango_spinner;
     
+    /***/
     public TablaAlistamiento(){
         super();
         mi_modelo = new ModeloTablaAlistamiento();
@@ -46,7 +48,7 @@ public class TablaAlistamiento extends JTable{
     // <editor-fold defaultstate="collapsed" desc="FORMATEO DE TAMAÑOS DE COLUMNAS">
     private void formatearCeldas() {
         //int anchoContenedor = scroll_items_selec.getWidth();
-        int[] anchos = new int[]{150, 250, 38, 38, 80};
+        int[] anchos = new int[]{150, 250, 38, 42, 80};
         /*int[] anchos = new int[]{ ((int)((anchoContenedor*30)/100)), ((int)((anchoContenedor*50)/100)), ((int)((anchoContenedor*20)/100)) };*/
         for (int i = 0; i < this.getColumnCount(); i++) {
             this.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
@@ -57,29 +59,46 @@ public class TablaAlistamiento extends JTable{
     }
     // </editor-fold>
     
-    public void actualizaTabla(LinkedHashMap<String, ArrayList<ItemDeLista>> new_data) {
-        data = new Object[new_data.size()][5];
-        int fila = 0;
-        for (HashMap.Entry en : new_data.entrySet()) {
-            data[fila] = new Object[]{en.getKey().toString(), new ComboBoxItem(en.getValue()), 0, new SpinnerCeldaTabla(), new PanelBotonesCelda()};
-            fila++;
+    public void actualizaTabla(LinkedHashMap<String, Object[]>/*ArrayList<ItemDeLista>*/ new_data, int cantidadSeleccionada) throws Exception{
+        try{
+            data = new Object[new_data.size()][5];
+            //rango_spinner = cantidadSeleccionada;
+            SpinnerNumberModel model_spinner;
+            int fila = 0;
+            for (HashMap.Entry reg : new_data.entrySet()) {
+                //if(((Object[])reg.getValue())[1] != null){
+                    boolean comp_par = (boolean)(((Object[])reg.getValue())[1]);
+                    if(comp_par == true){
+                        model_spinner = new SpinnerNumberModel(0, 0, cantidadSeleccionada * 2, 1);
+                    }
+                    else{
+                        model_spinner = new SpinnerNumberModel(0, 0, cantidadSeleccionada, 1);
+                    }
+                    data[fila] = new Object[]{reg.getKey().toString(), new ComboBoxItem(((Object[])reg.getValue())[0]), 0, new SpinnerCeldaTabla(model_spinner), new PanelBotonesCelda()};
+                //}
+                fila++;
+            }
+            // <editor-fold defaultstate="collapsed" desc="metodo largo para llenar a data">
+                /*int n_filas  = data_aux.length;
+             int n_colms = data_aux[0].length;
+             data = new Object[n_filas][n_colms];
+             for(fila = 0; fila < n_filas; fila++){
+             for(int colm = 0; colm < n_colms; colm++){
+             /*if(colm == 2){
+             data[fila][2] = ((ItemDeLista)((ComboBoxItem)data_aux[fila][1]).getSelectedItem()).getAtributos().get("stock");
+             }
+             else{/
+             data[fila][colm] = data_aux[fila][colm];
+             //}
+             }
+             }*/
+            // </editor-fold>
+            mi_modelo.fireTableDataChanged();
         }
-        // <editor-fold defaultstate="collapsed" desc="metodo largo para llenar a data">
-            /*int n_filas  = data_aux.length;
-         int n_colms = data_aux[0].length;
-         data = new Object[n_filas][n_colms];
-         for(fila = 0; fila < n_filas; fila++){
-         for(int colm = 0; colm < n_colms; colm++){
-         /*if(colm == 2){
-         data[fila][2] = ((ItemDeLista)((ComboBoxItem)data_aux[fila][1]).getSelectedItem()).getAtributos().get("stock");
-         }
-         else{/
-         data[fila][colm] = data_aux[fila][colm];
-         //}
-         }
-         }*/
-        // </editor-fold>
-        mi_modelo.fireTableDataChanged();
+        catch(Exception e){
+            //JOptionPane.showMessageDialog(null, "Error en Metodo \"actualizaTabla\" TablaAlistamiento\n"+e.getMessage() +"\n"+e.toString(), "", 0);
+            throw new Exception("Error al Actualizar la Tabla de Alistamiento.\n Excepción: "+e.toString());
+        }
     }
 
     public void vaciarTabla() {
@@ -90,31 +109,33 @@ public class TablaAlistamiento extends JTable{
     private class ModeloTablaAlistamiento extends DefaultTableModel {
         // <editor-fold defaultstate="collapsed" desc="MODELO DE LA TABLA DE ALISTAMIENTO">
 
-        private final Class[] TIPOS_COLUMNAS_TABLA_DESPACHOS = new Class[]{String.class, ComboBoxItem.class, Integer.class, SpinnerCeldaTabla.class, PanelBotonesCelda.class};
-        private final String[] COLUMNAS_TABLA_DESPACHO = new String[]{"Componentes", "Seleccion", "Stock", "Out", "Opciones"};
-
+        private final Class[] CLASES_COLUMNAS = new Class[]{String.class, ComboBoxItem.class, Integer.class, SpinnerCeldaTabla.class, PanelBotonesCelda.class};
+        private final String[] TITULOS_COLUMNAS = new String[]{"Componentes", "Seleccion", "Stock", "Out", "Opciones"};
+        private final boolean[] COLS_EDITABLES = new boolean[]{false, true, false, true, true};
+        
         /**
          * Constructor del Modelo de la TablaAlistamiento de Alistamiento.
          */
         public ModeloTablaAlistamiento() {
             super();
             data = new Object[][]{};
-            this.setColumnIdentifiers(COLUMNAS_TABLA_DESPACHO);
+            this.setColumnIdentifiers(TITULOS_COLUMNAS);
         }
 
-        @Override//determina la clase de componentes que iran en cada celda
+        @Override//determina la clase de componentes que iran reg cada celda
         public Class getColumnClass(int noCol) {
-            return TIPOS_COLUMNAS_TABLA_DESPACHOS[noCol];
+            return CLASES_COLUMNAS[noCol];
         }
 
         @Override
         public boolean isCellEditable(int row, int col) {
-            return col > 0; // con esto le indico que no dejara modificar la primer columna de la TablaAlistamiento
+            return COLS_EDITABLES[col];
+            //return col > 0; // con esto le indico que no dejara modificar la primer columna de la TablaAlistamiento
         }
 
         @Override
         public int getColumnCount() {
-            return COLUMNAS_TABLA_DESPACHO.length;
+            return TITULOS_COLUMNAS.length;
         }
 
         @Override
@@ -226,12 +247,6 @@ public class TablaAlistamiento extends JTable{
         }
     }
     
-    //<editor-fold defaultstate="collapsed" desc="EDITOR SPINNER">
-    /**
-     * Esta clase redefine un spinner haciendo que no se le puedan ingresar
-     * letras por ejemplo, o cuaquier configuracion que el programador quiera
-     * dar. 
-     */
     private static class SpinnerCeldaTabla extends JSpinner {
         // <editor-fold defaultstate="collapsed" desc="Codigo de la Clase SpinnerCeldaTabla">
         
@@ -248,15 +263,13 @@ public class TablaAlistamiento extends JTable{
         
         /**
          * Constructor Spinner con Modelo
-         * @param spinnerModel
-         */
+         * @param spinnerModel*/
         public SpinnerCeldaTabla(SpinnerModel spinnerModel) {
             super();
             if (spinnerModel == null) {
                 //throw new NullPointerException("model cannot be null");
-                this.myspinnerNumModel = new SpinnerNumberModel(1, 0, 10, 1);// Dato visualizado al inicio en el spinner, minimo, maximo, paso
-            }
-            else{
+                this.myspinnerNumModel = new SpinnerNumberModel(1, 0, 10, 1);// Dato visualizado al inicio reg el spinner, minimo, maximo, paso
+            } else {
                 this.myspinnerNumModel = spinnerModel;
             }
             constructorGeneral();
@@ -268,10 +281,13 @@ public class TablaAlistamiento extends JTable{
             constructorGeneral();
         }
         
+        /**
+         * Esta clase redefine un spinner haciendo que no se
+         * le puedan ingresar letras por ejemplo, o cuaquier configuracion que
+         * el programador quiera dar.*/
         private void constructorGeneral(){
             this.setModel(myspinnerNumModel);
             JSpinner.DefaultEditor editor;
-            //Editor editor = new Editor(this);
             editor = ((JSpinner.DefaultEditor)this.getEditor());
             editor.getTextField().addKeyListener(new VigiaTecleo());//aqui aplico la clase que implementa los listener del teclado para impedir la insercion de letras
         }
@@ -291,9 +307,7 @@ public class TablaAlistamiento extends JTable{
             public void keyReleased(KeyEvent e) {
             }
         }
-
         // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="MODELO DEL SPINNER (no implementado aun)">
         /*private static class MyModel extends AbstractSpinnerModel{
             
@@ -324,7 +338,6 @@ public class TablaAlistamiento extends JTable{
         // </editor-fold>
     }
     
-    //</editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="CLASES PARA LA GRAFICACION DE COMPONENTES (combobox, boton..) DENTRO DE TABLA Y SU CAPACIDAD DE DETERMINAR EL VALOR DE LA CELDA (edicion)">
         
@@ -373,10 +386,10 @@ public class TablaAlistamiento extends JTable{
     }// </editor-fold>
 
     //FUENTES
-    //insertar componentes en celdas de TablaAlistamiento ->
+    //insertar componentes reg celdas de TablaAlistamiento ->
     //http://www.java2s.com/Tutorial/Java/0240__Swing/UsingaJComboBoxinaCellinaJTableComponent.htm
     //http://www.chuidiang.com/java/tablas/tablaeditor/tablaeditor.php
     //<editor-fold defaultstate="collapsed" desc="COMPONENTES(personalizados) EDITORES DE CELDAS DE TABLA">
     //FUENTES
-    //http://swing-facil.blogspot.com.co/2012/01/jbutton-jcheckbox-jcombobox-en-jtable.html
+    //http://swing-facil.blogspot.com.co/2012/01/jbutton-jcheckbox-jcombobox-reg-jtable.html
 }

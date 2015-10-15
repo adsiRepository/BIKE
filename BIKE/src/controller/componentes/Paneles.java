@@ -2,14 +2,13 @@
 en esta clase es donde se controla los graficos en general de la aplicacion
 desde los fondos de los menues hasta los graficos estadisticos y de reportes si los hay.
  */
-package controller;
+package controller.componentes;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -17,16 +16,21 @@ import javax.swing.JPanel;
 
 /*@author bik*/
 
-public class Graficos {
+public class Paneles {
     
     public static class Escritorio extends JDesktopPane{
         
-        private final Image fondo_escritorio;//variable de imagen de fondo
+        private transient Image fondo_escritorio;//variable de imagen de fondo
         
         public Escritorio(){
             super();  
-            //justo en la siguiente linea, mediante codigo se aplica el fondo del escritorio señalando la ruta, el nombre y la extension del archivo.
-            fondo_escritorio = new ImageIcon(getClass().getResource("../sources/imgs/fondo_principal.png")).getImage();//hay que tener en cuenta la extension del archivo
+            try {
+                //justo en la siguiente linea, mediante codigo se aplica el fondo del escritorio señalando la ruta, el nombre y la extension del archivo.
+                //fondo_escritorio = new ImageIcon(getClass().getResource("../sources/imgs/fondo_principal.png")).getImage();//hay que tener en cuenta la extension del archivo
+                fondo_escritorio = ImageIO.read(new File("mis_imagenes/fondo_principal.png"));
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ex.toString());
+            }
         }
         
         @Override//mediante metodo propio de JDesktopPane
@@ -44,7 +48,7 @@ public class Graficos {
         private transient PanelFondoVentanaInterna panelImagenFondo;
         
         public VentanaInterna(){
-
+            super();
         }
         
         public void plasmarMiFondo(String nombreImagen_sinExtension){
@@ -57,24 +61,21 @@ public class Graficos {
     
     public static class PanelFondoVentanaInterna extends JPanel {
 
-        private Image fondo;
+        private transient Image fondo;
         
-        public PanelFondoVentanaInterna(){
+        /*public PanelFondoVentanaInterna(){
             this.fondo = new ImageIcon(getClass().getResource("../sources/imgs/fondo_ord_prod.png")).getImage();
-        }
+        }*/
         
         public PanelFondoVentanaInterna(String nombreImagen) {
-            Image iconoPrograma;
             try {
                 if (nombreImagen != null) {
-                    iconoPrograma = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
-                    this.fondo = iconoPrograma;
+                    this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
                 } else {
-                    iconoPrograma = ImageIO.read(new File("mis_imagenes/default_window_internal.png"));
-                    this.fondo = iconoPrograma;
+                    this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
                 }
             } catch (IOException ex) {
-                
+                JOptionPane.showMessageDialog(null, ex.toString());
             }
         }
         
@@ -86,14 +87,11 @@ public class Graficos {
         }
         
         public void setImage(String nombreImagen) {
-            Image iconoPrograma;
             try {
                 if (nombreImagen != null) {
-                    iconoPrograma = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
-                    this.fondo = iconoPrograma;
+                    this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
                 } else {
-                    iconoPrograma = ImageIO.read(new File("mis_imagenes/default_window_internal.png"));
-                    this.fondo = iconoPrograma;
+                    this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
                 }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "No se ha podido cambiar la Imagen de Fondo Error: " + ex.toString());

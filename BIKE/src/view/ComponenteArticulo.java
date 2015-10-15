@@ -3,14 +3,13 @@
 
 package view;
 
-import controller.Graficos.VentanaInterna;
-
 /**
  *
  * @author ADSI38
  */
-public class ComponenteArticulo extends VentanaInterna/*javax.swing.JInternalFrame*/ {
+public class ComponenteArticulo extends /*VentanaInterna*/javax.swing.JInternalFrame {
     
+    private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_componentes";
     
     /**
      * Creates new form Clientes
