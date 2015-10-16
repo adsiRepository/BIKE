@@ -129,13 +129,13 @@ public class ConsultaSQL {
                                 //un ItemDeLista tiene como propiedades el id o cod del objeto, mas un HashMap, que es un arraylist a modo de
                                 //clave - valor; tanto la llave como el valor pueden ser de cualquier clase, pero la primera siempre referenciará
                                 // y será la unica "llave" de acceso a la segunda, su referencia. Este HashMap contiene los atributos de cada item.
-                                atrbs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, result_b.getString(2));//aquí lleno el HashMap de atributos
+                                atrbs_item.put(ItemDeLista.TEXTO_MOSTRADO, result_b.getString(2));//aquí lleno el HashMap de atributos
                                 //en el cosntructor de ItemDeLista va el String id o cod, y el HashMap de atributos
                                 items.add(new ItemDeLista(result_b.getString(1), atrbs_item));
                             }
                             /*retorno = new ArrayList<>();
                              atrbs_item = new HashMap<>();
-                             atrbs_item.put(ComboBoxCeldaTabla.TEXTO_A_MOSTRAR, "..su madre.");
+                             atrbs_item.put(ComboBoxCeldaTabla.TEXTO_MOSTRADO, "..su madre.");
                              retorno.add(new ItemDeLista("item1", atrbs_item));*/
                             retorno.put(result_a.getString(2), items);
                         }
@@ -149,7 +149,7 @@ public class ConsultaSQL {
                     JOptionPane.showMessageDialog(null, ex.toString(), "Error en Consulta Componentes", 0);
                     items = new ArrayList<>();
                     atrbs_item = new HashMap<>();
-                    atrbs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, "Problemas en BD.");
+                    atrbs_item.put(ItemDeLista.TEXTO_MOSTRADO, "Problemas en BD.");
                     items.add(new ItemDeLista("error", atrbs_item));
                     retorno.put("error", items);
                     return retorno;
@@ -194,7 +194,7 @@ public class ConsultaSQL {
                             }
                             else{
                                 resultados.previous();
-                                atrbs_item.put(ItemDeLista.TEXTO_A_MOSTRAR, resultados.getString(2));
+                                atrbs_item.put(ItemDeLista.TEXTO_MOSTRADO, resultados.getString(2));
                                 atrbs_item.put("descripcion", resultados.getString(3));
                                 atrbs_item.put("tallas", tallas);
                                 retorno.put(resultados.getString(1), atrbs_item);
@@ -247,26 +247,26 @@ public class ConsultaSQL {
                         resultados.previous();//como avancé una fila para comprobar que habian registros, debo retroceder para recorrerlos todos.
                         while (resultados.next()) {
                             // EL PRIMER PUT DENTRO DEL HASHMAP SIEMPRE SERA EL TEXTO A MOSTRAR EN EL ITEM DEL COMBOBOX
-                            atributosItem.put(ItemDeLista.TEXTO_A_MOSTRAR, resultados.getString(2) + " " + resultados.getString(3));
+                            atributosItem.put(ItemDeLista.TEXTO_MOSTRADO, resultados.getString(2) + " " + resultados.getString(3));
                             retorno.put(resultados.getString(1), atributosItem);
                             atributosItem = new HashMap<>();//AL TERMINAR DE AGREGAR EL HASHMAP, LO REDEFINO COMO UN NUEVO OBJETO PARA EVITAR INTERFERENCIAS CON EL PROXIMO ITEMCOMBOBOX
                         }
                     }
                     else{//si no hubo registros:
-                        atributosItem.put(ItemDeLista.TEXTO_A_MOSTRAR, "Sin Datos en el Sistema");
+                        atributosItem.put(ItemDeLista.TEXTO_MOSTRADO, "Sin Datos en el Sistema");
                         retorno.put("null", atributosItem);
                     }
                     resultados.close();
                     connbd.close();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.toString(), "Error en Consulta Ensambladores", 0);
-                    atributosItem.put(ItemDeLista.TEXTO_A_MOSTRAR, "Problemas en BD.");
+                    atributosItem.put(ItemDeLista.TEXTO_MOSTRADO, "Problemas en BD.");
                     retorno.put("Error", atributosItem);
                     return retorno;
                 }
             }
             else{
-                atributosItem.put(ItemDeLista.TEXTO_A_MOSTRAR, "No hay Conexion a BD.");
+                atributosItem.put(ItemDeLista.TEXTO_MOSTRADO, "No hay Conexion a BD.");
                 retorno.put("Error", atributosItem);
             }
             return retorno;
@@ -309,7 +309,7 @@ public class ConsultaSQL {
                             items = new ArrayList<>();//ESTE ARRAYLIST ALMACENA LOS ITEMS QUE APARECERAN EN EL COMBOBOX DE LA CELDA DE LA TABLA
                             while (results_repuestos.next()) {//SI HAY REPUESTOS, SE LLENA; SINO, EVITA ESTE WHILE Y SE VA VACIO
                                 atributos_item_temp = new HashMap<>();
-                                atributos_item_temp.put(ItemDeLista.TEXTO_A_MOSTRAR, results_repuestos.getString(2));//ESTOS NUMEROS EQUIVALEN AL ORDEN EN QUE SE 
+                                atributos_item_temp.put(ItemDeLista.TEXTO_MOSTRADO, results_repuestos.getString(2));//ESTOS NUMEROS EQUIVALEN AL ORDEN EN QUE SE 
                                 atributos_item_temp.put("stock", results_repuestos.getInt(3));// PIDIERON LAS COLUMNAS EN EL SELECT
                                 items.add(new ItemDeLista(results_repuestos.getString(1), atributos_item_temp));// LA 1 ES "cod_rep"
                             }
@@ -328,7 +328,7 @@ public class ConsultaSQL {
                     //JOptionPane.showMessageDialog(null, ex.toString(), "Error en Consulta Componentes", 0);
                     /*items = new ArrayList<>();
                      atributos_item_temp = new HashMap<>();
-                     atributos_item_temp.put(ItemDeLista.TEXTO_A_MOSTRAR, "Problemas en BD.");
+                     atributos_item_temp.put(ItemDeLista.TEXTO_MOSTRADO, "Problemas en BD.");
                      items.add(new ItemDeLista("error", atributos_item_temp));
                      retorno.put("error", new Object[]{items});*/
                     throw new Exception("Se ha presentado un problema cuando se Buscaban los Componentes\n"

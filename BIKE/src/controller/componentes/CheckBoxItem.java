@@ -35,7 +35,7 @@ public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOf
 
     /*@Override
      public Component getListCellRendererComponent(JList<? extends ItemDeLista> list, ItemDeLista value, int index, boolean isSelected, boolean cellHasFocus) {
-     this.setText(value.getAtributos().get(ItemDeLista.TEXTO_A_MOSTRAR));
+     this.setText(value.getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
      this.setSelected(isSelected);
      this.setBackground(list.getBackground());
      return this;
@@ -57,7 +57,7 @@ public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOf
             this.setCellRenderer(new ListCellRenderer<CheckBoxItem>() {
                 @Override
                 public Component getListCellRendererComponent(JList<? extends CheckBoxItem> list, CheckBoxItem value, int index, boolean isSelected, boolean cellHasFocus) {
-                    value.setText(String.valueOf(value.getMyItem().getAtributos().get(ItemDeLista.TEXTO_A_MOSTRAR)));
+                    value.setText(String.valueOf(value.getMyItem().getAtributos().get(ItemDeLista.TEXTO_MOSTRADO)));
                     value.setBackground(isSelected ? getSelectionBackground() : getBackground());
                     value.setForeground(isSelected ? getSelectionForeground() : getForeground());
                     return value;

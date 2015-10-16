@@ -155,75 +155,74 @@ desc repuestos;
 alter table repuestos change marca marca char(2) not null;
 /*pagina catalogo => http://habicicletas.com/iframe..php?pag=bicicletas2.html*/
 insert into repuestos (cod_rep, repuesto, componente, cant_disp) values 
-('305337','CD MXR 12" 28D Negro Raleigh','009',15),
-('305140','28x89 Negra Cuadrante','049',15),
-('305309','BMX Aluminio PRO4-A530 Profnal Negro GW','009',15),
-('305126','Relacion 28x89mm Cuña, Biela Reforzada','051',15),
-('305451','Acero 24/34/42T-Biela Alum','048',15),
-('305334','Acero 36T 314-1 (Estrella)','009',15),
-('305438','Biela Acero Plastificada S/P','048',15),
-('305408','Biela Acero Plastificada C/P','048',15),
-('305469','Acero XCC-T208 28/38/48','048',15),
-('104106','3 Piezas Negro','018',15),
-('104104','3 Piezas Cromo','018',15),
-('104204','3 Piezas Rosca Inglesa','018',15),
-('104416','AHead Acero 1-1/8 CC845 Negro','222',15),
-('105306','Acero Negro','423',15),
-('105107','Acero FP501 Cromado','423',15),
-('105101','Acero CC800 Cromado','423',15),
-('301101','1/2 X 1/8 114L','011',15),
-('301121','1/2 X 1/8 114L C410','011',15),
-('301219','1/2 X 3/32 C30','021',15),
-('301206','1/2 X 3/32 HP20','021',15),
-('302104','Centro Y-5 36-54-46','856',15),
-('302209','Eje Cuadrante Tuercas','006',15),
-('302210','Eje Cuadrante Tornillos','006',15),
-('302411','Cartucho Acero Negro 910BK','006',15),
-('303326','Niño PVC Negro','043',15),
-('303323','BMX PVC FP-808 Negro','045',15),
-('303321','BMX FreeStyle Alum FP-965 Natural','045',15),
-('303414','MTB PVC F-815 Negro','043',15),
-('303402','MTB Aluminio','043',15),
-('304444','6 Vel 14-28 MTB Marron','023',15),
-('304452','6 Vel 14-34 MTB MegaRange','023',15),
-('304131','16 Dientes Marron','010',15),
-('304107','18 Dientes Marron','010',15),
-('304124','20 Dientes Marron','010',15),
-('304119','16 Dientes Cromado','010',15),
-('305133','OPC-101 89x16mm Negra','026',15),
-('305136','OPC-101 114x16mm Negra','026',15),
-('306424','MTB Palanca Resina','013',15),
-('306423','MTB Palanca Resina','013',15),
-('307425','MTB RD-25','013',15),
-('403436','Acero C/Eje C/Espaciador','022',15),
-('403401','Acero C/Puntilla C/Espaciador','022',15),
-('403439','Acero Parallex C/Eje S/Espaciador','031',15),
-('403438','Acero Parallex C/Puntilla C/Espaciador','031',15),
-('403343','BMX A209 Eje 3/8 Alum Natural','022',15),
-('403431','BMX A222 Eje 3/8 Alum Negro Balinera','022',15),
-('403435','Acero Parallex C/Eje Cromadas','022',15),
-('403334','MTB A201 Eje 3/8 Alum Natural','022',15),
-('403345','MTB A203 C/Puntilla Alum Natural','031',15),
-
-('311104','Cuña Relacion Hierro 9.3mm','332',15)
+('305337','CD MXR 12" 28D Negro Raleigh','009',12),
+('305140','28x89 Negra Cuadrante','049',16),
+('305309','BMX Aluminio PRO4-A530 Profnal Negro GW','009',21),
+('305126','Relacion 28x89mm Cuña, Biela Reforzada','051',37),
+('305451','Acero 24/34/42T-Biela Alum','048',42),
+('305334','Acero 36T 314-1 (Estrella)','009',16),
+('305438','Biela Acero Plastificada S/P','048',14),
+('305408','Biela Acero Plastificada C/P','048',8),
+('305469','Acero XCC-T208 28/38/48','048',27),
+('104106','3 Piezas Negro','018',19),
+('104104','3 Piezas Cromo','018',27),
+('104204','3 Piezas Rosca Inglesa','018',33),
+('104416','AHead Acero 1-1/8 CC845 Negro','222',52),
+('105306','Acero Negro','423',43),
+('105107','Acero FP501 Cromado','423',53),
+('105101','Acero CC800 Cromado','423',23),
+('301101','1/2 X 1/8 114L','011',32),
+('301121','1/2 X 1/8 114L C410','011',23),
+('301219','1/2 X 3/32 C30','021',12),
+('301206','1/2 X 3/32 HP20','021',43),
+('302104','Centro Y-5 36-54-46','856',23),
+('302209','Eje Cuadrante Tuercas','006',43),
+('302210','Eje Cuadrante Tornillos','006',54),
+('302411','Cartucho Acero Negro 910BK','006',54),
+('303326','Niño PVC Negro','043',53),
+('303323','BMX PVC FP-808 Negro','045',24),
+('303321','BMX FreeStyle Alum FP-965 Natural','045',34),
+('303414','MTB PVC F-815 Negro','043',52),
+('303402','MTB Aluminio','043',42),
+('304444','6 Vel 14-28 MTB Marron','023',23),
+('304452','6 Vel 14-34 MTB MegaRange','023',43),
+('304131','16 Dientes Marron','010',56),
+('304107','18 Dientes Marron','010',32),
+('304124','20 Dientes Marron','010',5),
+('304119','16 Dientes Cromado','010',34),
+('305133','OPC-101 89x16mm Negra','026',43),
+('305136','OPC-101 114x16mm Negra','026',9),
+('306424','MTB Palanca Resina','013',76),
+('306423','MTB Palanca Resina','013',43),
+('307425','MTB RD-25','013',54),
+('403436','Acero C/Eje C/Espaciador','022',32),
+('403401','Acero C/Puntilla C/Espaciador','022',43),
+('403439','Acero Parallex C/Eje S/Espaciador','031',21),
+('403438','Acero Parallex C/Puntilla C/Espaciador','031',32),
+('403343','BMX A209 Eje 3/8 Alum Natural','022',21),
+('403431','BMX A222 Eje 3/8 Alum Negro Balinera','022',43),
+('403435','Acero Parallex C/Eje Cromadas','022',54),
+('403334','MTB A201 Eje 3/8 Alum Natural','022',65),
+('403345','MTB A203 C/Puntilla Alum Natural','031',54),
+('311104','Cuña Relacion Hierro 9.3mm','332',64)
 /*las llantas se referenciran por tamaño, que necesariamente debe ir escrito de primero en el campo de descripcion. Al usuario debera indicarsele esta precuacion */
 ;
 insert into repuestos (cod_rep, repuesto, componente, talla, cant_disp) values 
-('407528','24 x 2.125 Negra F125','050','24',15),
-('407533','16 x 2.125 Negra Pistera F116','050','16',15),
-('407547','12-1 x 2-1/4 Negra F146','050','12',15),
-('690733','Aro Piramide M30 GW','885','26',15),
-('600382','Acero Lancer FreeStyle Disc/V-Brake','088','20',15);
+('407528','24 x 2.125 Negra F125','050','24',7),
+('407533','16 x 2.125 Negra Pistera F116','050','16',64),
+('407547','12-1 x 2-1/4 Negra F146','050','12',75),
+('690733','Aro Piramide M30 GW','885','26',64),
+('600382','Acero Lancer FreeStyle Disc/V-Brake','088','20',53);
 
 insert into repuestos values 
-('800843','Pareja Rines Doble Pared GW ','976','RDP','20',15),
-('800445','Pareja de rines de hoja sencilla.','975','RIN','20',15)
+('800843','Pareja Rines Doble Pared GW ','976','RDP','20',42),
+('800445','Pareja de rines de hoja sencilla.','975','RIN','20',52)
 ;
 
 alter table repuestos change repuesto repuesto varchar(80);
 update repuestos set repuesto = 'Rines con Aros doble pared, trasero y delantero.' where cod_rep = '800843'; 
 delete from repuestos; where cod_rep = '610382';
-select * from repuestos;
+select * from repuestos; where componente = '030';
 select cod_rep, repuesto from repuestos where componente = '010';
 
 
@@ -262,7 +261,7 @@ select a.id_articulo, a.articulo, a.descripcion, ta.talla from articulos a left 
 on ta.articulo = a.id_articulo;
 
 
-select cod_rep, repuesto, cant_disp from repuestos 
+select cod_rep, repuesto, talla from repuestos 
 where componente = '050' and talla is null 
 or componente = '050' and talla = '24';
 
@@ -283,19 +282,15 @@ insert into detalle_despacho values
 (3, '403436', 5),
 (3, '690733', 10)
 ;
-delete from detalle_despacho where repuesto = '690733';
+delete from detalle_despacho;
 select * from detalle_despacho;
 
 desc produccion;
 insert into produccion values
 (3,'RDP','26',5);
 
-select * from familia_componente;
 
-update familia_componente set comp_x_par = true where cod_fam = '046';
 
-select c.id_comp, c.componente, fc.comp_x_par from componentes c inner join familia_componente fc inner join componente_articulo ca
-where c.familia = fc.cod_fam and c.id_comp = ca.componente and ca.articulo = 'MTB' order by c.familia;
 
 
 /*desc componente_talla;

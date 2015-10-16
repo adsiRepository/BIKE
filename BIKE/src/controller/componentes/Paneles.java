@@ -101,4 +101,8 @@ public class Paneles {
         
     }
     
+    /*public static class VentanaEmergente extends JOptionPane{
+
+    }*/
+    
 }

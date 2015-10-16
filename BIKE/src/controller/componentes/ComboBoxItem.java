@@ -38,8 +38,11 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
                 this.addItem((ItemDeLista) it.next());
             }
             i_have_items = true;
+            //setSelectedItem(this.getItemAt(0));
         }
         else{
+            this.addItem(new ItemDeLista());
+            //this.setKeySelectionManager(keySelectionManager);
             i_have_items = false;
         }
         constructor();
@@ -116,7 +119,7 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
             if (value != null) {
                 //HashMap<String, String> attrs = ((ItemDeLista) value).getAtributos();
                 HashMap<String, Object> attrs = ((ItemDeLista) value).getAtributos();
-                setText(String.valueOf(attrs.get(ItemDeLista.TEXTO_A_MOSTRAR)));
+                setText(String.valueOf(attrs.get(ItemDeLista.TEXTO_MOSTRADO)));
             }
             return this;
         }

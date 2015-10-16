@@ -7,16 +7,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import javax.swing.AbstractCellEditor;
+import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.CellEditorListener;
@@ -31,17 +41,19 @@ import model.componentes.ItemDeLista;
  */
 public class TablaAlistamiento extends JTable{
     
-    private ModeloTablaAlistamiento mi_modelo;
+    private ModeloTablaAlistamiento modelo_tabla;
     private Object[][] data;
-    //private int rango_spinner;
+    //private int fil, col;
+    private int cant_item;
     
     /***/
     public TablaAlistamiento(){
         super();
-        mi_modelo = new ModeloTablaAlistamiento();
-        this.setModel(mi_modelo);
+        modelo_tabla = new ModeloTablaAlistamiento();
+        this.setModel(modelo_tabla);
         this.setDefaultRenderer(Component.class, new RenderComponenteCelda());
         this.setDefaultEditor(Component.class, new EditorComponenteCelda());
+        //this.addMouseListener(new EventosMouse());
         formatearCeldas();
     }
 
@@ -62,11 +74,9 @@ public class TablaAlistamiento extends JTable{
     public void actualizaTabla(LinkedHashMap<String, Object[]>/*ArrayList<ItemDeLista>*/ new_data, int cantidadSeleccionada) throws Exception{
         try{
             data = new Object[new_data.size()][5];
-            //rango_spinner = cantidadSeleccionada;
             SpinnerNumberModel model_spinner;
             int fila = 0;
             for (HashMap.Entry reg : new_data.entrySet()) {
-                //if(((Object[])reg.getValue())[1] != null){
                     boolean comp_par = (boolean)(((Object[])reg.getValue())[1]);
                     if(comp_par == true){
                         model_spinner = new SpinnerNumberModel(0, 0, cantidadSeleccionada * 2, 1);
@@ -74,8 +84,7 @@ public class TablaAlistamiento extends JTable{
                     else{
                         model_spinner = new SpinnerNumberModel(0, 0, cantidadSeleccionada, 1);
                     }
-                    data[fila] = new Object[]{reg.getKey().toString(), new ComboBoxItem(((Object[])reg.getValue())[0]), 0, new SpinnerCeldaTabla(model_spinner), new PanelBotonesCelda()};
-                //}
+                    data[fila] = new Object[]{reg.getKey().toString(), new My_ComboBox(((Object[])reg.getValue())[0], fila), cant_item, new SpinnerCeldaTabla(model_spinner), new PanelBotonesCelda()};
                 fila++;
             }
             // <editor-fold defaultstate="collapsed" desc="metodo largo para llenar a data">
@@ -93,23 +102,22 @@ public class TablaAlistamiento extends JTable{
              }
              }*/
             // </editor-fold>
-            mi_modelo.fireTableDataChanged();
+            modelo_tabla.fireTableDataChanged();
         }
         catch(Exception e){
-            //JOptionPane.showMessageDialog(null, "Error en Metodo \"actualizaTabla\" TablaAlistamiento\n"+e.getMessage() +"\n"+e.toString(), "", 0);
-            throw new Exception("Error al Actualizar la Tabla de Alistamiento.\n Excepción: "+e.toString());
+            throw new Exception("Error al Actualizar la Tabla de Alistamiento.\nExcepción: "+e.getMessage());
         }
     }
 
     public void vaciarTabla() {
         data = new Object[][]{};
-        mi_modelo.fireTableDataChanged();
+        modelo_tabla.fireTableDataChanged();
     }
     
     private class ModeloTablaAlistamiento extends DefaultTableModel {
         // <editor-fold defaultstate="collapsed" desc="MODELO DE LA TABLA DE ALISTAMIENTO">
 
-        private final Class[] CLASES_COLUMNAS = new Class[]{String.class, ComboBoxItem.class, Integer.class, SpinnerCeldaTabla.class, PanelBotonesCelda.class};
+        private final Class[] CLASES_COLUMNAS = new Class[]{String.class, My_ComboBox.class, Integer.class, SpinnerCeldaTabla.class, PanelBotonesCelda.class};
         private final String[] TITULOS_COLUMNAS = new String[]{"Componentes", "Seleccion", "Stock", "Out", "Opciones"};
         private final boolean[] COLS_EDITABLES = new boolean[]{false, true, false, true, true};
         
@@ -130,7 +138,6 @@ public class TablaAlistamiento extends JTable{
         @Override
         public boolean isCellEditable(int row, int col) {
             return COLS_EDITABLES[col];
-            //return col > 0; // con esto le indico que no dejara modificar la primer columna de la TablaAlistamiento
         }
 
         @Override
@@ -141,11 +148,6 @@ public class TablaAlistamiento extends JTable{
         @Override
         public Object getValueAt(int row, int col) {
             if (data != null) {
-                if (col == 2) {
-                    if(((ComboBoxItem)data[row][1]).i_have_items){
-                        data[row][2] = ((ComboBoxItem)data[row][1]).getMyFirstItem().getAtributos().get("stock");
-                    }
-                }
                 if (col == 4) {
                     ((PanelBotonesCelda) data[row][4]).miFila = row;
                     ((PanelBotonesCelda) data[row][4]).miCol = col;
@@ -166,6 +168,9 @@ public class TablaAlistamiento extends JTable{
         @Override
         public void setValueAt(Object value, int row, int col) {
             data[row][col] = value;
+            /*if(col == 1){
+                data[row][2] = ((ItemDeLista) ((My_ComboBox) data[row][1]).getSelectedItem()).getAtributos().get("stock");
+            }*/
             fireTableCellUpdated(row, col);//notifica a todos los listeners que el valor de la celda ha sido editado
         }
 
@@ -223,10 +228,10 @@ public class TablaAlistamiento extends JTable{
                 addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (((ComboBoxItem) data[miFila][1]).getSelectedItem() != null) {
+                        if (((My_ComboBox) data[miFila][1]).getSelectedItem() != null) {
                             switch (miAccion) {
                                 case 1:
-                                    JOptionPane.showMessageDialog(null, ((ItemDeLista) ((ComboBoxItem) data[miFila][1]).getSelectedItem()).getAtributos().get("stock"));
+                                    JOptionPane.showMessageDialog(null, ((ItemDeLista) ((My_ComboBox) data[miFila][1]).getSelectedItem()).getAtributos().get("stock"));
                                     break;
                                 case 2:
                                     JOptionPane.showMessageDialog(null, "Realmente Quieres Modificar la fila " + (miFila + 1));
@@ -337,8 +342,108 @@ public class TablaAlistamiento extends JTable{
         }*/
         // </editor-fold>
     }
+
+    /**COMBOBOX*/
+    private class My_ComboBox extends JComboBox<ItemDeLista> {
+
+        private final int mi_fila;
+        private final ItemDeLista[] my_items;
+        private ItemDeLista item_actual;
+        
+        public boolean i_have_items;
+
+        /**
+         * Constructor
+         * @param objItems Cuando sus my_items vienen en un ArrayList*/
+        public My_ComboBox(Object objItems, int miFila) throws Exception{
+            super();
+            try {
+                if (((ArrayList) objItems).size() > 0) {
+                    Iterator it = ((ArrayList) objItems).iterator();
+                    my_items = new ItemDeLista[((ArrayList) objItems).size()];
+                    int i = 0;
+                    while (it.hasNext()) {
+                        //this.addItem((ItemDeLista) it.next());
+                        my_items[i] = (ItemDeLista) it.next();
+                        i++;
+                    }
+                    i_have_items = true;
+                } else {
+                    //this.addItem(new ItemDeLista());
+                    my_items = new ItemDeLista[1];
+                    my_items[0] = new ItemDeLista();
+                    //this.setKeySelectionManager(keySelectionManager);
+                    i_have_items = false;
+                }
+                
+                this.mi_fila = miFila;
+                this.setModel(new ModeloComboBox());
+                this.setRenderer(new RenderItemComboBox());
+                this.setSelectedItem(this.getItemAt(0));
+                
+            } catch (Exception e) {
+                throw new Exception("Error al Construir My_ComboBox\n" + e.toString());
+            }
+        }
+
+        private class ModeloComboBox extends AbstractListModel<ItemDeLista> implements ComboBoxModel<ItemDeLista> {
+
+            // <editor-fold defaultstate="collapsed" desc="MODELO COMBOBOX, NO IMPLEMENTADO">
+            
+            //private int pos_actual;
+
+            public ModeloComboBox(/*ItemDeLista[] items*/) {
+                //my_items = items;
+            }
+
+            @Override
+            public int getSize() {
+                return my_items.length;
+            }
+
+            @Override
+            public ItemDeLista getElementAt(int index) {
+                //pos_actual = index;
+                return my_items[index];
+            }
+
+            @Override
+            public void setSelectedItem(Object anItem) {
+                //System.out.println("Se ha Cambiado el valor de un combobox");
+                item_actual = (ItemDeLista) anItem;
+                cant_item = (int) item_actual.getAtributos().get("stock");
+                modelo_tabla.setValueAt(cant_item, mi_fila, 2);
+            }
+
+            @Override
+            public Object getSelectedItem() {
+                return item_actual;
+            }
+            // </editor-fold>
+        }
     
-    
+        private class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista> {
+            // <editor-fold defaultstate="collapsed" desc="RENDERIZADOR (O DIBUJANTE) DE LOS ITEMS Y SUS CARACTERISTICAS VISUALES DENTRO DEL COMBOBOX">
+
+            public RenderItemComboBox() {
+                this.setBorder(null);
+            }
+
+            @Override
+            public Component getListCellRendererComponent(JList<? extends ItemDeLista> list, ItemDeLista value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value != null) {
+                    //HashMap<String, String> attrs = ((ItemDeLista) value).getAtributos();
+                    HashMap<String, Object> attrs = ((ItemDeLista) value).getAtributos();
+                    setText(String.valueOf(attrs.get(ItemDeLista.TEXTO_MOSTRADO)));
+                }
+                return this;
+            }
+            // </editor-fold>
+        }
+
+    }
+
+
     // <editor-fold defaultstate="collapsed" desc="CLASES PARA LA GRAFICACION DE COMPONENTES (combobox, boton..) DENTRO DE TABLA Y SU CAPACIDAD DE DETERMINAR EL VALOR DE LA CELDA (edicion)">
         
     private static class RenderComponenteCelda implements TableCellRenderer{
@@ -355,8 +460,8 @@ public class TablaAlistamiento extends JTable{
         }
         @Override
         public Object getCellEditorValue() {
-            return "CellEditorValue";//combo.getSelectedItem().toString();
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            //return data[fil][col];
+            return null;
         }
         @Override
         public boolean isCellEditable(EventObject anEvent) {
@@ -368,7 +473,7 @@ public class TablaAlistamiento extends JTable{
         }
         @Override
         public boolean stopCellEditing() {
-            //this.fireEditingStopped();
+            //this.fireEditingStopped();//
             return true;
         }
         @Override
@@ -385,6 +490,28 @@ public class TablaAlistamiento extends JTable{
         }
     }// </editor-fold>
 
+    
+    /*private class EventosMouse extends MouseAdapter implements MouseListener{
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            fil = TablaAlistamiento.this.rowAtPoint(e.getPoint());
+            col = TablaAlistamiento.this.columnAtPoint(e.getPoint());
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+    } */
+    
+    
     //FUENTES
     //insertar componentes reg celdas de TablaAlistamiento ->
     //http://www.java2s.com/Tutorial/Java/0240__Swing/UsingaJComboBoxinaCellinaJTableComponent.htm
