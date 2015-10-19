@@ -4,6 +4,8 @@ desde los fondos de los menues hasta los graficos estadisticos y de reportes si 
  */
 package controller.componentes;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -101,8 +103,49 @@ public class Paneles {
         
     }
     
-    /*public static class VentanaEmergente extends JOptionPane{
-
+    /*public static class VentanaEmergente extends JOptionPane implements Runnable{
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Paneles.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        @Override
+        public void setVisible(boolean aFlag) {
+            super.setVisible(aFlag); //To change body of generated methods, choose Tools | Templates.
+            if(aFlag){
+                Thread h = new Thread(new VentanaEmergente());
+                h.start();
+            }
+        }
     }*/
+    
+    public static class PanelContenedorControles extends JPanel{
+
+        public PanelContenedorControles() {
+            super();
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+            super.setEnabled(enabled); 
+            HabilitacionComponentes(this, enabled);
+        }
+
+        private void HabilitacionComponentes(Container contenedor, boolean habilitado){
+            Component[] mis_componentes = contenedor.getComponents();
+            for (Component componente : mis_componentes) { // para cada componente de mis_componentes
+                if(componente instanceof Container){
+                    HabilitacionComponentes((Container)componente, habilitado);
+                }
+                componente.setEnabled(habilitado);
+            }
+        }
+        
+    }
+    
+    
     
 }

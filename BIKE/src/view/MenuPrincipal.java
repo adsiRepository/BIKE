@@ -30,8 +30,8 @@ import javax.swing.table.TableCellRenderer;
  */
 public class MenuPrincipal extends javax.swing.JFrame {
 
-    private final String[] columnas_tabla;
-    private final Class[] tiposCampos;
+    private final String[] columnas_tabla =  new String[]{"Empleado", "Activo", "Última Tarea", "Inicio", "Entrega", "Accion"};
+    private final Class[] tiposCampos = new Class[]{String.class, Boolean.class, TextArea.class, /*Date.class*/ String.class, String.class, PanelBotonesCelda.class};
     //private DefaultTableModel dtm_tabla_actividades;
     private int fila_tabla, col_tabla;
     
@@ -44,21 +44,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public MenuPrincipal() {
         initComponents();
         
-        //((PanelReloj)panel_reloj_).start();
+        this.setTitle("MT BIKE");
         
         //configuracion de la tabla
-        tiposCampos = new Class[]{
-            String.class,
-            Boolean.class,
-            TextArea.class,
-            //Date.class,
-            String.class,
-            String.class,
-            PanelBotonesCelda.class
-        };
-        columnas_tabla =  new String[]{
-            "Empleado", "Activo", "Última Tarea", "Inicio", "Entrega", "Accion" 
-        };
+        
+        
         
         tabla_actividades.setDefaultRenderer(PanelBotonesCelda.class, new ComponentCellRenderer());
         tabla_actividades.setDefaultEditor(PanelBotonesCelda.class, new ComponentCellEditor());

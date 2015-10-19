@@ -4,6 +4,7 @@ import model.componentes.ItemDeLista;
 import controller.ConsultaSQL;
 import view.OrdenProduccion;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -50,6 +51,7 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
 
     private void constructor(){
         this.setRenderer(new RenderItemComboBox());
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
     } 
     
     public ItemDeLista getMyFirstItem(){

@@ -272,7 +272,6 @@ public class ConsultaSQL {
             return retorno;
         }
 
-        
         /**
          * Segunda Version Obtencion de Repuestos Disponibles por Articulo.
          * @param cod_articulo
@@ -335,10 +334,9 @@ public class ConsultaSQL {
                             + "Detalle: " + ex.toString() + "\n Base de Datos: " + ex.getSQLState());
                 }
             } else {
-                return null;
+                //return null;
+                throw new Exception("No Hay Conexión al Servidor");
             }
         }
-
     }
-
 }
