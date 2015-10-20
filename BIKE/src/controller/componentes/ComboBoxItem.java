@@ -8,71 +8,76 @@ import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 
 public class ComboBoxItem extends JComboBox<ItemDeLista> {
 
-    public boolean i_have_items;
+    private ArrayList<ItemDeLista> mis_items;
     
     /**
      * Constructor
      * @param combobox
-     * constante aplicada en el constructor, dependiente del combobox a construir*/
-    public ComboBoxItem(String combobox) {
+     * constante aplicada en el constructor, dependiente del combobox a construir
+     * @throws java.lang.Exception*/
+    public ComboBoxItem(String combobox) throws Exception{
         super();
         seleccionaComboBox(combobox);
-        constructor();
     }
+    
+    private void seleccionaComboBox(String combobox) throws Exception{
+        if (combobox.equals(OrdenProduccion.COD_CMBOX_ENSAMBLADORES)) {
+            //ConsultaSQL.ConsultorBD.obtenerListaEnsambladores().entrySet().stream().map((registro) -> new ItemDeLista(registro.getKey(), registro.getValue())).forEach((item) -> {
+              //  this.addItem(item);
+            //});
+            constructor(ConsultaSQL.ConsultorBD.obtenerListaEnsambladores());
+        }
+        if (combobox.equals(OrdenProduccion.COD_CMBOX_ARTICULOS)) {
+            /*ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos().entrySet().stream().map((registro) -> new ItemDeLista(registro.getKey(), registro.getValue())).forEach((item) -> {
+                this.addItem(item);
+            });*/
+            constructor(ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos());
+        }
+    }
+    
+    private void constructor(ArrayList<ItemDeLista> objItems){
+        mis_items = /*(ArrayList) */objItems;
+        //if (((ArrayList) objItems).size() > 0) {
+        if (mis_items.size() > 0) {
+            Iterator it = /*((ArrayList) objItems)*/mis_items.iterator();
+            while (it.hasNext()) {
+                this.addItem((ItemDeLista) it.next());
+            }
+        }
+        else{
+            this.addItem(new ItemDeLista());
+            this.setUI(new BasicComboBoxUI() {
+                @Override
+                protected JButton createArrowButton() {
+                    return null;
+                }
+            });
+            //this.setKeySelectionManager(keySelectionManager);
+        }
+        this.setRenderer(new RenderItemComboBox());
+        this.setSelectedItem(this.getItemAt(0));
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    } 
 
     /**
      * Constructor
      * @param objItems
      * Cuando sus my_items vienen en un ArrayList*/
-    public ComboBoxItem(Object objItems) {
+    /*public ComboBoxItem() {
         super();
-        if (((ArrayList) objItems).size() > 0) {
-            Iterator it = ((ArrayList) objItems).iterator();
-            while (it.hasNext()) {
-                this.addItem((ItemDeLista) it.next());
-            }
-            i_have_items = true;
-            //setSelectedItem(this.getItemAt(0));
-        }
-        else{
-            this.addItem(new ItemDeLista());
-            //this.setKeySelectionManager(keySelectionManager);
-            i_have_items = false;
-        }
+        
         constructor();
-    }
-
-    private void constructor(){
-        this.setRenderer(new RenderItemComboBox());
-        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    } 
+    }*/
     
-    public ItemDeLista getMyFirstItem(){
-        if(i_have_items){
-            return this.getItemAt(0);
-        }
-        return null;
-    }
-    
-    private void seleccionaComboBox(String combobox){
-        if (combobox.equals(OrdenProduccion.COD_CMBOX_ENSAMBLADORES)) {
-            ConsultaSQL.ConsultorBD.obtenerListaEnsambladores().entrySet().stream().map((registro) -> new ItemDeLista(registro.getKey(), registro.getValue())).forEach((item) -> {
-                this.addItem(item);
-            });
-        }
-        if (combobox.equals(OrdenProduccion.COD_CMBOX_ARTICULOS)) {
-            ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos().entrySet().stream().map((registro) -> new ItemDeLista(registro.getKey(), registro.getValue())).forEach((item) -> {
-                this.addItem(item);
-            });
-        }
-    }
     
     // <editor-fold defaultstate="collapsed" desc="MODELO COMBOBOX, NO IMPLEMENTADO">
     /*private class ModeloComboBox extends AbstractListModel<ItemDeLista> implements ComboBoxModel<ItemDeLista> {
@@ -119,9 +124,11 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
         @Override
         public Component getListCellRendererComponent(JList<? extends ItemDeLista> list, ItemDeLista value, int index, boolean isSelected, boolean cellHasFocus) {
             if (value != null) {
-                //HashMap<String, String> attrs = ((ItemDeLista) value).getAtributos();
                 HashMap<String, Object> attrs = ((ItemDeLista) value).getAtributos();
                 setText(String.valueOf(attrs.get(ItemDeLista.TEXTO_MOSTRADO)));
+                if(value.obtenerCodigoId() == null){
+                    setHorizontalAlignment(JTextField.CENTER);
+                }
             }
             return this;
         }

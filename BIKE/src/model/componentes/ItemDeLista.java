@@ -16,7 +16,7 @@ public class ItemDeLista {
     public ItemDeLista(){
         cod = null;
         atributos = new HashMap<>();
-        atributos.put(TEXTO_MOSTRADO, "\t----");
+        atributos.put(TEXTO_MOSTRADO, "Sin Registro");
         atributos.put("stock", 0);
     }
 
@@ -26,11 +26,11 @@ public class ItemDeLista {
     }
     
     // <editor-fold defaultstate="collapsed" desc=" GETTERS n SETTERS ">
-    public String getCod() {
+    public String obtenerCodigoId() {
         return cod;
     }
     
-    public void setCod(String cod) {
+    public void setearCodigoId(String cod) {
         this.cod = cod;
     }
     

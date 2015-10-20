@@ -21,7 +21,7 @@ public class ConexionBD {
     private static String host;
     private static String port;
 
-    public static Connection obtenerConexion(){
+    public static Connection obtenerConexion() throws Exception{
         try{
             Connection conex;
             Class.forName("com.mysql.jdbc.Driver");//libreria mysql connector
@@ -29,17 +29,12 @@ public class ConexionBD {
             conex = DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/storebike", usuario, password);
             return conex;
         }
-        catch(ClassNotFoundException ex){//
-            JOptionPane.showMessageDialog(null, "Excepcion "+ex.toString()+" que no permiten la Conexión a Base de Datos\n"
-                    + "Detalle: "+ex.getMessage(), "ConnBD", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-       catch (SQLException ex) {
-            if (ex.getErrorCode() == 0) {
-                JOptionPane.showMessageDialog(null, "No Hubo Conexion a la Base de Datos. \n Verifique su Conexión y "
-                        + "vuela a intentarlo.", "Servidor", 0);
-            }
-            return null;
+        catch(ClassNotFoundException | SQLException ex){//
+            /*JOptionPane.showMessageDialog(null, "Excepcion "+ex.toString()+" que no permiten la Conexión a Base de Datos\n"
+                    + "Detalle: "+ex.getMessage(), "ConnBD", JOptionPane.ERROR_MESSAGE);*/
+            throw new Exception("Excepcion Capturada al Conextarse al Servidor\n"
+                    + "class ConexionBD => obtenerConexion()\n"+ex.toString());
+            //return null;
         }
     }
     

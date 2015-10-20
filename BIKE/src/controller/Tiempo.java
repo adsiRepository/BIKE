@@ -3,7 +3,9 @@
 
 package controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -23,13 +25,23 @@ public class Tiempo {
         return calendario;
     }
     
+    /**FECHA FORMATEADA PARA LENGUAJE SQL
+     * @return String*/
+    public static String obtenerInstanteMySQL(){
+        actualizar();
+        Date hoy = calendario.getTime();
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formato.format(hoy);
+    }
+    
     private static void actualizar(){
         calendario = GregorianCalendar.getInstance();
     }
       
     public static void main(String[] args) {
-        System.out.println(Tiempo.getStringFechaActual());
-        System.out.println(Tiempo.getNow().get(Calendar.HOUR));
+        /*System.out.println(Tiempo.getStringFechaActual());
+        System.out.println(Tiempo.getNow().get(Calendar.HOUR));*/
+        System.out.println(Tiempo.obtenerInstanteMySQL());
     }
     
 }

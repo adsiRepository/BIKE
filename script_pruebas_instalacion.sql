@@ -14,22 +14,23 @@ drop user 'user_storebike'@'localhost';
 use world;
 select * from city;
 
-use storebike;
+
 show tables;
 drop database storebike;
 drop table configuraciones;
 
-SET SQL_SAFE_UPDATES=0;/*hay que poner esta linea en el sql del programa*/
+/*hay que poner esta linea en el sql del programa*/
 set foreign_key_checks = 1;
 
 desc ensambladores;
+
+use storebike;
+SET SQL_SAFE_UPDATES=0;
+
 insert into ensambladores values 
 ('1107057722','Miguel','González','3173547440','Cra 29 no. 38-25','2015-01-07',null),
 ('1190375460','Jose','Ortiz','3114445566','Calle falsa 123','1990-07-10',null);
-delete from ensambladores;
-select * from ensambladores;
 
-desc familia_componente;
 insert into familia_componente values
 ('001','Marco/Cuadro',			'Componente principal de una Bicicleta.', false, true),
 ('002','Horquilla/Tenedor',		null,false, true),
@@ -53,14 +54,7 @@ insert into familia_componente values
 ('019','Suplementos',			'Tornilleria, balineras; elementos suplementarios.',false, false),
 ('020','Accesorios',			null,false, false)
 ;
-delete from familia_componente;
-select * from familia_componente;
 
-/** http://labicikleta.com/11-tipos-de-freno-para-bicicleta/ */
-desc componentes;
-/**la sigte linea sirve para cambiar el tipo de dato de un campo nada mas*/
-alter table componentes change desc_comp desc_comp varchar(100);
-delete from componentes;
 insert into componentes (id_comp, componente, familia) values 
 ('081','Cuadro Suspensión','001'),	('001','Cuadro Tradicional','001'),		('883','Aro Sencillo','016'),				('015','Radios','016'),		
 ('557','Cuadro Ahead','001'),		('088','Cuadro BMX','001'),				('057','Cuadro Playero','001'),				('016','Caña/Tija 22.2','006'),
@@ -81,18 +75,10 @@ insert into componentes (id_comp, componente, familia) values
 insert into componentes values 
 ('844','Freno Cáliper','Toda las clases de freno de \'Herradura\'.','014'),
 ('975','Rin Sencillo','Rin sencillo para Bicicleta completamente ensamblado y listo para ser parte de una.','016'),
-('976','Rin Doble Pared','','016'),
+('976','Rin Doble Pared','Rines de Doble Pared.','016'),
 ('843','Freno Cantilever','Todo tipo de freno de doble Pivote, entre ellos el V-brake.','014')
 ;
-update componentes set desc_comp = 'Rines de Doble Pared.' where id_comp = '976';
-delete from componentes;
-select * from componentes c order by c.familia;
 
-select c.id_comp, c.componente from componentes c inner join componente_articulo ca 
-where ca.componente = c.id_comp and ca.articulo = 'MTB' order by c.familia;
-
-
-desc articulos;
 insert into articulos (id_articulo, articulo, descripcion) values 
 /*('ARJ','Juego de Rines',		'Par de Ruedas o Rines con componentes agrupados.','016'),*/
 ('RIN',	'Par Rines Sencillos',	'Pareja de rines de hoja sencilla.'),
@@ -106,12 +92,7 @@ insert into articulos (id_articulo, articulo, descripcion) values
 ('TUR',	'Turismo',				'Bicicleta Monomarcha o de Cambios Internos, ruedas de 28", frenos mediante accionamiento de varillas, muy utilitaria.'),
 ('IMP',	'Importado',			'Articulo pre-ensamblado.'),
 ('A01',	'Otro Articulo',		'Articulo ensamblado sin mucha Regularidad.');
-rename table artefacto to articulos;
-delete from articulos; /*where id_articulo = 'A01';*/
-select * from articulos;
 
-
-desc componente_articulo;
 insert into componente_articulo values
 ('RIN','883'), 	('BSC','020'),	('MTB','001'),	('MTS','081'),	('AMT','557'),	('BMX','088'),
 ('RIN','015'),	('BSC','001'),	('MTB','076'),	('MTS','076'),	('AMT','795'),	('BMX','095'),
@@ -140,20 +121,12 @@ insert into componente_articulo values
                                 ('MTB','975'),	('MTS','975'),					('BMX','975'),
                                 ('MTB','976'),	('MTS','976'),					('BMX','976')
 ;
-select * from componente_articulo;
 
-desc tallas;
 insert into tallas values
 /*('001','12'), ('002','16'), ('003','20'), ('004','24'), ('005','26'), ('006','28')*/
 ('12'), ('16'), ('20'), ('24'), ('26'), ('28')
 ;
-delete from tallas where 1;
-select * from tallas where 1;
-select * from tallas;
 
-desc repuestos;
-alter table repuestos change marca marca char(2) not null;
-/*pagina catalogo => http://habicicletas.com/iframe..php?pag=bicicletas2.html*/
 insert into repuestos (cod_rep, repuesto, componente, cant_disp) values 
 ('305337','CD MXR 12" 28D Negro Raleigh','009',12),
 ('305140','28x89 Negra Cuadrante','049',16),
@@ -219,10 +192,61 @@ insert into repuestos values
 ('800445','Pareja de rines de hoja sencilla.','975','RIN','20',52)
 ;
 
+insert into talla_articulo values
+('AMT','24'), 	('RIN','12'),					/*('ARJ','12'),*/	('BMX','16'),	('BSC', '12'),	('MTB', '20'),	('MTS', '16'),	('PLY', '16'), ('TUR', '28'),
+('AMT','26'),	('RIN','16'),	('RDP','16'),	/*('ARJ','16'),*/	('BMX','20'),	('BSC', '16'),	('MTB', '24'),	('MTS', '20'),	('PLY', '20'),
+				('RIN','20'),	('RDP','20'),	/*('ARJ','20'),*/					('BSC', '20'),	('MTB', '26'),	('MTS', '24'),	('PLY', '24'),
+                ('RIN','24'),	('RDP','24'),	/*('ARJ','24'),*/					('BSC', '24'),					('MTS', '26'),	('PLY', '26'),
+                ('RIN','26'),	('RDP','26'),	/*('ARJ','26'),*/					('BSC', '26'),
+				('RIN','28')					/*('ARJ','28')*/	
+;
+
+
+select * from ensambladores;
+
+desc familia_componente;
+
+delete from familia_componente;
+select * from familia_componente;
+
+/** http://labicikleta.com/11-tipos-de-freno-para-bicicleta/ */
+desc componentes;
+/**la sigte linea sirve para cambiar el tipo de dato de un campo nada mas*/
+alter table componentes change desc_comp desc_comp varchar(100);
+delete from componentes;
+
+delete from componentes;
+select * from componentes c order by c.familia;
+
+select c.id_comp, c.componente from componentes c inner join componente_articulo ca 
+where ca.componente = c.id_comp and ca.articulo = 'MTB' order by c.familia;
+
+
+desc articulos;
+
+rename table artefacto to articulos;
+delete from articulos; /*where id_articulo = 'A01';*/
+select * from articulos;
+
+
+desc componente_articulo;
+
+select * from componente_articulo;
+
+desc tallas;
+
+delete from tallas where 1;
+select * from tallas where 1;
+select * from tallas;
+
+desc repuestos;
+alter table repuestos change marca marca char(2) not null;
+/*pagina catalogo => http://habicicletas.com/iframe..php?pag=bicicletas2.html*/
+
 alter table repuestos change repuesto repuesto varchar(80);
-update repuestos set repuesto = 'Rines con Aros doble pared, trasero y delantero.' where cod_rep = '800843'; 
-delete from repuestos; where cod_rep = '610382';
-select * from repuestos; where componente = '030';
+update repuestos set cant_disp = 64 where cod_rep = '690733'; 
+delete from repuestos;
+select * from repuestos;
 select cod_rep, repuesto from repuestos where componente = '010';
 
 
@@ -238,28 +262,13 @@ select a.articulo from articulos a
 where a.componente = '975';
 
 desc tallas_articulos;
-insert into talla_articulo values
-/*('AMT','004'), 	('ARO','001'),	('BMX','002'),	('BSC', '001'),	('MTB', '003'),	('MTS', '002'),	('PLY', '002'), ('TUR', '28'),
-('AMT','005'),	('ARO','002'),	('BMX','003'),	('BSC', '002'),	('MTB', '004'),	('MTS', '003'),	('PLY', '003'),
-				('ARO','003'),					('BSC', '003'),	('MTB', '005'),	('MTS', '004'),	('PLY', '004'),
-                ('ARO','004'),					('BSC', '004'),					('MTS', '005'),	('PLY', '005'),
-                ('ARO','005'),					('BSC', '005'),
-				('ARO','006')*/
 
-('AMT','24'), 	('RIN','12'),					/*('ARJ','12'),*/	('BMX','16'),	('BSC', '12'),	('MTB', '20'),	('MTS', '16'),	('PLY', '16'), ('TUR', '28'),
-('AMT','26'),	('RIN','16'),	('RDP','16'),	/*('ARJ','16'),*/	('BMX','20'),	('BSC', '16'),	('MTB', '24'),	('MTS', '20'),	('PLY', '20'),
-				('RIN','20'),	('RDP','20'),	/*('ARJ','20'),*/					('BSC', '20'),	('MTB', '26'),	('MTS', '24'),	('PLY', '24'),
-                ('RIN','24'),	('RDP','24'),	/*('ARJ','24'),*/					('BSC', '24'),					('MTS', '26'),	('PLY', '26'),
-                ('RIN','26'),	('RDP','26'),	/*('ARJ','26'),*/					('BSC', '26'),
-				('RIN','28')					/*('ARJ','28')*/	
-;
 delete from talla_articulo; 
 select * from talla_articulo;
 
 desc articulos;
 select a.id_articulo, a.articulo, a.descripcion, ta.talla from articulos a left join talla_articulo ta
 on ta.articulo = a.id_articulo;
-
 
 select cod_rep, repuesto, talla from repuestos 
 where componente = '050' and talla is null 
@@ -274,22 +283,100 @@ desc ordenes_produccion;
 insert into ordenes_produccion (ensamblador, hora_despacho, hora_entrega) values 
 ('1190375460', '2015-04-07 13:52:44', '2015-04-10 10:10:22')
 ;
+alter table ordenes_produccion change no_ord no_ord int(11) not null auto_increment; 
 delete from ordenes_produccion;
 select * from ordenes_produccion;
 
 desc detalle_despacho;
 insert into detalle_despacho values
-(3, '403436', 5),
-(3, '690733', 10)
+(1, '403436', 5),
+(1, '690733', 10)
 ;
 delete from detalle_despacho;
+update detalle_despacho set cant_desp = 6 where repuesto = '690733';
+update detalle_despacho set repuesto = '690733' where repuesto = '311104' and orden = 1;
 select * from detalle_despacho;
 
 desc produccion;
 insert into produccion values
 (3,'RDP','26',5);
+delete from produccion;
+select * from produccion;
 
+drop trigger recount_reps;
 
+use mysql;
+use storebike;
+select * from proc;
+
+select numeroNuevaOrden('1190375460', '2015-04-07 13:52:44') as registro_actual;
+delete from ordenes_produccion where no_ord = 4;
+select * from ordenes_produccion;
+delete from ordenes_produccion;
+select max(no_ord) from ordenes_produccion;
+
+drop function if exists numeroNuevaOrden;
+delimiter |
+create function numeroNuevaOrden(ensamblador varchar(15), momento varchar(20)) 
+returns int
+begin
+	declare ultima_orden int(11);
+	declare nueva_orden int(11);
+    select max(no_ord) from ordenes_produccion into ultima_orden;
+    if (ultima_orden is null) then
+		set nueva_orden = 1;
+    else
+		set nueva_orden = ultima_orden + 1;
+    end if;
+    insert into ordenes_produccion (no_ord, ensamblador, hora_despacho) values (nueva_orden, ensamblador, momento);
+    return nueva_orden;
+end;|
+delimiter;
+
+delimiter |
+create trigger rest_reps after insert on detalle_despacho for each row
+begin
+	update repuestos set cant_disp = (cant_disp - new.cant_desp) where cod_rep = new.repuesto;
+end;|
+delimiter;
+
+delimiter |
+/**TRIGGER QUE ACTUALIZA LAS CANTIDADES DE REPUESTOS SEGUN SEA EL CAMPO SETEADO*/
+create trigger recount_reps after update on detalle_despacho for each row
+begin
+	declare cant_actual int(11);
+    declare cant_orig int(11);
+	if (old.repuesto <> new.repuesto) then
+		update repuestos set cant_disp = (cant_disp + old.cant_desp) where cod_rep = old.repuesto;
+        if (old.cant_desp <> new.cant_desp)then
+			update repuestos set cant_disp = (cant_disp - new.cant_desp) where cod_rep = new.repuesto;
+		else
+			update repuestos set cant_disp = (cant_disp - old.cant_desp) where cod_rep = new.repuesto;
+        end if;
+	/**SI EL CODIGO NO HA CAMBIADO PERO SI LA CANTIDAD =>*/
+	elseif (old.cant_desp <> new.cant_desp) then
+		select cant_disp from repuestos where cod_rep = old.repuesto into cant_actual;
+        set cant_orig = cant_actual + old.cant_desp;
+		update repuestos set cant_disp = (cant_orig - new.cant_desp) where cod_rep = old.repuesto;
+	end if;
+end;|
+
+/*delimiter |
+create function obtenerNumeroOrdenProduccion(cual int(1)) 
+returns int
+begin
+	declare cuenta int(11);
+    select count(*) from ordenes_produccion into cuenta;
+    if (cual = 1) then
+		return cuenta;
+    end if;
+    if (cual = 2) then
+		return (cuenta + 1);
+    end if;
+end;
+|*/
+    
+show triggers;
 
 
 

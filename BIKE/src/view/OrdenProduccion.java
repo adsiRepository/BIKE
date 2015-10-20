@@ -6,43 +6,16 @@ import controller.componentes.Paneles;
 import controller.componentes.Paneles.PanelFondoVentanaInterna;
 import controller.componentes.TablaAlistamiento;
 import model.componentes.ItemDeLista;
-import java.awt.Component;
-import java.awt.Cursor;
 import static view.MenuPrincipal.escritorio;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
-import java.util.EventObject;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import javax.swing.AbstractCellEditor;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.CellEditorListener;
-import javax.swing.plaf.ComboBoxUI;
-import javax.swing.plaf.basic.BasicCheckBoxUI;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -62,17 +35,18 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
      */
     public OrdenProduccion() {
         initComponents();
-        // <editor-fold defaultstate="collapsed" desc="CONFIGURACION DE LA VENTANA COMO TAMANO, TITULO..">
-        this.title = "Despacho de Ordenes de Ensamble";
-        this.closable = true;
-        this.iconable = true;
-        Dimension ScreenSpace = escritorio.getSize(), mySpc = this.getSize();
-        this.setLocation((ScreenSpace.width / 18), ((ScreenSpace.height - mySpc.height) / 2));
-        //this.setFrameIcon(new ImageIcon(getClass().getResource("/Recursos/Imagenes/iconUsers.png")));
-        this.setToolTipText("Modulo de Control de Ordenes de Ensamble");
-        // </editor-fold>
-        fila_tabla = 0;
-        col_tabla = 0;
+            // <editor-fold defaultstate="collapsed" desc="CONFIGURACION DE LA VENTANA COMO TAMANO, TITULO..">
+            this.title = "Despacho de Ordenes de Ensamble";
+            this.closable = true;
+            this.iconable = true;
+            Dimension ScreenSpace = escritorio.getSize(), mySpc = this.getSize();
+            this.setLocation((ScreenSpace.width / 18), ((ScreenSpace.height - mySpc.height) / 2));
+            //this.setFrameIcon(new ImageIcon(getClass().getResource("/Recursos/Imagenes/iconUsers.png")));
+            this.setToolTipText("Modulo de Control de Ordenes de Ensamble");
+            // </editor-fold>
+            fila_tabla = 0;
+            col_tabla = 0;
+        
     }
 
     /**
@@ -88,54 +62,59 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
         lbl_ensamblador_ = new javax.swing.JLabel();
         btn_retirar_accesorio1 = new javax.swing.JButton();
         btn_add_accesorio1 = new javax.swing.JButton();
-        combo_ensambladores_ = new controller.componentes.ComboBoxItem(COD_CMBOX_ENSAMBLADORES);
-        panel_primer_filtro_emsamble_ = new Paneles.PanelContenedorControles();
-        combo_catalogo_ensamble_ = new controller.componentes.ComboBoxItem(COD_CMBOX_ARTICULOS);
-        lbl_tipo_ensamble_ = new javax.swing.JLabel();
-        combo_ref_tamaño_ = new javax.swing.JComboBox();
-        lbl_ref_tamaño_ = new javax.swing.JLabel();
-        lbl_cantidad_ensamble_ = new javax.swing.JLabel();
-        txt_cant_ensamble_ = new javax.swing.JTextField();
-        scroll_txtArea_detalles_ = new javax.swing.JScrollPane();
-        txtArea_detalles_ = new javax.swing.JTextArea();
-        btn_alistar_despacho_ = new javax.swing.JButton();
-        btn_cancelar_despacho_ = new javax.swing.JButton();
-        scroll_items_selec = new javax.swing.JScrollPane();
-        tabla_alistamiento_ = new TablaAlistamiento();
-        btn_selec_repuestos_1 = new javax.swing.JButton();
-        btn_selec_repuestos_2 = new javax.swing.JButton();
-        scroll_tabla_ordenes_ = new javax.swing.JScrollPane();
-        tabla_mesa_ = new javax.swing.JTable();
-        btn_Despachar_Orden = new javax.swing.JButton();
-        btn_Cancelar_Despacho = new javax.swing.JButton();
-        txt_n_orden_ = new javax.swing.JTextField();
-        lbl_n_orden_ = new javax.swing.JLabel();
+        try {
+            combo_ensambladores_ = new controller.componentes.ComboBoxItem(COD_CMBOX_ENSAMBLADORES);
+            panel_primer_filtro_emsamble_ = new Paneles.PanelContenedorControles();
+            combo_catalogo_ensamble_ = new controller.componentes.ComboBoxItem(COD_CMBOX_ARTICULOS);
+            lbl_tipo_ensamble_ = new javax.swing.JLabel();
+            combo_ref_tamaño_ = new javax.swing.JComboBox();
+            lbl_ref_tamaño_ = new javax.swing.JLabel();
+            lbl_cantidad_ensamble_ = new javax.swing.JLabel();
+            txt_cant_ensamble_ = new javax.swing.JTextField();
+            scroll_txtArea_detalles_ = new javax.swing.JScrollPane();
+            txtArea_detalles_ = new javax.swing.JTextArea();
+            btn_alistar_despacho_ = new javax.swing.JButton();
+            btn_cancelar_despacho_ = new javax.swing.JButton();
+            scroll_items_selec = new javax.swing.JScrollPane();
+            tabla_alistamiento_ = new TablaAlistamiento();
+            btn_selec_repuestos_1 = new javax.swing.JButton();
+            btn_selec_repuestos_2 = new javax.swing.JButton();
+            scroll_tabla_ordenes_ = new javax.swing.JScrollPane();
+            tabla_mesa_ = new javax.swing.JTable();
+            btn_Despachar_Orden = new javax.swing.JButton();
+            btn_Cancelar_Despacho = new javax.swing.JButton();
+            txt_n_orden_ = new javax.swing.JTextField();
+            lbl_n_orden_ = new javax.swing.JLabel();
 
-        setClosable(true);
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMaximumSize(new java.awt.Dimension(915, 424));
-        setMinimumSize(new java.awt.Dimension(915, 424));
-        setName(""); // NOI18N
+            setClosable(true);
+            setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            setMaximumSize(new java.awt.Dimension(915, 424));
+            setMinimumSize(new java.awt.Dimension(915, 424));
+            setName(""); // NOI18N
 
-        panel_principal_.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        panel_principal_.setMaximumSize(new java.awt.Dimension(915, 424));
-        panel_principal_.setMinimumSize(new java.awt.Dimension(915, 424));
-        panel_principal_.setPreferredSize(new java.awt.Dimension(935, 400));
+            panel_principal_.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+            panel_principal_.setMaximumSize(new java.awt.Dimension(915, 424));
+            panel_principal_.setMinimumSize(new java.awt.Dimension(915, 424));
+            panel_principal_.setPreferredSize(new java.awt.Dimension(935, 400));
 
-        lbl_ensamblador_.setText("Ensamblador:");
+            lbl_ensamblador_.setText("Ensamblador:");
 
-        btn_retirar_accesorio1.setToolTipText("Despachar Mercancía para Orden Seleccionada");
-        btn_retirar_accesorio1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_retirar_accesorio1ActionPerformed(evt);
-            }
-        });
+            btn_retirar_accesorio1.setToolTipText("Despachar Mercancía para Orden Seleccionada");
+            btn_retirar_accesorio1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btn_retirar_accesorio1ActionPerformed(evt);
+                }
+            });
 
-        btn_add_accesorio1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_add_accesorio1ActionPerformed(evt);
-            }
-        });
+            btn_add_accesorio1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btn_add_accesorio1ActionPerformed(evt);
+                }
+            });
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(),"Orden de Producción",0);
+        }
 
         panel_primer_filtro_emsamble_.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panel_primer_filtro_emsamble_.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -408,7 +387,7 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel_principal_, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+            .addComponent(panel_principal_, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
         );
 
         pack();
@@ -471,7 +450,7 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
 
     private void btn_retirar_accesorio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_retirar_accesorio1ActionPerformed
 
-        JOptionPane.showMessageDialog(null, ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).getCod());
+        JOptionPane.showMessageDialog(null, ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).obtenerCodigoId());
 
 
     }//GEN-LAST:event_btn_retirar_accesorio1ActionPerformed
@@ -545,7 +524,7 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
 
                 if (decision == 0) { // como "Aceptar" está primero en el arreglo tiene el indice 0; -1 es la x de cerrar 
 
-                    String cod_objeto_ensamble = ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).getCod();
+                    String cod_objeto_ensamble = ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).obtenerCodigoId();
                     String talla = combo_ref_tamaño_.getSelectedItem().toString();
                     int cantidad = Integer.parseInt(txt_cant_ensamble_.getText());
 

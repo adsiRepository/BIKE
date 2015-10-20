@@ -121,11 +121,22 @@ public class TablaAlistamiento extends JTable {
         // </editor-fold>
     }
 
+    /***/
     public void vaciarTabla() {
         data = new Object[][]{};
         modelo_tabla.fireTableDataChanged();
     }
 
+    /**
+     * Metodo usado para registrar en BD la actual orden y su lista de despacho.
+     */
+    /*public Object[][]  guardarAlistamientoActual(){
+        
+    }*/
+    
+    /**
+     * Modelo de la Tabla.
+     */
     private class ModeloTablaAlistamiento extends DefaultTableModel {
         // <editor-fold defaultstate="collapsed" desc="MODELO DE LA TABLA DE ALISTAMIENTO">
 
@@ -455,12 +466,7 @@ public class TablaAlistamiento extends JTable {
         public My_ComboBox(ItemDeLista item) {
             my_items = new ItemDeLista[]{item};
             configBasica();
-            this.setUI(new BasicComboBoxUI() {
-                @Override
-                protected JButton createArrowButton() {
-                    return null;
-                }
-            });
+            noDesplegar();
         }
 
         /**
@@ -487,6 +493,7 @@ public class TablaAlistamiento extends JTable {
                     my_items[0] = new ItemDeLista();
                     //this.setKeySelectionManager(keySelectionManager);
                     i_have_items = false;
+                    noDesplegar();
                 }
                 configBasica();
             } catch (Exception e) {
@@ -501,6 +508,15 @@ public class TablaAlistamiento extends JTable {
             this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
 
+        private void noDesplegar(){
+            this.setUI(new BasicComboBoxUI() {
+                @Override
+                protected JButton createArrowButton() {
+                    return null;
+                }
+            });
+        }
+        
         private class ModeloComboBox extends AbstractListModel<ItemDeLista> implements ComboBoxModel<ItemDeLista> {
                 // <editor-fold defaultstate="collapsed" desc="MODELO COMBOBOX">
 
@@ -546,9 +562,11 @@ public class TablaAlistamiento extends JTable {
             @Override
             public Component getListCellRendererComponent(JList<? extends ItemDeLista> list, ItemDeLista value, int index, boolean isSelected, boolean cellHasFocus) {
                 if (value != null) {
-                    //HashMap<String, String> attrs = ((ItemDeLista) value).getAtributos();
                     HashMap<String, Object> attrs = ((ItemDeLista) value).getAtributos();
                     setText(String.valueOf(attrs.get(ItemDeLista.TEXTO_MOSTRADO)));
+                    if (value.obtenerCodigoId() == null) {
+                        setHorizontalAlignment(JTextField.CENTER);
+                    }
                 }
                 return this;
             }// </editor-fold>

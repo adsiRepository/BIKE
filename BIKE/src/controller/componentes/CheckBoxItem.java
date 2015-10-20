@@ -63,6 +63,7 @@ public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOf
                     return value;
                 }
             });
+            
             this.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -90,10 +91,10 @@ public class CheckBoxItem extends JCheckBox /*implements ListCellRenderer<ItemOf
 
         public ModeloListaArticulos() {
             try {
-                HashMap<String, HashMap<String, Object>> map = ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos();
+                /*HashMap<String, HashMap<String, Object>> map = ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos();
                 map.entrySet().stream().map((reg) -> new ItemDeLista(reg.getKey(), reg.getValue())).forEach((item) -> {
                     this.addElement(new CheckBoxItem(item));
-                });
+                });*/
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.toString(), "Cons ModeloListaArts", 0);
             }
