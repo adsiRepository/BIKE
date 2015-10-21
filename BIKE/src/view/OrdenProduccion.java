@@ -56,7 +56,7 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
             Object items = (((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).getAtributos()).get("tallas");
             ((ModeloComboTallas)combo_ref_tamaño_.getModel()).cambiarItems(items);
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e.toString(), "Constructor Orden Produccion", 0);
+            JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Constructor Orden Produccion", 0);
         }
   
     }

@@ -10,6 +10,10 @@ public class ItemDeLista {
     public static final String TEXTO_MOSTRADO = "texto";
   
     private String cod;
+    //HashMap (un Arreglo clave-valor), cada item es
+    //uno de un combobox. El primer String es el codigo o id del Item, este
+    //a su vez es la clave dentro del HashMap. El HashMap anidado seria el
+    //valor de esa clave, este HashMap contiene los atributos del Item.
     private HashMap<String, Object> atributos;
     
     /**CONSTRUCTOR. ITEM SIN DATOS PREDEFINIDOS (VACIO)*/

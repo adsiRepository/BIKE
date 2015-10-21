@@ -30,8 +30,7 @@ public class ConexionBD {
         catch(ClassNotFoundException | SQLException ex){//
             /*JOptionPane.showMessageDialog(null, "Excepcion "+ex.toString()+" que no permiten la Conexión a Base de Datos\n"
                     + "Detalle: "+ex.getMessage(), "ConnBD", JOptionPane.ERROR_MESSAGE);*/
-            throw new Exception("Excepcion Capturada al Intentar Conextarse al Servidor.\n"
-                    + "class ConexionBD => obtenerConexion()\n"+ex.toString());
+            throw new Exception("No se pudo establecer conexión son el Servidor.\nError: " + ex.toString());
             //return null;
         }
     }

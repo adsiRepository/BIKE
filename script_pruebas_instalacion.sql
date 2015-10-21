@@ -1,28 +1,40 @@
 /* FUENTES -> http://agcapa.es/mysql-comandos-basicos-consola-en-gnulinux/ */
 show databases; /*mostrar todas las bases*/
 
+drop database storebike;
+
 use mysql;/*mysql es la base de datos de configuraciones. En ella se guardan datos como los usuarios del servidor mysql.*/
 select user from user;
 /*CONFIGURACION DE USUARIOS Y ACCESO*/
+drop user 'user_storebike'@'localhost'; 
 create user 'user_storebike'@'localhost' identified by 'user_storebike'; /*CREAMOS EL USUARIO POR DEFECTO DEL PROGRAMA*/
 grant all privileges on storebike.* to 'user_storebike'@'localhost'; /*LE OTORGAMOS TODAS LAS CREDENCIALES UNICAMENTE EN LA BASE DE DATOS QUE LE CONCIERNE A ESTE PROGRAMA*/
+
 /*PARA OTORGAR PERMISOS DE ACCESO A USUARIOS DESDE OTRO EQUIPO DEBEMOS HACERLO CON LA SGTE LINEA:*/
 grant all privileges on storebike.* to 'user_storebike'@'nombre_equipo_desde_donde_conecta'; /*EL USUARIO ES 'user_storebike' SIEMPRE PUES ES EL USUARIO DEFINIDO PARA Y EN EL PROGRAMA Y NO TIENE NECESIDAD DE ESTARSE CAMBIANDO*/
-drop user 'user_storebike'@'localhost';
-/*----*/
 
-use world;
-select * from city;
+/**   ATENCION!   
+ 
+    ESTE ARCHIVO ES UNICAMENTE PARA PRUEBAS DE DESARROLLO, CONTIENE UNAS SENTENCIAS E INSERCIONES QUE PERMITEN
+    AL DESARROLLADOR EJECUTAR LAS PRUEBAS DE RIGOR.
+    
+    A PARTIR DE AQUI SE ENCUENTRAN LAS SENTENCIAS DE INSTALACION Y CONFIGURACION BASICA
+*/
 
+/*CONFIGURACION DE USUARIOS Y ACCESO.
+ESTE PAR DE LINEAS DEBEN SER EJECUTADAS SOLO UNA VEZ EN CADA SERVIDOR O PC UTILIZADO PARA PRUEBAS O DESARROLLO*/
+create user 'user_storebike'@'localhost' identified by 'user_storebike'; /*CREAMOS EL USUARIO POR DEFECTO DEL PROGRAMA*/
+grant all privileges on storebike.* to 'user_storebike'@'localhost'; /*LE OTORGAMOS TODAS LAS CREDENCIALES UNICAMENTE EN LA BASE DE DATOS QUE LE CONCIERNE A ESTE PROGRAMA*/
+/**NO OLVIDAR: SIN IMPORTAR SI SE BORRA O RECREA LA BASE DE DATOS, ESTE USUARIO CREADO YA ESTA ESTABLECIDO EN EL SERVIDOR
+HASTA QUE SE EJECUTE LA SGTE LINEA:
+    drop user 'user_storebike'@'localhost';
+SE CREA EL USUARIO SOLO UNA VEZ POR SERVIDOR.
+*/
 
-show tables;
-drop database storebike;
-drop table configuraciones;
-
-/*hay que poner esta linea en el sql del programa*/
-set foreign_key_checks = 1;
-
-desc ensambladores;
+/** A PARTIR  DE AQUI HASTA LA SIGUIENTE INDICACION SE ENCUENTRAN LAS INSERCIONES NECESARIAS PARA EJECUTAR LAS PRUEBAS.
+DEBE SELECCIONAR TODAS LAS LINEAS DESDE AQUI HASTA LA SIGUIENTE INDICACION E INTRODUCIRLAS EN EL SISTEMA MYSQL QUE UTILICE,
+EJECUTANDO TODAS LAS LINEAS DE INMEDIATO
+*/
 
 use storebike;
 SET SQL_SAFE_UPDATES=0;
@@ -123,7 +135,6 @@ insert into componente_articulo values
 ;
 
 insert into tallas values
-/*('001','12'), ('002','16'), ('003','20'), ('004','24'), ('005','26'), ('006','28')*/
 ('12'), ('16'), ('20'), ('24'), ('26'), ('28')
 ;
 
@@ -200,6 +211,10 @@ insert into talla_articulo values
                 ('RIN','26'),	('RDP','26'),	/*('ARJ','26'),*/					('BSC', '26'),
 				('RIN','28')					/*('ARJ','28')*/	
 ;
+
+/**  ATENCION!  HASTA AQUI SON LAS INSERCIONES DE DATOS PARA REALIZAR LAS PRUEBAS*/
+
+/** EN ADELANTE ES SIMPLEMENTE CODIGO VAGO CON EL FIN DE PARA PROBAR Y CONSTRUIR LAS SENTENCIAS USADAS EN LA APLICAION*/
 
 
 select * from ensambladores;

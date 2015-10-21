@@ -93,97 +93,91 @@ public class ConsultaSQL {
 
         
         /**
-         * @return => retorna un ArrayList con todos los elementos encontrados en la consulta.
+         * @return => retorna un ArrayList con todos los elementos encontrados
+         * en la consulta.
          * @throws java.lang.Exception
          */
-        public static ArrayList<ItemDeLista> obtenerCatalogoArticulos() throws Exception{
-            Connection connbd = ConexionBD.obtenerConexion();
-            ArrayList<ItemDeLista> retorno = new ArrayList<>();
-            HashMap<String, Object> atrbs_item = new HashMap<>();
+        public static ArrayList<ItemDeLista> obtenerCatalogoArticulos() throws Exception {
 
-            if (connbd != null) {
-                ResultSet resultados;
+            try (Connection connbd = ConexionBD.obtenerConexion()) {
+
+                ArrayList<ItemDeLista> retorno = new ArrayList<>();
+                HashMap<String, Object> atrbs_item = new HashMap<>();
+
                 try (java.sql.PreparedStatement sentencia = connbd.prepareStatement(
-                        "select a.id_articulo, a.articulo, a.descripcion, ta.talla from articulos a left join talla_articulo ta "
+                        "select a.id_articulo, a.articulo, a.descripcion, ta.talla "
+                        + "from articulos a left join talla_articulo ta "
                         + "on ta.articulo = a.id_articulo;")) {
-                    resultados = sentencia.executeQuery();
-                    String cod_temporal;
-                    
-                    if (resultados.next()) {
-                        cod_temporal = resultados.getString(1);
-                        ArrayList<Object> tallas = new ArrayList<>();
-                        resultados.previous();
-                        while (resultados.next()) {
-                            if(resultados.getString(1).equals(cod_temporal)){
-                                tallas.add(resultados.getString(4));
-                            }
-                            else{
-                                resultados.previous();
-                                atrbs_item.put(ItemDeLista.TEXTO_MOSTRADO, resultados.getString(2));
-                                atrbs_item.put("descripcion", resultados.getString(3));
-                                atrbs_item.put("tallas", tallas);
-                                retorno.add(new ItemDeLista(resultados.getString(1), atrbs_item));
-                                atrbs_item = new HashMap<>();
-                                tallas = new ArrayList<>();
-                                
-                                resultados.next();
-                                cod_temporal = resultados.getString(1);
-                                resultados.previous();
+
+                    try (ResultSet resultados = sentencia.executeQuery()) {
+
+                        String cod_temporal;
+
+                        if (resultados.next()) {
+                            cod_temporal = resultados.getString(1);
+                            ArrayList<Object> tallas = new ArrayList<>();
+                            resultados.previous();
+                            
+                            while (resultados.next()) {
+                                if (resultados.getString(1).equals(cod_temporal)) {
+                                    tallas.add(resultados.getString(4));
+                                } else {
+                                    resultados.previous();
+                                    atrbs_item.put(ItemDeLista.TEXTO_MOSTRADO, resultados.getString(2));
+                                    atrbs_item.put("descripcion", resultados.getString(3));
+                                    atrbs_item.put("tallas", tallas);
+                                    retorno.add(new ItemDeLista(resultados.getString(1), atrbs_item));
+                                    atrbs_item = new HashMap<>();
+                                    tallas = new ArrayList<>();
+
+                                    resultados.next();
+                                    cod_temporal = resultados.getString(1);
+                                    resultados.previous();
+                                }
                             }
                         }
                     }
-                    resultados.close();
-                    connbd.close();
-                    return retorno;
-                } catch (RuntimeException ex) {
-                    throw ex;
-                } catch (Exception ex) {
-                    throw new Exception("Error Consulta de Catalogo"+ex.toString());
                 }
-            } else {
-                throw new Exception("No Hay Conexión al Servidor");
+                return retorno;
+            } catch (RuntimeException ex) {
+                throw ex;
+            } catch (Exception ex) {
+                throw new Exception("Error Consulta de Catalogo" + ex.getLocalizedMessage());
             }
         }
-        
-        
+
         /**
-         * @return => retorna un HashMap (un Arreglo clave-valor), cada item es uno de un combobox.
-         * El primer String es el codigo o id del Item, este a su vez es la clave dentro del HashMap.
-         * El HashMap anidado seria el valor de esa clave, este HashMap contiene los atributos del Item.
+         * @return => retorna un ArrayList
          * @throws java.lang.Exception
          */
-        public static ArrayList<ItemDeLista>/*HashMap<String, HashMap<String, Object>>*/ obtenerListaEnsambladores() throws Exception{
+        public static ArrayList<ItemDeLista>/*HashMap<String, HashMap<String, Object>>*/ obtenerListaEnsambladores() throws Exception {
 
-            Connection connbd = ConexionBD.obtenerConexion();
-            //HashMap<String, HashMap<String, Object>> retorno = new HashMap<>();
-            ArrayList<ItemDeLista> items_retorno = new ArrayList<>();
-            HashMap<String, Object> atributos_item = new HashMap<>(); // ESTE HASHMAP AUXILIAR ES EL QUE SE USARA EN EL CONSTRUCTOR DE CADA ITEMCOMBOBOX
-            
-            if(connbd != null){
-                ResultSet resultados;
+            try (Connection connbd = ConexionBD.obtenerConexion()) {
+                
+                ArrayList<ItemDeLista> items_retorno = new ArrayList<>();
+                HashMap<String, Object> atributos_item; // ESTE HASHMAP AUXILIAR ES EL QUE SE USARA EN EL CONSTRUCTOR DE CADA ITEMCOMBOBOX
+
                 try (Statement sentencia = connbd.createStatement()) {
-                    resultados = sentencia.executeQuery("select id_emp, nom_emp, ape_emp from ensambladores;");
-                    while (resultados.next()) {
+                    try (ResultSet resultados = sentencia.executeQuery(
+                            "select id_emp, nom_emp, ape_emp from ensambladores;")) {
+                        while (resultados.next()) {
+                            atributos_item = new HashMap<>();//LO REDEFINO COMO UN NUEVO OBJETO PARA EVITAR INTERFERENCIAS CON EL PROXIMO ITEMCOMBOBOX
                             // EL PRIMER PUT DENTRO DEL HASHMAP SIEMPRE SERA EL TEXTO A MOSTRAR EN EL ITEM DEL COMBOBOX
                             atributos_item.put(ItemDeLista.TEXTO_MOSTRADO, resultados.getString(2) + " " + resultados.getString(3));
                             items_retorno.add(new ItemDeLista(resultados.getString(1), atributos_item));
-                            atributos_item = new HashMap<>();//AL TERMINAR DE AGREGAR EL HASHMAP, LO REDEFINO COMO UN NUEVO OBJETO PARA EVITAR INTERFERENCIAS CON EL PROXIMO ITEMCOMBOBOX
+                        }
                     }
-                    resultados.close();
-                    connbd.close();
-                    return items_retorno;
-                } catch (Exception e) {
-                    throw new Exception("Error al Intentar obtener los registros de Empleados\n"
-                            + "Detalle: "+e.toString());
                 }
-            }
-            else{
-                throw new Exception("No Hay Conexión al Servidor");
+                return items_retorno;
+            } catch (Exception e) {
+                throw new Exception("Error al Intentar obtener los registros de Empleados\n"
+                        + "Problema: " + e.getLocalizedMessage());
             }
         }
 
         /**
          * Segunda Version Obtencion de Repuestos Disponibles por Articulo.
+         *
          * @param cod_articulo
          * @param talla
          * @return 
@@ -234,9 +228,10 @@ public class ConsultaSQL {
                     }
                 }
                 return retorno;
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 throw new Exception("Se ha presentado un problema cuando se Buscaban los Componentes.\n"
-                        + "Detalle: " + ex.toString() + "\nCod Error SQL: " + ex.getSQLState());
+                        + "Detalle: " + ex.getLocalizedMessage() + "\n");
+                        //+ "Cod Error SQL: " + (((SQLException)ex != null)?((SQLException)ex).getSQLState():""));
             }
             // </editor-fold>
         }
@@ -300,7 +295,7 @@ public class ConsultaSQL {
                     
                 } catch (Exception e) {
                     throw new Exception("Error presentado al intentar registrar la nueva orden.\n"
-                            + "Detalle: " + e.toString());
+                            + "Detalle: " + e.getLocalizedMessage());
                 }
             } else {
                 throw new Exception("Debes de Elegir Items que Registrar. Intentalo nuevamente.");
@@ -321,12 +316,10 @@ public class ConsultaSQL {
                     return sentencia.executeUpdate() > 0;
                 }
             } catch (Exception e) {
-                throw new Exception("Error al Eliminar la Orden de Produccion.\n" + e.toString());
+                throw new Exception("Error al Eliminar la Orden de Produccion.\n" + e.getLocalizedMessage());
             }
         }
-        
-        
-        
+ 
         // <editor-fold defaultstate="collapsed" desc="ANTIGUO METODO DE OBTENCION DE REPUESTOS">
         /**
          * @Deprecated @param cod_articulo
