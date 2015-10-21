@@ -18,6 +18,7 @@ public class ItemDeLista {
         atributos = new HashMap<>();
         atributos.put(TEXTO_MOSTRADO, "Sin Registro");
         atributos.put("stock", 0);
+        atributos.put("tallas", null);
     }
 
     public ItemDeLista(String codigoId, HashMap<String, Object> atributos) {

@@ -31,14 +31,14 @@ public class MainClass {
         
         menu = new MenuPrincipal();
         //AQUI VA LA IMAGEN PARA EL ICONO DE LA APLICACION        //directorio     //nombre, al cambiar hay que tener en cuenta la extension del archivo
-        Image iconoPrograma;
+        /*Image iconoPrograma;
         try {
             iconoPrograma = ImageIO.read(new File("mis_imagenes/icon_program.png"));
             menu.setIconImage(iconoPrograma);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo cargar el Icono de la aplicación."+ex.toString());
-        }
+        }*/
         menu.setVisible(true);
     }
-   
+ 
 }

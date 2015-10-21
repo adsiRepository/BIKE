@@ -249,42 +249,12 @@ delete from repuestos;
 select * from repuestos;
 select cod_rep, repuesto from repuestos where componente = '010';
 
-
-/**Seleccionar los componentes por familia y por articulo*/
-select c.id_comp, c.componente from componentes c inner join componente_articulo ca 
-where c.id_comp = ca.componente and c.familia = '002' and ca.articulo = 'MTB';
-
-/**Seleccionar repuestos por componentes*/
-select r.cod_rep, r.repuesto from repuestos r 
-where r.componente = '009';
-
-select a.articulo from articulos a 
-where a.componente = '975';
-
-desc tallas_articulos;
-
-delete from talla_articulo; 
-select * from talla_articulo;
-
-desc articulos;
-select a.id_articulo, a.articulo, a.descripcion, ta.talla from articulos a left join talla_articulo ta
-on ta.articulo = a.id_articulo;
-
-select cod_rep, repuesto, talla from repuestos 
-where componente = '050' and talla is null 
-or componente = '050' and talla = '24';
-
-
-select c.componente from componentes c inner join componente_articulo ca 
-where c.id_comp = ca.componente and ca.articulo = 'MTB';
-
-
 desc ordenes_produccion;
-insert into ordenes_produccion (ensamblador, hora_despacho, hora_entrega) values 
-('1190375460', '2015-04-07 13:52:44', '2015-04-10 10:10:22')
+insert into ordenes_produccion (no_ord, ensamblador, hora_despacho, hora_entrega) values 
+(1, '1190375460', '2015-04-07 13:52:44', '2015-04-10 10:10:22')
 ;
 alter table ordenes_produccion change no_ord no_ord int(11) not null auto_increment; 
-delete from ordenes_produccion;
+delete from ordenes_produccion where no_ord = 1;
 select * from ordenes_produccion;
 
 desc detalle_despacho;
@@ -297,23 +267,29 @@ update detalle_despacho set cant_desp = 6 where repuesto = '690733';
 update detalle_despacho set repuesto = '690733' where repuesto = '311104' and orden = 1;
 select * from detalle_despacho;
 
+/**CODIGO OBTENER PRODUCCION*/
+select op.ensamblador, op.hora_despacho, op.hora_entrega, a.descripcion, p.talla, p.cantidad 
+from ordenes_produccion op inner join produccion p inner join articulos a 
+where p.articulo = a.id_articulo and p.no_ord_prod = op.no_ord and op.no_ord = 4;
+/***/
+
 desc produccion;
 insert into produccion values
 (3,'RDP','26',5);
 delete from produccion;
 select * from produccion;
 
-drop trigger recount_reps;
-
-use mysql;
-use storebike;
-select * from proc;
-
 select numeroNuevaOrden('1190375460', '2015-04-07 13:52:44') as registro_actual;
 delete from ordenes_produccion where no_ord = 4;
 select * from ordenes_produccion;
 delete from ordenes_produccion;
 select max(no_ord) from ordenes_produccion;
+
+drop trigger recount_reps;
+drop trigger recup_reps;
+
+select * from proc;
+show triggers;
 
 drop function if exists numeroNuevaOrden;
 delimiter |
@@ -344,15 +320,17 @@ delimiter |
 /**TRIGGER QUE ACTUALIZA LAS CANTIDADES DE REPUESTOS SEGUN SEA EL CAMPO SETEADO*/
 create trigger recount_reps after update on detalle_despacho for each row
 begin
-	declare cant_actual int(11);
-    declare cant_orig int(11);
-	if (old.repuesto <> new.repuesto) then
-		update repuestos set cant_disp = (cant_disp + old.cant_desp) where cod_rep = old.repuesto;
-        if (old.cant_desp <> new.cant_desp)then
+ declare cant_actual int(11);
+ declare cant_orig int(11);
+ 
+ if (old.repuesto <> new.repuesto) then
+  update repuestos set cant_disp = (cant_disp + old.cant_desp) where cod_rep = old.repuesto;
+  if (old.cant_desp <> new.cant_desp)then
 			update repuestos set cant_disp = (cant_disp - new.cant_desp) where cod_rep = new.repuesto;
 		else
 			update repuestos set cant_disp = (cant_disp - old.cant_desp) where cod_rep = new.repuesto;
-        end if;
+   end if;
+   
 	/**SI EL CODIGO NO HA CAMBIADO PERO SI LA CANTIDAD =>*/
 	elseif (old.cant_desp <> new.cant_desp) then
 		select cant_disp from repuestos where cod_rep = old.repuesto into cant_actual;
@@ -360,6 +338,63 @@ begin
 		update repuestos set cant_disp = (cant_orig - new.cant_desp) where cod_rep = old.repuesto;
 	end if;
 end;|
+
+delimiter |
+create trigger recup_reps before delete on ordenes_produccion for each row
+begin
+ declare r_cod_rep varchar(6);
+ declare r_cant_desp int(11);
+ declare fin boolean;
+ 
+ /* http://www.hermosaprogramacion.com/2014/06/mysql-cursores/ */
+ declare reps cursor for 
+ select d.repuesto, d.cant_desp from detalle_despacho d where d.orden = old.no_ord;
+ declare continue handler for not found set fin = true;
+ open reps;
+ loop_ : loop
+  fetch reps into r_cod_rep, r_cant_desp;
+  if fin then
+   leave loop_;
+  end if;
+  update repuestos set cant_disp = cant_disp + r_cant_desp where cod_rep = r_cod_rep;
+ end loop loop_;
+ close reps;
+ 
+end;|
+
+delimiter |
+create trigger dev_reps after delete on detalle_despacho for each row
+begin
+ update repuestos set cant_disp = (cant_disp + old.cant_desp) where cod_rep = old.repuesto;
+end;|
+
+/**Seleccionar los componentes por familia y por articulo*/
+select c.id_comp, c.componente from componentes c inner join componente_articulo ca 
+where c.id_comp = ca.componente and c.familia = '002' and ca.articulo = 'MTB';
+
+/**Seleccionar repuestos por componentes*/
+select r.cod_rep, r.repuesto from repuestos r 
+where r.componente = '009';
+
+select a.articulo from articulos a 
+where a.componente = '975';
+
+desc tallas_articulos;
+
+delete from talla_articulo; 
+select * from talla_articulo;
+
+desc articulos;
+select a.id_articulo, a.articulo, a.descripcion, ta.talla from articulos a left join talla_articulo ta
+on ta.articulo = a.id_articulo;
+
+select cod_rep, repuesto, talla from repuestos 
+where componente = '050' and talla is null 
+or componente = '050' and talla = '24';
+
+select c.componente from componentes c inner join componente_articulo ca 
+where c.id_comp = ca.componente and ca.articulo = 'MTB';
+
 
 /*delimiter |
 create function obtenerNumeroOrdenProduccion(cual int(1)) 

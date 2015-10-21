@@ -17,56 +17,70 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 
 public class ComboBoxItem extends JComboBox<ItemDeLista> {
 
-    private ArrayList<ItemDeLista> mis_items;
+    //private transient ArrayList<ItemDeLista> mis_items;
     
     /**
-     * Constructor
-     * @param combobox
-     * constante aplicada en el constructor, dependiente del combobox a construir
-     * @throws java.lang.Exception*/
-    public ComboBoxItem(String combobox) throws Exception{
+     * Constructor.
+     */
+    public ComboBoxItem() /*String comboboxthrows Exception*/{
         super();
-        seleccionaComboBox(combobox);
+        //seleccionaComboBox(combobox);
+        this.setRenderer(new RenderItemComboBox());
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
-    
-    private void seleccionaComboBox(String combobox) throws Exception{
-        if (combobox.equals(OrdenProduccion.COD_CMBOX_ENSAMBLADORES)) {
-            //ConsultaSQL.ConsultorBD.obtenerListaEnsambladores().entrySet().stream().map((registro) -> new ItemDeLista(registro.getKey(), registro.getValue())).forEach((item) -> {
-              //  this.addItem(item);
-            //});
-            constructor(ConsultaSQL.ConsultorBD.obtenerListaEnsambladores());
+
+    /**METODO ME PERMITE SELECCIONAR LOS ITEMS QUE LLEVARA EL COMBOBOX.
+     * @param nom_combo Se especifica un String que indicará los items del combobox.
+     * @throws java.lang.Exception
+     */
+    public void seleccionaComboBox(String nom_combo) throws Exception {
+        ArrayList<ItemDeLista> items = new ArrayList<>();
+        if (nom_combo.equals(OrdenProduccion.COD_CMBOX_ENSAMBLADORES)) {
+            //constructor(ConsultaSQL.ConsultorBD.obtenerListaEnsambladores());
+            items = ConsultaSQL.ConsultorBD.obtenerListaEnsambladores();
         }
-        if (combobox.equals(OrdenProduccion.COD_CMBOX_ARTICULOS)) {
-            /*ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos().entrySet().stream().map((registro) -> new ItemDeLista(registro.getKey(), registro.getValue())).forEach((item) -> {
-                this.addItem(item);
-            });*/
-            constructor(ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos());
+        if (nom_combo.equals(OrdenProduccion.COD_CMBOX_ARTICULOS)) {
+            //constructor(ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos());
+            items = ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos();
         }
+        if (items.size() > 0) {
+            Iterator it = items.iterator();
+            while (it.hasNext()) {
+                this.addItem((ItemDeLista) it.next());
+            }
+        } else {
+            this.addItem(new ItemDeLista());
+            this.setUI(new DibujoCombobox());
+            //this.setKeySelectionManager(keySelectionManager);
+        }
+        this.setSelectedIndex(0);
     }
-    
-    private void constructor(ArrayList<ItemDeLista> objItems){
-        mis_items = /*(ArrayList) */objItems;
-        //if (((ArrayList) objItems).size() > 0) {
+
+    /*private void constructor(ArrayList<ItemDeLista> objItems){
+     mis_items = /*(ArrayList) /objItems;
+     //if (((ArrayList) objItems).size() > 0) {
         if (mis_items.size() > 0) {
-            Iterator it = /*((ArrayList) objItems)*/mis_items.iterator();
+            Iterator it = /*((ArrayList) objItems)/mis_items.iterator();
             while (it.hasNext()) {
                 this.addItem((ItemDeLista) it.next());
             }
         }
         else{
             this.addItem(new ItemDeLista());
-            this.setUI(new BasicComboBoxUI() {
-                @Override
-                protected JButton createArrowButton() {
-                    return null;
-                }
-            });
+            this.setUI(new DibujoCombobox());
             //this.setKeySelectionManager(keySelectionManager);
         }
         this.setRenderer(new RenderItemComboBox());
-        this.setSelectedItem(this.getItemAt(0));
+        this.setSelectedIndex(0);
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    } 
+    } */
+    
+    private static class DibujoCombobox extends BasicComboBoxUI {
+        @Override
+        protected JButton createArrowButton() {
+            return null;
+        }
+    }
 
     /**
      * Constructor
@@ -115,7 +129,7 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
         
     }*/// </editor-fold>
 
-    private class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista>{
+    private static class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista>{
         // <editor-fold defaultstate="collapsed" desc="RENDERIZADOR (O DIBUJANTE) DE LOS ITEMS Y SUS CARACTERISTICAS VISUALES DENTRO DEL COMBOBOX">
         public RenderItemComboBox() {
             this.setBorder(null);

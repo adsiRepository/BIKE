@@ -190,16 +190,14 @@ public class ConsultaSQL {
          * @throws java.lang.Exception 
          */
         public static LinkedHashMap<String, Object[]> obtenerRepuestos_Articulo(String cod_articulo, String talla) throws Exception {
+            // <editor-fold defaultstate="collapsed" desc="CODIGO OBTENCION DE COMPONENTES Y REPUESTOS">
 
-            Connection connbd = ConexionBD.obtenerConexion();
-
-            if (connbd != null) {
-
+            try (Connection connbd = ConexionBD.obtenerConexion()) {
+                
                 LinkedHashMap<String, Object[]> retorno = new LinkedHashMap<>();
                 ArrayList<ItemDeLista> items;
                 HashMap<String, Object> atributos_item_temp;
-
-                ResultSet result_componentes;
+                
                 try (java.sql.PreparedStatement sentencia_articulos = connbd.prepareStatement(
                         "select c.id_comp, c.componente, fc.comp_x_par from "
                         + "componentes c inner join familia_componente fc inner join componente_articulo ca "
@@ -207,68 +205,68 @@ public class ConsultaSQL {
                         + "order by c.familia;")) {
                     
                     sentencia_articulos.setString(1, cod_articulo);
-                    result_componentes = sentencia_articulos.executeQuery();
-
-                    while (result_componentes.next()) {
-                        ResultSet results_repuestos;
-                        try (java.sql.PreparedStatement sentencia_repuestos = connbd.prepareStatement(
-                                "select cod_rep, repuesto, cant_disp from repuestos "
-                                + "where componente = ? and talla is null "
-                                + "or componente = ? and talla = ?;")) {
+                    
+                    try (ResultSet result_componentes = sentencia_articulos.executeQuery()) {
+                        
+                        while (result_componentes.next()) {
                             
-                            sentencia_repuestos.setString(1, result_componentes.getString(1));
-                            sentencia_repuestos.setString(2, result_componentes.getString(1));
-                            sentencia_repuestos.setString(3, talla);
-                            
-                            results_repuestos = sentencia_repuestos.executeQuery();
-                            
-                            items = new ArrayList<>();//ESTE ARRAYLIST ALMACENA LOS ITEMS QUE APARECERAN EN EL COMBOBOX DE LA CELDA DE LA TABLA
-                            while (results_repuestos.next()) {//SI HAY REPUESTOS, SE LLENA; SINO, EVITA ESTE WHILE Y SE VA VACIO
-                                atributos_item_temp = new HashMap<>();
-                                atributos_item_temp.put(ItemDeLista.TEXTO_MOSTRADO, results_repuestos.getString(2));//ESTOS NUMEROS EQUIVALEN AL ORDEN EN QUE SE 
-                                atributos_item_temp.put("stock", results_repuestos.getInt(3));// PIDIERON LAS COLUMNAS EN EL SELECT
-                                items.add(new ItemDeLista(results_repuestos.getString(1), atributos_item_temp));// LA 1 ES "cod_rep"
+                            try (java.sql.PreparedStatement sentencia_repuestos = connbd.prepareStatement(
+                                    "select cod_rep, repuesto, cant_disp from repuestos "
+                                    + "where componente = ? and talla is null "
+                                    + "or componente = ? and talla = ?;")) {
+                                
+                                sentencia_repuestos.setString(1, result_componentes.getString(1));
+                                sentencia_repuestos.setString(2, result_componentes.getString(1));
+                                sentencia_repuestos.setString(3, talla);
+                                
+                                try (ResultSet results_repuestos = sentencia_repuestos.executeQuery()) {
+                                    items = new ArrayList<>();//ESTE ARRAYLIST ALMACENA LOS ITEMS QUE APARECERAN EN EL COMBOBOX DE LA CELDA DE LA TABLA
+                                    while (results_repuestos.next()) {//SI HAY REPUESTOS, SE LLENA; SINO, EVITA ESTE WHILE Y SE VA VACIO
+                                        atributos_item_temp = new HashMap<>();
+                                        atributos_item_temp.put(ItemDeLista.TEXTO_MOSTRADO, results_repuestos.getString(2));//ESTOS NUMEROS EQUIVALEN AL ORDEN EN QUE SE 
+                                        atributos_item_temp.put("stock", results_repuestos.getInt(3));// PIDIERON LAS COLUMNAS EN EL SELECT
+                                        items.add(new ItemDeLista(results_repuestos.getString(1), atributos_item_temp));// LA 1 ES "cod_rep"
+                                    }
+                                    retorno.put(result_componentes.getString(2), new Object[]{items, result_componentes.getBoolean(3)});
+                                }
                             }
-                            retorno.put(result_componentes.getString(2), new Object[]{items, result_componentes.getBoolean(3)});
                         }
-                        results_repuestos.close();
                     }
-                    result_componentes.close();
-                    connbd.close();
-                    return retorno;
-                } catch (SQLException ex) {
-                    throw new Exception("Se ha presentado un problema cuando se Buscaban los Componentes.\n"
-                            + "Detalle: " + ex.toString() + "\nCod Error SQL: " + ex.getSQLState());
                 }
-            } else {
-                throw new Exception("No Hay Conexión al Servidor");
+                return retorno;
+            } catch (SQLException ex) {
+                throw new Exception("Se ha presentado un problema cuando se Buscaban los Componentes.\n"
+                        + "Detalle: " + ex.toString() + "\nCod Error SQL: " + ex.getSQLState());
             }
+            // </editor-fold>
         }
         
-        /**
-         * METODO PARA REGISTRAR EL DESPACHO A PRODUCCION DE UN ARTICULO.
+        /**METODO PARA REGISTRAR EL DESPACHO A PRODUCCION DE UN ARTICULO
          * @param cod_empleado
-         * @param cod_articulo
+         * @param produccion
          * @param listado
          * @return boolean
          * @throws java.lang.Exception
          */
-        public static boolean registrarNuevaOrden(String cod_empleado, String cod_articulo, Object[][] listado) throws Exception {
+        public static boolean registrarNuevaOrden(String cod_empleado, Object[] produccion, Object[][] listado) throws Exception {
+            // <editor-fold defaultstate="collapsed" desc="CODIGO DE CONSULTA SQL QUE PERMITE REGISTRAR UNA NUEVA ORDEN DE PRODUCCION">
             if (listado.length > 0) {
                 try (Connection connbd = ConexionBD.obtenerConexion()) {
+                    int comprobante = 1;
                     int no_orden;
-                    StringBuilder sb; 
                     try (java.sql.PreparedStatement sentencia = connbd.prepareStatement(
                             "select numeroNuevaOrden(?, ?);")) {//aqui se utiliza una funcion almacenada en la base de datos que me arroja el 
-                                                                //codigo de registro con que puedo insertar las tablas relacionadas.
+                        //codigo de registro con que puedo insertar las tablas relacionadas.
                         sentencia.setString(1, cod_empleado); //estos de aca reemplazaran los signos de interrogacion en su orden
-                        sentencia.setString(2, Tiempo.obtenerInstanteMySQL());
-                        try (ResultSet result = sentencia.executeQuery()) {
-                            result.next();
-                            no_orden = result.getInt(1);
+                        sentencia.setString(2, Tiempo.obtenerInstanteMySQL());//la funcion lo que hace es registrar una nueva orden de produccion,
+                        try (ResultSet result = sentencia.executeQuery()) {//recibe el codigo del empleado y la hora de despacho. Devuelve el numero
+                            result.next();                          //de registro para poder insertar la orden en las tablas relacionadas
+                            no_orden = result.getInt(1);//aqui recibo el numero de registro.
                         }
                     }
                     
+                    StringBuilder sb;
+                    // <editor-fold defaultstate="collapsed" desc="Escritura de la Sentencia">
                     sb = new StringBuilder();
                     sb.append("insert into detalle_despacho values ");
                     for (int i = 1; i <= listado.length; i++) {
@@ -278,15 +276,28 @@ public class ConsultaSQL {
                             sb.append("(?, ?, ?), ");
                         }
                     }
+                    // </editor-fold>
                     try (java.sql.PreparedStatement sentencia = connbd.prepareStatement(sb.toString())) {
                         for (int i = 1; i <= listado.length; i++) {
                             sentencia.setInt((i * 3) - 2, no_orden);
                             sentencia.setString((i * 3) - 1, listado[i - 1][0].toString());
                             sentencia.setInt((i * 3), (int) listado[i - 1][1]);
                         }
-                        int result = sentencia.executeUpdate();
-                        return result > 0;
+                        comprobante = comprobante * sentencia.executeUpdate();
                     }
+                    
+                    try (java.sql.PreparedStatement sentencia = connbd.prepareStatement(
+                            "insert into produccion values (?, ?, ?, ?);")) {
+                        sentencia.setInt(1, no_orden);
+                        sentencia.setString(2, produccion[0].toString());//cod articulo
+                        sentencia.setString(3, produccion[1].toString());//talla
+                        sentencia.setInt(4, (int) produccion[2]);//cantidad
+
+                        comprobante = comprobante * sentencia.executeUpdate();
+                    }
+                    
+                    return comprobante > 0;
+                    
                 } catch (Exception e) {
                     throw new Exception("Error presentado al intentar registrar la nueva orden.\n"
                             + "Detalle: " + e.toString());
@@ -294,8 +305,28 @@ public class ConsultaSQL {
             } else {
                 throw new Exception("Debes de Elegir Items que Registrar. Intentalo nuevamente.");
             }
-        }
 
+// </editor-fold>
+        }
+        
+        /**METODO PARA BORRAR LA ORDEN DE PRODUCCION INDICADA
+         * @param no_orden
+         * @return boolean
+         * @throws java.lang.Exception*/
+        public static boolean borrarOrdenProduccion(int no_orden) throws Exception {
+            try (Connection conbd = ConexionBD.obtenerConexion()) {
+                try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
+                        "delete from ordenes_produccion where no_ord = ?;")) {
+                    sentencia.setInt(1, no_orden);
+                    return sentencia.executeUpdate() > 0;
+                }
+            } catch (Exception e) {
+                throw new Exception("Error al Eliminar la Orden de Produccion.\n" + e.toString());
+            }
+        }
+        
+        
+        
         // <editor-fold defaultstate="collapsed" desc="ANTIGUO METODO DE OBTENCION DE REPUESTOS">
         /**
          * @Deprecated @param cod_articulo
@@ -367,10 +398,9 @@ public class ConsultaSQL {
          return retorno;
          }*/
 // </editor-fold>
-        
     }
     
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try {
             //SETEO DE VARIABLES ENCARGADAS DE LA CONEXION A LA BASE DE DATOS
             ConexionBD.setUsuario("user_storebike");
@@ -378,16 +408,19 @@ public class ConsultaSQL {
             ConexionBD.setHost("localhost");
             ConexionBD.setPort("3306");
             
+            Object[] produccion = new Object[3];
+            produccion[0] = "MTB";
+            produccion[1] = "26";
+            produccion[2] = 5;
+            
             Object[][] data = new Object[2][2];
+            data[0] = new Object[]{"403436", 4};
+            data[1] = new Object[]{"690733", 3};
             
-            data[0] = new Object[]{"403436", 8};
-            data[1] = new Object[]{"690733", 7};
-            
-            boolean f = ConsultorBD.registrarNuevaOrden("1190375460", "2015-04-07 13:52:44", data);
+            boolean f = ConsultorBD.registrarNuevaOrden("1190375460", produccion, data);
             System.out.println(f);
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }
-    }
-    
+    }*/
 }

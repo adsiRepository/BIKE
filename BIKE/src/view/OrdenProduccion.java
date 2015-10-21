@@ -2,6 +2,7 @@
 package view;
 
 import controller.ConsultaSQL;
+import controller.componentes.ComboBoxItem;
 import controller.componentes.Paneles;
 import controller.componentes.Paneles.PanelFondoVentanaInterna;
 import controller.componentes.TablaAlistamiento;
@@ -16,6 +17,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 
 /**
  *
@@ -28,25 +31,34 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
     public static final String COD_CMBOX_ARTICULOS = "articulos";
 
     private int fila_tabla, col_tabla;
-    private ModeloComboBoxTallas modelo_combo_tallas;
+    //private ModeloComboBoxTallas modelo_combo_tallas;
 
     /**
      * Constructor.
      */
     public OrdenProduccion() {
         initComponents();
-            // <editor-fold defaultstate="collapsed" desc="CONFIGURACION DE LA VENTANA COMO TAMANO, TITULO..">
-            this.title = "Despacho de Ordenes de Ensamble";
-            this.closable = true;
-            this.iconable = true;
-            Dimension ScreenSpace = escritorio.getSize(), mySpc = this.getSize();
-            this.setLocation((ScreenSpace.width / 18), ((ScreenSpace.height - mySpc.height) / 2));
-            //this.setFrameIcon(new ImageIcon(getClass().getResource("/Recursos/Imagenes/iconUsers.png")));
-            this.setToolTipText("Modulo de Control de Ordenes de Ensamble");
-            // </editor-fold>
-            fila_tabla = 0;
-            col_tabla = 0;
-        
+        // <editor-fold defaultstate="collapsed" desc="CONFIGURACION DE LA VENTANA COMO TAMANO, TITULO..">
+        this.title = "Despacho de Ordenes de Ensamble";
+        this.closable = true;
+        this.iconable = true;
+        Dimension ScreenSpace = escritorio.getSize(), mySpc = this.getSize();
+        this.setLocation((ScreenSpace.width / 18), ((ScreenSpace.height - mySpc.height) / 2));
+        //this.setFrameIcon(new ImageIcon(getClass().getResource("/Recursos/Imagenes/iconUsers.png")));
+        this.setToolTipText("Modulo de Control de Ordenes de Ensamble");
+        // </editor-fold>
+        fila_tabla = 0;
+        col_tabla = 0;
+
+        try{
+            ((ComboBoxItem)combo_ensambladores_).seleccionaComboBox(COD_CMBOX_ENSAMBLADORES);
+            ((ComboBoxItem)combo_catalogo_ensamble_).seleccionaComboBox(COD_CMBOX_ARTICULOS);
+            Object items = (((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).getAtributos()).get("tallas");
+            ((ModeloComboTallas)combo_ref_tamaño_.getModel()).cambiarItems(items);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.toString(), "Constructor Orden Produccion", 0);
+        }
+  
     }
 
     /**
@@ -62,59 +74,54 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
         lbl_ensamblador_ = new javax.swing.JLabel();
         btn_retirar_accesorio1 = new javax.swing.JButton();
         btn_add_accesorio1 = new javax.swing.JButton();
-        try {
-            combo_ensambladores_ = new controller.componentes.ComboBoxItem(COD_CMBOX_ENSAMBLADORES);
-            panel_primer_filtro_emsamble_ = new Paneles.PanelContenedorControles();
-            combo_catalogo_ensamble_ = new controller.componentes.ComboBoxItem(COD_CMBOX_ARTICULOS);
-            lbl_tipo_ensamble_ = new javax.swing.JLabel();
-            combo_ref_tamaño_ = new javax.swing.JComboBox();
-            lbl_ref_tamaño_ = new javax.swing.JLabel();
-            lbl_cantidad_ensamble_ = new javax.swing.JLabel();
-            txt_cant_ensamble_ = new javax.swing.JTextField();
-            scroll_txtArea_detalles_ = new javax.swing.JScrollPane();
-            txtArea_detalles_ = new javax.swing.JTextArea();
-            btn_alistar_despacho_ = new javax.swing.JButton();
-            btn_cancelar_despacho_ = new javax.swing.JButton();
-            scroll_items_selec = new javax.swing.JScrollPane();
-            tabla_alistamiento_ = new TablaAlistamiento();
-            btn_selec_repuestos_1 = new javax.swing.JButton();
-            btn_selec_repuestos_2 = new javax.swing.JButton();
-            scroll_tabla_ordenes_ = new javax.swing.JScrollPane();
-            tabla_mesa_ = new javax.swing.JTable();
-            btn_Despachar_Orden = new javax.swing.JButton();
-            btn_Cancelar_Despacho = new javax.swing.JButton();
-            txt_n_orden_ = new javax.swing.JTextField();
-            lbl_n_orden_ = new javax.swing.JLabel();
+        combo_ensambladores_ = new controller.componentes.ComboBoxItem();
+        panel_primer_filtro_emsamble_ = new Paneles.PanelContenedorControles();
+        combo_catalogo_ensamble_ = new controller.componentes.ComboBoxItem();
+        lbl_tipo_ensamble_ = new javax.swing.JLabel();
+        combo_ref_tamaño_ = new JComboBox(new ModeloComboTallas());
+        lbl_ref_tamaño_ = new javax.swing.JLabel();
+        lbl_cantidad_ensamble_ = new javax.swing.JLabel();
+        txt_cant_ensamble_ = new javax.swing.JTextField();
+        scroll_txtArea_detalles_ = new javax.swing.JScrollPane();
+        txtArea_detalles_ = new javax.swing.JTextArea();
+        btn_alistar_despacho_ = new javax.swing.JButton();
+        btn_cancelar_despacho_ = new javax.swing.JButton();
+        scroll_items_selec = new javax.swing.JScrollPane();
+        tabla_alistamiento_ = new TablaAlistamiento();
+        btn_guardar_Orden_Alistada_ = new javax.swing.JButton();
+        btn_borrar_Orden_Registrada_ = new javax.swing.JButton();
+        scroll_tabla_ordenes_ = new javax.swing.JScrollPane();
+        tabla_mesa_ = new javax.swing.JTable();
+        btn_Despachar_Orden = new javax.swing.JButton();
+        btn_Cancelar_Despacho = new javax.swing.JButton();
+        txt_n_orden_ = new javax.swing.JTextField();
+        lbl_n_orden_ = new javax.swing.JLabel();
 
-            setClosable(true);
-            setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            setMaximumSize(new java.awt.Dimension(915, 424));
-            setMinimumSize(new java.awt.Dimension(915, 424));
-            setName(""); // NOI18N
+        setClosable(true);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMaximumSize(new java.awt.Dimension(915, 424));
+        setMinimumSize(new java.awt.Dimension(915, 424));
+        setName(""); // NOI18N
 
-            panel_principal_.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-            panel_principal_.setMaximumSize(new java.awt.Dimension(915, 424));
-            panel_principal_.setMinimumSize(new java.awt.Dimension(915, 424));
-            panel_principal_.setPreferredSize(new java.awt.Dimension(935, 400));
+        panel_principal_.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panel_principal_.setMaximumSize(new java.awt.Dimension(915, 424));
+        panel_principal_.setMinimumSize(new java.awt.Dimension(915, 424));
+        panel_principal_.setPreferredSize(new java.awt.Dimension(935, 400));
 
-            lbl_ensamblador_.setText("Ensamblador:");
+        lbl_ensamblador_.setText("Ensamblador:");
 
-            btn_retirar_accesorio1.setToolTipText("Despachar Mercancía para Orden Seleccionada");
-            btn_retirar_accesorio1.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btn_retirar_accesorio1ActionPerformed(evt);
-                }
-            });
+        btn_retirar_accesorio1.setToolTipText("Despachar Mercancía para Orden Seleccionada");
+        btn_retirar_accesorio1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_retirar_accesorio1ActionPerformed(evt);
+            }
+        });
 
-            btn_add_accesorio1.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btn_add_accesorio1ActionPerformed(evt);
-                }
-            });
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(),"Orden de Producción",0);
-        }
+        btn_add_accesorio1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_add_accesorio1ActionPerformed(evt);
+            }
+        });
 
         panel_primer_filtro_emsamble_.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panel_primer_filtro_emsamble_.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -131,8 +138,6 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
 
         lbl_tipo_ensamble_.setText("Ensamble: ");
 
-        modelo_combo_tallas = new ModeloComboBoxTallas();
-        combo_ref_tamaño_.setModel(modelo_combo_tallas);
         combo_ref_tamaño_.setToolTipText("Referencia de Tamaño");
         combo_ref_tamaño_.setMaximumSize(new java.awt.Dimension(74, 25));
         combo_ref_tamaño_.setMinimumSize(new java.awt.Dimension(74, 25));
@@ -214,6 +219,7 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
             }
         });
 
+        btn_cancelar_despacho_.setToolTipText("Cancelar Alistamiento");
         btn_cancelar_despacho_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cancelar_despacho_ActionPerformed(evt);
@@ -231,19 +237,20 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
         });
         scroll_items_selec.setViewportView(tabla_alistamiento_);
 
-        btn_selec_repuestos_1.setText("nuevo articulo a ensamblar");
-        btn_selec_repuestos_1.setToolTipText("Despachar Mercancía para Orden Seleccionada");
-        btn_selec_repuestos_1.addActionListener(new java.awt.event.ActionListener() {
+        btn_guardar_Orden_Alistada_.setText("nuevo articulo a ensamblar");
+        btn_guardar_Orden_Alistada_.setToolTipText("Despachar Mercancía para Orden Seleccionada");
+        btn_guardar_Orden_Alistada_.setEnabled(false);
+        btn_guardar_Orden_Alistada_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_selec_repuestos_1ActionPerformed(evt);
+                btn_guardar_Orden_Alistada_ActionPerformed(evt);
             }
         });
 
-        btn_selec_repuestos_2.setText("cancelar orden de articulo");
-        btn_selec_repuestos_2.setToolTipText("Despachar Mercancía para Orden Seleccionada");
-        btn_selec_repuestos_2.addActionListener(new java.awt.event.ActionListener() {
+        btn_borrar_Orden_Registrada_.setText("cancelar orden de articulo");
+        btn_borrar_Orden_Registrada_.setToolTipText("Despachar Mercancía para Orden Seleccionada");
+        btn_borrar_Orden_Registrada_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_selec_repuestos_2ActionPerformed(evt);
+                btn_borrar_Orden_Registrada_ActionPerformed(evt);
             }
         });
 
@@ -324,9 +331,9 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
                             .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(panel_principal_Layout.createSequentialGroup()
                                 .addGap(89, 89, 89)
-                                .addComponent(btn_selec_repuestos_1)
+                                .addComponent(btn_guardar_Orden_Alistada_)
                                 .addGap(39, 39, 39)
-                                .addComponent(btn_selec_repuestos_2))
+                                .addComponent(btn_borrar_Orden_Registrada_))
                             .addGroup(panel_principal_Layout.createSequentialGroup()
                                 .addGap(19, 19, 19)
                                 .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -372,8 +379,8 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
                 .addComponent(scroll_items_selec, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_principal_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_selec_repuestos_1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_selec_repuestos_2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_guardar_Orden_Alistada_, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_borrar_Orden_Registrada_, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scroll_tabla_ordenes_, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31))
@@ -387,45 +394,22 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel_principal_, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+            .addComponent(panel_principal_, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private class ModeloComboBoxTallas extends AbstractListModel<Object> implements ComboBoxModel<Object> {
-        // <editor-fold defaultstate="collapsed" desc="Modelo del ComboBox de tamaños">
+    private static class ModeloComboTallas extends AbstractListModel<Object> implements ComboBoxModel<Object> {
 
         private Object[] mis_elementos;
         private int posicion;
-
-        @SuppressWarnings("OverridableMethodCallInConstructor")
-        public ModeloComboBoxTallas() {
-            cambiarItems(((ItemDeLista) combo_catalogo_ensamble_.getItemAt(0)).getAtributos().get("tallas"));
+        
+        public ModeloComboTallas() {
+            mis_elementos = new Object[]{""};
         }
-
-        @Override
-        public int getSize() {
-            return mis_elementos.length;
-        }
-
-        @Override
-        public Object getElementAt(int index) {
-            posicion = index;
-            return mis_elementos[index];
-        }
-
-        @Override
-        public void setSelectedItem(Object anItem) {
-            mis_elementos[posicion] = anItem;
-        }
-
-        @Override
-        public Object getSelectedItem() {
-            return mis_elementos[posicion];
-        }
-
         public void cambiarItems(Object arrayList_tallas) {
+            //this.removeAllItems();
             Iterator it = ((ArrayList) arrayList_tallas).iterator();
             mis_elementos = new Object[((ArrayList) arrayList_tallas).size()];
             int i = 0;
@@ -433,11 +417,26 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
                 mis_elementos[i] = it.next();
                 i++;
             }
-            posicion = 0;//(mis_elementos.length - 1);
+            posicion = 0;//esto indica que se posicionará en el primer item
             fireContentsChanged(this, 0, mis_elementos.length);
         }
-
-// </editor-fold>
+        @Override
+        public int getSize() {
+            return mis_elementos.length;
+        }
+        @Override
+        public Object getElementAt(int index) {
+            posicion = index;
+            return mis_elementos[index];
+        }
+        @Override
+        public void setSelectedItem(Object anItem) {
+            mis_elementos[posicion] = anItem;
+        }
+        @Override
+        public Object getSelectedItem() {
+            return mis_elementos[posicion];
+        }
     }
 
     private void btn_Despachar_OrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Despachar_OrdenActionPerformed
@@ -451,7 +450,6 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
     private void btn_retirar_accesorio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_retirar_accesorio1ActionPerformed
 
         JOptionPane.showMessageDialog(null, ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).obtenerCodigoId());
-
 
     }//GEN-LAST:event_btn_retirar_accesorio1ActionPerformed
 
@@ -476,13 +474,47 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
 
     }//GEN-LAST:event_tabla_alistamiento_MouseClicked
 
-    private void btn_selec_repuestos_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selec_repuestos_1ActionPerformed
+    private void btn_guardar_Orden_Alistada_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardar_Orden_Alistada_ActionPerformed
+        // <editor-fold defaultstate="collapsed" desc="CODE">
+        try {
+            String ensamblador = ((ItemDeLista) combo_ensambladores_.getSelectedItem()).obtenerCodigoId();
+            Object[] produccion = new Object[3];
+            produccion[0] = ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).obtenerCodigoId();
+            produccion[1] = combo_ref_tamaño_.getSelectedItem().toString();
+            produccion[2] = Integer.parseInt(txt_cant_ensamble_.getText());
+            Object[][] listado = ((TablaAlistamiento) tabla_alistamiento_).obtenerListadoDespacho();
+            
+            boolean hecho = ConsultaSQL.ConsultorBD.registrarNuevaOrden(ensamblador, produccion, listado);
+            if (hecho) {
+                combo_ensambladores_.setEnabled(true);
+                panel_primer_filtro_emsamble_.setEnabled(true);
+                ((TablaAlistamiento) tabla_alistamiento_).vaciarTabla();
+                btn_guardar_Orden_Alistada_.setEnabled(false);
+                //JOptionPane.showMessageDialog(OrdenProduccion.this, );
+                JOptionPane.showOptionDialog(OrdenProduccion.this,
+                        "Orden Guardada Correctamente.",
+                        "Orden de Producción", // título del JOptionPane
+                        JOptionPane.OK_OPTION, // tipo input
+                        JOptionPane.INFORMATION_MESSAGE, // tipo mensaje
+                        new ImageIcon("mis_imagenes/icon_jop_correcto.png"), // icono, si es nulo aparecerá el por defecto
+                        new Object[]{"Aceptar"}, //opciones => estos serán los botones
+                        new Object[]{});
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Guardar Orden", 0);
+        }
 
-    }//GEN-LAST:event_btn_selec_repuestos_1ActionPerformed
+// </editor-fold>
+    }//GEN-LAST:event_btn_guardar_Orden_Alistada_ActionPerformed
 
-    private void btn_selec_repuestos_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selec_repuestos_2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_selec_repuestos_2ActionPerformed
+    private void btn_borrar_Orden_Registrada_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrar_Orden_Registrada_ActionPerformed
+        try {
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Borrar Orden", 0);
+        }
+    }//GEN-LAST:event_btn_borrar_Orden_Registrada_ActionPerformed
 
     private void txt_cant_ensamble_KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensamble_KeyTyped
 
@@ -531,18 +563,21 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
                     LinkedHashMap<String, Object[]>/*ArrayList<ItemDeLista>*/ informacion_bd
                             = ConsultaSQL.ConsultorBD.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla);
 
-                    if (informacion_bd != null && (informacion_bd.size() > 0)) {
+                    //if (informacion_bd != null) {
                         panel_primer_filtro_emsamble_.setEnabled(false);
                         combo_ensambladores_.setEnabled(false);
                         ((TablaAlistamiento) tabla_alistamiento_).actualizaTabla(informacion_bd, cantidad);
-                    } else {
+                        btn_guardar_Orden_Alistada_.setEnabled(true);
+                    /*} else {
                         JOptionPane.showMessageDialog(this, "Al parecer no hay Componentes vinculados a este Articulo",
                                 "Alistar Orden de Producción", 0);
-                    }
+                    }*/
                 }
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Antes, debe especificar la cantidad de Artículos.", "Orden de Producción", 0);
             }
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Error en Alistamiento", 0);
         }
@@ -555,7 +590,9 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
         if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
             itemSelec = evt.getItem();
             txtArea_detalles_.setText(String.valueOf((((ItemDeLista) itemSelec).getAtributos()).get("descripcion")));//lo que se hace aqui es parsear el objeto (el paréntesis con el nombre de la clase parsea el objeto hacia ese tipo o esa clase)
-            modelo_combo_tallas.cambiarItems((((ItemDeLista) itemSelec).getAtributos()).get("tallas"));
+            
+            Object items = (((ItemDeLista) itemSelec).getAtributos()).get("tallas");
+            ((ModeloComboTallas)combo_ref_tamaño_.getModel()).cambiarItems(items);
         }
 
     }//GEN-LAST:event_combo_catalogo_ensamble_ItemStateChanged
@@ -574,10 +611,10 @@ public class OrdenProduccion extends /*VentanaInterna*/ javax.swing.JInternalFra
     private javax.swing.JButton btn_Despachar_Orden;
     private javax.swing.JButton btn_add_accesorio1;
     private javax.swing.JButton btn_alistar_despacho_;
+    private javax.swing.JButton btn_borrar_Orden_Registrada_;
     private javax.swing.JButton btn_cancelar_despacho_;
+    private javax.swing.JButton btn_guardar_Orden_Alistada_;
     private javax.swing.JButton btn_retirar_accesorio1;
-    private javax.swing.JButton btn_selec_repuestos_1;
-    private javax.swing.JButton btn_selec_repuestos_2;
     private javax.swing.JComboBox combo_catalogo_ensamble_;
     private javax.swing.JComboBox combo_ensambladores_;
     private javax.swing.JComboBox combo_ref_tamaño_;

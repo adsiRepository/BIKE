@@ -35,7 +35,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import model.componentes.ItemDeLista;
-
 // </editor-fold>
 /**
  *
@@ -128,12 +127,40 @@ public class TablaAlistamiento extends JTable {
     }
 
     /**
-     * Metodo usado para registrar en BD la actual orden y su lista de despacho.
+     * Metodo usado para obtener la lista de despacho.
+     * @return 
+     * @throws java.lang.Exception 
      */
-    /*public Object[][]  guardarAlistamientoActual(){
-        
-    }*/
-    
+    public Object[][] obtenerListadoDespacho() throws Exception{
+        // <editor-fold defaultstate="collapsed" desc="CODIGO">
+        try {
+            ArrayList<Object[]> bolsa = new ArrayList<>();
+            ItemDeLista item;
+            SpinnerCeldaTabla spinner;
+            for (Object[] dt : data) {//data es un arreglo con otro arreglo dentro de cada indice
+                item = (ItemDeLista) ((My_ComboBox) dt[1]).getSelectedItem();
+                spinner = (SpinnerCeldaTabla) dt[3];
+                if (item.obtenerCodigoId() != null && (int) spinner.getValue() > 0) {
+                    bolsa.add(new Object[]{item.obtenerCodigoId(), spinner.getValue()});
+                }
+            }
+            Object[][] listado = new Object[bolsa.size()][2];
+            Iterator it = bolsa.iterator();
+            int i = 0;
+            while (it.hasNext()) {
+                listado[i] = (Object[]) it.next();//el parentesis con la clase indica parseo o casteo de variables
+                i++;
+            }
+            return listado;
+        } catch (Exception e) {
+            throw new Exception("Error en la filtración de los repuestos.\n"
+                    + "Clase: \"TablaAlistamiento\", metodo: \"obtenerListadoDespacho\"\n"
+                    + "Excepción: " + e.toString());
+        }
+
+// </editor-fold>
+    }
+
     /**
      * Modelo de la Tabla.
      */
@@ -173,6 +200,11 @@ public class TablaAlistamiento extends JTable {
             if (data != null) {
                 if (col == 1) {
                     ((My_ComboBox) data[row][1]).mi_fila = row;
+                }
+                if (col == 3) {
+                    if(!(((My_ComboBox) data[row][1]).i_have_items)){
+                        ((SpinnerCeldaTabla) data[row][3]).setEnabled(false);
+                    }
                 }
                 if (col == 4) {
                     ((PanelBotonesCelda) data[row][4]).miFila = row;

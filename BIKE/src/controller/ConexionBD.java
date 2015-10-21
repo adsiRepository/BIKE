@@ -6,8 +6,6 @@ package controller;
 import java.sql.Connection; // LIBRERIA DE CONEXION BD
 import java.sql.DriverManager; //DRIVER DE MANEJO DE DATOS
 import java.sql.SQLException; //OMITIR O ENVIAR MENSAJES DE ERROR SQL
-import javax.swing.JOptionPane; // ENVIA MENSAJES EMERGENTES EN PANTALLA
-
 
 /*
  * creation    : 26/11/2014, 07:45:23 AM
@@ -32,7 +30,7 @@ public class ConexionBD {
         catch(ClassNotFoundException | SQLException ex){//
             /*JOptionPane.showMessageDialog(null, "Excepcion "+ex.toString()+" que no permiten la Conexión a Base de Datos\n"
                     + "Detalle: "+ex.getMessage(), "ConnBD", JOptionPane.ERROR_MESSAGE);*/
-            throw new Exception("Excepcion Capturada al Conextarse al Servidor\n"
+            throw new Exception("Excepcion Capturada al Intentar Conextarse al Servidor.\n"
                     + "class ConexionBD => obtenerConexion()\n"+ex.toString());
             //return null;
         }

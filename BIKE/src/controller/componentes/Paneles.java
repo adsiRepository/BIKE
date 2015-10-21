@@ -131,14 +131,14 @@ public class Paneles {
         @Override
         public void setEnabled(boolean enabled) {
             super.setEnabled(enabled); 
-            HabilitacionComponentes(this, enabled);
+            habilitarComponentes(this, enabled);
         }
 
-        private void HabilitacionComponentes(Container contenedor, boolean habilitado){
+        private void habilitarComponentes(Container contenedor, boolean habilitado){
             Component[] mis_componentes = contenedor.getComponents();
             for (Component componente : mis_componentes) { // para cada componente de mis_componentes
                 if(componente instanceof Container){
-                    HabilitacionComponentes((Container)componente, habilitado);
+                    habilitarComponentes((Container)componente, habilitado);
                 }
                 componente.setEnabled(habilitado);
             }

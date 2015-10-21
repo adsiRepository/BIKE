@@ -2,36 +2,20 @@
 package view;
 
 import controller.componentes.Paneles;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Graphics;
-import java.awt.TextArea;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.EventObject;
-import javax.swing.AbstractCellEditor;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.event.CellEditorListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
 /**
  * author  : miguel, braden, never
  */
 public class MenuPrincipal extends javax.swing.JFrame {
 
-    private final String[] columnas_tabla =  new String[]{"Empleado", "Activo", "Última Tarea", "Inicio", "Entrega", "Accion"};
-    private final Class[] tiposCampos = new Class[]{String.class, Boolean.class, TextArea.class, /*Date.class*/ String.class, String.class, PanelBotonesCelda.class};
     //private DefaultTableModel dtm_tabla_actividades;
     private int fila_tabla, col_tabla;
     
@@ -43,60 +27,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
     /** Creates new form MenuPrincipal */
     public MenuPrincipal() {
         initComponents();
-        
         this.setTitle("MT BIKE");
-        
-        //configuracion de la tabla
-        
-        
-        
-        tabla_actividades.setDefaultRenderer(PanelBotonesCelda.class, new ComponentCellRenderer());
-        tabla_actividades.setDefaultEditor(PanelBotonesCelda.class, new ComponentCellEditor());
-        
-        // <editor-fold defaultstate="collapsed" desc="Configuracion de la Ventana">
-        this.setExtendedState(MAXIMIZED_BOTH);
-        this.setLocationRelativeTo(null);
-    // </editor-fold>
-       
-        //uso del metodo
-        refrescarTablaActividades();
-        formatearTabla();
-        //--
-    }
-    
-    //definicion del metodo
-    private void refrescarTablaActividades(){
-        //tuto perfecto para aprender a insertar botones en una celda de cualquier tabla -> https://www.youtube.com/watch?v=bVknuhawXsI
-        Object[][] datos = new Object[][]{
-            {"Miguel Gonzalez", true, "5 '26 TT Tradicional", "27/may/15 10:30", "", new PanelBotonesCelda()},
-            {"Jerry Gutierrez", true, "30 Aros '20 Econo", "26/may/15 11:25", "", new PanelBotonesCelda()},
-            {"David Murcia Guzman", true, "20 Aros '20 Econo", "26/may/15 11:25", "", new PanelBotonesCelda()},
-            {"Carlos Trujillo", true, "20 Aros '20 Econo", "26/may/15 11:25", "", new PanelBotonesCelda()}
-        };
-        boolean[] colsEditables = new boolean[]{false, true, false, false, false, true};
-        tabla_actividades.setModel(new DefaultTableModel(datos, columnas_tabla){
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return tiposCampos[columnIndex];
-            }
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return colsEditables[column];
-            }
-        });
-
-    }
-    
-    private void formatearTabla(){
-        int anchoContenedor = scroll_tabla_acts.getWidth();
-        int[] anchos = new int[]{((anchoContenedor*16)/100), ((anchoContenedor*9)/100), ((anchoContenedor*30)/100), ((anchoContenedor*15)/100), ((anchoContenedor*15)/100), ((anchoContenedor*15)/100)};
-        for(int i = 0; i < tabla_actividades.getColumnCount(); i++){
-            tabla_actividades.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-            tabla_actividades.getColumnModel().getColumn(i).setMinWidth(anchos[i]);
-            tabla_actividades.getColumnModel().getColumn(i).setMaxWidth(anchos[i]);
+        try {
+            Image iconoPrograma;
+            iconoPrograma = ImageIO.read(new File("mis_imagenes/icon_program.png"));
+            this.setIconImage(iconoPrograma);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "No se pudo cargar el Icono de la aplicación." + e.toString());
         }
-        tabla_actividades.setRowHeight(40);
+        this.setLocationRelativeTo(null);
+        this.setExtendedState(MAXIMIZED_BOTH);
     }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -362,8 +304,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    //METODOS DEL PROGRAMADOR =>
-    
     private Font getFuenteFecha(){
         Font letter;
         String source = "../sources/fuentes/DS-DIGI.ttf";
@@ -379,7 +319,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
         return letter;
     }
-
     
     private void menu_item_parametrizacion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_parametrizacion_ActionPerformed
 
@@ -446,235 +385,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_menu_item_repuestos_ActionPerformed
    
-//CLASES INTERNAS DE ESTA CLASE "MenuPrincipal"
-    private class PanelBotonesCelda extends JPanel {
-        // <editor-fold defaultstate="collapsed" desc="JPANEL PARA CELDA DE TABLA">
-        
-        // Variables declaration                    
-        private final CellTableButton btncell_cancel_orden_;
-        private final CellTableButton btncell_edit_orden_;
-        private final CellTableButton btncell_ok_orden_;
-        public int miFila, miCol;
-        // End of variables declaration 
-        
-        /**
-         * Creates new form PanelBotonesCelda
-         */
-        public PanelBotonesCelda() {
-            btncell_cancel_orden_ = new CellTableButton(1);
-            btncell_edit_orden_ = new CellTableButton(2);
-            btncell_ok_orden_ = new CellTableButton(3);
-            inicializacion();
-        }
-
-        /**
-         * este metodo es llamado al inicializar el panel
-         * este configura las cosas basicas
-         */
-        @SuppressWarnings("unchecked")
-        private void inicializacion() {
-            // <editor-fold defaultstate="collapsed" desc="Codigo Generado Automaticamente por el Disenador Netbeans">                          
-            try {
-                setLayout(new java.awt.GridLayout());
-                
-                btncell_cancel_orden_.setIcon(new ImageIcon("mis_imagenes/imgbtn_cancel.png"));
-                btncell_cancel_orden_.setPreferredSize(new java.awt.Dimension(35, 35));
-                add(btncell_cancel_orden_);
-
-                btncell_edit_orden_.setIcon(new ImageIcon("mis_imagenes/imgbtn_edit.png")); 
-                btncell_edit_orden_.setPreferredSize(new java.awt.Dimension(35, 35));
-                add(btncell_edit_orden_);
-
-                btncell_ok_orden_.setIcon(new ImageIcon("mis_imagenes/imgbtn_ok.png"));
-                btncell_ok_orden_.setPreferredSize(new java.awt.Dimension(35, 35));
-                add(btncell_ok_orden_);
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }// </editor-fold>
-        }                       
-
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="CLASES INTERNAS DEL PANEL">
-        private class CellTableButton extends JButton implements /*TableCellEditor,*/ ActionListener {
-            // <editor-fold defaultstate="collapsed" desc="CLASE EXTENDIDA DE JBUTTON CONFIGURADA PARA INSERTAR BOTONES EN CELDAS DE UNA TABLA">
-            //fuentes
-            //http://www.edu4java.com/es/swing/swing4.html
-            //http://stackoverflow.com/questions/1475543/how-to-add-button-in-a-row-of-jtable-in-swing-java
-
-            //private int fil, col;
-            private int miAccion;//1, 2 o 3 segun sea cancelar orden(1), modificarla(2) o entregar(3) 
-            
-            //<editor-fold defaultstate="collapsed" desc="METODOS DE CONSTRUCCION Y CONFIGURACION DE ESTA CLASE DE BOTON">
-            public CellTableButton(int accion) {
-                super();
-                metodoConstructorGeneral(accion);
-            }
-            
-            public CellTableButton(int accion, String text) {
-                super(text);
-                metodoConstructorGeneral(accion);
-            }
-            
-            public CellTableButton(int accion, Icon icon) {
-                super(icon);
-                metodoConstructorGeneral(accion);
-            }
-            
-            private void metodoConstructorGeneral(int accion) {
-                addActionListener(this);
-                this.miAccion = accion;
-            }
-            
-            @Override
-            public void paint(Graphics grf) {
-                super.paint(grf);
-                /*switch(miAccion){
-                    case 1:
-                        
-                }*/
-            }
-    
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(15, 10);
-            }
-//</editor-fold>
-
-            //Action Listener => metodo que se desata al accionar el boton u oprimirlo
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                switch (miAccion) {
-                    case 1:
-                        JOptionPane.showMessageDialog(null, "Haz Cancelado la orden de la fila " + (miFila+1));
-                        break;
-                    case 2:
-                        JOptionPane.showMessageDialog(null, "Realmente Quieres Modificar la fila " + (miFila+1));
-                        break;
-                    case 3:
-                        JOptionPane.showMessageDialog(null, "Entregar la fila " + (miFila+1));
-                        break;
-                }
-                
-            }
-
-            // <editor-fold defaultstate="collapsed" desc="METODOS IMPLEMENTADOS DE LA INTERFAZ TableCellEditor del Boton">
-        /*@Override
-             public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-             MenuPrincipal.fila_tabla = row;
-             MenuPrincipal.col_tabla = column;
-             return this;
-             }
-
-             @Override
-             public Object getCellEditorValue() {
-             return "Configurado";
-             }
-
-             @Override
-             public boolean isCellEditable(EventObject anEvent) {
-             return true;
-             }
-
-             @Override
-             public boolean shouldSelectCell(EventObject anEvent) {
-             return true;
-             }
-
-             @Override
-             public boolean stopCellEditing() {
-             return true;
-             }
-
-             @Override
-             public void cancelCellEditing() {
-             }
-
-             @Override
-             public void addCellEditorListener(CellEditorListener l) {
-             }
-
-             @Override
-             public void removeCellEditorListener(CellEditorListener l) {
-             }
-             */
-            // </editor-fold>
-            // </editor-fold>
-        }
-
-// </editor-fold>
-    }
-    
-    private static class ComponentCellRenderer implements TableCellRenderer {
-        // <editor-fold defaultstate="collapsed" desc="CLASE QUE DIBUJA EL COMPONENTE DENTRO DE LA CELDA DE LA TABLA">
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            /*if(hasFocus == true){
-             table.repaint();
-             }*/
-            return (Component) value;
-        }
-
-        // </editor-fold>
-    }
-    
-    private static class ComponentCellEditor extends AbstractCellEditor implements TableCellEditor/*, ActionListener*/ {
-        // <editor-fold defaultstate="collapsed" desc="CLASE QUE LE DA LA CAPACIDAD AL COMPONENTE DE EDITAR EL VALOR DE LA CELDA">
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            if(column == 5){
-                ((PanelBotonesCelda)value).miFila = row;
-                ((PanelBotonesCelda)value).miCol = column;
-                return (Component) value;
-            }
-            return (Component) value;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return "CellEditorValue";//combo.getSelectedItem().toString();
-        }
-
-        @Override
-        public boolean isCellEditable(EventObject anEvent) {
-            return true;
-        }
-
-        @Override
-        public boolean shouldSelectCell(EventObject anEvent) {
-            return true;
-        }
-
-        @Override
-        public boolean stopCellEditing() {
-            return true;
-        }
-
-        @Override
-        public void cancelCellEditing() {
-            System.out.println("Edicion Cancelada");
-        }
-
-        @Override
-        public void addCellEditorListener(CellEditorListener l) {
-        
-        }
-
-        @Override
-        public void removeCellEditorListener(CellEditorListener l) {
-            System.out.println("removeCellEditorListener");
-        }
-
-// </editor-fold>
-    }
- 
-    
-    
+    // <editor-fold defaultstate="collapsed" desc="VOID MAIN O METODO PRINCIPAL">
     public static void main(String args[]) {
-        // Set the Nimbus look and feel
+     // Set the Nimbus look and feel
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         // If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
         // For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -689,21 +402,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
-        //</editor-fold>
-
         // Create and display the form
         java.awt.EventQueue.invokeLater(() -> {
             MenuPrincipal menu = new MenuPrincipal();
             menu.setVisible(true);
-            /*dialogo1 dialg1 = new dialogo1(menu, true);
-            dialg1.setVisible(true);*/
         });
     }
-
- 
-    
-    
+    // </editor-fold>
+   
+     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barra_menu_1;
     private javax.swing.JButton btn_empleados_;

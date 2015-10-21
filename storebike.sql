@@ -282,6 +282,57 @@ USE `storebike`;
 DELIMITER $$
 
 USE `storebike`$$
+drop function if exists numeroNuevaOrden$$
+SHOW WARNINGS$$
+USE `storebike`$$
+create function numeroNuevaOrden(ensamblador varchar(15), momento varchar(20)) 
+returns int
+begin
+	declare ultima_orden int(11);
+	declare nueva_orden int(11);
+    select max(no_ord) from ordenes_produccion into ultima_orden;
+    if (ultima_orden is null) then
+		set nueva_orden = 1;
+    else
+		set nueva_orden = ultima_orden + 1;
+    end if;
+    insert into ordenes_produccion (no_ord, ensamblador, hora_despacho) values (nueva_orden, ensamblador, momento);
+    return nueva_orden;
+end;
+$$
+
+SHOW WARNINGS$$
+
+USE `storebike`$$
+DROP TRIGGER IF EXISTS `storebike`.`ordenes_produccion_BEFORE_DELETE` $$
+SHOW WARNINGS$$
+USE `storebike`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `storebike`.`ordenes_produccion_BEFORE_DELETE` BEFORE DELETE ON `ordenes_produccion` FOR EACH ROW
+BEGIN
+ declare r_cod_rep varchar(6);
+ declare r_cant_desp int(11);
+ declare fin boolean;
+ 
+ /* http://www.hermosaprogramacion.com/2014/06/mysql-cursores/ */
+ declare reps cursor for 
+ select d.repuesto, d.cant_desp from detalle_despacho d where d.orden = old.no_ord;
+ declare continue handler for not found set fin = true;
+ open reps;
+ loop_ : loop
+  fetch reps into r_cod_rep, r_cant_desp;
+  if fin then
+   leave loop_;
+  end if;
+  update repuestos set cant_disp = cant_disp + r_cant_desp where cod_rep = r_cod_rep;
+ end loop loop_;
+ close reps;
+ 
+END
+$$
+
+SHOW WARNINGS$$
+
+USE `storebike`$$
 DROP TRIGGER IF EXISTS `storebike`.`detalle_despacho_AFTER_INSERT` $$
 SHOW WARNINGS$$
 USE `storebike`$$
@@ -323,6 +374,20 @@ BEGIN
 		set cant_disp = (acumulado - new.cant_desp) 
 		where cod_rep = old.repuesto;
 	end if;
+END
+$$
+
+SHOW WARNINGS$$
+
+USE `storebike`$$
+DROP TRIGGER IF EXISTS `storebike`.`detalle_despacho_AFTER_DELETE` $$
+SHOW WARNINGS$$
+USE `storebike`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `storebike`.`detalle_despacho_AFTER_DELETE` AFTER DELETE ON `detalle_despacho` FOR EACH ROW
+BEGIN
+ update repuestos 
+		set cant_disp = (cant_disp + old.cant_desp) 
+		where cod_rep = old.repuesto;
 END
 $$
 
