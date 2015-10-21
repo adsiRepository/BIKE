@@ -6,6 +6,7 @@ import controller.componentes.ComboBoxItem;
 import controller.componentes.Paneles;
 import controller.componentes.Paneles.VentanaInterna;
 import controller.componentes.TablaAlistamiento;
+import controller.componentes.TablaProduccion;
 import model.componentes.ItemDeLista;
 import static view.MenuPrincipal.escritorio;
 
@@ -19,6 +20,7 @@ import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import model.MainClass;
 
 /**
  *
@@ -89,7 +91,7 @@ public class OrdenProduccion extends VentanaInterna {
         btn_guardar_Orden_Alistada_ = new javax.swing.JButton();
         btn_borrar_Orden_Registrada_ = new javax.swing.JButton();
         scroll_tabla_ordenes_ = new javax.swing.JScrollPane();
-        tabla_mesa_ = new javax.swing.JTable();
+        tabla_mesa_ = new TablaProduccion(TablaProduccion.TABLA_VISUALIZACION);
         btn_Despachar_Orden = new javax.swing.JButton();
         btn_Cancelar_Despacho = new javax.swing.JButton();
         txt_n_orden_ = new javax.swing.JTextField();
@@ -247,14 +249,6 @@ public class OrdenProduccion extends VentanaInterna {
             }
         });
 
-        tabla_mesa_.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {}
-            },
-            new String [] {
-
-            }
-        ));
         tabla_mesa_.getTableHeader().setReorderingAllowed(false);
         tabla_mesa_.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -439,11 +433,16 @@ public class OrdenProduccion extends VentanaInterna {
 
     private void btn_add_accesorio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_add_accesorio1ActionPerformed
 
-        JOptionPane.showMessageDialog(null, "ancho scroll: " + scroll_items_selec.getWidth() + "\n"
+        /*JOptionPane.showMessageDialog(null, "ancho scroll: " + scroll_items_selec.getWidth() + "\n"
                 + "30% = " + ((int) ((scroll_items_selec.getWidth() * 30) / 100)) + "\n"
                 + "50% = " + ((int) ((scroll_items_selec.getWidth() * 50) / 100)) + "\n"
                 + "20% = " + ((int) ((scroll_items_selec.getWidth() * 20) / 100))
-        );
+        );*/
+        
+        //MainClass.getMenuPrincipal().setCol_tabla(5);
+        //MainClass.menu.getCol_tabla();
+        MainClass.setUsuario("jorge");
+        JOptionPane.showMessageDialog(OrdenProduccion.this, MainClass.getUsuario());
 
     }//GEN-LAST:event_btn_add_accesorio1ActionPerformed
 
@@ -468,13 +467,10 @@ public class OrdenProduccion extends VentanaInterna {
             produccion[2] = Integer.parseInt(txt_cant_ensamble_.getText());
             Object[][] listado = ((TablaAlistamiento) tabla_alistamiento_).obtenerListadoDespacho();
             
-            boolean hecho = ConsultaSQL.ConsultorBD.registrarNuevaOrden(ensamblador, produccion, listado);
+            boolean hecho = ConsultaSQL.registrarNuevaOrden(ensamblador, produccion, listado);
             if (hecho) {
-                combo_ensambladores_.setEnabled(true);
-                panel_primer_filtro_emsamble_.setEnabled(true);
-                ((TablaAlistamiento) tabla_alistamiento_).vaciarTabla();
                 btn_guardar_Orden_Alistada_.setEnabled(false);
-                //JOptionPane.showMessageDialog(OrdenProduccion.this, );
+                ((TablaAlistamiento) tabla_alistamiento_).vaciarTabla();
                 JOptionPane.showOptionDialog(OrdenProduccion.this,
                         "Orden Guardada Correctamente.",
                         "Orden de Producción", // título del JOptionPane
@@ -483,6 +479,12 @@ public class OrdenProduccion extends VentanaInterna {
                         new ImageIcon("mis_imagenes/icon_jop_correcto.png"), // icono, si es nulo aparecerá el por defecto
                         new Object[]{"Aceptar"}, //opciones => estos serán los botones
                         new Object[]{});
+                combo_ensambladores_.setEnabled(true);
+                panel_primer_filtro_emsamble_.setEnabled(true);
+                
+                if((MenuPrincipal.getTabla_actividades()) instanceof TablaProduccion){
+                   ((TablaProduccion)MenuPrincipal.getTabla_actividades()).actualizarTabla();
+                }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Guardar Orden", 0);
@@ -545,7 +547,7 @@ public class OrdenProduccion extends VentanaInterna {
                     int cantidad = Integer.parseInt(txt_cant_ensamble_.getText());
 
                     LinkedHashMap<String, Object[]>/*ArrayList<ItemDeLista>*/ informacion_bd
-                            = ConsultaSQL.ConsultorBD.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla);
+                            = ConsultaSQL.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla);
 
                     //if (informacion_bd != null) {
                         panel_primer_filtro_emsamble_.setEnabled(false);

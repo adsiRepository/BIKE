@@ -1,4 +1,7 @@
+
 package controller.componentes;
+
+// <editor-fold defaultstate="collapsed" desc="imports">
 
 import model.componentes.ItemDeLista;
 import controller.ConsultaSQL;
@@ -15,6 +18,9 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
+// </editor-fold>
+
+/***/
 public class ComboBoxItem extends JComboBox<ItemDeLista> {
 
     //private transient ArrayList<ItemDeLista> mis_items;
@@ -37,11 +43,11 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
         ArrayList<ItemDeLista> items = new ArrayList<>();
         if (nom_combo.equals(OrdenProduccion.COD_CMBOX_ENSAMBLADORES)) {
             //constructor(ConsultaSQL.ConsultorBD.obtenerListaEnsambladores());
-            items = ConsultaSQL.ConsultorBD.obtenerListaEnsambladores();
+            items = ConsultaSQL.obtenerListaEnsambladores();
         }
         if (nom_combo.equals(OrdenProduccion.COD_CMBOX_ARTICULOS)) {
             //constructor(ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos());
-            items = ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos();
+            items = ConsultaSQL.obtenerCatalogoArticulos();
         }
         if (items.size() > 0) {
             Iterator it = items.iterator();

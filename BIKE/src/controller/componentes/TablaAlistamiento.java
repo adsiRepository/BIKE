@@ -36,6 +36,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import model.componentes.ItemDeLista;
 // </editor-fold>
+
 /**
  *
  * @author Miguel González
@@ -45,7 +46,7 @@ public class TablaAlistamiento extends JTable {
     private ModeloTablaAlistamiento modelo_tabla;
     private Object[][] data;
     //private int fil, col;
-    private int cant_item;
+    private int cant_item = 0;
 
     /**
      * Constructor
@@ -88,11 +89,13 @@ public class TablaAlistamiento extends JTable {
             SpinnerNumberModel model_spinner;
             int fila = 0;
             for (HashMap.Entry reg : new_data.entrySet()) {
-                boolean comp_par = (boolean) (((Object[]) reg.getValue())[1]);//casteado a arreglo de objetos y obtenido el indice 1
-                if (comp_par == true) {
-                    model_spinner = new SpinnerNumberModel(0, 0, (cantidadSeleccionada * 2), 1);
-                } else {
-                    model_spinner = new SpinnerNumberModel(0, 0, cantidadSeleccionada, 1);
+                int comp_par = (int) (((Object[]) reg.getValue())[1]);//casteado a arreglo de objetos y obtenido el indice 1
+                switch(comp_par){
+                    case 1:
+                        model_spinner = new SpinnerNumberModel(0, 0, (cantidadSeleccionada * 2), 1);
+                        break;
+                    default:
+                        model_spinner = new SpinnerNumberModel(0, 0, cantidadSeleccionada, 1);   
                 }
                 data[fila] = new Object[]{reg.getKey().toString(), new My_ComboBox(((Object[]) reg.getValue())[0]),
                     cant_item, new SpinnerCeldaTabla(model_spinner), new PanelBotonesCelda(true)};
@@ -198,6 +201,10 @@ public class TablaAlistamiento extends JTable {
         @Override
         public Object getValueAt(int row, int col) {
             if (data != null) {
+                if (row == 0) {
+                    int h = (int)((ItemDeLista)(((My_ComboBox) data[row][1]).getMy_items()[0])).getAtributos().get("stock");
+                    data[0][2] = h;
+                }
                 if (col == 1) {
                     ((My_ComboBox) data[row][1]).mi_fila = row;
                 }
@@ -491,20 +498,21 @@ public class TablaAlistamiento extends JTable {
 
         public int mi_fila;
         private ItemDeLista[] my_items;
+
         private ItemDeLista item_actual;
 
         public boolean i_have_items;
-
+        
+        /**CONSTRUCTOR DE COMBOBOX SIN ARTICULOS.
+         */
         public My_ComboBox(ItemDeLista item) {
             my_items = new ItemDeLista[]{item};
             configBasica();
             noDesplegar();
         }
 
-        /**
-         * Constructor
-         *
-         * @param objItems Cuando sus my_items vienen en un ArrayList
+        /**Constructor
+         * @param objItems Cuando sus items vienen en un ArrayList
          */
         public My_ComboBox(Object objItems) throws Exception {
             super();
@@ -549,12 +557,20 @@ public class TablaAlistamiento extends JTable {
             });
         }
         
+        public ItemDeLista[] getMy_items() {
+            return my_items;
+        }
+        
         private class ModeloComboBox extends AbstractListModel<ItemDeLista> implements ComboBoxModel<ItemDeLista> {
-                // <editor-fold defaultstate="collapsed" desc="MODELO COMBOBOX">
+            // <editor-fold defaultstate="collapsed" desc="MODELO COMBOBOX">
 
-            //private int pos_actual;
+            //private boolean primero;
+            
+            /***/
             public ModeloComboBox(/*ItemDeLista[] items*/) {
                 //my_items = items;
+                //primero = false;
+                //cant_item = (int) my_items[0].getAtributos().get("stock");
             }
 
             @Override

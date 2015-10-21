@@ -1,24 +1,29 @@
-//sena 2015 -- miguel gonzalez & ...
+
+//sena 2015 -- Autores: miguel gonzalez, braden velasquez & neverlin santana
 
 package model;
 
+// <editor-fold defaultstate="collapsed" desc="imports">
+
 import controller.ConexionBD;
 import view.MenuPrincipal;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
+
+// </editor-fold>
 
 public class MainClass {
     
     //VARIABLES GLOBALES JAVA => http://www.davidmarco.es/articulo/ambito-de-variables-en-java
     
-    private static MenuPrincipal menu;
+    public static final MenuPrincipal menu = new MenuPrincipal();
 
-    public static MenuPrincipal getMenuPrincipal() {
+    private static String usuario;
+    private static String password;
+    
+    private static boolean contar_repuestos;
+
+    /*public static MenuPrincipal getMenuPrincipal() {
         return menu;
-    }
+    }*/
     
     //metodo principal o inicial de la aplicacion
     public static void main(String[] args) {
@@ -29,7 +34,11 @@ public class MainClass {
         ConexionBD.setHost("localhost");
         ConexionBD.setPort("3306");
         
-        menu = new MenuPrincipal();
+        usuario = "miguel";
+        password = "jjjj";
+        
+        menu.setVisible(true);
+        
         //AQUI VA LA IMAGEN PARA EL ICONO DE LA APLICACION        //directorio     //nombre, al cambiar hay que tener en cuenta la extension del archivo
         /*Image iconoPrograma;
         try {
@@ -38,7 +47,24 @@ public class MainClass {
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo cargar el Icono de la aplicación."+ex.toString());
         }*/
-        menu.setVisible(true);
     }
- 
+    
+    public static String getUsuario() {
+        return usuario;
+    }
+    public static void setUsuario(String usuario) {
+        MainClass.usuario = usuario;
+    }
+    public static String getPassword() {
+        return password;
+    }
+    public static void setPassword(String password) {
+        MainClass.password = password;
+    }
+    public static boolean isContar_repuestos() {
+        return contar_repuestos;
+    }
+    public static void setContar_repuestos(boolean contar_repuestos) {
+        MainClass.contar_repuestos = contar_repuestos;
+    }
 }

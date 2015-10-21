@@ -216,6 +216,47 @@ insert into talla_articulo values
 
 /** EN ADELANTE ES SIMPLEMENTE CODIGO VAGO CON EL FIN DE PARA PROBAR Y CONSTRUIR LAS SENTENCIAS USADAS EN LA APLICAION*/
 
+use storebike;
+
+/**CODIGO OBTENER PRODUCCION*/
+select op.no_ord, e.nom_emp, e.ape_emp, op.hora_despacho, op.hora_entrega, a.descripcion, p.talla, p.cantidad 
+from ordenes_produccion op inner join produccion p inner join articulos a inner join ensambladores e  
+where op.ensamblador = e.id_emp and p.articulo = a.id_articulo and p.no_ord_prod = op.no_ord;/* and op.no_ord = 1;*/
+/***/
+
+/**OBTENER COMPONENTES DE ARTICULO*/
+select c.id_comp, c.componente from componentes c inner join componente_articulo ca 
+where ca.componente = c.id_comp and ca.articulo = 'MTB' order by c.familia;
+/***/
+
+/**EJERCICIO CON LAS ORDENES DE PRODUCCION Y SUS DETALLES*/
+select * from repuestos;
+
+desc ordenes_produccion;
+insert into ordenes_produccion (no_ord, ensamblador, hora_despacho, hora_entrega) values 
+(1, '1190375460', '2015-04-07 13:52:44', '2015-04-10 10:10:22')
+;
+alter table ordenes_produccion change no_ord no_ord int(11) not null auto_increment; 
+delete from ordenes_produccion where no_ord = 1;
+select * from ordenes_produccion;
+
+desc detalle_despacho;
+insert into detalle_despacho values
+(1, '403436', 5),
+(1, '690733', 10)
+;
+delete from detalle_despacho;
+update detalle_despacho set cant_desp = 6 where repuesto = '690733';
+update detalle_despacho set repuesto = '690733' where repuesto = '311104' and orden = 1;
+select * from detalle_despacho;
+
+desc produccion;
+insert into produccion values
+(3,'RDP','26',5);
+delete from produccion;
+select * from produccion;
+/***/
+
 
 select * from ensambladores;
 
@@ -233,8 +274,6 @@ delete from componentes;
 delete from componentes;
 select * from componentes c order by c.familia;
 
-select c.id_comp, c.componente from componentes c inner join componente_articulo ca 
-where ca.componente = c.id_comp and ca.articulo = 'MTB' order by c.familia;
 
 
 desc articulos;
@@ -261,38 +300,8 @@ alter table repuestos change marca marca char(2) not null;
 alter table repuestos change repuesto repuesto varchar(80);
 update repuestos set cant_disp = 64 where cod_rep = '690733'; 
 delete from repuestos;
-select * from repuestos;
+
 select cod_rep, repuesto from repuestos where componente = '010';
-
-desc ordenes_produccion;
-insert into ordenes_produccion (no_ord, ensamblador, hora_despacho, hora_entrega) values 
-(1, '1190375460', '2015-04-07 13:52:44', '2015-04-10 10:10:22')
-;
-alter table ordenes_produccion change no_ord no_ord int(11) not null auto_increment; 
-delete from ordenes_produccion where no_ord = 1;
-select * from ordenes_produccion;
-
-desc detalle_despacho;
-insert into detalle_despacho values
-(1, '403436', 5),
-(1, '690733', 10)
-;
-delete from detalle_despacho;
-update detalle_despacho set cant_desp = 6 where repuesto = '690733';
-update detalle_despacho set repuesto = '690733' where repuesto = '311104' and orden = 1;
-select * from detalle_despacho;
-
-/**CODIGO OBTENER PRODUCCION*/
-select op.ensamblador, op.hora_despacho, op.hora_entrega, a.descripcion, p.talla, p.cantidad 
-from ordenes_produccion op inner join produccion p inner join articulos a 
-where p.articulo = a.id_articulo and p.no_ord_prod = op.no_ord and op.no_ord = 4;
-/***/
-
-desc produccion;
-insert into produccion values
-(3,'RDP','26',5);
-delete from produccion;
-select * from produccion;
 
 select numeroNuevaOrden('1190375460', '2015-04-07 13:52:44') as registro_actual;
 delete from ordenes_produccion where no_ord = 4;

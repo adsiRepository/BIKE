@@ -76,18 +76,12 @@ public class Paneles {
              }*/
             public PanelFondoVentanaInterna(String nombreImagen) {
                 try {
-                    //if (nombreImagen != null) {
                     this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
-                    //} //else {
-                      //  this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
-                    //}
-                } catch (Exception ex) {
+                } catch (IOException ex) {
                     try {
                         this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
                     } catch (IOException ex1) {
-                        //Logger.getLogger(Paneles.class.getName()).log(Level.SEVERE, null, ex1);
                     }
-                    //JOptionPane.showMessageDialog(null, ex.toString());
                 }
             }
 

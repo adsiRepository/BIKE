@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  *
  * @author Miguel
  */
-public class PanelReloj extends JPanel{
+public class PanelReloj extends JPanel {
     
     private int hours = 0;
     private int minutes = 0;
@@ -40,7 +40,7 @@ public class PanelReloj extends JPanel{
     private final transient BasicStroke anchoAgujaMin = new BasicStroke(3);
     private final transient BasicStroke anchoAgujaHor = new BasicStroke(5);
     
-    
+    /***/
     public PanelReloj() {
         //fuentes temporizadores =>
         //http://foro.chuidiang.com/java-j2se/timer-o-thread/
@@ -57,17 +57,10 @@ public class PanelReloj extends JPanel{
     private void actualizar() {
         this.repaint();
     }
-
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
-        Graphics2D g2 = (Graphics2D)g;
-
-        //indicaciones de graficacion => 
-        //http://swing-facil.blogspot.com.co/2011/12/renderinghints-renderizados-y.html
-        //https://docs.oracle.com/javase/tutorial/2d/overview/rendering.html
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         int w = getWidth();
         int h = getHeight();
@@ -83,15 +76,24 @@ public class PanelReloj extends JPanel{
             //metodo que dibuja el reloj
             cara_delReloj(gc);
         }
+        
+        Graphics2D g2;
+    
+        if (g instanceof Graphics2D) {
+            g2 = (Graphics2D) g;
+            //indicaciones de graficacion => 
+            //http://swing-facil.blogspot.com.co/2011/12/renderinghints-renderizados-y.html
+            //https://docs.oracle.com/javase/tutorial/2d/overview/rendering.html
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        hours = Tiempo.getNow().get(Calendar.HOUR);
-        minutes = Tiempo.getNow().get(Calendar.MINUTE);
-        seconds = Tiempo.getNow().get(Calendar.SECOND);
-        millis = Tiempo.getNow().get(Calendar.MILLISECOND);
+            hours = Tiempo.getNow().get(Calendar.HOUR);
+            minutes = Tiempo.getNow().get(Calendar.MINUTE);
+            seconds = Tiempo.getNow().get(Calendar.SECOND);
+            millis = Tiempo.getNow().get(Calendar.MILLISECOND);
 
-        //g2.drawImage(clockImage, null, 0, 0);
-
-        dibujarManecillas(g2);
+            //g2.drawImage(clockImage, null, 0, 0);
+            dibujarManecillas(g2);
+        }
 
     }
     
@@ -144,7 +146,6 @@ public class PanelReloj extends JPanel{
             }
             dibujarLinea(g2, centerX, centerY, radPerSecMin * sec, ticStart, size / 2);
         }
-        
     }
 
     /***/
