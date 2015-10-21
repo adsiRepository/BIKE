@@ -10,6 +10,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -28,7 +30,6 @@ public class Paneles {
             super();  
             try {
                 //justo en la siguiente linea, mediante codigo se aplica el fondo del escritorio señalando la ruta, el nombre y la extension del archivo.
-                //fondo_escritorio = new ImageIcon(getClass().getResource("../sources/imgs/fondo_principal.png")).getImage();//hay que tener en cuenta la extension del archivo
                 fondo_escritorio = ImageIO.read(new File("mis_imagenes/fondo_principal.png"));
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, ex.toString());
@@ -46,63 +47,72 @@ public class Paneles {
    
     
     public static class VentanaInterna extends JInternalFrame {
-        
+
         private transient PanelFondoVentanaInterna panelImagenFondo;
-        
-        public VentanaInterna(){
+
+        /**
+         * COSNTRUCTOR REGULAR.  Hereda Exactamente un JInternalFrame
+         */
+        public VentanaInterna() {
             super();
         }
-        
-        public void plasmarMiFondo(String nombreImagen_sinExtension){
-            this.panelImagenFondo = new PanelFondoVentanaInterna(nombreImagen_sinExtension);
-            setContentPane(panelImagenFondo);
+
+        /**
+         * @param nombre_mi_fondo
+         */
+        public VentanaInterna(String nombre_mi_fondo) {
+            super();
+            this.panelImagenFondo = new PanelFondoVentanaInterna(nombre_mi_fondo);
+            this.setContentPane(panelImagenFondo);
         }
 
-    }
-    
-    
-    public static class PanelFondoVentanaInterna extends JPanel {
+        /***/
+        private static class PanelFondoVentanaInterna extends JPanel {
 
-        private transient Image fondo;
-        
-        /*public PanelFondoVentanaInterna(){
-            this.fondo = new ImageIcon(getClass().getResource("../sources/imgs/fondo_ord_prod.png")).getImage();
-        }*/
-        
-        public PanelFondoVentanaInterna(String nombreImagen) {
-            try {
-                if (nombreImagen != null) {
+            private transient Image fondo;
+
+            /*public PanelFondoVentanaInterna(){
+             this.fondo = new ImageIcon(getClass().getResource("../sources/imgs/fondo_ord_prod.png")).getImage();
+             }*/
+            public PanelFondoVentanaInterna(String nombreImagen) {
+                try {
+                    //if (nombreImagen != null) {
                     this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
-                } else {
-                    this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
+                    //} //else {
+                      //  this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
+                    //}
+                } catch (Exception ex) {
+                    try {
+                        this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
+                    } catch (IOException ex1) {
+                        //Logger.getLogger(Paneles.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                    //JOptionPane.showMessageDialog(null, ex.toString());
                 }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, ex.toString());
+            }
+
+            @Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+                g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
+                //super.paint(g);
+            }
+
+            public void setImage(String nombreImagen) {
+                try {
+                    if (nombreImagen != null) {
+                        this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
+                    } else {
+                        this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "No se ha podido cambiar la Imagen de Fondo Error: " + ex.toString());
+                }
+                repaint();
             }
         }
-        
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-            g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
-            //super.paint(g);
-        }
-        
-        public void setImage(String nombreImagen) {
-            try {
-                if (nombreImagen != null) {
-                    this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
-                } else {
-                    this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
-                }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "No se ha podido cambiar la Imagen de Fondo Error: " + ex.toString());
-            }
-            repaint();
-        }
-        
     }
-    
+ 
     /*public static class VentanaEmergente extends JOptionPane implements Runnable{
         @Override
         public void run() {

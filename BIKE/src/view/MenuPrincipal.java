@@ -1,7 +1,6 @@
 
 package view;
 
-import controller.componentes.Paneles;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Image;
@@ -20,8 +19,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private int fila_tabla, col_tabla;
     
     //VENTANAS INTERNAS
+    public ControlArticulos controlArticulos;
+    public ControlComponentes controlComponentes;
+    public GestionProduccion gestionProduccion;
+    public GestionRepuestos gestionRepuestos;
     public OrdenProduccion ordenProduccion;
-    public ComponenteArticulo controlRepuestos;
+    public RegistroEmpleados registroEmpleados;
     //----
     
     /** Creates new form MenuPrincipal */
@@ -64,13 +67,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menu_item_cerrar_ = new javax.swing.JMenuItem();
         menu_tareas_ = new javax.swing.JMenu();
         menu_item_nueva_orden_ = new javax.swing.JMenuItem();
-        menu_item_despachos_ = new javax.swing.JMenuItem();
+        menuItem_revisionProduccion_ = new javax.swing.JMenuItem();
         menu_almacen_ = new javax.swing.JMenu();
         menu_item_componentes_ = new javax.swing.JMenuItem();
-        menu_item_articulos_ = new javax.swing.JMenuItem();
-        menu_item_repuestos_ = new javax.swing.JMenuItem();
+        menu_item_gestion_produccion_ = new javax.swing.JMenuItem();
+        menuItem_controlRepuestos_ = new javax.swing.JMenuItem();
         menu_ensambladores_ = new javax.swing.JMenu();
-        menu_item_reg_ensam_ = new javax.swing.JMenuItem();
+        menuItem_registroEnsamblador_ = new javax.swing.JMenuItem();
         menu_item_supervis_ensam_ = new javax.swing.JMenuItem();
         menu_herramientas_ = new javax.swing.JMenu();
         menu_item_servidores_ = new javax.swing.JMenuItem();
@@ -219,11 +222,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menu_archivo_.add(menu_item_parametrizacion_);
 
         menu_item_cerrar_.setText("Cerrar");
+        menu_item_cerrar_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_item_cerrar_ActionPerformed(evt);
+            }
+        });
         menu_archivo_.add(menu_item_cerrar_);
 
         barra_menu_1.add(menu_archivo_);
 
-        menu_tareas_.setText("Tareas");
+        menu_tareas_.setText("Produccion");
 
         menu_item_nueva_orden_.setText("Nueva Orden");
         menu_item_nueva_orden_.addActionListener(new java.awt.event.ActionListener() {
@@ -233,13 +241,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menu_tareas_.add(menu_item_nueva_orden_);
 
-        menu_item_despachos_.setText("Revisar Despachos");
-        menu_item_despachos_.addActionListener(new java.awt.event.ActionListener() {
+        menuItem_revisionProduccion_.setText("Revision");
+        menuItem_revisionProduccion_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menu_item_despachos_ActionPerformed(evt);
+                menuItem_revisionProduccion_ActionPerformed(evt);
             }
         });
-        menu_tareas_.add(menu_item_despachos_);
+        menu_tareas_.add(menuItem_revisionProduccion_);
 
         barra_menu_1.add(menu_tareas_);
 
@@ -253,23 +261,33 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menu_almacen_.add(menu_item_componentes_);
 
-        menu_item_articulos_.setText("Articulos");
-        menu_almacen_.add(menu_item_articulos_);
-
-        menu_item_repuestos_.setText("Repuestos");
-        menu_item_repuestos_.addActionListener(new java.awt.event.ActionListener() {
+        menu_item_gestion_produccion_.setText("Articulos o Productos");
+        menu_item_gestion_produccion_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menu_item_repuestos_ActionPerformed(evt);
+                menu_item_gestion_produccion_ActionPerformed(evt);
             }
         });
-        menu_almacen_.add(menu_item_repuestos_);
+        menu_almacen_.add(menu_item_gestion_produccion_);
+
+        menuItem_controlRepuestos_.setText("Repuestos");
+        menuItem_controlRepuestos_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItem_controlRepuestos_ActionPerformed(evt);
+            }
+        });
+        menu_almacen_.add(menuItem_controlRepuestos_);
 
         barra_menu_1.add(menu_almacen_);
 
         menu_ensambladores_.setText("Ensambladores");
 
-        menu_item_reg_ensam_.setText("Registro");
-        menu_ensambladores_.add(menu_item_reg_ensam_);
+        menuItem_registroEnsamblador_.setText("Registro");
+        menuItem_registroEnsamblador_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItem_registroEnsamblador_ActionPerformed(evt);
+            }
+        });
+        menu_ensambladores_.add(menuItem_registroEnsamblador_);
 
         menu_item_supervis_ensam_.setText("Supervision");
         menu_ensambladores_.add(menu_item_supervis_ensam_);
@@ -329,13 +347,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_menu_item_servidores_ActionPerformed
 
-    private void menu_item_despachos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_despachos_ActionPerformed
-
-    }//GEN-LAST:event_menu_item_despachos_ActionPerformed
+    private void menuItem_revisionProduccion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem_revisionProduccion_ActionPerformed
+        try {
+            if (gestionProduccion != null && gestionProduccion.isVisible()) {
+                if (gestionProduccion.isIcon()) {
+                   // ordenProduccion.setIcon(false);
+                }
+            } else {
+                gestionProduccion = new GestionProduccion();
+                escritorio.add(gestionProduccion);
+                gestionProduccion.setVisible(true);
+            }
+            gestionProduccion.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.toString());
+        }
+    }//GEN-LAST:event_menuItem_revisionProduccion_ActionPerformed
 
     private void menu_item_nueva_orden_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_nueva_orden_ActionPerformed
-
-        //try {
+        try {
             if (ordenProduccion != null && ordenProduccion.isVisible()) {
                 if (ordenProduccion.isIcon()) {
                    // ordenProduccion.setIcon(false);
@@ -346,11 +376,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 ordenProduccion.setVisible(true);
             }
             ordenProduccion.toFront();
-        /*} catch (Exception ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.toString());
             //System.out.print("Excepcion localizada en: MenuPrincipal.menu_item_nueva_orden_ActionPerformed => \n"+ex.toString());
-        }*/
-        
+        }
     }//GEN-LAST:event_menu_item_nueva_orden_ActionPerformed
 
     private void tabla_actividadesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_actividadesMouseClicked
@@ -361,29 +390,76 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_tabla_actividadesMouseClicked
 
     private void menu_item_componentes_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_componentes_ActionPerformed
-
         try {
-            if (controlRepuestos != null && controlRepuestos.isVisible()) {
-                if (controlRepuestos.isIcon()) {
-                    controlRepuestos.setIcon(false);
+            if (controlComponentes != null && controlComponentes.isVisible()) {
+                if (controlComponentes.isIcon()) {
+                    controlComponentes.setIcon(false);
                 }
             } else {
-                controlRepuestos = new ComponenteArticulo();
-                escritorio.add(controlRepuestos);
-                controlRepuestos.setVisible(true);
+                controlComponentes = new ControlComponentes();
+                escritorio.add(controlComponentes);
+                controlComponentes.setVisible(true);
             }
-            controlRepuestos.toFront();
+            controlComponentes.toFront();
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            JOptionPane.showMessageDialog(MenuPrincipal.this, "No Fue posible Abrir la Ventana.\nError: "+ex.toString());
         }
-
     }//GEN-LAST:event_menu_item_componentes_ActionPerformed
 
-    private void menu_item_repuestos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_repuestos_ActionPerformed
-        
-        
-        
-    }//GEN-LAST:event_menu_item_repuestos_ActionPerformed
+    private void menuItem_controlRepuestos_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem_controlRepuestos_ActionPerformed
+        try {
+            if (gestionRepuestos != null && gestionRepuestos.isVisible()) {
+                if (gestionRepuestos.isIcon()) {
+                    gestionRepuestos.setIcon(false);
+                }
+            } else {
+                gestionRepuestos = new GestionRepuestos();
+                escritorio.add(gestionRepuestos);
+                gestionRepuestos.setVisible(true);
+            }
+            gestionRepuestos.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(MenuPrincipal.this, "No Fue posible Abrir la Ventana.\nError: "+ex.toString());
+        }
+    }//GEN-LAST:event_menuItem_controlRepuestos_ActionPerformed
+
+    private void menuItem_registroEnsamblador_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem_registroEnsamblador_ActionPerformed
+        try {
+            if (registroEmpleados != null && registroEmpleados.isVisible()) {
+                if (registroEmpleados.isIcon()) {
+                    registroEmpleados.setIcon(false);
+                }
+            } else {
+                registroEmpleados = new RegistroEmpleados();
+                escritorio.add(registroEmpleados);
+                registroEmpleados.setVisible(true);
+            }
+            registroEmpleados.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(MenuPrincipal.this, "No Fue posible Abrir la Ventana.\nError: "+ex.toString());
+        }
+    }//GEN-LAST:event_menuItem_registroEnsamblador_ActionPerformed
+
+    private void menu_item_gestion_produccion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_gestion_produccion_ActionPerformed
+        try {
+            if (controlArticulos != null && controlArticulos.isVisible()) {
+                if (controlArticulos.isIcon()) {
+                    controlArticulos.setIcon(false);
+                }
+            } else {
+                controlArticulos = new ControlArticulos();
+                escritorio.add(controlArticulos);
+                controlArticulos.setVisible(true);
+            }
+            controlArticulos.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(MenuPrincipal.this, "No Fue posible Abrir la Ventana.\nError: "+ex.toString());
+        }    
+    }//GEN-LAST:event_menu_item_gestion_produccion_ActionPerformed
+
+    private void menu_item_cerrar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_cerrar_ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_menu_item_cerrar_ActionPerformed
    
     // <editor-fold defaultstate="collapsed" desc="VOID MAIN O METODO PRINCIPAL">
     public static void main(String args[]) {
@@ -417,19 +493,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_inventario_;
     private javax.swing.JButton btn_produccion_;
     private javax.swing.JButton btn_revision_;
-    public static final javax.swing.JDesktopPane escritorio = new Paneles.Escritorio();
+    public static final javax.swing.JDesktopPane escritorio = new controller.componentes.Paneles.Escritorio();
+    private javax.swing.JMenuItem menuItem_controlRepuestos_;
+    private javax.swing.JMenuItem menuItem_registroEnsamblador_;
+    private javax.swing.JMenuItem menuItem_revisionProduccion_;
     private javax.swing.JMenu menu_almacen_;
     private javax.swing.JMenu menu_archivo_;
     private javax.swing.JMenu menu_ensambladores_;
     private javax.swing.JMenu menu_herramientas_;
-    private javax.swing.JMenuItem menu_item_articulos_;
     private javax.swing.JMenuItem menu_item_cerrar_;
     private javax.swing.JMenuItem menu_item_componentes_;
-    private javax.swing.JMenuItem menu_item_despachos_;
+    private javax.swing.JMenuItem menu_item_gestion_produccion_;
     private javax.swing.JMenuItem menu_item_nueva_orden_;
     private javax.swing.JMenuItem menu_item_parametrizacion_;
-    private javax.swing.JMenuItem menu_item_reg_ensam_;
-    private javax.swing.JMenuItem menu_item_repuestos_;
     private javax.swing.JMenuItem menu_item_servidores_;
     private javax.swing.JMenuItem menu_item_supervis_ensam_;
     private javax.swing.JMenu menu_tareas_;

@@ -21,12 +21,15 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cerrar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_item_cerrar_ActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="menu_tareas_">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Tareas"/>
+            <Property name="text" type="java.lang.String" value="Produccion"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menu_item_nueva_orden_">
@@ -37,12 +40,12 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_item_nueva_orden_ActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menu_item_despachos_">
+            <MenuItem class="javax.swing.JMenuItem" name="menuItem_revisionProduccion_">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Revisar Despachos"/>
+                <Property name="text" type="java.lang.String" value="Revision"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_item_despachos_ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItem_revisionProduccion_ActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -60,17 +63,20 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_item_componentes_ActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menu_item_articulos_">
+            <MenuItem class="javax.swing.JMenuItem" name="menu_item_gestion_produccion_">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Articulos"/>
+                <Property name="text" type="java.lang.String" value="Articulos o Productos"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_item_gestion_produccion_ActionPerformed"/>
+              </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menu_item_repuestos_">
+            <MenuItem class="javax.swing.JMenuItem" name="menuItem_controlRepuestos_">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Repuestos"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_item_repuestos_ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItem_controlRepuestos_ActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -80,10 +86,13 @@
             <Property name="text" type="java.lang.String" value="Ensambladores"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="menu_item_reg_ensam_">
+            <MenuItem class="javax.swing.JMenuItem" name="menuItem_registroEnsamblador_">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Registro"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItem_registroEnsamblador_ActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menu_item_supervis_ensam_">
               <Properties>

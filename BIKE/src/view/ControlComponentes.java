@@ -3,18 +3,25 @@
 
 package view;
 
-/**
- *
- * @author ADSI38
+import controller.componentes.Paneles.VentanaInterna;
+
+/**FORMULARIO OFRECIDO AL USUARIO PARA LA ADMINISTRACION DE COMPONENTES.
+ * Consigna tu nombre si haces parte de la Autoría de este Documento.
+ * @author Miguel
  */
-public class ComponenteArticulo extends /*VentanaInterna*/javax.swing.JInternalFrame {
+public class ControlComponentes extends VentanaInterna {
     
+    /**NOMBRE ARCHIVO IMAGEN DE FONDO PARA ESTA VENTANA. Solo nombre sin extension (obligatorio archivos png)*/
     private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_componentes";
+    /***/
     
     /**
      * Creates new form Clientes
      */
-    public ComponenteArticulo() {
+    public ControlComponentes() {
+        //AQUI AL LLAMAR A SUPER LLAMO AL CONSTRUCTOR DE VENTANA INTERNA QUE RECIBE UN STRING CON EL NOMBRE
+        //DE LA IMAGEN DE FONDO UBICADA EN LA CARPETA "mis_imagenes" EN EL DIRECTORIO PRINCIPAL DEL PROYECTO (fuera de todas las carpetas) 
+        super(NOMBRE_MI_IMAGEN_FONDO);
         initComponents();
         this.setIconifiable(true);
     }
@@ -106,9 +113,9 @@ public class ComponenteArticulo extends /*VentanaInterna*/javax.swing.JInternalF
     }// </editor-fold>//GEN-END:initComponents
 
    
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         
-    }
+    }*/
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
