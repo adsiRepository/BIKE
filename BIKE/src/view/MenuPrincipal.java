@@ -3,7 +3,6 @@ package view;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
 
-import controller.ConsultaSQL;
 import controller.componentes.TablaProduccion;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -11,7 +10,6 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -61,7 +59,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         if (tabla_actividades instanceof TablaProduccion) {
             int anchoContenedor = scroll_tabla_acts.getWidth();
             int[] anchos = new int[]{
-                ((anchoContenedor * 9) / 100), ((anchoContenedor * 15) / 100),
+                ((anchoContenedor * 8) / 100), ((anchoContenedor * 15) / 100),
                 ((anchoContenedor * 13) / 100), ((anchoContenedor * 13) / 100),
                 ((anchoContenedor * 18) / 100), ((anchoContenedor * 7) / 100),
                 ((anchoContenedor * 7) / 100), ((anchoContenedor * 18) / 100)
@@ -113,10 +111,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorio.setAutoscrolls(true);
         escritorio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        scroll_tabla_acts.setViewportBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(220, 218, 218), new java.awt.Color(0, 153, 204), null, null));
         scroll_tabla_acts.setAutoscrolls(true);
-        scroll_tabla_acts.setMaximumSize(new java.awt.Dimension(452, 402));
+        scroll_tabla_acts.setMaximumSize(new java.awt.Dimension(1000, 1000));
         scroll_tabla_acts.setMinimumSize(new java.awt.Dimension(452, 402));
+        scroll_tabla_acts.setName(""); // NOI18N
 
+        tabla_actividades.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tabla_actividades.getTableHeader().setReorderingAllowed(false);
         tabla_actividades.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -370,7 +371,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         try{
             InputStream upload = MenuPrincipal.class.getResourceAsStream(source);
             letter = Font.createFont(Font.TRUETYPE_FONT, upload);
-            letter = letter.deriveFont(0, 58);
+            letter = letter.deriveFont(0, 52);
         }
         catch(FontFormatException | IOException ex){
             System.out.println(ex.toString());
@@ -503,7 +504,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void btn_empleados_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_empleados_ActionPerformed
         
-        JOptionPane.showMessageDialog(MenuPrincipal.this, MainClass.getUsuario());
         
     }//GEN-LAST:event_btn_empleados_ActionPerformed
 

@@ -85,6 +85,9 @@ public class TablaAlistamiento extends JTable {
     public void actualizaTabla(LinkedHashMap<String, Object[]> new_data, int cantidadSeleccionada) throws Exception {
         // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
         try {
+            data = new Object[][]{};
+            modelo_tabla.fireTableDataChanged();
+            
             data = new Object[new_data.size()][5];// 5 columnas
             SpinnerNumberModel model_spinner;
             int fila = 0;

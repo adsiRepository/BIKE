@@ -257,6 +257,20 @@ delete from produccion;
 select * from produccion;
 /***/
 
+use storebike;
+/**ENTREGAR LA ORDEN DE PRODUCCION*/
+update ordenes_produccion set hora_entrega = '2015-10-22 10:30:45' where no_ord = 1;
+/***/
+
+select no_ord from ordenes_produccion order by no_ord desc limit 1;
+select max(no_ord) from ordenes_produccion limit 1;
+
+select op.no_ord, e.nom_emp, e.ape_emp, op.hora_despacho, op.hora_entrega, 
+a.articulo, p.talla, p.cantidad 
+from ordenes_produccion op inner join produccion p 
+inner join articulos a inner join ensambladores e 
+where op.ensamblador = e.id_emp and p.articulo = a.id_articulo 
+and p.no_ord_prod = op.no_ord order by op.no_ord asc;
 
 select * from ensambladores;
 

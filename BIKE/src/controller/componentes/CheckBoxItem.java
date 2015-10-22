@@ -2,11 +2,9 @@
 package controller.componentes;
 
 import model.componentes.ItemDeLista;
-import controller.ConsultaSQL;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JCheckBox;

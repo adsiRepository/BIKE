@@ -168,7 +168,32 @@ public class ConsultaSQL {
     }
 
     /**
-     * METODO PARA REGISTRAR EL DESPACHO A PRODUCCION DE UN ARTICULO
+     * METODO QUE OBTIENE EL NUMERO DE LA ULTIMA ORDEN DE PRODUCCION DESPACHADA.
+     * Retorna el ultimo numero de registro de orden de produccion.
+     *
+     * @return int - entero con el numero de produccion actual
+     * @throws java.lang.Exception
+     */
+    public static int obtenerUltimoNumProduccion() throws Exception {
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "select max(no_ord) from ordenes_produccion limit 1;")) {
+                try (ResultSet resultado = sentencia.executeQuery()) {
+                    while (resultado.next()) {//si hay resultados (por lo menos 1 registro)
+                        return resultado.getInt(1);
+                    }
+                    return 1;
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Problemas al obtener el numero del registro de las Ordenes de Produccion.\n"
+                    + "Error:   "+e.toString());
+        }
+    }
+    
+    
+    /**
+     * METODO PARA REGISTRAR UNA NUEVA ORDEN DE PRODUCCION
      *
      * @param cod_empleado
      * @param produccion
@@ -231,7 +256,9 @@ public class ConsultaSQL {
                         + "Detalle: " + e.getLocalizedMessage());
             }
         } else {
-            throw new Exception("Debes de Elegir Items que Registrar. Intentalo nuevamente.");
+            throw new Exception("Antes, debe elegir la Cantidad de Repuestos a Despachar. "
+                    + "Debe especificar la cantidad de por lo menos 1 articulo. "
+                    + "Intentelo nuevamente.");
         }
 
 // </editor-fold>
@@ -274,16 +301,24 @@ public class ConsultaSQL {
                     + "from ordenes_produccion op inner join produccion p "
                     + "inner join articulos a inner join ensambladores e "
                     + "where op.ensamblador = e.id_emp and p.articulo = a.id_articulo "
-                    + "and p.no_ord_prod = op.no_ord;")) {
+                    + "and p.no_ord_prod = op.no_ord order by op.no_ord asc;")) {
 
                 ArrayList<Object[]> retorno = new ArrayList<>();
                 try (ResultSet resultados = sentencia.executeQuery()) {
+                    
+                    //java.util.Calendar fecha_despacho;
+                    //java.util.Calendar fecha_entrega;
+                    
                     while (resultados.next()) {
+                        
+                        //fecha_despacho = new GregorianCalendar();
+                        //fecha_entrega = new GregorianCalendar();
+                        
                         retorno.add(new Object[]{//este nuevo objeto sera cada nuevo registro obtenido de la consulta
                             resultados.getInt(1), //no_orden
                             resultados.getString(2) + " " + resultados.getString(3),//res 2 = nombre; res 3 = apellido
-                            resultados.getDate(4), //fecha despacho
-                            resultados.getDate(5), // fecha entrega
+                            resultados.getTimestamp(4), //fecha despacho
+                            resultados.getTimestamp(5), // fecha entrega
                             resultados.getString(6), // producion
                             resultados.getString(7), // talla
                             resultados.getInt(8) // cantidad

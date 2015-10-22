@@ -7,11 +7,10 @@ import java.sql.Connection; // LIBRERIA DE CONEXION BD
 import java.sql.DriverManager; //DRIVER DE MANEJO DE DATOS
 import java.sql.SQLException; //OMITIR O ENVIAR MENSAJES DE ERROR SQL
 
-/*
- * creation    : 26/11/2014, 07:45:23 AM
- * author      : miguel gonzález
+/**
+ * Clase encargada de configurar, obtener y suministrar la conexion a la Base de
+ * Datos de este Sistema.
  */
-
 public class ConexionBD {
 
     private static String usuario;
@@ -19,12 +18,20 @@ public class ConexionBD {
     private static String host;
     private static String port;
 
-    public static Connection obtenerConexion() throws Exception{
-        try{
+    /**
+     * Metodo publico. Retorna una instancia activa de la conexion a la base de
+     * datos que servira como interfaz para ejecutar los comandos sql de
+     * consulta y demás operaciones de la base de datos del Sistema.
+     *
+     * @return
+     * @throws java.lang.Exception
+     */
+    public static Connection obtenerConexion() throws Exception {
+        try {
             Connection conex;
             Class.forName("com.mysql.jdbc.Driver");//libreria mysql connector
             //ESTAS VARIABLES SE ESTAN SETEANDO EN LA CLASE PRINCIPAL. SE SETEAN EN OTRA PARTE POR SU CONDICION CAMBIANTE
-            conex = DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/storebike", usuario, password);
+            conex = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/storebike", usuario, password);
             return conex;
         }
         catch(ClassNotFoundException | SQLException ex){//

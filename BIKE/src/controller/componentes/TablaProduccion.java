@@ -4,20 +4,18 @@ package controller.componentes;
 // <editor-fold defaultstate="collapsed" desc="imports">
 
 import controller.ConsultaSQL;
+import controller.Tiempo;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.Iterator;
+import java.awt.Color;
 import javax.swing.AbstractCellEditor;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -45,12 +43,11 @@ public class TablaProduccion extends JTable{
     private boolean[] COLS_EDITABLES;
     
     private Object[][] data;
-    private ModeloTablaProduccion mi_modelo_tabla;
+    private final ModeloTablaProduccion mi_modelo_tabla;
     
     /**ESTAS SON CONSTANTES QUE AYUDAN A CONTROLAR EL TIPO DE TABLA A CREAR*/
     public static final String TABLA_VISUALIZACION = "tabla_de_visualizacion";
     public static final String TABLA_CONTROL = "tabla_de_control";
-    
     private final String mi_modelo;
     // </editor-fold>
     
@@ -80,15 +77,16 @@ public class TablaProduccion extends JTable{
             };
         }
     
+        
         if (mi_modelo.equals(TABLA_VISUALIZACION)) {
             CLASES_COLUMNAS = new Class[]{
-                Integer.class, String.class, String.class, Integer.class, String.class
-            };
+                Boolean.class, Integer.class, String.class,      String.class,             String.class,   Integer.class,  String.class
+            };  
             TITULOS_COLUMNAS = new String[]{
-                "No. Orden", "Ensamblador", "Articulo Producido", "Cantidad", "Hora Despacho"
+                "Seleccionado", "No. Orden", "Ensamblador", "Articulo Producido",   "Talla",   "Cantidad",    "Hora Despacho"
             };
             COLS_EDITABLES = new boolean[]{
-                false, false, false, false, false
+                true, false, false, false, false, false, false
             };
             /*anchos = new int[]{
                 ((anchoContenedor * 16) / 100), ((anchoContenedor * 9) / 100), 
@@ -129,6 +127,8 @@ public class TablaProduccion extends JTable{
     public void actualizarTabla(/*ArrayList<Object[]> new_data*/) throws Exception {
         // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
         try {
+            data = new Object[][]{};
+            mi_modelo_tabla.fireTableDataChanged();
             if (mi_modelo.equals(TABLA_CONTROL)) {
                 ArrayList<Object[]> new_data = ConsultaSQL.revisarProduccionActual();
                 Iterator it = new_data.iterator();
@@ -136,17 +136,57 @@ public class TablaProduccion extends JTable{
                     int i = 0;
                     Object[] registro;
                     data = new Object[new_data.size()][8];
+                    String fecha_despacho, hora_despacho;
+                    String fecha_entrega, hora_entrega;
                     while (it.hasNext()) {
                         registro = (Object[]) it.next();//el parentesis con la clase indica parseo o casteo de variables
+                        fecha_despacho = Tiempo.calendarFechaToString((java.sql.Timestamp)registro[2]);
+                        hora_despacho = Tiempo.calendarHoraToString((java.sql.Timestamp)registro[2]);
+                        fecha_entrega = Tiempo.calendarFechaToString((java.sql.Timestamp)registro[3]);
+                        hora_entrega = Tiempo.calendarHoraToString((java.sql.Timestamp)registro[3]);
                         data[i] = new Object[]{
-                            registro[0], registro[1], registro[2], registro[3],
-                            registro[4], registro[5], registro[6], new PanelBotonesCeldaProduccion()
+                            /*no_orden*/registro[0], 
+                            /*nombre completo*/registro[1], 
+                            /*momento despacho*/fecha_despacho + "   " + hora_despacho/*registro[2]*/, 
+                            /*momento entrega*/fecha_entrega + "   " + hora_entrega/*registro[3]*/,
+                            /*articulo producido*/registro[4], 
+                            /*tamaño*/registro[5], 
+                            /*cantidad*/registro[6], 
+                            /*opciones*/new PanelBotonesCeldaProduccion()
                         };
                         i++;
                     }
                     mi_modelo_tabla.fireTableDataChanged();
                 }
             }
+            
+            if (mi_modelo.equals(TABLA_VISUALIZACION)) {
+                ArrayList<Object[]> new_data = ConsultaSQL.revisarProduccionActual();
+                Iterator it = new_data.iterator();
+                if (it.hasNext()) {
+                    int i = 0;
+                    Object[] registro;
+                    data = new Object[new_data.size()][7];
+                    String fecha_despacho, hora_despacho;
+                    while (it.hasNext()) {
+                        registro = (Object[]) it.next();//el parentesis con la clase indica parseo o casteo de variables
+                        fecha_despacho = Tiempo.calendarFechaToString((java.sql.Timestamp) registro[2]);
+                        hora_despacho = Tiempo.calendarHoraToString((java.sql.Timestamp) registro[2]);
+                        data[i] = new Object[]{
+                            /*check seleccion*/false,
+                            /*no_orden*/registro[0],
+                            /*nombre completo*/ registro[1],
+                            /*articulo producido*/ registro[4],
+                            /*tamaño*/ registro[5],
+                            /*cantidad*/ registro[6],
+                            /*momento despacho*/ fecha_despacho + "   " + hora_despacho/*registro[2]*/
+                        };
+                        i++;
+                    }
+                    mi_modelo_tabla.fireTableDataChanged();
+                }
+            }
+
         } catch (Exception e) {
             throw new Exception("Error al Actualizar la Tabla de Alistamiento.\nExcepción: " + e.getMessage());
         }
@@ -192,6 +232,9 @@ public class TablaProduccion extends JTable{
         @Override
         public Object getValueAt(int row, int col) {
             if (data != null) {
+                if (col == 7) {
+                    ((PanelBotonesCeldaProduccion) data[row][7]).miFila = row;
+                }
                 return data[row][col];
             }
             return null; // no necesita estar dentro del else porque un return solo se ejecuta 1 vez
@@ -354,11 +397,13 @@ public class TablaProduccion extends JTable{
     private static class ComponentCellRenderer implements TableCellRenderer {
         // <editor-fold defaultstate="collapsed" desc="CLASE QUE DIBUJA EL COMPONENTE DENTRO DE LA CELDA DE LA TABLA">
 
-        JTextField label = new JTextField();
+        JTextField label;
         
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if(value instanceof String){
+            if (value instanceof String || value instanceof Integer) {
+                label = new JTextField();
+                label.setHorizontalAlignment(JTextField.CENTER);
                 label.setText(value.toString());
                 return label;
             }
@@ -374,11 +419,6 @@ public class TablaProduccion extends JTable{
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            if(column == 5){
-                ((PanelBotonesCeldaProduccion)value).miFila = row;
-                //((PanelBotonesCeldaProduccion)value).miCol = column;
-                return (Component) value;
-            }
             return (Component) value;
         }
 
