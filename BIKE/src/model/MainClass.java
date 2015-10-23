@@ -38,6 +38,7 @@ public class MainClass {
         password = "jjjj";
         
         menu.setVisible(true);
+        menu.iniciarTabla();
         
         //AQUI VA LA IMAGEN PARA EL ICONO DE LA APLICACION        //directorio     //nombre, al cambiar hay que tener en cuenta la extension del archivo
         /*Image iconoPrograma;

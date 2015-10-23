@@ -23,7 +23,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 /***/
 public class ComboBoxItem extends JComboBox<ItemDeLista> {
 
-    //private transient ArrayList<ItemDeLista> mis_items;
+    private transient ArrayList<ItemDeLista> items;
     
     /**
      * Constructor.
@@ -40,7 +40,7 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
      * @throws java.lang.Exception
      */
     public void seleccionaComboBox(String nom_combo) throws Exception {
-        ArrayList<ItemDeLista> items = new ArrayList<>();
+        //ArrayList<ItemDeLista> items = new ArrayList<>();
         if (nom_combo.equals(OrdenProduccion.COD_CMBOX_ENSAMBLADORES)) {
             //constructor(ConsultaSQL.ConsultorBD.obtenerListaEnsambladores());
             items = ConsultaSQL.obtenerListaEnsambladores();
@@ -60,6 +60,22 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
             //this.setKeySelectionManager(keySelectionManager);
         }
         this.setSelectedIndex(0);
+    }
+    
+    /**
+     * @param codItemDeLista
+     */
+    public void seleccionarItem(String codItemDeLista) {
+        ItemDeLista item;
+        String cod;
+        for (int i = 0; i < items.size(); i++) {
+            item = items.get(i);
+            cod = item.obtenerCodigoId();
+            if (cod.equals(codItemDeLista)) {
+                this.setSelectedIndex(i);
+                break;
+            }
+        }
     }
 
     /*private void constructor(ArrayList<ItemDeLista> objItems){

@@ -248,6 +248,23 @@ insert into detalle_despacho values
 delete from detalle_despacho;
 update detalle_despacho set cant_desp = 6 where repuesto = '690733';
 update detalle_despacho set repuesto = '690733' where repuesto = '311104' and orden = 1;
+
+desc componentes;
+/**OBTENER LISTADO DESPACHADO EN UNA ORDEN*/
+/**Primero datos empleado y produccion*/
+select op.no_ord, e.id_emp, e.nom_emp, e.ape_emp, a.id_articulo, a.articulo, p.talla, p.cantidad 
+from ordenes_produccion op inner join ensambladores e inner join articulos a 
+inner join produccion p 
+where op.ensamblador = e.id_emp and a.id_articulo = p.articulo and p.no_ord_prod = op.no_ord;
+/**Obtener toda la informacion de una vez*/
+select op.no_ord, e.nom_emp, e.ape_emp, a.articulo, p.talla, p.cantidad, 
+c.componente, r.cod_rep, r.repuesto, dp.cant_desp 
+from ordenes_produccion op inner join ensambladores e inner join articulos a 
+inner join produccion p inner join componentes c inner join repuestos r inner join detalle_despacho dp 
+where op.ensamblador = e.id_emp and a.id_articulo = p.articulo and p.no_ord_prod = op.no_ord 
+and c.id_comp = r.componente and dp.orden = op.no_ord and r.cod_rep = dp.repuesto and op.no_ord = 2;
+/***/
+
 select * from detalle_despacho;
 
 desc produccion;

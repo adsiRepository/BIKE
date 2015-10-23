@@ -24,6 +24,9 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import model.MainClass;
+import static view.MenuPrincipal.escritorio;
+import view.OrdenProduccion;
 
 // </editor-fold>
 
@@ -335,12 +338,47 @@ public class TablaProduccion extends JTable{
             private void accionarBoton() {
 
                 switch (miAccion) {
+                    
                     case 1:
+                        try {
+                            boolean hecho = ConsultaSQL.registrarEntregaProduccion((int)data[miFila][0]);
+                            if(hecho){
+                                data = new Object[][]{};
+                                mi_modelo_tabla.fireTableDataChanged();
+                                TablaProduccion.this.actualizarTabla();
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(TablaProduccion.this, "No se pudo Borrar la Orden");
+                            }
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(TablaProduccion.this, e.getLocalizedMessage());
+                        }
                         //JOptionPane.showMessageDialog(null, "Haz Cancelado la orden de la fila " + (miFila + 1));
                         break;
+     
                     case 2:
-                        JOptionPane.showMessageDialog(null, "Realmente Quieres Modificar la fila " + (miFila + 1));
+                        
+                        JOptionPane.showMessageDialog(null, "oprimiste en la fila "+(int)data[miFila][0],
+                                    "Editar Orden", 0);
+                        try {
+                            if (MainClass.menu.ordenProduccion != null && MainClass.menu.ordenProduccion.isVisible()) {
+                                if (MainClass.menu.ordenProduccion.isIcon()) {
+                                    MainClass.menu.ordenProduccion.setIcon(false);
+                                }
+                            } else {
+                                MainClass.menu.ordenProduccion = new OrdenProduccion();
+                                escritorio.add(MainClass.menu.ordenProduccion);
+                                MainClass.menu.ordenProduccion.setVisible(true);
+                            }
+                            MainClass.menu.ordenProduccion.editarOrdenProduccion((int)data[miFila][0]);
+                            MainClass.menu.ordenProduccion.toFront();
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Error al abrir la ventana de Alistamiento.\n"
+                                    +ex.getMessage(), 
+                                    "Editar Orden", 0);
+                        }
                         break;
+
                     case 3:
                         try {
                             boolean hecho = ConsultaSQL.borrarOrdenProduccion((int)data[miFila][0]);

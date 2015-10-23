@@ -55,18 +55,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
-        
         if (tabla_actividades instanceof TablaProduccion) {
+            //ArrayList<Object[]> data = ConsultaSQL.revisarProduccionActual();
             int anchoContenedor = scroll_tabla_acts.getWidth();
             int[] anchos = new int[]{
-                ((anchoContenedor * 8) / 100), ((anchoContenedor * 15) / 100),
-                ((anchoContenedor * 13) / 100), ((anchoContenedor * 13) / 100),
+                ((anchoContenedor * 8) / 100), ((anchoContenedor * 13) / 100),
+                ((anchoContenedor * 15) / 100), ((anchoContenedor * 15) / 100),
                 ((anchoContenedor * 18) / 100), ((anchoContenedor * 7) / 100),
-                ((anchoContenedor * 7) / 100), ((anchoContenedor * 18) / 100)
+                ((anchoContenedor * 7) / 100), ((anchoContenedor * 15) / 100)
             //70, 100, 100, 100, 150, 70, 70, 150
             };
             int alturaCol = 30;
             ((TablaProduccion) tabla_actividades).formatearTabla(anchos, alturaCol);
+
         }
     }
 
@@ -86,7 +87,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         panel_reloj_ = new controller.PanelReloj();
         panel_fecha_ = new javax.swing.JPanel();
         txtview_fecha_actual = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         barra_menu_1 = new javax.swing.JMenuBar();
         menu_archivo_ = new javax.swing.JMenu();
         menu_item_parametrizacion_ = new javax.swing.JMenuItem();
@@ -190,13 +190,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jButton1.setText("Revisar Produccion");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
@@ -215,13 +208,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(escritorioLayout.createSequentialGroup()
-                        .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(escritorioLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(escritorioLayout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(escritorioLayout.createSequentialGroup()
@@ -233,8 +221,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(escritorioLayout.createSequentialGroup()
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
@@ -252,7 +239,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorio.setLayer(btn_revision_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(panel_reloj_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(panel_fecha_, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        escritorio.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         menu_archivo_.setText("Archivo");
 
@@ -378,6 +364,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
             letter = new Font("cursive", Font.PLAIN, 18);
         }
         return letter;
+    }
+    
+    public void iniciarTabla(){
+        if (tabla_actividades instanceof TablaProduccion) {
+            try {
+                ((TablaProduccion) tabla_actividades).actualizarTabla();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(MenuPrincipal.this, e.getLocalizedMessage(), "Obtener Informacion de Produccion", 0);
+            }
+        }
     }
     
     private void menu_item_parametrizacion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_parametrizacion_ActionPerformed
@@ -506,17 +502,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btn_empleados_ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            if(tabla_actividades instanceof TablaProduccion){
-                //ArrayList<Object[]> data = ConsultaSQL.revisarProduccionActual();
-                ((TablaProduccion)tabla_actividades).actualizarTabla();
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(MenuPrincipal.this, e.getLocalizedMessage(), "Obtener Informacion de Produccion", 0);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
    
     // <editor-fold defaultstate="collapsed" desc="VOID MAIN O METODO PRINCIPAL">
     public static void main(String args[]) {
@@ -551,7 +536,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_produccion_;
     private javax.swing.JButton btn_revision_;
     public static final javax.swing.JDesktopPane escritorio = new controller.componentes.Paneles.Escritorio();
-    private javax.swing.JButton jButton1;
     private javax.swing.JMenuItem menuItem_controlRepuestos_;
     private javax.swing.JMenuItem menuItem_registroEnsamblador_;
     private javax.swing.JMenuItem menuItem_revisionProduccion_;

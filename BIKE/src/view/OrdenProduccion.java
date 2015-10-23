@@ -14,13 +14,13 @@ import java.awt.Dimension;
 
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
-import model.MainClass;
 
 /**
  *
@@ -57,7 +57,8 @@ public class OrdenProduccion extends VentanaInterna {
             ((ComboBoxItem) combo_ensambladores_).seleccionaComboBox(COD_CMBOX_ENSAMBLADORES);
             ((ComboBoxItem) combo_catalogo_ensamble_).seleccionaComboBox(COD_CMBOX_ARTICULOS);
             Object items = (((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).getAtributos()).get("tallas");
-            ((ModeloComboTallas) combo_ref_tamaño_.getModel()).cambiarItems(items);
+            ((ComboTallas)combo_ref_tamaño_).mi_modelo_tallas.cambiarItems(items);
+            //((ModeloComboTallas) combo_ref_tamaño_.getModel()).cambiarItems(items);
             ((TablaProduccion) tabla_produccion_).actualizarTabla();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Constructor Orden Produccion", 0);
@@ -88,12 +89,12 @@ public class OrdenProduccion extends VentanaInterna {
 
         lbl_ensamblador_ = new javax.swing.JLabel();
         btn_retirar_accesorio1 = new javax.swing.JButton();
-        btn_add_accesorio1 = new javax.swing.JButton();
+        btn_esamblador_2_ = new javax.swing.JButton();
         combo_ensambladores_ = new controller.componentes.ComboBoxItem();
         panel_primer_filtro_emsamble_ = new Paneles.PanelContenedorControles();
         combo_catalogo_ensamble_ = new controller.componentes.ComboBoxItem();
         lbl_tipo_ensamble_ = new javax.swing.JLabel();
-        combo_ref_tamaño_ = new JComboBox(new ModeloComboTallas());
+        combo_ref_tamaño_ = new ComboTallas();
         lbl_ref_tamaño_ = new javax.swing.JLabel();
         lbl_cantidad_ensamble_ = new javax.swing.JLabel();
         txt_cant_ensamble_ = new javax.swing.JTextField();
@@ -107,8 +108,8 @@ public class OrdenProduccion extends VentanaInterna {
         btn_borrar_Orden_Registrada_ = new javax.swing.JButton();
         scroll_tabla_produccion_ = new javax.swing.JScrollPane();
         tabla_produccion_ = new TablaProduccion(TablaProduccion.TABLA_VISUALIZACION);
-        btn_Despachar_Orden = new javax.swing.JButton();
-        btn_Cancelar_Despacho = new javax.swing.JButton();
+        btn_guardar_salir_ = new javax.swing.JButton();
+        btn_cancelar_alistamiento_ = new javax.swing.JButton();
         txt_n_orden_ = new javax.swing.JTextField();
         lbl_n_orden_ = new javax.swing.JLabel();
 
@@ -127,9 +128,9 @@ public class OrdenProduccion extends VentanaInterna {
             }
         });
 
-        btn_add_accesorio1.addActionListener(new java.awt.event.ActionListener() {
+        btn_esamblador_2_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_add_accesorio1ActionPerformed(evt);
+                btn_esamblador_2_ActionPerformed(evt);
             }
         });
 
@@ -278,20 +279,22 @@ public class OrdenProduccion extends VentanaInterna {
         });
         scroll_tabla_produccion_.setViewportView(tabla_produccion_);
 
-        btn_Despachar_Orden.setText("Guardar Actual y Salir");
-        btn_Despachar_Orden.setMaximumSize(new java.awt.Dimension(139, 23));
-        btn_Despachar_Orden.setMinimumSize(new java.awt.Dimension(139, 23));
-        btn_Despachar_Orden.setPreferredSize(new java.awt.Dimension(139, 23));
-        btn_Despachar_Orden.addActionListener(new java.awt.event.ActionListener() {
+        btn_guardar_salir_.setText("Guardar Actual y Salir");
+        btn_guardar_salir_.setToolTipText("Guardar el alistamiento actual y salir");
+        btn_guardar_salir_.setMaximumSize(new java.awt.Dimension(139, 23));
+        btn_guardar_salir_.setMinimumSize(new java.awt.Dimension(139, 23));
+        btn_guardar_salir_.setPreferredSize(new java.awt.Dimension(139, 23));
+        btn_guardar_salir_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Despachar_OrdenActionPerformed(evt);
+                btn_guardar_salir_ActionPerformed(evt);
             }
         });
 
-        btn_Cancelar_Despacho.setText("Cancelar Actual y Salir");
-        btn_Cancelar_Despacho.addActionListener(new java.awt.event.ActionListener() {
+        btn_cancelar_alistamiento_.setText("Cancelar Actual y Salir");
+        btn_cancelar_alistamiento_.setToolTipText("Cancelar el alistamiento actual y salir");
+        btn_cancelar_alistamiento_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Cancelar_DespachoActionPerformed(evt);
+                btn_cancelar_alistamiento_ActionPerformed(evt);
             }
         });
 
@@ -323,7 +326,7 @@ public class OrdenProduccion extends VentanaInterna {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btn_esamblador_2_, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(panel_primer_filtro_emsamble_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -351,8 +354,8 @@ public class OrdenProduccion extends VentanaInterna {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btn_guardar_salir_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_cancelar_alistamiento_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(59, 59, 59)
                         .addComponent(scroll_tabla_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
@@ -372,7 +375,7 @@ public class OrdenProduccion extends VentanaInterna {
                                 .addComponent(combo_ensambladores_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(btn_retirar_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btn_add_accesorio1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btn_esamblador_2_, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
@@ -394,61 +397,203 @@ public class OrdenProduccion extends VentanaInterna {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btn_cancelar_despacho_, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(63, 63, 63)
-                                .addComponent(btn_Despachar_Orden, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_guardar_salir_, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_Cancelar_Despacho, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(btn_cancelar_alistamiento_, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+// <editor-fold defaultstate="collapsed" desc="METODOS DEL PROGRAMADOR">
 
-    private static class ModeloComboTallas extends AbstractListModel<Object> implements ComboBoxModel<Object> {
+    private static class ComboTallas extends JComboBox<Object>{
 
-        private Object[] mis_elementos;
+        public ModeloComboTallas mi_modelo_tallas;
+        private ArrayList<Object> mis_elementos;
         private int posicion;
         
-        public ModeloComboTallas() {
-            mis_elementos = new Object[]{""};
+        public ComboTallas() {
+            super();
+            mi_modelo_tallas = new ModeloComboTallas();
+            this.setModel(mi_modelo_tallas);
         }
-        public void cambiarItems(Object arrayList_tallas) {
-            //this.removeAllItems();
-            Iterator it = ((ArrayList) arrayList_tallas).iterator();
-            mis_elementos = new Object[((ArrayList) arrayList_tallas).size()];
-            int i = 0;
-            while (it.hasNext()) {
-                mis_elementos[i] = it.next();
-                i++;
+
+        /**
+         * @param codItemDeLista
+         */
+        public void seleccionarItem(String seleccion) throws Exception {
+            Object talla;
+            String cod;
+            /*for (int i = 0; i < mis_elementos.length; i++) {
+             talla = mis_elementos[i];
+             cod = talla.toString();
+             if (cod.equals(seleccion)) {
+             //OrdenProduccion.this.combo_ref_tamaño_.setSelectedIndex(i);
+             //setSelectedItem(talla);
+             ComboTallas.this.setSelectedIndex(i);
+             }
+             }*/
+            for (int i = 0; i < mis_elementos.size(); i++) {
+                talla = mis_elementos.get(i);
+                cod = talla.toString();
+                if (cod.equals(seleccion)) {
+                    this.setSelectedIndex(i);
+                    break;
+                }
             }
-            posicion = 0;//esto indica que se posicionará en el primer item
-            fireContentsChanged(this, 0, mis_elementos.length);
+            //return 0;
         }
-        @Override
-        public int getSize() {
-            return mis_elementos.length;
-        }
-        @Override
-        public Object getElementAt(int index) {
-            posicion = index;
-            return mis_elementos[index];
-        }
-        @Override
-        public void setSelectedItem(Object anItem) {
-            mis_elementos[posicion] = anItem;
-        }
-        @Override
-        public Object getSelectedItem() {
-            return mis_elementos[posicion];
+
+        private class ModeloComboTallas extends AbstractListModel<Object> implements ComboBoxModel<Object> {
+            // <editor-fold defaultstate="collapsed" desc="MODELO DEL COMBOBOX DE TALLAS">
+
+            //private Object[] mis_elementos;
+            
+            public ModeloComboTallas() {
+                //mis_elementos = new Object[]{""};
+                mis_elementos = new ArrayList<>();
+                mis_elementos.add("");
+            }
+
+            public void cambiarItems(Object arrayList_tallas) {
+            //mis_elementos = new Object[]{};//limpieza
+                //fireContentsChanged(this, 0, 1);
+
+                Iterator it = ((ArrayList) arrayList_tallas).iterator();
+                //mis_elementos = new Object[((ArrayList) arrayList_tallas).size()];
+                mis_elementos = new ArrayList<>();
+                //int i = 0;
+                while (it.hasNext()) {
+                    //mis_elementos[i] = it.next();
+                    mis_elementos.add(it.next());
+                    //i++;
+                }
+                posicion = 0;//esto indica que se posicionará en el primer item
+                //fireContentsChanged(this, 0, mis_elementos.length);
+                fireContentsChanged(this, 0, mis_elementos.size());
+            }
+
+            @Override
+            public int getSize() {
+                //return mis_elementos.length;
+                return mis_elementos.size();
+            }
+
+            @Override
+            public Object getElementAt(int index) {
+                posicion = index;
+                return mis_elementos.get(index);
+                //return mis_elementos[index];
+            }
+
+            @Override
+            public void setSelectedItem(Object anItem) {
+                mis_elementos.set(posicion, anItem);
+                //mis_elementos[posicion] = anItem;
+            }
+
+            @Override
+            public Object getSelectedItem() {
+                return mis_elementos.get(posicion);
+                //return mis_elementos[posicion];
+            }
+// </editor-fold>
         }
     }
 
-    private void btn_Despachar_OrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Despachar_OrdenActionPerformed
+    /**
+     * @param no_orden
+     * @throws java.lang.Exception
+     */
+    public void editarOrdenProduccion(int no_orden) throws Exception {
+        try{
+            HashMap<Object[], LinkedHashMap<String, ItemDeLista>> orden_produccion;
+            orden_produccion = ConsultaSQL.obtenerListadoDespachoOrden(no_orden);
+            
+            Object[] detalles_orden = null;
+            LinkedHashMap<String, ItemDeLista> lista_despacho = new LinkedHashMap<>();
+            //Object lista_despacho = null;
+            for (HashMap.Entry reg : orden_produccion.entrySet()) {
+                detalles_orden = (Object[])reg.getKey();
+                lista_despacho = (LinkedHashMap)reg.getValue();
+            }
+          
+            txt_n_orden_.setText("" + detalles_orden[0]);
+            ((ComboBoxItem) combo_ensambladores_).seleccionarItem(detalles_orden[1].toString());
+            ((ComboBoxItem) combo_catalogo_ensamble_).seleccionarItem(detalles_orden[2].toString());
+            ((ComboTallas)combo_ref_tamaño_).seleccionarItem(detalles_orden[3].toString());
+            //((ModeloComboTallas)combo_ref_tamaño_.getModel()).seleccionarItem(detalles_orden[3].toString());
+            //combo_ref_tamaño_.setSelectedItem(detalles_orden[3].toString());
+            txt_cant_ensamble_.setText(detalles_orden[4].toString());
+            
+            LinkedHashMap<Object[], ArrayList<ItemDeLista>> stock_db = 
+                    ConsultaSQL.obtenerRepuestos_Articulo(detalles_orden[2].toString(), detalles_orden[3].toString());
+            
+            ((TablaAlistamiento) tabla_alistamiento_).actualizaTabla(stock_db, (int)detalles_orden[4]);
+            
+           // ((TablaAlistamiento)tabla_alistamiento_).actualizaTablaParaEdicion(detalles_orden, lista_despacho/*lista_despacho*/);
 
-    }//GEN-LAST:event_btn_Despachar_OrdenActionPerformed
+        } catch (Exception e) {
+            throw new Exception("Problemas al intentar editar la orden.\n" + e.getMessage());
+        }
+    }
 
-    private void btn_Cancelar_DespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cancelar_DespachoActionPerformed
+// </editor-fold>
+    private void btn_guardar_salir_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardar_salir_ActionPerformed
 
-    }//GEN-LAST:event_btn_Cancelar_DespachoActionPerformed
+        // <editor-fold defaultstate="collapsed" desc="CODIGO PARA GUARDAR LA ORDEN ALISTADA Y/O SALIR">
+        try {
+            int lista = ((TablaAlistamiento) tabla_alistamiento_).getRowCount();
+            if (lista > 0) {
+                String ensamblador = ((ItemDeLista) combo_ensambladores_.getSelectedItem()).obtenerCodigoId();
+                Object[] produccion = new Object[3];
+                produccion[0] = ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).obtenerCodigoId();
+                produccion[1] = combo_ref_tamaño_.getSelectedItem().toString();
+                produccion[2] = Integer.parseInt(txt_cant_ensamble_.getText());
+                Object[][] listado = ((TablaAlistamiento) tabla_alistamiento_).obtenerListadoDespacho();
+
+                boolean hecho = ConsultaSQL.registrarNuevaOrden(ensamblador, produccion, listado);
+                if (hecho) {
+                    JOptionPane.showOptionDialog(OrdenProduccion.this,
+                            "Orden Guardada Correctamente.",
+                            "Orden de Producción", // título del JOptionPane
+                            JOptionPane.OK_OPTION, // tipo input
+                            JOptionPane.INFORMATION_MESSAGE, // tipo mensaje
+                            new ImageIcon("mis_imagenes/icon_jop_correcto.png"), // icono, si es nulo aparecerá el por defecto
+                            new Object[]{"Aceptar"}, //opciones => estos serán los botones
+                            new Object[]{});
+
+                    OrdenProduccion.this.dispose();
+                    if ((MenuPrincipal.getTabla_actividades()) instanceof TablaProduccion) {
+                        ((TablaProduccion) MenuPrincipal.getTabla_actividades()).actualizarTabla();
+                    }
+                }
+            } else {
+                int d = JOptionPane.showOptionDialog(OrdenProduccion.this,
+                            "No tienes lista de despacho pendiente,\n¿estas seguro que quieres salir?",
+                            "Orden de Producción", // título del JOptionPane
+                            JOptionPane.YES_NO_OPTION, // tipo input
+                            JOptionPane.QUESTION_MESSAGE, // tipo mensaje
+                            null,
+                            new Object[]{"Salir", "Volver"}, //opciones => estos serán los botones
+                            new Object[]{});
+                if(d==0){
+                    OrdenProduccion.this.dispose();
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Guardar Orden", 0);
+        }
+        // </editor-fold>
+        
+    }//GEN-LAST:event_btn_guardar_salir_ActionPerformed
+
+    private void btn_cancelar_alistamiento_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelar_alistamiento_ActionPerformed
+
+        OrdenProduccion.this.dispose();
+        
+    }//GEN-LAST:event_btn_cancelar_alistamiento_ActionPerformed
 
     private void btn_retirar_accesorio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_retirar_accesorio1ActionPerformed
 
@@ -456,7 +601,7 @@ public class OrdenProduccion extends VentanaInterna {
 
     }//GEN-LAST:event_btn_retirar_accesorio1ActionPerformed
 
-    private void btn_add_accesorio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_add_accesorio1ActionPerformed
+    private void btn_esamblador_2_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_esamblador_2_ActionPerformed
 
         /*JOptionPane.showMessageDialog(null, "ancho scroll: " + scroll_items_selec.getWidth() + "\n"
                 + "30% = " + ((int) ((scroll_items_selec.getWidth() * 30) / 100)) + "\n"
@@ -466,10 +611,11 @@ public class OrdenProduccion extends VentanaInterna {
         
         //MainClass.getMenuPrincipal().setCol_tabla(5);
         //MainClass.menu.getCol_tabla();
-        MainClass.setUsuario("jorge");
-        JOptionPane.showMessageDialog(OrdenProduccion.this, MainClass.getUsuario());
+        //MainClass.setUsuario("jorge");
+        //int lista = ((TablaAlistamiento) tabla_alistamiento_).getRowCount();
+        //JOptionPane.showMessageDialog(OrdenProduccion.this, lista);
 
-    }//GEN-LAST:event_btn_add_accesorio1ActionPerformed
+    }//GEN-LAST:event_btn_esamblador_2_ActionPerformed
 
     private void tabla_alistamiento_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_alistamiento_MouseClicked
 
@@ -483,7 +629,8 @@ public class OrdenProduccion extends VentanaInterna {
     }//GEN-LAST:event_tabla_alistamiento_MouseClicked
 
     private void btn_guardar_Orden_Alistada_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardar_Orden_Alistada_ActionPerformed
-        // <editor-fold defaultstate="collapsed" desc="CODE">
+     
+        // <editor-fold defaultstate="collapsed" desc="CODIGO QUE REGISTRA Y DESPACHA LA ORDEN EN ALISTAMIENTO Y LLENA LA TABLA INFERIOR">
         try {
             String ensamblador = ((ItemDeLista) combo_ensambladores_.getSelectedItem()).obtenerCodigoId();
             Object[] produccion = new Object[3];
@@ -522,15 +669,79 @@ public class OrdenProduccion extends VentanaInterna {
         }
 
 // </editor-fold>
+        
     }//GEN-LAST:event_btn_guardar_Orden_Alistada_ActionPerformed
 
     private void btn_borrar_Orden_Registrada_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrar_Orden_Registrada_ActionPerformed
+       
+        // <editor-fold defaultstate="collapsed" desc="CODIGO DE BORRAR ORDENES SELECCIONADAS EN LA TABLA INFERIOR">
         try {
-            JOptionPane.showMessageDialog(OrdenProduccion.this, "fila actual = " + fila_tabla_produccion);
+            ArrayList<Integer> cods_filas_selec = new ArrayList<>();
+            boolean selec;
+            int cod_selec;
+            for (int i = 0; i < tabla_produccion_.getRowCount(); i++) {
+                selec = (boolean) (tabla_produccion_.getValueAt(i, 0));
+                if (selec) {
+                    cod_selec = (int) tabla_produccion_.getValueAt(i, 1);
+                    cods_filas_selec.add(cod_selec);
+                }
+            }
+            
+            //ArrayList<Integer> fallidos = new ArrayList<>();
+            int ok = 0;
+            boolean hecho;
+            for(Integer cod : cods_filas_selec){
+                try {
+                    hecho = ConsultaSQL.borrarOrdenProduccion(cod);
+                    if (hecho) {
+                        //fallidos.add(cod);
+                        ok++;
+                    }
+                    else{
+                        throw new Exception("No fue posible eliminar el registro.");
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(
+                            OrdenProduccion.this,
+                            "Problemas para borrar la orden no. " + cod + ".\n" + e.getLocalizedMessage(),
+                            "Borrar Ordenes Seleccionadas", 
+                            0);
+                    //fallidos.add(cod);
+                }
+            }
+            
+            if (ok > 0) {
+                JOptionPane.showMessageDialog(OrdenProduccion.this, "Los registros seleccionados fueron borrados correctamente.",
+                        "Borrar Ordenes Seleccionadas", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            if ((MenuPrincipal.getTabla_actividades()) instanceof TablaProduccion) {
+                ((TablaProduccion) MenuPrincipal.getTabla_actividades()).actualizarTabla();
+            }
+            ((TablaProduccion) tabla_produccion_).actualizarTabla();
+
+            /*if (fallidos.size() > 0) {
+             StringBuilder z = new StringBuilder();
+             for (int i = 0; i < fallidos.size(); i++) {
+             if (i == (fallidos.size() - 1)) {
+             z.append(fallidos.get(i));
+                    } else {
+                        z.append(fallidos.get(i)).append(", ");
+                    }
+                }
+                JOptionPane.showMessageDialog(OrdenProduccion.this,
+                        "Hubo registros que no se borraron correctamente.\nRegistros sin borrar: " + z.toString(),
+                        "Borrar Ordenes Seleccionadas", 0);
+            } else {
+                JOptionPane.showMessageDialog(OrdenProduccion.this, "Los registros seleccionados fueron borrados correctamente.\n",
+                        "Borrar Ordenes Seleccionadas", JOptionPane.INFORMATION_MESSAGE);
+            }*/
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Borrar Orden", 0);
         }
+// </editor-fold>
+        
     }//GEN-LAST:event_btn_borrar_Orden_Registrada_ActionPerformed
 
     private void txt_cant_ensamble_KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensamble_KeyTyped
@@ -560,9 +771,11 @@ public class OrdenProduccion extends VentanaInterna {
     }//GEN-LAST:event_tabla_produccion_MouseClicked
 
     private void btn_alistar_despacho_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_alistar_despacho_ActionPerformed
+       
+        // <editor-fold defaultstate="collapsed" desc="CODIGO DE GENERACION DE ALISTAMIENTO">
         try {
             if (!txt_cant_ensamble_.getText().isEmpty()) {
-
+                
                 int decision = JOptionPane.showOptionDialog(this,
                         "Alistarás una nueva Orden de Producción para "
                         + ((ItemDeLista) combo_ensambladores_.getSelectedItem()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO),
@@ -578,8 +791,8 @@ public class OrdenProduccion extends VentanaInterna {
                     String cod_objeto_ensamble = ((ItemDeLista) combo_catalogo_ensamble_.getSelectedItem()).obtenerCodigoId();
                     String talla = combo_ref_tamaño_.getSelectedItem().toString();
                     int cantidad = Integer.parseInt(txt_cant_ensamble_.getText());
-
-                    LinkedHashMap<String, Object[]>/*ArrayList<ItemDeLista>*/ informacion_bd
+                    
+                    LinkedHashMap<Object[], ArrayList<ItemDeLista>>/**/ informacion_bd 
                             = ConsultaSQL.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla);
 
                     //if (informacion_bd != null) {
@@ -594,7 +807,7 @@ public class OrdenProduccion extends VentanaInterna {
                      "Alistar Orden de Producción", 0);
                      }*/
                 }
-
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Antes, debe especificar la cantidad de Artículos.", "Orden de Producción", 0);
             }
@@ -602,6 +815,9 @@ public class OrdenProduccion extends VentanaInterna {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Error en Alistamiento", 0);
         }
+
+// </editor-fold>
+        
     }//GEN-LAST:event_btn_alistar_despacho_ActionPerformed
 
     private void combo_catalogo_ensamble_ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_combo_catalogo_ensamble_ItemStateChanged
@@ -612,7 +828,8 @@ public class OrdenProduccion extends VentanaInterna {
             txtArea_detalles_.setText(String.valueOf((((ItemDeLista) itemSelec).getAtributos()).get("descripcion")));//lo que se hace aqui es parsear el objeto (el paréntesis con el nombre de la clase parsea el objeto hacia ese tipo o esa clase)
             
             Object items = (((ItemDeLista) itemSelec).getAtributos()).get("tallas");
-            ((ModeloComboTallas)combo_ref_tamaño_.getModel()).cambiarItems(items);
+            ((ComboTallas)combo_ref_tamaño_).mi_modelo_tallas.cambiarItems(items);
+            //((ModeloComboTallas)combo_ref_tamaño_.getModel()).cambiarItems(items);
         }
 
     }//GEN-LAST:event_combo_catalogo_ensamble_ItemStateChanged
@@ -628,13 +845,13 @@ public class OrdenProduccion extends VentanaInterna {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_Cancelar_Despacho;
-    private javax.swing.JButton btn_Despachar_Orden;
-    private javax.swing.JButton btn_add_accesorio1;
     private javax.swing.JButton btn_alistar_despacho_;
     private javax.swing.JButton btn_borrar_Orden_Registrada_;
+    private javax.swing.JButton btn_cancelar_alistamiento_;
     private javax.swing.JButton btn_cancelar_despacho_;
+    private javax.swing.JButton btn_esamblador_2_;
     private javax.swing.JButton btn_guardar_Orden_Alistada_;
+    private javax.swing.JButton btn_guardar_salir_;
     private javax.swing.JButton btn_retirar_accesorio1;
     private javax.swing.JComboBox combo_catalogo_ensamble_;
     private javax.swing.JComboBox combo_ensambladores_;

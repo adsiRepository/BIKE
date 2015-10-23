@@ -1,7 +1,8 @@
-
 package controller.componentes;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
+import controller.ConsultaSQL;
+import static controller.ConsultaSQL.obtenerListadoDespachoOrden;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -45,6 +46,7 @@ public class TablaAlistamiento extends JTable {
 
     private ModeloTablaAlistamiento modelo_tabla;
     private Object[][] data;
+
     //private int fil, col;
     private int cant_item = 0;
 
@@ -78,30 +80,36 @@ public class TablaAlistamiento extends JTable {
 
     /**
      * Método publico utilizado para cambiar la informacion de la tabla
+     *
      * @param new_data
      * @param cantidadSeleccionada
      * @throws java.lang.Exception
      */
-    public void actualizaTabla(LinkedHashMap<String, Object[]> new_data, int cantidadSeleccionada) throws Exception {
+    public void actualizaTabla(LinkedHashMap<Object[], ArrayList<ItemDeLista>> new_data, int cantidadSeleccionada) throws Exception {
         // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
         try {
-            data = new Object[][]{};
+            data = new Object[][]{};//limpiamos bien la tabla
             modelo_tabla.fireTableDataChanged();
-            
+
             data = new Object[new_data.size()][5];// 5 columnas
             SpinnerNumberModel model_spinner;
             int fila = 0;
+            Object[] componente;
+            boolean par;
             for (HashMap.Entry reg : new_data.entrySet()) {
-                int comp_par = (int) (((Object[]) reg.getValue())[1]);//casteado a arreglo de objetos y obtenido el indice 1
-                switch(comp_par){
-                    case 1:
-                        model_spinner = new SpinnerNumberModel(0, 0, (cantidadSeleccionada * 2), 1);
-                        break;
-                    default:
-                        model_spinner = new SpinnerNumberModel(0, 0, cantidadSeleccionada, 1);   
+                componente = (Object[]) reg.getKey();
+                par = (boolean) componente[2];
+                if (par) {
+                    model_spinner = new SpinnerNumberModel(0, 0, (cantidadSeleccionada * 2), 1);
+                } else {
+                    model_spinner = new SpinnerNumberModel(0, 0, cantidadSeleccionada, 1);
                 }
-                data[fila] = new Object[]{reg.getKey().toString(), new My_ComboBox(((Object[]) reg.getValue())[0]),
-                    cant_item, new SpinnerCeldaTabla(model_spinner), new PanelBotonesCelda(true)};
+                data[fila] = new Object[]{
+                    componente[1].toString(),
+                    new My_ComboBox(reg.getValue()),
+                    cant_item,
+                    new SpinnerCeldaTabla(model_spinner),
+                    new PanelBotonesCelda(true)};
                 fila++;
             }
             // <editor-fold defaultstate="collapsed" desc="metodo largo para llenar a data">
@@ -126,7 +134,119 @@ public class TablaAlistamiento extends JTable {
         // </editor-fold>
     }
 
-    /***/
+    /**
+     * DESPLIEGA EL LISTADO DESPACHADO EN LA ORDEN DE PRODUCCION ESPECIFICADA.
+     *
+     * @param detalle_produccion
+     * @param listado
+     * @throws java.lang.Exception
+     */
+    public void actualizaTablaParaEdicion(Object[] detalle_produccion, /*LinkedHashMap<Object[], ArrayList<ItemDeLista>> stock_db*/
+            LinkedHashMap<String, ItemDeLista> listado) throws Exception {
+        // <editor-fold defaultstate="collapsed" desc="IR A EDICION DE DESPACHO">
+        try {
+            if (detalle_produccion != null /*&& list != null*/) {
+
+                /*    Object[][] new_data = new Object[data.length + listado.size()][5];
+                
+                 for (int i = 0; i < data.length; i++) {
+                 new_data[i] = data[i];
+                 }
+                
+                 int fila = data.length;
+                 for (HashMap.Entry eg : listado.entrySet()) {
+                 new_data[fila] = new Object[]{
+                 eg.getValue().toString(),
+                 new My_ComboBox(eg.getValue()),
+                 ((ItemDeLista)eg.getValue()).getAtributos().get("stock"),
+                 new SpinnerCeldaTabla((int) ((ItemDeLista)eg.getValue()).getAtributos().get("cant_desp")),
+                 new PanelBotonesCelda(false)
+                 };
+                 fila++;
+                 }*/
+                //data = new_data;
+                //modelo_tabla.fireTableDataChanged();
+                //String cod_articulo = detalle_produccion[2].toString();
+                //String talla = detalle_produccion[3].toString();
+                //int cant_desp = (int) detalle_produccion[4];
+                //LinkedHashMap<Object[], ArrayList<ItemDeLista>> stock_db = ConsultaSQL.obtenerRepuestos_Articulo(cod_articulo, talla);
+                //LinkedHashMap<String, ItemDeLista> listado = ((LinkedHashMap<String,ItemDeLista>)list);
+                //Object[][] repuestos_stock = new Object[stock_db.size()][5];
+                //Object[][] repuestos_despachados = new Object[listado.size()][5];
+                //data = new Object[(stock_db.size()) + (list.size())][5];
+
+                /*data = new Object[stock_db.size()][5];// 5 columnas
+                 SpinnerNumberModel model_spinner;
+                 int fila = 0;
+                 Object[] componente;
+                 boolean par;
+                 for (HashMap.Entry reg : stock_db.entrySet()) {
+                 componente = (Object[]) reg.getKey();
+                 par = (boolean) componente[2];
+                 if (par) {
+                 model_spinner = new SpinnerNumberModel(0, 0, (5 * 2), 1);
+                 } else {
+                 model_spinner = new SpinnerNumberModel(0, 0, 5, 1);
+                 }
+                 data[fila] = new Object[]{
+                 componente[1].toString(),
+                 new My_ComboBox(reg.getValue()),
+                 cant_item,
+                 new SpinnerCeldaTabla(model_spinner),
+                 new PanelBotonesCelda(true)};
+                 fila++;
+                 }*/
+                //data = repuestos_stock;
+                /*fila = 0;
+                 ItemDeLista item_;
+                 int stock;
+                
+                 for (HashMap.Entry rep : listado.entrySet()) {
+                 item_ = (ItemDeLista) rep.getValue();
+                 stock = (int) item_.getAtributos().get("stock");
+                 repuestos_despachados[fila] = new Object[]{
+                 rep.getKey().toString(),
+                 new My_ComboBox(item_, true),
+                 stock,
+                 new SpinnerCeldaTabla(),
+                 new PanelBotonesCelda(false)
+                 };
+                 fila++;
+                 }*/
+                //String nom_comp_stock, nom_comp_lista;
+                /*data = new Object[repuestos_stock.length][5];
+                 for (fila = 0; fila < data.length; fila++) {
+                 /*nom_comp_stock = repuestos_stock[fila][0].toString();
+                 nom_comp_lista = repuestos_despachados[fila][0].toString();
+                 if (nom_comp_lista.equals(nom_comp_stock)) {/
+                 data[fila] = repuestos_stock[fila];
+                 //data[fila + 1] = repuestos_despachados[fila];
+                 /*     fila = 1;
+                 } else {
+                 //data[fila] = repuestos_stock[fila];
+                 }/
+                 }*/
+                //data = repuestos_despachados;
+                //modelo_tabla.fireTableDataChanged();
+                //LinkedHashMap<String, ItemDeLista> h;
+                //Object[] ob;
+                //for (HashMap.Entry reg : listado.entrySet()) {
+                //ob = (Object[]) reg.getKey();
+                //System.out.println(ob[0] + " " + ob[1] + " " + ob[2] + " " + ob[3] + " " + ob[4]);
+                //h = (LinkedHashMap<String, ItemDeLista>) reg.getValue();
+                //}
+            }
+        } catch (Exception e) {
+            throw new Exception("Problemas al volcar el listado de despacho.\n"
+                    + "Error: " + e.toString());
+        }
+
+// </editor-fold>
+    }
+
+    /**
+     * 
+     */
     public void vaciarTabla() {
         data = new Object[][]{};
         modelo_tabla.fireTableDataChanged();
@@ -134,10 +254,11 @@ public class TablaAlistamiento extends JTable {
 
     /**
      * Metodo usado para obtener la lista de despacho.
-     * @return 
-     * @throws java.lang.Exception 
+     *
+     * @return
+     * @throws java.lang.Exception
      */
-    public Object[][] obtenerListadoDespacho() throws Exception{
+    public Object[][] obtenerListadoDespacho() throws Exception {
         // <editor-fold defaultstate="collapsed" desc="CODIGO">
         try {
             ArrayList<Object[]> bolsa = new ArrayList<>();
@@ -186,7 +307,7 @@ public class TablaAlistamiento extends JTable {
             this.setColumnIdentifiers(TITULOS_COLUMNAS);
         }
 
-        @Override//determina la clase de componentes que iran reg cada celda
+        @Override//determina la clase de componentes que iran repuesto_stock cada celda
         public Class getColumnClass(int noCol) {
             return CLASES_COLUMNAS[noCol];
         }
@@ -205,14 +326,14 @@ public class TablaAlistamiento extends JTable {
         public Object getValueAt(int row, int col) {
             if (data != null) {
                 if (row == 0) {
-                    int h = (int)((ItemDeLista)(((My_ComboBox) data[row][1]).getMy_items()[0])).getAtributos().get("stock");
+                    int h = (int) ((ItemDeLista) (((My_ComboBox) data[row][1]).getMy_items()[0])).getAtributos().get("stock");
                     data[0][2] = h;
                 }
                 if (col == 1) {
                     ((My_ComboBox) data[row][1]).mi_fila = row;
                 }
                 if (col == 3) {
-                    if(!(((My_ComboBox) data[row][1]).i_have_items)){
+                    if (!(((My_ComboBox) data[row][1]).i_have_items)) {
                         ((SpinnerCeldaTabla) data[row][3]).setEnabled(false);
                     }
                 }
@@ -247,30 +368,31 @@ public class TablaAlistamiento extends JTable {
     private class PanelBotonesCelda extends JPanel {
 
         // <editor-fold defaultstate="collapsed" desc="JPANEL PARA CELDA DE TABLA">
-
         private BotonCelda btncell_new_rep;
         private BotonCelda btncell_back_new_rep;
         public int miFila;//, miCol;
         public boolean soy_copia;
 
+        private MyLabel label;
+
         /**
          * Constructor
          */
         public PanelBotonesCelda(boolean conBotones) {
-            if(conBotones){
+            if (conBotones) {
                 btncell_new_rep = new BotonCelda(1);
                 btncell_back_new_rep = new BotonCelda(2);
                 formatoBotones();
                 soy_copia = false;
                 this.setToolTipText("puedes seleccionar o descartar un \n"
                         + "repuesto para el mismo componente");
-            }
-            else {
-                JLabel label = new JLabel();
-                setLayout(new java.awt.GridLayout());
-                label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-                label.setText("Seleccionado");
-                add(label);
+            } else {
+                //label = ;
+                //setLayout(new java.awt.GridLayout());
+                //label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                //label.setText("Seleccionado");
+                add(new MyLabel());
+                ((MyLabel) this.getComponent(0)).setText("Seleccionado");
                 soy_copia = true;
             }
         }
@@ -301,16 +423,15 @@ public class TablaAlistamiento extends JTable {
         private class BotonCelda extends JButton {
 
             // <editor-fold defaultstate="collapsed" desc="CLASE EXTENDIDA DE JBUTTON CONFIGURADA PARA INSERTAR BOTONES EN CELDAS DE UNA TABLA">
-
             private final int miAccion;
 
             public BotonCelda(int ac) {
                 super();
                 miAccion = ac;
-                if(miAccion == 1){
+                if (miAccion == 1) {
                     this.setToolTipText("confirmar este repuesto y seleccionar otro");
                 }
-                if(miAccion == 2){
+                if (miAccion == 2) {
                     this.setToolTipText("descartar último repuesto confirmado");
                 }
                 addActionListener(new ActionListener() {
@@ -331,7 +452,7 @@ public class TablaAlistamiento extends JTable {
                     }
                 });
             }
-            
+
             private void accionBotonAgregar() {
                 // <editor-fold defaultstate="collapsed" desc="BOTON AGREGAR">
                 int max_spinner = (int) ((SpinnerNumberModel) ((JSpinner) (data[miFila][3])).getModel()).getMaximum();
@@ -384,10 +505,10 @@ public class TablaAlistamiento extends JTable {
             private void accionBotonDescartar() {
                 // <editor-fold defaultstate="collapsed" desc="DESCARTAR ULTIMO REPUESTO SELECCIONADO">
                 if (((PanelBotonesCelda) data[miFila + 1][4]).soy_copia) {
-                    
+
                     Object[][] old_data = data;
                     data = new Object[old_data.length - 1][5];
-                    
+
                     for (int i = 0; i < data.length; i++) {
                         if (i <= miFila) {
                             if (i == miFila) {
@@ -415,7 +536,7 @@ public class TablaAlistamiento extends JTable {
 
 // </editor-fold>
             }
-            
+
             @Override
             public void paint(Graphics grf) {
                 super.paint(grf);
@@ -440,13 +561,14 @@ public class TablaAlistamiento extends JTable {
 
         /**
          * Constructor Spinner con Modelo
+         *
          * @param spinnerModel
          */
         public SpinnerCeldaTabla(SpinnerModel spinnerModel) {
             super();
             if (spinnerModel == null) {
                 //throw new NullPointerException("model cannot be null");
-                this.myspinnerNumModel = new SpinnerNumberModel(1, 0, 10, 1);// Dato visualizado al inicio reg el spinner, minimo, maximo, paso
+                this.myspinnerNumModel = new SpinnerNumberModel(1, 0, 10, 1);// Dato visualizado al inicio repuesto_stock el spinner, minimo, maximo, paso
             } else {
                 this.myspinnerNumModel = spinnerModel;
             }
@@ -473,7 +595,9 @@ public class TablaAlistamiento extends JTable {
         }
 
         private class NoLetras implements KeyListener {
+
             // <editor-fold defaultstate="collapsed" desc="CONTROLADOR DE TECLAS OPRIMIDAS">
+
             @Override
             public void keyTyped(KeyEvent e) {
                 char typ = e.getKeyChar();
@@ -481,9 +605,11 @@ public class TablaAlistamiento extends JTable {
                     e.consume();
                 }
             }
+
             @Override
             public void keyPressed(KeyEvent e) {
             }
+
             @Override
             public void keyReleased(KeyEvent e) {
             }
@@ -498,23 +624,36 @@ public class TablaAlistamiento extends JTable {
     private class My_ComboBox extends JComboBox<ItemDeLista> {
 
         // <editor-fold defaultstate="collapsed" desc="CODIGO My_ComboBox">
-
         public int mi_fila;
         private ItemDeLista[] my_items;
 
         private ItemDeLista item_actual;
 
         public boolean i_have_items;
-        
-        /**CONSTRUCTOR DE COMBOBOX SIN ARTICULOS.
+
+        /**
+         * CONSTRUCTOR DE COMBOBOX DE UN SOLO ITEM.
          */
         public My_ComboBox(ItemDeLista item) {
+            super();
             my_items = new ItemDeLista[]{item};
             configBasica();
             noDesplegar();
         }
 
-        /**Constructor
+        /**
+         * 
+         */
+        public My_ComboBox(ItemDeLista item, boolean lista) {
+            super();
+            my_items = new ItemDeLista[]{item};
+            configBasica();
+            noDesplegar();
+        }
+
+        /**
+         * Constructor
+         *
          * @param objItems Cuando sus items vienen en un ArrayList
          */
         public My_ComboBox(Object objItems) throws Exception {
@@ -551,7 +690,7 @@ public class TablaAlistamiento extends JTable {
             this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
 
-        private void noDesplegar(){
+        private void noDesplegar() {
             this.setUI(new BasicComboBoxUI() {
                 @Override
                 protected JButton createArrowButton() {
@@ -559,17 +698,18 @@ public class TablaAlistamiento extends JTable {
                 }
             });
         }
-        
+
         public ItemDeLista[] getMy_items() {
             return my_items;
         }
-        
+
         private class ModeloComboBox extends AbstractListModel<ItemDeLista> implements ComboBoxModel<ItemDeLista> {
             // <editor-fold defaultstate="collapsed" desc="MODELO COMBOBOX">
 
             //private boolean primero;
-            
-            /***/
+            /**
+             * 
+             */
             public ModeloComboBox(/*ItemDeLista[] items*/) {
                 //my_items = items;
                 //primero = false;
@@ -605,7 +745,6 @@ public class TablaAlistamiento extends JTable {
         private class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista> {
 
             // <editor-fold defaultstate="collapsed" desc="RENDERIZADOR (O DIBUJANTE) DE LOS ITEMS Y SUS CARACTERISTICAS VISUALES DENTRO DEL COMBOBOX">
-
             public RenderItemComboBox() {
                 this.setBorder(null);
             }
@@ -630,8 +769,8 @@ public class TablaAlistamiento extends JTable {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             /*if(column == 4){
-                ((PanelBotonesCelda)value).getBotonNuevoRep().setF
-            }*/
+             ((PanelBotonesCelda)value).getBotonNuevoRep().setF
+             }*/
             return (Component) value;
         }
     }
@@ -681,11 +820,19 @@ public class TablaAlistamiento extends JTable {
         }
     }// </editor-fold>
 
+    private static class MyLabel extends JLabel {
+
+        public MyLabel() {
+            this.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            this.setText("Seleccionado");
+        }
+
+    }
+
     //FUENTES
-    //insertar componentes reg celdas de TablaAlistamiento ->
+    //insertar componentes repuesto_stock celdas de TablaAlistamiento ->
     //http://www.java2s.com/Tutorial/Java/0240__Swing/UsingaJComboBoxinaCellinaJTableComponent.htm
     //http://www.chuidiang.com/java/tablas/tablaeditor/tablaeditor.php
     //<editor-fold defaultstate="collapsed" desc="COMPONENTES(personalizados) EDITORES DE CELDAS DE TABLA">
-    //http://swing-facil.blogspot.com.co/2012/01/jbutton-jcheckbox-jcombobox-reg-jtable.html
-    
+    //http://swing-facil.blogspot.com.co/2012/01/jbutton-jcheckbox-jcombobox-repuesto_stock-jtable.html
 }

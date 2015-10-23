@@ -44,7 +44,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btn_retirar_accesorio1" min="-2" pref="22" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btn_add_accesorio1" min="-2" pref="22" max="-2" attributes="0"/>
+                              <Component id="btn_esamblador_2_" min="-2" pref="22" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="panel_primer_filtro_emsamble_" min="-2" max="-2" attributes="0"/>
@@ -83,8 +83,8 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btn_Despachar_Orden" max="32767" attributes="0"/>
-                          <Component id="btn_Cancelar_Despacho" max="32767" attributes="0"/>
+                          <Component id="btn_guardar_salir_" max="32767" attributes="0"/>
+                          <Component id="btn_cancelar_alistamiento_" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
                       <Component id="scroll_tabla_produccion_" min="-2" pref="708" max="-2" attributes="0"/>
@@ -111,7 +111,7 @@
                           </Group>
                           <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                               <Component id="btn_retirar_accesorio1" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="btn_add_accesorio1" min="-2" pref="22" max="-2" attributes="0"/>
+                              <Component id="btn_esamblador_2_" min="-2" pref="22" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -140,9 +140,9 @@
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
-                              <Component id="btn_Despachar_Orden" min="-2" pref="52" max="-2" attributes="0"/>
+                              <Component id="btn_guardar_salir_" min="-2" pref="52" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="btn_Cancelar_Despacho" min="-2" pref="52" max="-2" attributes="0"/>
+                              <Component id="btn_cancelar_alistamiento_" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -166,9 +166,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_retirar_accesorio1ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btn_add_accesorio1">
+    <Component class="javax.swing.JButton" name="btn_esamblador_2_">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_add_accesorio1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_esamblador_2_ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="combo_ensambladores_">
@@ -281,7 +281,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JComboBox(new ModeloComboTallas())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new ComboTallas()"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="lbl_ref_tama&#xf1;o_">
@@ -447,9 +447,10 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="btn_Despachar_Orden">
+    <Component class="javax.swing.JButton" name="btn_guardar_salir_">
       <Properties>
         <Property name="text" type="java.lang.String" value="Guardar Actual y Salir"/>
+        <Property name="toolTipText" type="java.lang.String" value="Guardar el alistamiento actual y salir"/>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[139, 23]"/>
         </Property>
@@ -461,15 +462,16 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_Despachar_OrdenActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_guardar_salir_ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btn_Cancelar_Despacho">
+    <Component class="javax.swing.JButton" name="btn_cancelar_alistamiento_">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancelar Actual y Salir"/>
+        <Property name="toolTipText" type="java.lang.String" value="Cancelar el alistamiento actual y salir"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_Cancelar_DespachoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_cancelar_alistamiento_ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txt_n_orden_">
