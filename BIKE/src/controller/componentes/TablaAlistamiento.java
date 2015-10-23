@@ -106,7 +106,7 @@ public class TablaAlistamiento extends JTable {
                 }
                 data[fila] = new Object[]{
                     componente[1].toString(),
-                    new My_ComboBox(reg.getValue()),
+                    new My_ComboBox(reg.getValue(), 0),
                     cant_item,
                     new SpinnerCeldaTabla(model_spinner),
                     new PanelBotonesCelda(true)};
@@ -147,97 +147,59 @@ public class TablaAlistamiento extends JTable {
         try {
             if (detalle_produccion != null /*&& list != null*/) {
 
-                /*    Object[][] new_data = new Object[data.length + listado.size()][5];
-                
-                 for (int i = 0; i < data.length; i++) {
-                 new_data[i] = data[i];
-                 }
-                
-                 int fila = data.length;
-                 for (HashMap.Entry eg : listado.entrySet()) {
-                 new_data[fila] = new Object[]{
-                 eg.getValue().toString(),
-                 new My_ComboBox(eg.getValue()),
-                 ((ItemDeLista)eg.getValue()).getAtributos().get("stock"),
-                 new SpinnerCeldaTabla((int) ((ItemDeLista)eg.getValue()).getAtributos().get("cant_desp")),
-                 new PanelBotonesCelda(false)
-                 };
-                 fila++;
-                 }*/
-                //data = new_data;
-                //modelo_tabla.fireTableDataChanged();
-                //String cod_articulo = detalle_produccion[2].toString();
-                //String talla = detalle_produccion[3].toString();
-                //int cant_desp = (int) detalle_produccion[4];
-                //LinkedHashMap<Object[], ArrayList<ItemDeLista>> stock_db = ConsultaSQL.obtenerRepuestos_Articulo(cod_articulo, talla);
-                //LinkedHashMap<String, ItemDeLista> listado = ((LinkedHashMap<String,ItemDeLista>)list);
-                //Object[][] repuestos_stock = new Object[stock_db.size()][5];
-                //Object[][] repuestos_despachados = new Object[listado.size()][5];
-                //data = new Object[(stock_db.size()) + (list.size())][5];
+                //Object[][] new_data = new Object[data.length + listado.size()][5];
 
-                /*data = new Object[stock_db.size()][5];// 5 columnas
-                 SpinnerNumberModel model_spinner;
-                 int fila = 0;
-                 Object[] componente;
-                 boolean par;
-                 for (HashMap.Entry reg : stock_db.entrySet()) {
-                 componente = (Object[]) reg.getKey();
-                 par = (boolean) componente[2];
-                 if (par) {
-                 model_spinner = new SpinnerNumberModel(0, 0, (5 * 2), 1);
-                 } else {
-                 model_spinner = new SpinnerNumberModel(0, 0, 5, 1);
-                 }
-                 data[fila] = new Object[]{
-                 componente[1].toString(),
-                 new My_ComboBox(reg.getValue()),
-                 cant_item,
-                 new SpinnerCeldaTabla(model_spinner),
-                 new PanelBotonesCelda(true)};
-                 fila++;
-                 }*/
-                //data = repuestos_stock;
-                /*fila = 0;
-                 ItemDeLista item_;
-                 int stock;
+                int fila = 0;
+                Object[][]lista = new Object[listado.size()][5];
+                for (HashMap.Entry eg : listado.entrySet()) {
+                    int cant_desp = (int) ((ItemDeLista) eg.getValue()).getAtributos().get("cant_desp");
+                    lista[fila] = new Object[]{
+                        /*0*/eg.getKey(),
+                        //new My_ComboBox((ItemDeLista)eg.getValue()),
+                        /*1*/((ItemDeLista)eg.getValue()).obtenerCodigoId(),
+                        /*2*/((ItemDeLista) eg.getValue()).getAtributos().get("stock"),
+                        /*3*/cant_desp,
+                        /*4*/new PanelBotonesCelda(true)
+                    };
+                    fila++;
+                }
                 
-                 for (HashMap.Entry rep : listado.entrySet()) {
-                 item_ = (ItemDeLista) rep.getValue();
-                 stock = (int) item_.getAtributos().get("stock");
-                 repuestos_despachados[fila] = new Object[]{
-                 rep.getKey().toString(),
-                 new My_ComboBox(item_, true),
-                 stock,
-                 new SpinnerCeldaTabla(),
-                 new PanelBotonesCelda(false)
-                 };
-                 fila++;
-                 }*/
-                //String nom_comp_stock, nom_comp_lista;
-                /*data = new Object[repuestos_stock.length][5];
-                 for (fila = 0; fila < data.length; fila++) {
-                 /*nom_comp_stock = repuestos_stock[fila][0].toString();
-                 nom_comp_lista = repuestos_despachados[fila][0].toString();
-                 if (nom_comp_lista.equals(nom_comp_stock)) {/
-                 data[fila] = repuestos_stock[fila];
-                 //data[fila + 1] = repuestos_despachados[fila];
-                 /*     fila = 1;
-                 } else {
-                 //data[fila] = repuestos_stock[fila];
-                 }/
-                 }*/
-                //data = repuestos_despachados;
-                //modelo_tabla.fireTableDataChanged();
-                //LinkedHashMap<String, ItemDeLista> h;
-                //Object[] ob;
-                //for (HashMap.Entry reg : listado.entrySet()) {
-                //ob = (Object[]) reg.getKey();
-                //System.out.println(ob[0] + " " + ob[1] + " " + ob[2] + " " + ob[3] + " " + ob[4]);
-                //h = (LinkedHashMap<String, ItemDeLista>) reg.getValue();
-                //}
+                Object[][] new_data = new Object[data.length][5];
+                Object[] aux;
+                SpinnerNumberModel model_spinner;
+                for (fila = 0; fila < data.length; fila++) {
+                    aux = null;
+                    for (Object[] lst : lista) {
+                        if (data[fila][0].equals(lst[0])) {
+                            //aux = new Object[1][5];
+                            int max = (int)((SpinnerNumberModel)((JSpinner)data[fila][3]).getModel()).getMaximum();
+                            model_spinner = new SpinnerNumberModel((int)lst[3], 0, max, 1);
+                            aux = new Object[]{
+                                data[fila][0], 
+                                data[fila][1], 
+                                lst[2], 
+                                new SpinnerCeldaTabla(model_spinner), 
+                                lst[4]
+                            };
+                            //((My_ComboBox)data[fila][1]).seleccionarItem(lst[1].toString());
+                            break;
+                        }
+                    }
+                    if(aux != null){
+                        new_data[fila] = aux;
+                    }
+                    else{
+                        new_data[fila] = data[fila];
+                    }
+                }
+                
+                data = new_data;
+                modelo_tabla.fireTableDataChanged();
             }
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception e) {
-            throw new Exception("Problemas al volcar el listado de despacho.\n"
+           throw new Exception("Problemas al volcar el listado de despacho.\n"
                     + "Error: " + e.toString());
         }
 
@@ -440,12 +402,90 @@ public class TablaAlistamiento extends JTable {
                         try {
                             if (((My_ComboBox) data[miFila][1]).getSelectedItem() != null) {
                                 if (miAccion == 1) {
-                                    accionBotonAgregar();
+                                    // <editor-fold defaultstate="collapsed" desc="BOTON AGREGAR">
+                                    int max_spinner = (int) ((SpinnerNumberModel) ((JSpinner) (data[miFila][3])).getModel()).getMaximum();
+                                    int cant_elegida = (int) ((JSpinner) (data[miFila][3])).getValue();
+
+                                    if (cant_elegida > 0) {
+                                        ItemDeLista item_reservado = (ItemDeLista) ((My_ComboBox) data[miFila][1]).getSelectedItem();
+                                        Object[][] new_data = new Object[data.length + 1][5];
+                                        for (int i = 0; i < new_data.length; i++) {
+                                            if (i <= miFila) {
+                                                if (i == miFila) {
+                                                    new_data[i] = new Object[]{
+                                                        data[miFila][0],
+                                                        data[miFila][1],
+                                                        data[miFila][2],
+                                                        new SpinnerCeldaTabla(
+                                                        new SpinnerNumberModel(0, 0, (max_spinner - cant_elegida), 1)),
+                                                        data[miFila][4]
+                                                    };
+                                                    if (!((max_spinner - cant_elegida) > 0)) {
+                                                        ((My_ComboBox) new_data[miFila][1]).setEnabled(false);
+                                                        ((JSpinner) (new_data[miFila][3])).setEnabled(false);
+                                                    }
+                                                } else {
+                                                    new_data[i] = data[i];
+                                                }
+                                            } else {
+                                                if (i == (miFila + 1)) {
+                                                    new_data[i] = new Object[]{
+                                                        data[miFila][0],
+                                                        new My_ComboBox(item_reservado),
+                                                        modelo_tabla.getValueAt(miFila, 2),
+                                                        new SpinnerCeldaTabla((int) ((JSpinner) (data[miFila][3])).getValue()),
+                                                        new PanelBotonesCelda(false)
+                                                    };
+                                                } else {
+                                                    new_data[i] = data[i - 1];
+                                                }
+                                            }
+                                        }
+                                        data = new_data;
+                                        modelo_tabla.fireTableDataChanged();
+                                    } else {
+                                        JOptionPane.showMessageDialog(TablaAlistamiento.this, "Selecciona la cantidad del Repuesto\n"
+                                                + "antes de elegir otro");
+                                    }
+                                    // </editor-fold>
                                 }
                                 if (miAccion == 2) {
-                                    accionBotonDescartar();
+                                    // <editor-fold defaultstate="collapsed" desc="DESCARTAR ULTIMO REPUESTO SELECCIONADO">
+                                    if (((PanelBotonesCelda) data[miFila + 1][4]).soy_copia) {
+
+                                        Object[][] old_data = data;
+                                        data = new Object[old_data.length - 1][5];
+
+                                        for (int i = 0; i < data.length; i++) {
+                                            if (i <= miFila) {
+                                                if (i == miFila) {
+                                                    int max_spinner = (int) ((SpinnerNumberModel) ((JSpinner) (old_data[miFila][3])).getModel()).getMaximum();
+                                                    int cant_back = (int) ((SpinnerNumberModel) ((JSpinner) (old_data[miFila + 1][3])).getModel()).getValue();
+                                                    data[i] = new Object[]{
+                                                        old_data[miFila][0],
+                                                        old_data[miFila][1],
+                                                        old_data[miFila][2],
+                                                        new SpinnerCeldaTabla(
+                                                        new SpinnerNumberModel(0, 0, (max_spinner + cant_back), 1)),
+                                                        old_data[miFila][4]
+                                                    };
+                                                    ((My_ComboBox) data[miFila][1]).setEnabled(true);
+                                                    ((JSpinner) data[miFila][3]).setEnabled(true);
+                                                } else {
+                                                    data[i] = old_data[i];
+                                                }
+                                            } else {
+                                                data[i] = old_data[i + 1];
+                                            }
+                                        }
+                                        modelo_tabla.fireTableDataChanged();
+                                    }
+
+// </editor-fold>
                                 }
                             }
+                        } catch (RuntimeException ex) {
+                            throw ex;
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(BotonCelda.this, e.toString());
                         }
@@ -453,89 +493,13 @@ public class TablaAlistamiento extends JTable {
                 });
             }
 
-            private void accionBotonAgregar() {
-                // <editor-fold defaultstate="collapsed" desc="BOTON AGREGAR">
-                int max_spinner = (int) ((SpinnerNumberModel) ((JSpinner) (data[miFila][3])).getModel()).getMaximum();
-                int cant_elegida = (int) ((JSpinner) (data[miFila][3])).getValue();
-
-                if (cant_elegida > 0) {
-                    ItemDeLista item_reservado = (ItemDeLista) ((My_ComboBox) data[miFila][1]).getSelectedItem();
-                    Object[][] new_data = new Object[data.length + 1][5];
-                    for (int i = 0; i < new_data.length; i++) {
-                        if (i <= miFila) {
-                            if (i == miFila) {
-                                new_data[i] = new Object[]{
-                                    data[miFila][0],
-                                    data[miFila][1],
-                                    data[miFila][2],
-                                    new SpinnerCeldaTabla(
-                                    new SpinnerNumberModel(0, 0, (max_spinner - cant_elegida), 1)),
-                                    data[miFila][4]
-                                };
-                                if (!((max_spinner - cant_elegida) > 0)) {
-                                    ((My_ComboBox) new_data[miFila][1]).setEnabled(false);
-                                    ((JSpinner) (new_data[miFila][3])).setEnabled(false);
-                                }
-                            } else {
-                                new_data[i] = data[i];
-                            }
-                        } else {
-                            if (i == (miFila + 1)) {
-                                new_data[i] = new Object[]{
-                                    data[miFila][0],
-                                    new My_ComboBox(item_reservado),
-                                    modelo_tabla.getValueAt(miFila, 2),
-                                    new SpinnerCeldaTabla((int) ((JSpinner) (data[miFila][3])).getValue()),
-                                    new PanelBotonesCelda(false)
-                                };
-                            } else {
-                                new_data[i] = data[i - 1];
-                            }
-                        }
-                    }
-                    data = new_data;
-                    modelo_tabla.fireTableDataChanged();
-                } else {
-                    JOptionPane.showMessageDialog(TablaAlistamiento.this, "Selecciona la cantidad del Repuesto\n"
-                            + "antes de elegir otro");
-                }
-                // </editor-fold>
+            /*private void accionBotonAgregar() {
+                
             }
 
             private void accionBotonDescartar() {
-                // <editor-fold defaultstate="collapsed" desc="DESCARTAR ULTIMO REPUESTO SELECCIONADO">
-                if (((PanelBotonesCelda) data[miFila + 1][4]).soy_copia) {
-
-                    Object[][] old_data = data;
-                    data = new Object[old_data.length - 1][5];
-
-                    for (int i = 0; i < data.length; i++) {
-                        if (i <= miFila) {
-                            if (i == miFila) {
-                                int max_spinner = (int) ((SpinnerNumberModel) ((JSpinner) (old_data[miFila][3])).getModel()).getMaximum();
-                                int cant_back = (int) ((SpinnerNumberModel) ((JSpinner) (old_data[miFila + 1][3])).getModel()).getValue();
-                                data[i] = new Object[]{
-                                    old_data[miFila][0],
-                                    old_data[miFila][1],
-                                    old_data[miFila][2],
-                                    new SpinnerCeldaTabla(
-                                    new SpinnerNumberModel(0, 0, (max_spinner + cant_back), 1)),
-                                    old_data[miFila][4]
-                                };
-                                ((My_ComboBox) data[miFila][1]).setEnabled(true);
-                                ((JSpinner) data[miFila][3]).setEnabled(true);
-                            } else {
-                                data[i] = old_data[i];
-                            }
-                        } else {
-                            data[i] = old_data[i + 1];
-                        }
-                    }
-                    modelo_tabla.fireTableDataChanged();
-                }
-
-// </editor-fold>
-            }
+                
+            }*/
 
             @Override
             public void paint(Graphics grf) {
@@ -639,16 +603,7 @@ public class TablaAlistamiento extends JTable {
             my_items = new ItemDeLista[]{item};
             configBasica();
             noDesplegar();
-        }
-
-        /**
-         * 
-         */
-        public My_ComboBox(ItemDeLista item, boolean lista) {
-            super();
-            my_items = new ItemDeLista[]{item};
-            configBasica();
-            noDesplegar();
+            
         }
 
         /**
@@ -656,7 +611,7 @@ public class TablaAlistamiento extends JTable {
          *
          * @param objItems Cuando sus items vienen en un ArrayList
          */
-        public My_ComboBox(Object objItems) throws Exception {
+        public My_ComboBox(Object objItems, int o) throws Exception {
             super();
             try {
                 if (((ArrayList) objItems).size() > 0) {
@@ -697,6 +652,23 @@ public class TablaAlistamiento extends JTable {
                     return null;
                 }
             });
+        }
+
+        /**
+         * @param codItemDeLista
+         */
+        public void seleccionarItem(String codItemDeLista) {
+            ItemDeLista item;
+            String cod;
+            for (int i = 0; i < my_items.length; i++) {
+                //item = items.get(i);
+                item = my_items[i];
+                cod = item.obtenerCodigoId();
+                if (cod.equals(codItemDeLista)) {
+                    this.setSelectedIndex(i);
+                    break;
+                }
+            }
         }
 
         public ItemDeLista[] getMy_items() {
@@ -758,6 +730,7 @@ public class TablaAlistamiento extends JTable {
                         setHorizontalAlignment(JTextField.CENTER);
                     }
                 }
+                
                 return this;
             }// </editor-fold>
         }// </editor-fold>
@@ -765,12 +738,9 @@ public class TablaAlistamiento extends JTable {
 
     // <editor-fold defaultstate="collapsed" desc="CLASES PARA LA GRAFICACION DE COMPONENTES (combobox, boton..) DENTRO DE TABLA Y SU CAPACIDAD DE DETERMINAR EL VALOR DE LA CELDA (edicion)">
     private static class RenderComponenteCelda implements TableCellRenderer {
-
+        
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            /*if(column == 4){
-             ((PanelBotonesCelda)value).getBotonNuevoRep().setF
-             }*/
             return (Component) value;
         }
     }

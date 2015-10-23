@@ -358,8 +358,8 @@ public class TablaProduccion extends JTable{
      
                     case 2:
                         
-                        JOptionPane.showMessageDialog(null, "oprimiste en la fila "+(int)data[miFila][0],
-                                    "Editar Orden", 0);
+                        //JOptionPane.showMessageDialog(null, "oprimiste en la fila "+(int)data[miFila][0],
+                          //          "Editar Orden", 0);
                         try {
                             if (MainClass.menu.ordenProduccion != null && MainClass.menu.ordenProduccion.isVisible()) {
                                 if (MainClass.menu.ordenProduccion.isIcon()) {

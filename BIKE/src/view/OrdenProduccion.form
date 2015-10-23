@@ -71,7 +71,7 @@
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                                      <Component id="btn_guardar_Orden_Alistada_" min="-2" pref="200" max="-2" attributes="0"/>
+                                      <Component id="btn_guardar_lista_" min="-2" pref="200" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="btn_borrar_Orden_Registrada_" min="-2" pref="200" max="-2" attributes="0"/>
                                   </Group>
@@ -121,7 +121,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btn_borrar_Orden_Registrada_" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
-                                  <Component id="btn_guardar_Orden_Alistada_" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
+                                  <Component id="btn_guardar_lista_" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="scroll_tabla_produccion_" min="-2" pref="132" max="-2" attributes="0"/>
@@ -389,7 +389,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="btn_guardar_Orden_Alistada_">
+    <Component class="javax.swing.JButton" name="btn_guardar_lista_">
       <Properties>
         <Property name="text" type="java.lang.String" value="aceptar y alistar otra"/>
         <Property name="toolTipText" type="java.lang.String" value="Despachar la orden actual y preparar otra"/>
@@ -405,7 +405,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_guardar_Orden_Alistada_ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_guardar_lista_ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btn_borrar_Orden_Registrada_">
