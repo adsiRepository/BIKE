@@ -386,6 +386,7 @@ public class TablaProduccion extends JTable{
                                 data = new Object[][]{};
                                 mi_modelo_tabla.fireTableDataChanged();
                                 TablaProduccion.this.actualizarTabla();
+                                MainClass.menu.ordenProduccion.actualizarDesdeFuera();
                             }
                             else{
                                 JOptionPane.showMessageDialog(TablaProduccion.this, "No se pudo Borrar la Orden");

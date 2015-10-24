@@ -36,7 +36,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     //VENTANAS INTERNAS
     public ControlArticulos controlArticulos;
     public ControlComponentes controlComponentes;
-    public GestionProduccion gestionProduccion;
     public GestionRepuestos gestionRepuestos;
     public OrdenProduccion ordenProduccion;
     public RegistroEmpleados registroEmpleados;
@@ -93,7 +92,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menu_item_cerrar_ = new javax.swing.JMenuItem();
         menu_tareas_ = new javax.swing.JMenu();
         menu_item_nueva_orden_ = new javax.swing.JMenuItem();
-        menuItem_revisionProduccion_ = new javax.swing.JMenuItem();
         menu_almacen_ = new javax.swing.JMenu();
         menu_item_componentes_ = new javax.swing.JMenuItem();
         menu_item_gestion_produccion_ = new javax.swing.JMenuItem();
@@ -270,14 +268,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menu_tareas_.add(menu_item_nueva_orden_);
 
-        menuItem_revisionProduccion_.setText("Revision");
-        menuItem_revisionProduccion_.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItem_revisionProduccion_ActionPerformed(evt);
-            }
-        });
-        menu_tareas_.add(menuItem_revisionProduccion_);
-
         barra_menu_1.add(menu_tareas_);
 
         menu_almacen_.setText("Almacen");
@@ -383,23 +373,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void menu_item_servidores_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_servidores_ActionPerformed
 
     }//GEN-LAST:event_menu_item_servidores_ActionPerformed
-
-    private void menuItem_revisionProduccion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem_revisionProduccion_ActionPerformed
-        try {
-            if (gestionProduccion != null && gestionProduccion.isVisible()) {
-                if (gestionProduccion.isIcon()) {
-                   gestionProduccion.setIcon(false);
-                }
-            } else {
-                gestionProduccion = new GestionProduccion();
-                escritorio.add(gestionProduccion);
-                gestionProduccion.setVisible(true);
-            }
-            gestionProduccion.toFront();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.toString());
-        }
-    }//GEN-LAST:event_menuItem_revisionProduccion_ActionPerformed
 
     private void menu_item_nueva_orden_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_nueva_orden_ActionPerformed
         try {
@@ -538,7 +511,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static final javax.swing.JDesktopPane escritorio = new controller.componentes.Paneles.Escritorio();
     private javax.swing.JMenuItem menuItem_controlRepuestos_;
     private javax.swing.JMenuItem menuItem_registroEnsamblador_;
-    private javax.swing.JMenuItem menuItem_revisionProduccion_;
     private javax.swing.JMenu menu_almacen_;
     private javax.swing.JMenu menu_archivo_;
     private javax.swing.JMenu menu_ensambladores_;

@@ -41,10 +41,6 @@
                               <Component id="lbl_ensamblador_" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="combo_ensambladores_" min="-2" pref="180" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btn_retirar_accesorio1" min="-2" pref="22" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btn_esamblador_2_" min="-2" pref="22" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="panel_primer_filtro_emsamble_" min="-2" max="-2" attributes="0"/>
@@ -56,27 +52,25 @@
                           </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="lbl_n_orden_" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txt_n_orden_" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                              <Component id="btn_guardar_lista_" min="-2" pref="200" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btn_borrar_Orden_Registrada_" min="-2" pref="200" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="btn_refrecar_lista_edicion_" min="-2" pref="120" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="lbl_n_orden_" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="scroll_items_selec" min="-2" pref="581" max="-2" attributes="0"/>
+                                      <Component id="txt_n_orden_" min="-2" pref="50" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                                      <Component id="btn_guardar_lista_" min="-2" pref="200" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="btn_borrar_Orden_Registrada_" min="-2" pref="200" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="scroll_items_selec" min="-2" pref="581" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="20" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -88,9 +82,9 @@
                       </Group>
                       <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
                       <Component id="scroll_tabla_produccion_" min="-2" pref="708" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace pref="20" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -109,10 +103,7 @@
                               <Component id="lbl_ensamblador_" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="combo_ensambladores_" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                              <Component id="btn_retirar_accesorio1" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="btn_esamblador_2_" min="-2" pref="22" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="btn_refrecar_lista_edicion_" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -147,7 +138,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="18" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -158,17 +149,13 @@
         <Property name="text" type="java.lang.String" value="Ensamblador:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btn_retirar_accesorio1">
+    <Component class="javax.swing.JButton" name="btn_refrecar_lista_edicion_">
       <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Despachar Mercanc&#xed;a para Orden Seleccionada"/>
+        <Property name="text" type="java.lang.String" value="refrescar lista"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_retirar_accesorio1ActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btn_esamblador_2_">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_esamblador_2_ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_refrecar_lista_edicion_ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="combo_ensambladores_">
@@ -208,7 +195,7 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="txt_cant_ensamble_" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
                               <Component id="combo_ref_tamaño_" min="-2" pref="41" max="-2" attributes="0"/>
-                              <Component id="combo_catalogo_ensamble_" min="-2" pref="146" max="-2" attributes="0"/>
+                              <Component id="combo_articulos_" min="-2" pref="146" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -222,7 +209,7 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lbl_tipo_ensamble_" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="combo_catalogo_ensamble_" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="combo_articulos_" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -242,7 +229,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JComboBox" name="combo_catalogo_ensamble_">
+        <Component class="javax.swing.JComboBox" name="combo_articulos_">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Al Seleccionar se filtraran en la lista los Items correspondientes a esta clase de Articulo"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -256,7 +243,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="combo_catalogo_ensamble_ItemStateChanged"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="combo_articulos_ItemStateChanged"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new controller.componentes.ComboBoxItem()"/>
@@ -410,8 +397,8 @@
     </Component>
     <Component class="javax.swing.JButton" name="btn_borrar_Orden_Registrada_">
       <Properties>
-        <Property name="text" type="java.lang.String" value="cancelar orden seleccionada"/>
-        <Property name="toolTipText" type="java.lang.String" value="Borraras la(s) orden que selecciones en la tabla inferior"/>
+        <Property name="text" type="java.lang.String" value="borrar orden seleccionada"/>
+        <Property name="toolTipText" type="java.lang.String" value="Borraras la/s orden que seleccione/s en la tabla inferior"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_borrar_Orden_Registrada_ActionPerformed"/>

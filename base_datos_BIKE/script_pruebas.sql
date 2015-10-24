@@ -239,23 +239,28 @@ insert into ordenes_produccion (no_ord, ensamblador, hora_despacho, hora_entrega
 alter table ordenes_produccion change no_ord no_ord int(11) not null auto_increment; 
 delete from ordenes_produccion where no_ord = 1;
 select * from ordenes_produccion;
+update ordenes_produccion set ensamblador = '1107057722', hora_despacho = '2015-10-23 09:47:30' where no_ord = 4;
+
+select * from tallas;
 
 desc detalle_despacho;
 insert into detalle_despacho values
 (1, '403436', 5),
 (1, '690733', 10)
 ;
-delete from detalle_despacho;
+
+delete from detalle_despacho where orden = 2;
 update detalle_despacho set cant_desp = 6 where repuesto = '690733';
 update detalle_despacho set repuesto = '690733' where repuesto = '311104' and orden = 1;
+select * from detalle_despacho;
+
 
 desc componentes;
 /**OBTENER LISTADO DESPACHADO EN UNA ORDEN*/
 /**Primero datos empleado y produccion*/
-select op.no_ord, e.id_emp, e.nom_emp, e.ape_emp, a.id_articulo, a.articulo, p.talla, p.cantidad 
-from ordenes_produccion op inner join ensambladores e inner join articulos a 
-inner join produccion p 
-where op.ensamblador = e.id_emp and a.id_articulo = p.articulo and p.no_ord_prod = op.no_ord;
+select op.no_ord, e.id_emp, a.id_articulo, p.talla, p.cantidad 
+from ordenes_produccion op inner join ensambladores e inner join articulos a inner join produccion p 
+where op.ensamblador = e.id_emp and a.id_articulo = p.articulo and p.no_ord_prod = op.no_ord and op.no_ord = 2;
 /**Obtener toda la informacion de una vez*/
 select op.no_ord, e.nom_emp, e.ape_emp, a.articulo, p.talla, p.cantidad, 
 c.componente, r.cod_rep, r.repuesto, dp.cant_desp 
@@ -263,14 +268,45 @@ from ordenes_produccion op inner join ensambladores e inner join articulos a
 inner join produccion p inner join componentes c inner join repuestos r inner join detalle_despacho dp 
 where op.ensamblador = e.id_emp and a.id_articulo = p.articulo and p.no_ord_prod = op.no_ord 
 and c.id_comp = r.componente and dp.orden = op.no_ord and r.cod_rep = dp.repuesto and op.no_ord = 2;
+/**Obtener solo el listado*/
+select c.componente, r.cod_rep, r.repuesto, r.cant_disp, dp.cant_desp 
+from detalle_despacho dp inner join repuestos r inner join componentes c 
+where c.id_comp = r.componente and r.cod_rep = dp.repuesto and dp.orden = 2;
+
 /***/
 
-select * from detalle_despacho;
+
+/**GESTION DE ARTICULOS*/
+/**buscar componentes de articulo*/
+select c.componente, c.desc_comp from componentes c inner join componente_articulo ca 
+where c.id_comp = ca.componente and ca.articulo = 'MTB';
+
+select * from componentes;
+
+select * from componente_articulo;
+delete from componente_articulo where articulo = 'RIN'; 
+select * from componente_articulo where articulo = 'RIN'; 
+
+insert into componente_articulo values
+('RIN','883'), 	
+('RIN','015'),	
+('RIN','024'),	
+('RIN','022'),	
+('RIN','031');
+
+select distinct f.familia, c.id_comp, c.componente, c.desc_comp 
+from componentes c inner join familia_componente f 
+inner join componente_articulo ca 
+where f.cod_fam = c.familia and c.id_comp = ca.componente;
+
+
+/***/
+
 
 desc produccion;
 insert into produccion values
 (3,'RDP','26',5);
-delete from produccion;
+delete from produccion where no_ord_prod = 2;
 select * from produccion;
 /***/
 
@@ -305,14 +341,19 @@ delete from componentes;
 delete from componentes;
 select * from componentes c order by c.familia;
 
-
+select f.familia, c.componente, c.desc_comp 
+from componentes c inner join familia_componente f inner join componente_articulo ca 
+where f.cod_fam = c.familia and c.id_comp = ca.componente and ca.articulo = 'MTB';
 
 desc articulos;
 
 rename table artefacto to articulos;
-delete from articulos; /*where id_articulo = 'A01';*/
-select * from articulos;
 
+/**GESTION DE ARTICULOS*/
+delete from articulos where id_articulo = 'RIN';
+select * from articulos;
+update articulos set id_articulo = 'AMT' where id_articulo = 'M';
+/***/
 
 desc componente_articulo;
 

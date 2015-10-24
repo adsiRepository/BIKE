@@ -1,13 +1,16 @@
 //code
 package controller;
 
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import model.componentes.ItemDeLista;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;//Maneja el ArrayList
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,8 +18,45 @@ import java.util.LinkedHashMap;
  */
 public class ConsultaSQL {
 
+    //ENSAMBLADORES
+    
     /**
-     * METODO QUE DEVUELVE EL LISTADO DE TODOS ARTICULOS O PRODUCTOS ENSAMBLADOS
+     * METODO QUE OBTIENE EL LISTADO DE ENSAMBLADORES ACTUALES.
+     *
+     * @return => retorna un ArrayList
+     * @throws java.lang.Exception
+     */
+    public static ArrayList<ItemDeLista>/*HashMap<String, HashMap<String, Object>>*/ obtenerListaEnsambladores() throws Exception {
+
+        try (Connection connbd = ConexionBD.obtenerConexion()) {
+
+            ArrayList<ItemDeLista> items_retorno = new ArrayList<>();
+            HashMap<String, Object> atributos_item; // ESTE HASHMAP AUXILIAR ES EL QUE SE USARA EN EL CONSTRUCTOR DE CADA ITEMCOMBOBOX
+
+            try (Statement sentencia = connbd.createStatement()) {
+                try (ResultSet resultados = sentencia.executeQuery(
+                        "select id_emp, nom_emp, ape_emp from ensambladores;")) {
+                    while (resultados.next()) {
+                        atributos_item = new HashMap<>();//LO REDEFINO COMO UN NUEVO OBJETO PARA EVITAR INTERFERENCIAS CON EL PROXIMO ITEMCOMBOBOX
+                        // EL PRIMER PUT DENTRO DEL HASHMAP SIEMPRE SERA EL TEXTO A MOSTRAR EN EL ITEM DEL COMBOBOX
+                        atributos_item.put(ItemDeLista.TEXTO_MOSTRADO, resultados.getString(2) + " " + resultados.getString(3));
+                        items_retorno.add(new ItemDeLista(resultados.getString(1), atributos_item));
+                    }
+                }
+            }
+            return items_retorno;
+        } catch (Exception e) {
+            throw new Exception("Error al Intentar obtener los registros de Empleados\n"
+                    + "Problema: " + e.getLocalizedMessage());
+        }
+    }
+    
+    //FIN ENSAMBLADORES
+    
+    //ARTICULOS
+    
+    /**
+     * METODO QUE DEVUELVE EL LISTADO DE TODOS ARTICULOS O PRODUCTOS QUE SON PRODUCIDOS
      * EN LA TIENDA. Estos son Agregados o elimindados por el usuario en una
      * ventana dedicada.
      *
@@ -62,47 +102,380 @@ public class ConsultaSQL {
                                 resultados.previous();
                             }
                         }
+                        
                     }
+                   return retorno; 
                 }
             }
-            return retorno;
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Exception ex) {
             throw new Exception("Error Consulta de Catalogo" + ex.getLocalizedMessage());
         }
     }
-
+    
+    
     /**
-     * METODO QUE OBTIENE EL LISTADO DE ENSAMBLADORES ACTUALES.
+     * METODO PARA INGRESAR O REGISTRAR UN NUEVO ARTICULO.
      *
-     * @return => retorna un ArrayList
+     * @param detalles nombre, descripcion, tallas.
+     * @param componentes el listado de componentes vinculados al articulo.
+     * @return verdadero o falso segun el resultado.
      * @throws java.lang.Exception
      */
-    public static ArrayList<ItemDeLista>/*HashMap<String, HashMap<String, Object>>*/ obtenerListaEnsambladores() throws Exception {
-
-        try (Connection connbd = ConexionBD.obtenerConexion()) {
-
-            ArrayList<ItemDeLista> items_retorno = new ArrayList<>();
-            HashMap<String, Object> atributos_item; // ESTE HASHMAP AUXILIAR ES EL QUE SE USARA EN EL CONSTRUCTOR DE CADA ITEMCOMBOBOX
-
-            try (Statement sentencia = connbd.createStatement()) {
-                try (ResultSet resultados = sentencia.executeQuery(
-                        "select id_emp, nom_emp, ape_emp from ensambladores;")) {
-                    while (resultados.next()) {
-                        atributos_item = new HashMap<>();//LO REDEFINO COMO UN NUEVO OBJETO PARA EVITAR INTERFERENCIAS CON EL PROXIMO ITEMCOMBOBOX
-                        // EL PRIMER PUT DENTRO DEL HASHMAP SIEMPRE SERA EL TEXTO A MOSTRAR EN EL ITEM DEL COMBOBOX
-                        atributos_item.put(ItemDeLista.TEXTO_MOSTRADO, resultados.getString(2) + " " + resultados.getString(3));
-                        items_retorno.add(new ItemDeLista(resultados.getString(1), atributos_item));
+    public static boolean registrarNuevoArticulo(Object[] detalles, Object[] componentes) throws Exception {
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            
+            int comprobante = 1;
+            
+            String cod_generado = Crypt.generarContraseña(Crypt.ARTICULOS);
+            boolean cod_exist = true;
+            while(cod_exist){
+                try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                        "select * from articulos where id_articulo = ?;")) {
+                    sentencia.setString(1, cod_generado);
+                    try (ResultSet resultados = sentencia.executeQuery()) {
+                        if(resultados.next()){
+                            cod_generado = Crypt.generarContraseña(Crypt.ARTICULOS);
+                        }
+                        else{
+                            cod_exist = false;
+                        }
                     }
                 }
             }
-            return items_retorno;
-        } catch (Exception e) {
-            throw new Exception("Error al Intentar obtener los registros de Empleados\n"
-                    + "Problema: " + e.getLocalizedMessage());
+            
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "insert into articulos (id_articulo, articulo, descripcion) values "
+                    + "(?, ?, ?);")) {
+                sentencia.setString(1, cod_generado);
+                sentencia.setString(2, detalles[0].toString());
+                sentencia.setString(3, detalles[1].toString());
+                comprobante = comprobante * sentencia.executeUpdate();
+            }
+
+            StringBuilder sb;
+            
+            // <editor-fold defaultstate="collapsed" desc="Escritura de la Sentencia">
+            sb = new StringBuilder();
+            sb.append("insert into componente_articulo values ");
+            for (int i = 1; i <= componentes.length; i++) {
+                if (i == componentes.length) {
+                    sb.append("(?, ?);");
+                } else {
+                    sb.append("(?, ?), ");
+                }
+            }
+            // </editor-fold>
+            try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(sb.toString())) {
+                for (int i = 1; i <= componentes.length; i++) {
+                    sentencia_insert.setString(((i * 2) - 1), cod_generado);
+                    sentencia_insert.setString((i * 2), (String) componentes[i - 1]);
+                }
+                comprobante = comprobante * sentencia_insert.executeUpdate();
+                //return comprobante > 0;
+            }
+            
+            Object[] tallas = (Object[]) detalles[2];
+
+            if (tallas.length > 0) {
+                /*try (java.sql.PreparedStatement borrar_tallas = con.prepareStatement(
+                        "delete from talla_articulo where articulo = ?;")) {
+                    borrar_tallas.setString(1, cod_articulo);
+                    //comprobante = comprobante * borrar_tallas.executeUpdate();
+                    if (!(borrar_tallas.executeUpdate() > 0)) {
+                        JOptionPane.showMessageDialog(null, "No existian tallas asiganadas al articulo.");
+                    }
+                }*/
+
+                sb = new StringBuilder();
+                sb.append("insert into talla_articulo values ");
+                for (int i = 1; i <= tallas.length; i++) {
+                    if (i == tallas.length) {
+                        sb.append("(?, ?);");
+                    } else {
+                        sb.append("(?, ?), ");
+                    }
+                }
+                try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(sb.toString())) {
+                    for (int i = 1; i <= tallas.length; i++) {
+                        sentencia_insert.setString(((i * 2) - 1), cod_generado);
+                        sentencia_insert.setString((i * 2), (String) tallas[i - 1]);
+                    }
+                    comprobante = comprobante * sentencia_insert.executeUpdate();
+                    return comprobante > 0;
+                }
+            }
+
+            return comprobante > 0;
+
+        } catch (Exception ex) {
+            throw new Exception("Error Consulta de Catalogo\n" + ex.getLocalizedMessage());
         }
     }
+    
+    
+    
+    /**
+     * METODO PARA MODIFICAR LOS DATOS DE UN ARTICULO.
+     *
+     * @param cod_articulo codigo del articulo que será eliminado.
+     * @param detalles nombre, descripcion, tallas.
+     * @return verdadero o falso segun el resultado.
+     * @throws java.lang.Exception
+     */
+    public static boolean modificarArticulo(String cod_articulo, Object[] detalles) throws Exception {
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            
+            int comprobante = 1;
+            
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "update articulos "
+                    + "set articulo = ?, descripcion = ? "
+                    + "where id_articulo = ?;")) {
+                sentencia.setString(1, detalles[0].toString());
+                sentencia.setString(2, detalles[1].toString());
+                sentencia.setString(3, cod_articulo);
+                comprobante = comprobante * sentencia.executeUpdate();
+            }
+            
+            Object[] tallas_nuevas = (Object[]) detalles[2];
+
+            if (tallas_nuevas.length > 0) {
+
+                try (java.sql.PreparedStatement borrar_tallas = con.prepareStatement(
+                        "delete from talla_articulo where articulo = ?;")) {
+                    borrar_tallas.setString(1, cod_articulo);
+                    //comprobante = comprobante * borrar_tallas.executeUpdate();
+                    if (!(borrar_tallas.executeUpdate() > 0)) {
+                        JOptionPane.showMessageDialog(null, "No existian tallas asiganadas al articulo.");
+                    }
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.append("insert into talla_articulo values ");
+                for (int i = 1; i <= tallas_nuevas.length; i++) {
+                    if (i == tallas_nuevas.length) {
+                        sb.append("(?, ?);");
+                    } else {
+                        sb.append("(?, ?), ");
+                    }
+                }
+                try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(sb.toString())) {
+                    for (int i = 1; i <= tallas_nuevas.length; i++) {
+                        sentencia_insert.setString(((i * 2) - 1), cod_articulo);
+                        sentencia_insert.setString((i * 2), (String) tallas_nuevas[i - 1]);
+                    }
+                    comprobante = comprobante * sentencia_insert.executeUpdate();
+                    return comprobante > 0;
+                }
+            }
+
+            return comprobante > 0;
+
+        } catch (Exception ex) {
+            throw new Exception("Error Consulta de Catalogo\n" + ex.getLocalizedMessage());
+        }
+    }
+    
+    
+    /**
+     * METODO PARA BORRAR UN ARTICULO EXISTENTE.
+     *
+     * @param cod_articulo codigo del articulo que será eliminado.
+     * @return verdadero o falso segun el resultado.
+     * @throws java.lang.Exception
+     */
+    public static boolean eliminarArticulo(String cod_articulo) throws Exception {
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia_delete = con.prepareStatement(
+                    "delete from articulos where id_articulo = ?;")) {
+                sentencia_delete.setString(1, cod_articulo);
+                return sentencia_delete.executeUpdate() > 0;
+            }
+        } catch (Exception ex) {
+            throw new Exception("Error Consulta de Catalogo\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    
+    /**
+     * METODO PARA OBTENER EL CATALOGO DE TALLAS DE ARTICULOS USADAS EN LA
+     * TIENDA
+     *
+     * @return
+     * @throws java.lang.Exception
+     */
+    public static Object[] tallasUsadas() throws Exception {
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            try (Statement sentencia = con.createStatement()) {
+                try (ResultSet resultados = sentencia.executeQuery(
+                        "select talla from tallas;")) {
+                    ArrayList<String> tallas = new ArrayList<>();
+                    while (resultados.next()) {
+                        tallas.add(resultados.getString(1));
+                    }
+                    if(tallas.size() > 0){
+                        return tallas.toArray();
+                    }
+                    else{
+                        throw new Exception("No hay tallas registradas por el momento.");
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            throw new Exception("Error Consulta de Catalogo\n" + ex.getLocalizedMessage());
+        }
+    }
+    
+    
+    //COMPONENTES
+    
+    /**
+     * CON ESTE METODO SE OBTENDRA EL LISTADO DE COMPONENTES ASIGNADOS A UN ARTICULO.
+     * @param cod_articulo
+     * @return 
+     * @throws java.lang.Exception
+     */
+    public static Object[][] obtenerComponentesDeArticulo(String cod_articulo) throws Exception{
+        try (Connection con = ConexionBD.obtenerConexion()) {
+
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "select f.familia, c.id_comp, c.componente, c.desc_comp "
+                    + "from componentes c inner join familia_componente f "
+                    + "inner join componente_articulo ca "
+                    + "where f.cod_fam = c.familia and c.id_comp = ca.componente "
+                    + "and ca.articulo = ?;")) {
+                sentencia.setString(1, cod_articulo);
+                try (ResultSet resultados = sentencia.executeQuery()) {
+                    ArrayList<Object[]> caja = new ArrayList<>();
+                    while (resultados.next()) {
+                        caja.add(new Object[]{
+                            resultados.getString(1), 
+                            resultados.getString(2), 
+                            resultados.getString(3),
+                            resultados.getString(4)
+                        });
+                    }
+                    if (caja.size() > 0) {
+                        Object[][] retorno = new Object[caja.size()][4];
+                        Iterator it = caja.iterator();
+                        int i = 0;
+                        while (it.hasNext()) {
+                            retorno[i] = (Object[]) it.next();
+                            i++;
+                        }
+                        return retorno;
+                    } else {
+                        throw new Exception("Al parecer este Articulo no Tiene Componentes Registrados.");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new Exception("Problemas al obtener el listado de Componentes del articulo.\n"
+                    + "Error: " + e.getLocalizedMessage());
+        }
+    }
+    
+    
+    /**
+     * METODO QUE OBTIENE LA TOTALIDAD DE COMPONENTES QUE HACEN PARTE DE 
+     * LOS ARTICULOS.
+     *
+     * @return
+     * @throws java.lang.Exception
+     */
+    public static Object[][] obtenerTodosLosComponentes() throws Exception {
+        try (Connection con = ConexionBD.obtenerConexion()) {
+
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "select distinct f.familia, c.id_comp, c.componente, c.desc_comp "
+                    + "from componentes c inner join familia_componente f "
+                    + "inner join componente_articulo ca "
+                    + "where f.cod_fam = c.familia and c.id_comp = ca.componente;")) {
+                
+                try (ResultSet resultados = sentencia.executeQuery()) {
+                    ArrayList<Object[]> caja = new ArrayList<>();
+                    while (resultados.next()) {
+                        caja.add(new Object[]{
+                            resultados.getString(1), 
+                            resultados.getString(2), 
+                            resultados.getString(3),
+                            resultados.getString(4)
+                        });
+                    }
+                    if (caja.size() > 0) {
+                        Object[][] retorno = new Object[caja.size()][4];
+                        Iterator it = caja.iterator();
+                        int i = 0;
+                        while (it.hasNext()) {
+                            retorno[i] = (Object[]) it.next();
+                            i++;
+                        }
+                        return retorno;
+                    } else {
+                        throw new Exception("No existen componentes registrados en el Sistema.");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new Exception("Problemas al obtener el listado de Componentes.\n"
+                    + "Error: " + e.getLocalizedMessage());
+        }
+    }
+    
+    
+    /**
+     * METODO QUE MODIFICARÁ LOS COMPONENTES VINCULADOS A UN ARTICULO.
+     * 
+     * @param cod_articulo
+     * @param componentes
+     * @return
+     * @throws java.lang.Exception */
+    public static boolean modificarComponentesArticulo(String cod_articulo, Object[] componentes) throws Exception{
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            
+            int comprobante = 1;
+    
+            try (java.sql.PreparedStatement sentencia_delete = con.prepareStatement(
+                    "delete from componente_articulo where articulo = ?;")) {
+
+                sentencia_delete.setString(1, cod_articulo);
+                comprobante = comprobante * sentencia_delete.executeUpdate();
+                
+                StringBuilder sb;
+                // <editor-fold defaultstate="collapsed" desc="Escritura de la Sentencia">
+                sb = new StringBuilder();
+                sb.append("insert into componente_articulo values ");
+                for (int i = 1; i <= componentes.length; i++) {
+                    if (i == componentes.length) {
+                        sb.append("(?, ?);");
+                    } else {
+                        sb.append("(?, ?), ");
+                    }
+                }
+                // </editor-fold>
+                try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(sb.toString())) {
+                    for (int i = 1; i <= componentes.length; i++) {
+                        sentencia_insert.setString(((i * 2) - 1), cod_articulo);
+                        sentencia_insert.setString((i * 2), (String)componentes[i - 1]);
+                    }
+                    comprobante = comprobante * sentencia_insert.executeUpdate();
+                    return comprobante > 0;
+                }
+            }
+
+        } catch (Exception e) {
+            throw new Exception("Problemas al obtener el listado de Componentes del articulo.\n"
+                    + "Error: " + e.getLocalizedMessage());
+        }
+    }
+    
+    //FIN COMPONENTES 
+    
+
 
     /**
      * Segunda Version Obtencion de Repuestos Disponibles por Articulo.
@@ -262,6 +635,85 @@ public class ConsultaSQL {
             throw new Exception("Error al obtener el listado de la Orden de Produccion requerida.\n" + e.getMessage());
         }
     }
+    
+    /**
+     * METODO QUE ME PERMITE BORRAR EL LISTADO DE REPUESTOS DESPACHADOS EN UNA
+     * ORDEN SIN BORRAR LA ORDEN.
+     *
+     * @param no_orden
+     * @param produccion
+     * @param listado
+     * @return
+     * @throws java.lang.Exception
+     */
+    public static boolean actualizarListadoDespachoOrden(int no_orden, Object[] produccion, Object[][] listado) throws Exception{
+        try(Connection con = ConexionBD.obtenerConexion()){
+            int comprobante = 1;
+      
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "update ordenes_produccion "
+                    + "set ensamblador = ?, "
+                    + "hora_despacho = ? "
+                    + "where no_ord = ?;")) {
+                sentencia.setString(1, produccion[0].toString());
+                sentencia.setString(2, Tiempo.obtenerInstanteMySQL());
+                sentencia.setInt(3, no_orden);
+                comprobante = comprobante * sentencia.executeUpdate();
+            }
+
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "delete from produccion where no_ord_prod = ?;")) {
+                sentencia.setInt(1, no_orden);
+                comprobante = comprobante * sentencia.executeUpdate();
+            }
+            
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "insert into produccion values (?, ?, ?, ?);")) {
+                sentencia.setInt(1, no_orden);
+                sentencia.setString(2, produccion[1].toString());//cod articulo
+                sentencia.setString(3, produccion[2].toString());//talla
+                sentencia.setInt(4, (int) produccion[3]);//cantidad
+                comprobante = comprobante * sentencia.executeUpdate();
+            }
+
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "delete from detalle_despacho where orden = ?;")) {
+                sentencia.setInt(1, no_orden);
+                comprobante = comprobante * sentencia.executeUpdate();
+            }
+
+            StringBuilder sb;
+            // <editor-fold defaultstate="collapsed" desc="Escritura de la Sentencia">
+            sb = new StringBuilder();
+            sb.append("insert into detalle_despacho values ");
+            for (int i = 1; i <= listado.length; i++) {
+                if (i == listado.length) {
+                    sb.append("(?, ?, ?);");
+                } else {
+                    sb.append("(?, ?, ?), ");
+                }
+            }
+            // </editor-fold>
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(sb.toString())) {
+                for (int i = 1; i <= listado.length; i++) {
+                    sentencia.setInt((i * 3) - 2, no_orden);
+                    sentencia.setString((i * 3) - 1, listado[i - 1][0].toString());
+                    sentencia.setInt((i * 3), (int) listado[i - 1][1]);
+                }
+                comprobante = comprobante * sentencia.executeUpdate();
+            }
+            return comprobante > 0;
+        } catch (Exception e) {
+            if (e instanceof MySQLIntegrityConstraintViolationException) {
+                throw new Exception("No puedes seleccionar dos veces el mismo repuesto para cada componente.\n"
+                        + "Verifica en la lista si algun componente tiene seleccionado el mismo\n"
+                        + "repuesto mas de una vez. Intentelo nuevamente.\n"
+                        + "Detalle: " + e.getMessage());
+            } else {
+                throw new Exception("No se ha podido actualizar el listado de la orden.\n" + e.toString());
+            }
+        }
+    }
 
     /**
      * METODO QUE OBTIENE EL NUMERO DE LA ULTIMA ORDEN DE PRODUCCION DESPACHADA.
@@ -345,10 +797,17 @@ public class ConsultaSQL {
                 }
 
                 return comprobante > 0;
-
+         
             } catch (Exception e) {
-                throw new Exception("Error presentado al intentar registrar la nueva orden.\n"
-                        + "Detalle: " + e.getLocalizedMessage());
+                if (e instanceof MySQLIntegrityConstraintViolationException) {
+                    throw new Exception("No puedes seleccionar dos veces el mismo repuesto para cada componente.\n"
+                            + "Verifica en la lista si algun componente tiene seleccionado el mismo\n"
+                            + "repuesto mas de una vez. Intentelo nuevamente.\n"
+                            + "Detalle: " + e.getMessage());
+                } else {
+                    throw new Exception("Error presentado al intentar registrar la nueva orden.\n"
+                            + "Detalle: " + e.getLocalizedMessage());
+                }
             }
         } else {
             throw new Exception("Antes, debe elegir la Cantidad de Repuestos a Despachar.\n"
@@ -551,7 +1010,7 @@ public class ConsultaSQL {
     /**
      * @param args
      */
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         try {
             //SETEO DE VARIABLES ENCARGADAS DE LA CONEXION A LA BASE DE DATOS
             ConexionBD.setUsuario("user_storebike");
@@ -567,10 +1026,10 @@ public class ConsultaSQL {
              Object[][] data = new Object[2][2];
              data[0] = new Object[]{"403436", 4};
              data[1] = new Object[]{"690733", 3};
-             boolean f = ConsultorBD.registrarNuevaOrden("1190375460", detalle_produccion, data);/ //aqui va el astrisco
+             boolean f = ConsultorBD.registrarNuevaOrden("1190375460", detalle_produccion, data);*/ //aqui va el astrisco
             //boolean f = setConteoRepuestos(true);
             //boolean f = obtenerListadoDespachoOrden(4);
-            LinkedHashMap<String, ItemDeLista> h;
+            /*LinkedHashMap<String, ItemDeLista> h;
             Object[] ob;
             for (HashMap.Entry reg : obtenerListadoDespachoOrden(2).entrySet()) {
                 ob = (Object[]) reg.getKey();
@@ -580,10 +1039,28 @@ public class ConsultaSQL {
                     System.out.println(eg.getKey() + " : " + ((ItemDeLista) eg.getValue()).obtenerCodigoId() + " "
                             + ((ItemDeLista) eg.getValue()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
                 }
-            }
+            }*/ // aca *
 
+            /*Object[] produccion = new Object[]{"RDP", "26", 5};
+            Object[][] listado = new Object[2][2];
+            listado[0] = new Object[]{"403436", 5};
+            listado[1] = new Object[]{"690733", 10};
+            boolean f = ConsultaSQL.actualizarListadoDespachoOrden(5, produccion, listado);*/
+            //Object[] f = tallasUsadas();
+            //Object[][] f = obtenerComponentesDeArticulo("MTB");
+            //System.out.println(f[1][0]+" "+f[1][1]);
+            
+            //Object[] comps = new Object[]{"001", "003", "019"};
+            //boolean f = modificarComponentesArticulo("RIN", comps);
+            //boolean f = eliminarArticulo("RDP");
+            Object[] tallas = new Object[]{"16","20","26"};
+            Object[] detalles = new Object[]{"Ultraracer", "Bicicleta voladora.", tallas};
+            Object[] componentes = new Object[]{"001","076","003"};
+            boolean f = registrarNuevoArticulo(detalles, componentes);
+            //boolean f = modificarArticulo("TT", detalles);
+            System.out.println(f);
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }
-    }*/
+    }
 }

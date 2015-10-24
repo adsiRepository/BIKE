@@ -31,7 +31,7 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
     public ComboBoxItem() /*String comboboxthrows Exception*/{
         super();
         //seleccionaComboBox(combobox);
-        this.setRenderer(new RenderItemComboBox());
+        this.setRenderer(new ORenderItemComboBox());
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
@@ -39,27 +39,34 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
      * @param nom_combo Se especifica un String que indicará los items del combobox.
      * @throws java.lang.Exception
      */
-    public void seleccionaComboBox(String nom_combo) throws Exception {
-        //ArrayList<ItemDeLista> items = new ArrayList<>();
-        if (nom_combo.equals(OrdenProduccion.COD_CMBOX_ENSAMBLADORES)) {
-            //constructor(ConsultaSQL.ConsultorBD.obtenerListaEnsambladores());
-            items = ConsultaSQL.obtenerListaEnsambladores();
-        }
-        if (nom_combo.equals(OrdenProduccion.COD_CMBOX_ARTICULOS)) {
-            //constructor(ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos());
-            items = ConsultaSQL.obtenerCatalogoArticulos();
-        }
-        if (items.size() > 0) {
-            Iterator it = items.iterator();
-            while (it.hasNext()) {
-                this.addItem((ItemDeLista) it.next());
+    public void llenarme(String nom_combo) throws Exception {
+        if (nom_combo != null) {
+            if(this.getItemCount() > 0){
+                this.removeAllItems();
             }
+            items = new ArrayList<>();
+            if (nom_combo.equals(OrdenProduccion.MODELO_COMBO_ENSAMBLADORES)) {
+                //constructor(ConsultaSQL.ConsultorBD.obtenerListaEnsambladores());
+                items = ConsultaSQL.obtenerListaEnsambladores();
+            }
+            if (nom_combo.equals(OrdenProduccion.MODELO_COMBO_ARTICULOS)) {
+                //constructor(ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos());
+                items = ConsultaSQL.obtenerCatalogoArticulos();
+            }
+            if (items.size() > 0) {
+                Iterator it = items.iterator();
+                while (it.hasNext()) {
+                    this.addItem((ItemDeLista) it.next());
+                }
+            } else {
+                this.addItem(new ItemDeLista());
+                this.setUI(new DibujoCombobox());
+                //this.setKeySelectionManager(keySelectionManager);
+            }
+            this.setSelectedIndex(0);
         } else {
-            this.addItem(new ItemDeLista());
-            this.setUI(new DibujoCombobox());
-            //this.setKeySelectionManager(keySelectionManager);
+            throw new Exception("el nombre del modelo del ComboBoxItem no es valido, no puede ser nulo");
         }
-        this.setSelectedIndex(0);
     }
     
     /**
@@ -92,12 +99,12 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
             this.setUI(new DibujoCombobox());
             //this.setKeySelectionManager(keySelectionManager);
         }
-        this.setRenderer(new RenderItemComboBox());
+        this.setRenderer(new ORenderItemComboBox());
         this.setSelectedIndex(0);
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
     } */
     
-    private static class DibujoCombobox extends BasicComboBoxUI {
+    public static class DibujoCombobox extends BasicComboBoxUI {
         @Override
         protected JButton createArrowButton() {
             return null;
@@ -151,9 +158,9 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
         
     }*/// </editor-fold>
 
-    private static class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista>{
+    private static class ORenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista>{
         // <editor-fold defaultstate="collapsed" desc="RENDERIZADOR (O DIBUJANTE) DE LOS ITEMS Y SUS CARACTERISTICAS VISUALES DENTRO DEL COMBOBOX">
-        public RenderItemComboBox() {
+        public ORenderItemComboBox() {
             this.setBorder(null);
         }
 

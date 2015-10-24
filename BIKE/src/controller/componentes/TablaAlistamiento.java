@@ -3,6 +3,7 @@ package controller.componentes;
 // <editor-fold defaultstate="collapsed" desc="imports">
 import controller.ConsultaSQL;
 import static controller.ConsultaSQL.obtenerListadoDespachoOrden;
+import controller.componentes.ComboBoxItem.DibujoCombobox;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -602,8 +603,8 @@ public class TablaAlistamiento extends JTable {
             super();
             my_items = new ItemDeLista[]{item};
             configBasica();
-            noDesplegar();
-            
+            //noDesplegar();
+            this.setUI(new DibujoCombobox());
         }
 
         /**
@@ -611,7 +612,7 @@ public class TablaAlistamiento extends JTable {
          *
          * @param objItems Cuando sus items vienen en un ArrayList
          */
-        public My_ComboBox(Object objItems, int o) throws Exception {
+        private My_ComboBox(Object objItems, int o) throws Exception {
             super();
             try {
                 if (((ArrayList) objItems).size() > 0) {
@@ -630,7 +631,8 @@ public class TablaAlistamiento extends JTable {
                     my_items[0] = new ItemDeLista();
                     //this.setKeySelectionManager(keySelectionManager);
                     i_have_items = false;
-                    noDesplegar();
+                    //noDesplegar();
+                    this.setUI(new DibujoCombobox());
                 }
                 configBasica();
             } catch (Exception e) {
@@ -640,19 +642,21 @@ public class TablaAlistamiento extends JTable {
 
         private void configBasica() {
             this.setModel(new ModeloComboBox());
-            this.setRenderer(new RenderItemComboBox());
+            this.setRenderer(new MyRenderItemComboBox());
             this.setSelectedItem(this.getItemAt(0));
-            this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            //this.setCursor(new MyCursor(Cursor.HAND_CURSOR));
         }
 
-        private void noDesplegar() {
+        
+        
+        /*private void noDesplegar() {
             this.setUI(new BasicComboBoxUI() {
                 @Override
                 protected JButton createArrowButton() {
                     return null;
                 }
             });
-        }
+        }*/
 
         /**
          * @param codItemDeLista
@@ -714,27 +718,29 @@ public class TablaAlistamiento extends JTable {
             // </editor-fold>
         }
 
-        private class RenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista> {
+        private class MyRenderItemComboBox extends JTextField implements ListCellRenderer<ItemDeLista> {
 
-            // <editor-fold defaultstate="collapsed" desc="RENDERIZADOR (O DIBUJANTE) DE LOS ITEMS Y SUS CARACTERISTICAS VISUALES DENTRO DEL COMBOBOX">
-            public RenderItemComboBox() {
-                this.setBorder(null);
+        // <editor-fold defaultstate="collapsed" desc="RENDERIZADOR (O DIBUJANTE) DE LOS ITEMS Y SUS CARACTERISTICAS VISUALES DENTRO DEL COMBOBOX">
+        public MyRenderItemComboBox() {
+            this.setBorder(null);
+        }
+
+        @Override
+        public Component getListCellRendererComponent(JList<? extends ItemDeLista> list, ItemDeLista value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (value != null) {
+                HashMap<String, Object> attrs = ((ItemDeLista) value).getAtributos();
+                setText(String.valueOf(attrs.get(ItemDeLista.TEXTO_MOSTRADO)));
+                if (value.obtenerCodigoId() == null) {
+                    setHorizontalAlignment(JTextField.CENTER);
+                }
             }
 
-            @Override
-            public Component getListCellRendererComponent(JList<? extends ItemDeLista> list, ItemDeLista value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value != null) {
-                    HashMap<String, Object> attrs = ((ItemDeLista) value).getAtributos();
-                    setText(String.valueOf(attrs.get(ItemDeLista.TEXTO_MOSTRADO)));
-                    if (value.obtenerCodigoId() == null) {
-                        setHorizontalAlignment(JTextField.CENTER);
-                    }
-                }
-                
-                return this;
-            }// </editor-fold>
+            return this;
         }// </editor-fold>
+    }// </editor-fold>
+        
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="CLASES PARA LA GRAFICACION DE COMPONENTES (combobox, boton..) DENTRO DE TABLA Y SU CAPACIDAD DE DETERMINAR EL VALOR DE LA CELDA (edicion)">
     private static class RenderComponenteCelda implements TableCellRenderer {
@@ -798,6 +804,7 @@ public class TablaAlistamiento extends JTable {
         }
 
     }
+
 
     //FUENTES
     //insertar componentes repuesto_stock celdas de TablaAlistamiento ->
