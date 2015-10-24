@@ -60,7 +60,7 @@ public class Crypt {
         System.out.println(generarContraseña(REPUESTOS));
     }
 
-    public static String encryptMD5(String stringAEncriptar) {
+    /*public static String encryptMD5(String stringAEncriptar) {
         try {
             MessageDigest msdg = MessageDigest.getInstance("MD5");
             byte[] bytes = msdg.digest(stringAEncriptar.getBytes());
@@ -75,10 +75,10 @@ public class Crypt {
         } catch (NoSuchAlgorithmException e) {
             return null;
         }
-    }
+    }*/
     
     
-    public static String GenerarCodUser(){
+    public static String generarCodUser(){
         String prefijo = "AB";
         String cod = "0123456789";
         StringBuilder codUser = new StringBuilder();

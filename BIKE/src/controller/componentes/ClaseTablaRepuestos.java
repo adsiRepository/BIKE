@@ -1,16 +1,11 @@
+
 package controller.componentes;
 
 import java.awt.Component;
-import java.awt.HeadlessException;
-import java.util.ArrayList;
 import java.util.EventObject;
-import java.util.Iterator;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -20,21 +15,22 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author Miguel
  */
-public class ComponentesTablaArticulos {
-
-    public static class TablaArticulos extends JTable {
+public class ClaseTablaRepuestos {
+    
+    /***/
+    public static class TablaRepuestos extends JTable {
 
         private Object[][] data;
         private final MiModeloTabla mi_modelo_tabla;
 
-        public TablaArticulos() {
+        public TablaRepuestos() {
             super();
             mi_modelo_tabla = new MiModeloTabla();
             this.setModel(mi_modelo_tabla);
             this.setDefaultRenderer(Component.class, new RenderComponenteCelda());
             this.setDefaultEditor(Component.class, new EditorComponenteCelda());
             //int anchoContenedor = scroll_items_selec.getWidth();
-            int[] anchos = new int[]{120, 55, 160, 210, 60};
+            int[] anchos = new int[]{60, 180, 140, 60, 70};
             //int[] max_anchos = new int[]{200, 300, 38};
             /*int[] anchos = new int[]{ ((int)((anchoContenedor*30)/100)), ((int)((anchoContenedor*50)/100)), ((int)((anchoContenedor*20)/100)) };*/
             for (int i = 0; i < this.getColumnCount(); i++) {
@@ -43,35 +39,30 @@ public class ComponentesTablaArticulos {
                 this.getColumnModel().getColumn(i).setMaxWidth(anchos[i]);
                 this.getColumnModel().getColumn(i).setResizable(true);
             }
-            this.setRowHeight(55);
+            this.setRowHeight(35);
         }
 
-        
-        
-        
+
         /**
-         * Método publico utizado para cambiar la informacion de la tabla
-         * @param componentes
+         * Método publico utilizado para cambiar la informacion de la tabla
+         *
+         * @param repuestos
          * @throws java.lang.Exception
          */
-        public void actualizaTabla(Object[][] componentes) throws Exception {
+        public void actualizaTabla(Object[][] repuestos) throws Exception {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
                 limpiarTabla();
-                data = new Object[componentes.length][5];
-                String desc;
-                for (int i = 0; i < componentes.length; i++) {
-                    if (componentes[i][3] != null) {
-                        desc = componentes[i][3].toString();
-                    } else {
-                        desc = "No hay descripcion";
-                    }
+                data = new Object[repuestos.length][5];
+                //String aux = "";
+                for (int i = 0; i < repuestos.length; i++) {
+                    //if()
                     data[i] = new Object[]{
-                        componentes[i][0],
-                        componentes[i][1].toString(),
-                        componentes[i][2].toString(),
-                        new ScrollMyTextArea(desc),
-                        true
+                        repuestos[i][0].toString(),
+                        repuestos[i][1].toString(),
+                        repuestos[i][2],
+                        repuestos[i][3],
+                        (int)repuestos[i][4]
                     };
                 }
                 mi_modelo_tabla.fireTableDataChanged();
@@ -89,39 +80,6 @@ public class ComponentesTablaArticulos {
             mi_modelo_tabla.fireTableDataChanged();
         }
 
-        /**
-         * @return 
-         * @throws java.lang.Exception*/
-        public Object[] obtenerSeleccion() throws Exception{
-            try {
-                ArrayList<Object> caja = new ArrayList<>();
-                boolean selec;
-                int i;
-                for(i = 0; i < mi_modelo_tabla.getRowCount(); i++){
-                    selec = (boolean)mi_modelo_tabla.getValueAt(i, 4);
-                    if(selec){
-                        caja.add(mi_modelo_tabla.getValueAt(i, 1));
-                    }
-                }
-                if(caja.size() > 0){
-                    Iterator it = caja.iterator();
-                    i = 0;
-                    Object[] seleccion = new Object[caja.size()];
-                    while (it.hasNext()) {
-                        seleccion[i] = it.next();
-                        i++;
-                    }
-                    return seleccion;
-                }
-                else{
-                    throw  new Exception("No se han seleccionado Componentes para este articulo.");
-                }
-            } catch (Exception e) {
-                throw new Exception("No se ha podido obtener el listado seleccionado.\n"
-                        + "Error: "+e.getLocalizedMessage());
-            }
-        }
-        
         
         /**
          * 
@@ -129,22 +87,17 @@ public class ComponentesTablaArticulos {
         private class MiModeloTabla extends DefaultTableModel {
             // <editor-fold defaultstate="collapsed" desc="MODELO DE LA TABLA">
 
-            private final Class[] CLASES_COLUMNAS = new Class[]{String.class, String.class, String.class, ScrollMyTextArea.class, Boolean.class};
-            private final String[] TITULOS_COLUMNAS = new String[]{"Familia", "Codigo", "Componente", "Descripcion", "Usado"};
-            private final boolean[] COLS_EDITABLES = new boolean[]{false, false, false, false, true};
+            private final Class[] CLASES_COLUMNAS = new Class[]{String.class, String.class, String.class, String.class, Integer.class};
+            private final String[] TITULOS_COLUMNAS = new String[]{"Codigo", "Referencia", "Articulo que Compone", "Talla", "Cantidad"};
+            private final boolean[] COLS_EDITABLES = new boolean[]{false, false, false, false, false};
 
             /**
              * Constructor del Modelo de la TablaAlistamiento de Alistamiento.
              */
             public MiModeloTabla() {
                 super();
-                data = new Object[1][5];
-                data[0] = new Object[]{"familia","","componente",new ScrollMyTextArea("descripcion"),false};
-                try {
-                    this.setColumnIdentifiers(TITULOS_COLUMNAS);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Error al construir la tabla de Articulos.\n" + e.toString());
-                }
+                data = new Object[][]{};
+                this.setColumnIdentifiers(TITULOS_COLUMNAS);
             }
 
             @Override//determina la clase de componentes que iran en cada celda
@@ -171,9 +124,6 @@ public class ComponentesTablaArticulos {
             @Override
             public Object getValueAt(int row, int col) {
                 if (data != null) {
-                    /*if(col == 1){
-                        return data[row][col+1];
-                    }*/
                     return data[row][col];
                 }
                 return null; // no necesita estar dentro del else porque un return solo se ejecuta 1 vez
@@ -189,9 +139,6 @@ public class ComponentesTablaArticulos {
 
             @Override
             public void setValueAt(Object value, int row, int col) {
-                /*if(col == 1){
-                    data[row][col - 1] = value;
-                }*/
                 data[row][col] = value;
                 fireTableCellUpdated(row, col);//notifica a todos los listeners que el valor de la celda ha sido editado
             }
@@ -256,35 +203,6 @@ public class ComponentesTablaArticulos {
             }
         }// </editor-fold>
 
-        /**
-         *
-         */
-        private static class ScrollMyTextArea extends JScrollPane {
-
-            public String mi_texto;
-            private final AreaTexto my_area;
-
-            public ScrollMyTextArea(String contenido) {
-                super();
-                my_area = new AreaTexto();
-                mi_texto = contenido;
-                my_area.setText(mi_texto);
-                this.setViewportView(my_area);
-                this.setWheelScrollingEnabled(true);
-                this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            }
-
-            private static class AreaTexto extends JTextArea {
-
-                public AreaTexto() throws HeadlessException {
-                    super();
-                    this.setLineWrap(true);
-                    this.setWrapStyleWord(true);
-                }
-            }
-
-        }
-
     }
-
+    
 }

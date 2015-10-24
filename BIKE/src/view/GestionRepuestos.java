@@ -3,8 +3,15 @@ package view;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
 
+import controller.ConsultaSQL;
+import controller.Crypt;
+import controller.componentes.ClaseTablaRepuestos.TablaRepuestos;
+import controller.componentes.ComboBoxItem;
 import controller.componentes.Paneles;
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.componentes.ItemDeLista;
 import static view.MenuPrincipal.escritorio;
 
 // </editor-fold>
@@ -19,6 +26,17 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
     /**NOMBRE ARCHIVO IMAGEN DE FONDO PARA ESTA VENTANA. Solo nombre sin extension (obligatorio archivos png)*/
     private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_productos";
     /***/
+    private static final String OP_COMBO_TALLAS_NO_TALLA = "Sin talla";
+    
+    
+    public static final String MODELO_COMBO_COMPONENTES = "combo_componentes";
+    
+    public static final String OP_BOTON_GUARDAR_NUEVO = "nuevo_repuesto";
+    public static final String OP_BOTON_EDITAR = "editar_repuesto";
+    private String decision_boton_guardar;
+    
+    private int fila_tabla, col_tabla;
+    private String codigo_seleccionado;
     
     /***/
     public GestionRepuestos() {
@@ -28,7 +46,21 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
         this.closable = true;
         this.iconable = true;
         Dimension tamaño_escritorio = escritorio.getSize(), mySpc = this.getSize();
-        this.setLocation((tamaño_escritorio.width / 8)*3, ((tamaño_escritorio.height - mySpc.height) / 4));
+        this.setLocation(/*(tamaño_escritorio.width / 3)*/10, ((tamaño_escritorio.height - mySpc.height) / 4));
+        try {
+            ((ComboBoxItem) combo_componentes_).llenarme(MODELO_COMBO_COMPONENTES);
+            ((ComboBoxItem) combo_articulos_).llenarme(OrdenProduccion.MODELO_COMBO_ARTICULOS);
+            combo_talla_.removeAllItems();
+            combo_talla_.addItem(OP_COMBO_TALLAS_NO_TALLA);
+            Object[] tallas = ConsultaSQL.tallasUsadas();
+            for(Object ob : tallas){
+                        //my_checks.add(new MyCheckCombo(ob.toString()));
+                combo_talla_.addItem(ob);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Constructor Orden Produccion", 0);
+        }
+        panel_edicion_.setEnabled(false);
     }
 
     /**
@@ -40,21 +72,609 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        combo_componentes_ = new ComboBoxItem();
+        lbl_componente_ = new javax.swing.JLabel();
+        scroll_tabla_repuestos_ = new javax.swing.JScrollPane();
+        tabla_repuestos_ = new TablaRepuestos();
+        btn_editar_seleccionado_ = new javax.swing.JButton();
+        btn_cancelar_edicion_ = new javax.swing.JButton();
+        btn_ver_reps_componente_ = new javax.swing.JButton();
+        check_contar_ = new javax.swing.JCheckBox();
+        btn_guardar_ = new javax.swing.JButton();
+        btn_nuevo_repuesto_ = new javax.swing.JButton();
+        btn_borrar_repuesto_ = new javax.swing.JButton();
+        txt_show_componente_ = new javax.swing.JTextField();
+        panel_edicion_ = new Paneles.PanelContenedorControles();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txa_ref_repuesto_ = new javax.swing.JTextArea();
+        lbl_stock_ = new javax.swing.JLabel();
+        txt_cant_stock_ = new javax.swing.JTextField();
+        check_articulo_repuesto_ = new javax.swing.JCheckBox();
+        combo_articulos_ = new ComboBoxItem();
+        lbl_articulos_ = new javax.swing.JLabel();
+        lbl_plu_ = new javax.swing.JLabel();
+        txt_plu_ = new javax.swing.JTextField();
+        check_generar_cod_ = new javax.swing.JCheckBox();
+        lbl_ref_repuesto_ = new javax.swing.JLabel();
+        lbl_talla_ = new javax.swing.JLabel();
+        combo_talla_ = new javax.swing.JComboBox();
+
+        setEnabled(false);
+
+        combo_componentes_.setToolTipText("el repuesto registrado o modificado será asignado al componente aqui seleccionado");
+        combo_componentes_.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                combo_componentes_ItemStateChanged(evt);
+            }
+        });
+
+        lbl_componente_.setText("Componente:");
+
+        tabla_repuestos_.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_repuestos_MouseClicked(evt);
+            }
+        });
+        scroll_tabla_repuestos_.setViewportView(tabla_repuestos_);
+
+        btn_editar_seleccionado_.setText("editar seleccionado");
+        btn_editar_seleccionado_.setEnabled(false);
+        btn_editar_seleccionado_.setMaximumSize(new java.awt.Dimension(135, 23));
+        btn_editar_seleccionado_.setMinimumSize(new java.awt.Dimension(135, 23));
+        btn_editar_seleccionado_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editar_seleccionado_ActionPerformed(evt);
+            }
+        });
+
+        btn_cancelar_edicion_.setText("cancelar");
+        btn_cancelar_edicion_.setMaximumSize(new java.awt.Dimension(135, 23));
+        btn_cancelar_edicion_.setMinimumSize(new java.awt.Dimension(135, 23));
+        btn_cancelar_edicion_.setPreferredSize(new java.awt.Dimension(125, 23));
+        btn_cancelar_edicion_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelar_edicion_ActionPerformed(evt);
+            }
+        });
+
+        btn_ver_reps_componente_.setText("ver repuestos");
+        btn_ver_reps_componente_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ver_reps_componente_ActionPerformed(evt);
+            }
+        });
+
+        check_contar_.setText("seguir conteo de repuestos");
+
+        btn_guardar_.setText("guardar");
+        btn_guardar_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_guardar_ActionPerformed(evt);
+            }
+        });
+
+        btn_nuevo_repuesto_.setText("nuevo");
+        btn_nuevo_repuesto_.setToolTipText("registrar nuevo repuesto");
+        btn_nuevo_repuesto_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_nuevo_repuesto_ActionPerformed(evt);
+            }
+        });
+
+        btn_borrar_repuesto_.setText("borrar repuesto");
+        btn_borrar_repuesto_.setEnabled(false);
+        btn_borrar_repuesto_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_borrar_repuesto_ActionPerformed(evt);
+            }
+        });
+
+        txt_show_componente_.setBackground(new java.awt.Color(204, 204, 204));
+        txt_show_componente_.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        panel_edicion_.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txa_ref_repuesto_.setColumns(1);
+        txa_ref_repuesto_.setLineWrap(true);
+        txa_ref_repuesto_.setRows(3);
+        txa_ref_repuesto_.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(txa_ref_repuesto_);
+
+        lbl_stock_.setText("Cantidad en Stock:");
+
+        check_articulo_repuesto_.setText("es repuesto");
+        check_articulo_repuesto_.setToolTipText("registrar este articulo como subcomponente de otro");
+        check_articulo_repuesto_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                check_articulo_repuesto_ActionPerformed(evt);
+            }
+        });
+
+        combo_articulos_.setToolTipText("elige un articulo producido si este será a su vez componente de otro");
+
+        lbl_articulos_.setText("Articulo como repuesto:");
+
+        lbl_plu_.setText("PLU:");
+
+        txt_plu_.setToolTipText("plu o codigo del repuesto");
+
+        check_generar_cod_.setText("Generar PLU");
+        check_generar_cod_.setToolTipText("autogenerar codigo del repuesto");
+
+        lbl_ref_repuesto_.setText("Nombre o Referencia del Repuesto:");
+
+        lbl_talla_.setText("Talla Disponible:");
+
+        javax.swing.GroupLayout panel_edicion_Layout = new javax.swing.GroupLayout(panel_edicion_);
+        panel_edicion_.setLayout(panel_edicion_Layout);
+        panel_edicion_Layout.setHorizontalGroup(
+            panel_edicion_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_edicion_Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_edicion_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_edicion_Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 18, Short.MAX_VALUE))
+                    .addGroup(panel_edicion_Layout.createSequentialGroup()
+                        .addGroup(panel_edicion_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panel_edicion_Layout.createSequentialGroup()
+                                .addGroup(panel_edicion_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(combo_talla_, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_talla_))
+                                .addGap(18, 18, 18)
+                                .addGroup(panel_edicion_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_stock_)
+                                    .addComponent(txt_cant_stock_, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lbl_articulos_)
+                            .addGroup(panel_edicion_Layout.createSequentialGroup()
+                                .addComponent(combo_articulos_, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(check_articulo_repuesto_))
+                            .addComponent(lbl_plu_)
+                            .addGroup(panel_edicion_Layout.createSequentialGroup()
+                                .addComponent(txt_plu_, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(check_generar_cod_))
+                            .addComponent(lbl_ref_repuesto_))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        panel_edicion_Layout.setVerticalGroup(
+            panel_edicion_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_edicion_Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_articulos_)
+                .addGroup(panel_edicion_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(combo_articulos_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(check_articulo_repuesto_))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_plu_)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_edicion_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_plu_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(check_generar_cod_))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_ref_repuesto_)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_edicion_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_edicion_Layout.createSequentialGroup()
+                        .addComponent(lbl_stock_)
+                        .addGap(5, 5, 5)
+                        .addComponent(txt_cant_stock_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panel_edicion_Layout.createSequentialGroup()
+                        .addComponent(lbl_talla_)
+                        .addGap(5, 5, 5)
+                        .addComponent(combo_talla_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lbl_componente_)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(combo_componentes_, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panel_edicion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(btn_cancelar_edicion_, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_guardar_, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_nuevo_repuesto_, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_ver_reps_componente_)
+                        .addGap(29, 29, 29)
+                        .addComponent(check_contar_))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_borrar_repuesto_, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_editar_seleccionado_, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txt_show_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scroll_tabla_repuestos_, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(check_contar_, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btn_ver_reps_componente_))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_editar_seleccionado_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_borrar_repuesto_)
+                            .addComponent(txt_show_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scroll_tabla_repuestos_, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_componente_)
+                            .addComponent(combo_componentes_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_nuevo_repuesto_)
+                        .addGap(1, 1, 1)
+                        .addComponent(panel_edicion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_cancelar_edicion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_guardar_))))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_nuevo_repuesto_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevo_repuesto_ActionPerformed
+        try {
+            
+            panel_edicion_.setEnabled(true);
+            btn_borrar_repuesto_.setEnabled(false);
+            btn_editar_seleccionado_.setEnabled(false);
+            txt_plu_.setText("");
+            txa_ref_repuesto_.setText("");
+            txt_cant_stock_.setText("");
+            btn_editar_seleccionado_.setEnabled(false);
+            btn_borrar_repuesto_.setEnabled(false);
+            btn_nuevo_repuesto_.setEnabled(false);
+            decision_boton_guardar = OP_BOTON_GUARDAR_NUEVO;
+            ((TablaRepuestos)tabla_repuestos_).limpiarTabla();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "nuevo_repuesto", 0);
+        }
+    }//GEN-LAST:event_btn_nuevo_repuesto_ActionPerformed
+
+    private void btn_cancelar_edicion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelar_edicion_ActionPerformed
+        try {
+            ((TablaRepuestos)tabla_repuestos_).limpiarTabla();
+            txt_plu_.setText("");
+            txa_ref_repuesto_.setText("");
+            txt_cant_stock_.setText("");
+            btn_editar_seleccionado_.setEnabled(false);
+            btn_borrar_repuesto_.setEnabled(false);
+            btn_nuevo_repuesto_.setEnabled(true);
+            combo_articulos_.setEnabled(true);
+            check_articulo_repuesto_.setEnabled(true);
+            panel_edicion_.setEnabled(false);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "cancelar_edicion", 0);
+        }
+    }//GEN-LAST:event_btn_cancelar_edicion_ActionPerformed
+
+    private void btn_guardar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardar_ActionPerformed
+        try {
+            if (decision_boton_guardar.equals(OP_BOTON_GUARDAR_NUEVO)) {
+            // <editor-fold defaultstate="collapsed" desc=" DESCRIPTION ">
+                String plu = txt_plu_.getText();
+                String ref_nom_repuesto = txa_ref_repuesto_.getText();
+                
+                String cod_comp = ((ItemDeLista) combo_componentes_.getSelectedItem()).obtenerCodigoId();
+                String talla = String.valueOf(combo_talla_.getSelectedItem());
+                if (talla.equals(OP_COMBO_TALLAS_NO_TALLA)) {
+                    talla = null;
+                }
+                
+                int cant = 0;
+                if (txt_cant_stock_.getText().length() > 0) {
+                    cant = Integer.parseInt(txt_cant_stock_.getText());
+                }
+                
+                if (!(plu.length() > 0)) {
+                    if (check_generar_cod_.isSelected()) {
+                        
+                        String cod_rep = Crypt.generarContraseña(Crypt.REPUESTOS);
+                        
+                        if (check_articulo_repuesto_.isSelected()) {
+                            // <editor-fold defaultstate="collapsed" desc="Sí SE SELECCIONO ARTICULO COMO REPUESTO">
+                            ItemDeLista articulo = (ItemDeLista) combo_articulos_.getSelectedItem();
+                            String ref_rep;
+                            if (ref_nom_repuesto.length() > 0) {
+                                ref_rep = ref_nom_repuesto;
+                            } else {
+                                ref_rep = String.valueOf(articulo.getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
+                            }
+                            String cod_articulo = articulo.obtenerCodigoId();
+                            
+                            boolean hecho = registrarNuevoRepuesto(cod_rep, ref_rep, cod_comp, cod_articulo, talla, cant);
+              
+                            if (hecho) {
+                                JOptionPane.showMessageDialog(null, "El repuesto para el componente "
+                                        + String.valueOf(((ItemDeLista) combo_componentes_.getSelectedItem()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO))
+                                        + " fue ingresado correctamente.",
+                                        "Nuevo Repuesto", JOptionPane.INFORMATION_MESSAGE);
+                                btn_borrar_repuesto_.setEnabled(false);
+                                btn_editar_seleccionado_.setEnabled(false);
+                                btn_nuevo_repuesto_.setEnabled(true);
+                                check_articulo_repuesto_.setSelected(false);
+                                panel_edicion_.setEnabled(false);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No se pudo efectuar el ingreso.",
+                                        "Nuevo Repuesto", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                    // </editor-fold>
+                        } else {
+                            if (ref_nom_repuesto.length() > 0) {
+                                //crear nuevo desde 0 
+                                boolean hecho = registrarNuevoRepuesto(cod_rep, ref_nom_repuesto, cod_comp, null, talla, cant);
+                                if (hecho) {
+                                    JOptionPane.showMessageDialog(null, "El repuesto para el componente "
+                                            + String.valueOf(((ItemDeLista) combo_componentes_.getSelectedItem()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO))
+                                            + " fue ingresado correctamente.",
+                                            "Nuevo Repuesto", JOptionPane.INFORMATION_MESSAGE);
+                                    btn_borrar_repuesto_.setEnabled(false);
+                                    btn_editar_seleccionado_.setEnabled(false);
+                                    btn_nuevo_repuesto_.setEnabled(true);
+                                    check_articulo_repuesto_.setSelected(false);
+                                    panel_edicion_.setEnabled(false);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "No se pudo efectuar el ingreso.",
+                                            "Nuevo Repuesto", JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No puedes registrar un articulo sin su nombre o referencia.",
+                                        "Nuevo Repuesto", 0);
+                            }
+                        }
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No haz consignado un PLU ni haz elegido la opcion de autogenerar.\n"
+                                + "No se puede registrar el producto sin un codigo.",
+                                "Nuevo Repuesto", 0);
+                    }
+                } else {
+                    if (check_articulo_repuesto_.isSelected()) {
+                        ItemDeLista articulo = (ItemDeLista) combo_articulos_.getSelectedItem();
+                        String ref_rep;
+                        if (ref_nom_repuesto.length() > 0) {
+                            ref_rep = ref_nom_repuesto;
+                        } else {
+                            ref_rep = String.valueOf(articulo.getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
+                        }
+                        String cod_articulo = articulo.obtenerCodigoId();
+
+                        boolean hecho = registrarNuevoRepuesto(plu, ref_rep, cod_comp, cod_articulo, talla, cant);
+
+                        if (hecho) {
+                            JOptionPane.showMessageDialog(null, "El repuesto para el componente "
+                                    + String.valueOf(((ItemDeLista) combo_componentes_.getSelectedItem()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO))
+                                    + " fue ingresado correctamente.",
+                                    "Nuevo Repuesto", JOptionPane.INFORMATION_MESSAGE);
+                            btn_borrar_repuesto_.setEnabled(false);
+                            btn_editar_seleccionado_.setEnabled(false);
+                            btn_nuevo_repuesto_.setEnabled(true);
+                            check_articulo_repuesto_.setSelected(false);
+                            panel_edicion_.setEnabled(false);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No se pudo efectuar el ingreso.",
+                                    "Nuevo Repuesto", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        //ejecutar metodo de guardar articulo como repuesto
+                    } else {
+                        if (ref_nom_repuesto.length() > 0) {
+                            //crear nuevo desde 0 
+                            boolean hecho = registrarNuevoRepuesto(plu, ref_nom_repuesto, cod_comp, "", talla, cant);
+                            if (hecho) {
+                                JOptionPane.showMessageDialog(null, "El repuesto para el componente "
+                                        + String.valueOf(((ItemDeLista) combo_componentes_.getSelectedItem()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO))
+                                        + " fue ingresado correctamente.",
+                                        "Nuevo Repuesto", JOptionPane.INFORMATION_MESSAGE);
+                                btn_borrar_repuesto_.setEnabled(false);
+                                btn_editar_seleccionado_.setEnabled(false);
+                                btn_nuevo_repuesto_.setEnabled(true);
+                                check_articulo_repuesto_.setSelected(false);
+                                panel_edicion_.setEnabled(false);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No se pudo efectuar el ingreso.",
+                                        "Nuevo Repuesto", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No puedes registrar un articulo sin su nombre o referencia.",
+                                    "Nuevo Repuesto", 0);
+                        }
+                    }
+                }
+            // </editor-fold>
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "guardar", 0);
+            
+        }
+    }//GEN-LAST:event_btn_guardar_ActionPerformed
+
+    /**
+     */
+    private boolean registrarNuevoRepuesto(String plu, String nom, String comp, String art, String talla, int cant) throws Exception{
+        Object[] registro = new Object[6];
+        registro[0] = plu;
+        registro[1] = nom;
+        registro[2] = comp;
+        if(!(art.length() > 0)){
+            registro[3] = null;
+        }
+        else{
+            registro[3] = art;
+        }
+        registro[4] = talla;
+        registro[5] = cant;
+        
+        boolean hecho = ConsultaSQL.agregarRepuesto(registro);
+        return hecho;
+    }
+    
+    private void btn_editar_seleccionado_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_seleccionado_ActionPerformed
+        try {
+            
+            txt_plu_.setText(String.valueOf(tabla_repuestos_.getValueAt(fila_tabla, 0)));
+            txa_ref_repuesto_.setText(String.valueOf(tabla_repuestos_.getValueAt(fila_tabla, 1)));
+            txt_cant_stock_.setText(String.valueOf(tabla_repuestos_.getValueAt(fila_tabla, 4)));
+            
+            Object talla = tabla_repuestos_.getValueAt(fila_tabla, 3);
+            Object aux;
+            for (int i = 0; i < combo_talla_.getItemCount(); i++) {
+                aux = combo_talla_.getItemAt(i);
+                if (aux.equals(talla)) {
+                    combo_talla_.setSelectedIndex(i);
+                    break;
+                }
+            }
+            panel_edicion_.setEnabled(true);
+            btn_borrar_repuesto_.setEnabled(true);
+            btn_nuevo_repuesto_.setEnabled(false);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "editar", 0);
+        }
+    }//GEN-LAST:event_btn_editar_seleccionado_ActionPerformed
+
+    private void btn_borrar_repuesto_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrar_repuesto_ActionPerformed
+        try {
+            
+            int decision = JOptionPane.showOptionDialog(
+                    this,
+                    "¿Estás seguro de eliminar este articulo?",
+                    "Control de Repuestos", // título del JOptionPane
+                    JOptionPane.OK_CANCEL_OPTION, // tipo input
+                    JOptionPane.QUESTION_MESSAGE, // tipo mensaje
+                    null, // icono, si es nulo aparecerá el por defecto
+                    new Object[]{"Aceptar", "Cancelar"}, //opciones => estos serán los botones
+                    new Object[]{}//dialogo o texto mostrado
+            );
+            if (decision == 0) {
+                String cod_rep = txt_plu_.getText();
+                boolean hecho = ConsultaSQL.borrarRepuesto(cod_rep);
+                if (hecho) {
+                    JOptionPane.showMessageDialog(null, "Repuesto Eliminado.", "borrar repuesto", JOptionPane.INFORMATION_MESSAGE);
+                    txa_ref_repuesto_.setText("");
+                    txt_plu_.setText("");
+                    txt_cant_stock_.setText("");
+                    ((TablaRepuestos)tabla_repuestos_).limpiarTabla();
+                    btn_borrar_repuesto_.setEnabled(false);
+                    btn_editar_seleccionado_.setEnabled(false);
+                    panel_edicion_.setEnabled(false);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "borrar repuesto", 0);
+        }
+    }//GEN-LAST:event_btn_borrar_repuesto_ActionPerformed
+
+    private void btn_ver_reps_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ver_reps_componente_ActionPerformed
+        try {
+            ItemDeLista item = (ItemDeLista) combo_componentes_.getSelectedItem();
+            Object[][] reps = ConsultaSQL.obtenerRepuestosComponente(item.obtenerCodigoId());
+            
+            ((TablaRepuestos)tabla_repuestos_).actualizaTabla(reps);
+            
+            btn_borrar_repuesto_.setEnabled(true);
+            btn_editar_seleccionado_.setEnabled(true);
+            //btn_nuevo_repuesto_.setEnabled(false);
+            combo_articulos_.setEnabled(false);
+            check_articulo_repuesto_.setEnabled(false);
+            
+            /*for (Object[] rep : reps) {
+                System.out.println(rep[0] + " " + rep[1] + " " + rep[2] + " " + rep[3] + " " + rep[4]);
+            }*/
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "ver_reps_componente", 0);
+        }
+    }//GEN-LAST:event_btn_ver_reps_componente_ActionPerformed
+
+    private void tabla_repuestos_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_repuestos_MouseClicked
+        
+        fila_tabla = tabla_repuestos_.rowAtPoint(evt.getPoint());
+        col_tabla = tabla_repuestos_.columnAtPoint(evt.getPoint());
+        codigo_seleccionado = String.valueOf(tabla_repuestos_.getValueAt(fila_tabla, 0));
+        
+    }//GEN-LAST:event_tabla_repuestos_MouseClicked
+
+    private void combo_componentes_ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_combo_componentes_ItemStateChanged
+        
+        Object itemSelec;
+        if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+            itemSelec = evt.getItem();
+            txt_show_componente_.setText(String.valueOf(((ItemDeLista) itemSelec).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO)));//lo que se hace aqui es parsear el objeto (el paréntesis con el nombre de la clase parsea el objeto hacia ese tipo o esa clase)
+            
+        }
+        
+    }//GEN-LAST:event_combo_componentes_ItemStateChanged
+
+    private void check_articulo_repuesto_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_articulo_repuesto_ActionPerformed
+        
+        /*if(check_articulo_repuesto_.isSelected()){
+            txa_ref_repuesto_.setEnabled(false);
+            txa_ref_repuesto_.setText("El nombre o referencia no es necesario si estas seleccionando un articulo "
+                    + "como repuesto para otro. Recuerda que este figurará como parteneciente al tipo de "
+                    + "componente elegido arriba y será elegible por los articulos que utilicen ese tipo"
+                    + "de componente. La descripción del articulo servirá como su referencia "
+                    + "si se utiliza como repuesto. Un ejemplo claro de esta situación es el Articulo rines, pues "
+                    + "estos son un articulo producido y a su vez es utilizado como repuesto para otros articulos.");
+        }else{
+            txa_ref_repuesto_.setEnabled(true);
+            txa_ref_repuesto_.setText("");
+        }*/
+        
+    }//GEN-LAST:event_check_articulo_repuesto_ActionPerformed
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_borrar_repuesto_;
+    private javax.swing.JButton btn_cancelar_edicion_;
+    private javax.swing.JButton btn_editar_seleccionado_;
+    private javax.swing.JButton btn_guardar_;
+    private javax.swing.JButton btn_nuevo_repuesto_;
+    private javax.swing.JButton btn_ver_reps_componente_;
+    private javax.swing.JCheckBox check_articulo_repuesto_;
+    private javax.swing.JCheckBox check_contar_;
+    private javax.swing.JCheckBox check_generar_cod_;
+    private javax.swing.JComboBox combo_articulos_;
+    private javax.swing.JComboBox combo_componentes_;
+    private javax.swing.JComboBox combo_talla_;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbl_articulos_;
+    private javax.swing.JLabel lbl_componente_;
+    private javax.swing.JLabel lbl_plu_;
+    private javax.swing.JLabel lbl_ref_repuesto_;
+    private javax.swing.JLabel lbl_stock_;
+    private javax.swing.JLabel lbl_talla_;
+    private javax.swing.JPanel panel_edicion_;
+    private javax.swing.JScrollPane scroll_tabla_repuestos_;
+    private javax.swing.JTable tabla_repuestos_;
+    private javax.swing.JTextArea txa_ref_repuesto_;
+    private javax.swing.JTextField txt_cant_stock_;
+    private javax.swing.JTextField txt_plu_;
+    private javax.swing.JTextField txt_show_componente_;
     // End of variables declaration//GEN-END:variables
 }

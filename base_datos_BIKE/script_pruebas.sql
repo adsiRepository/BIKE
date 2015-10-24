@@ -3,6 +3,8 @@ show databases; /*mostrar todas las bases*/
 
 drop database storebike;
 
+show tables;
+
 use mysql;/*mysql es la base de datos de configuraciones. En ella se guardan datos como los usuarios del servidor mysql.*/
 select user from user;
 /*CONFIGURACION DE USUARIOS Y ACCESO*/
@@ -199,7 +201,7 @@ insert into repuestos (cod_rep, repuesto, componente, talla, cant_disp) values
 ('600382','Acero Lancer FreeStyle Disc/V-Brake','088','20',53);
 
 insert into repuestos values 
-('800843','Pareja Rines Doble Pared GW ','976','RDP','20',42),
+('833853','miguelito ',null,null,null,null);
 ('800445','Pareja de rines de hoja sencilla.','975','RIN','20',52)
 ;
 
@@ -338,8 +340,10 @@ desc componentes;
 alter table componentes change desc_comp desc_comp varchar(100);
 delete from componentes;
 
+use storebike;
 delete from componentes;
-select * from componentes c order by c.familia;
+select * from componentes order by familia;
+select id_comp, componente from componentes c order by c.familia;
 
 select f.familia, c.componente, c.desc_comp 
 from componentes c inner join familia_componente f inner join componente_articulo ca 
@@ -350,9 +354,15 @@ desc articulos;
 rename table artefacto to articulos;
 
 /**GESTION DE ARTICULOS*/
-delete from articulos where id_articulo = 'RIN';
+delete from articulos where id_articulo = 'BAK';
 select * from articulos;
-update articulos set id_articulo = 'AMT' where id_articulo = 'M';
+
+update articulos set id_articulo = 'TT', articulo = 'TodoTerreno' where id_articulo = 'MTB';
+delete from talla_articulo where articulo = 'PLY';
+select * from talla_articulo;
+insert into talla_articulo values
+('PLY','24');
+
 /***/
 
 desc componente_articulo;
@@ -369,9 +379,12 @@ desc repuestos;
 alter table repuestos change marca marca char(2) not null;
 /*pagina catalogo => http://habicicletas.com/iframe..php?pag=bicicletas2.html*/
 
+use storebike;
+select * from componentes;
+select * from repuestos; where componente = '975';
 alter table repuestos change repuesto repuesto varchar(80);
 update repuestos set cant_disp = 64 where cod_rep = '690733'; 
-delete from repuestos;
+delete from repuestos where cod_rep = '305136';
 
 select cod_rep, repuesto from repuestos where componente = '010';
 

@@ -332,6 +332,92 @@ public class ConsultaSQL {
     //COMPONENTES
     
     /**
+     * METODO PARA OBTENER TODOS LOS COMPONENTES ACTUALES.
+     * @return ArrayList con todos los componentes registrados.
+     * @throws java.lang.Exception
+     */
+    public static ArrayList<ItemDeLista> obtenerTodosComponentes() throws Exception {
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            ArrayList<ItemDeLista> items_retorno = new ArrayList<>();
+            HashMap<String, Object> atributos_item; // ESTE HASHMAP AUXILIAR ES EL QUE SE USARA EN EL CONSTRUCTOR DE CADA ITEMCOMBOBOX
+
+            try (Statement sentencia = con.createStatement()) {
+                try (ResultSet resultados = sentencia.executeQuery(
+                        "select id_comp, componente from componentes c order by c.familia;")) {
+                    while (resultados.next()) {
+                        atributos_item = new HashMap<>();//LO REDEFINO COMO UN NUEVO OBJETO PARA EVITAR INTERFERENCIAS CON EL PROXIMO ITEMCOMBOBOX
+                        // EL PRIMER PUT DENTRO DEL HASHMAP SIEMPRE SERA EL TEXTO A MOSTRAR EN EL ITEM DEL COMBOBOX
+                        atributos_item.put(ItemDeLista.TEXTO_MOSTRADO, resultados.getString(2));
+                        items_retorno.add(new ItemDeLista(resultados.getString(1), atributos_item));
+                    }
+                }
+            }
+            return items_retorno;
+        } catch (Exception e) {
+            throw new Exception("Problemas al obtener el listado de Componentes del articulo.\n"
+                    + "Error: " + e.getLocalizedMessage());
+        }
+    }
+    
+    
+    /**
+     * METODO PARA OBTENER TODOS REPUESTOS DE UN COMPONENTE.
+     * @param cod_comp codigo del componente para ejecutar la busqueda
+     * @return ArrayList con todos los componentes registrados.
+     * @throws java.lang.Exception
+     */
+    public static Object[][] obtenerRepuestosComponente(String cod_comp) throws Exception {
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "select cod_rep, repuesto, articulo, talla, cant_disp "
+                    + "from repuestos where componente = ?;")) {
+                sentencia.setString(1, cod_comp);
+                try (ResultSet resultados = sentencia.executeQuery()) {
+                    ArrayList<Object[]> registros = new ArrayList<>();
+                    while (resultados.next()) {
+                        registros.add(new Object[]{
+                            resultados.getString(1), 
+                            resultados.getString(2), 
+                            resultados.getString(3),
+                            resultados.getString(4),
+                            resultados.getInt(5)
+                        });
+                    }
+                    if (registros.size() > 0) {
+                        Object[][] retorno = new Object[registros.size()][5];
+                        Iterator it = registros.iterator();
+                        int i = 0;
+                        Object[] reg;
+                        while (it.hasNext()) {
+                            reg = (Object[]) it.next();
+                            if (reg[2] != null) {
+                                try (java.sql.PreparedStatement sentencia_b = con.prepareStatement(
+                                        "select articulo from articulos where id_articulo = ?;")) {
+                                    sentencia_b.setString(1, reg[2].toString());
+                                    try (ResultSet resultados_b = sentencia_b.executeQuery()) {
+                                        while(resultados_b.next()){
+                                            reg[2] = resultados_b.getString(1);
+                                        }
+                                    }
+                                }
+                            }
+                            retorno[i] = reg;
+                            i++;
+                        }
+                        return retorno;
+                    } else {
+                        throw new Exception("Al parecer este Componente no tiene repuestos registrados.");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Problemas al obtener el listado de Componentes del articulo.\n"
+                    + "Error: " + e.getLocalizedMessage());
+        }
+    }
+    
+    
+    /**
      * CON ESTE METODO SE OBTENDRA EL LISTADO DE COMPONENTES ASIGNADOS A UN ARTICULO.
      * @param cod_articulo
      * @return 
@@ -474,6 +560,49 @@ public class ConsultaSQL {
     }
     
     //FIN COMPONENTES 
+    
+    //REPUESTOS
+    
+    /**
+     * METODO PARA INGRESAR O REGISTRAR UN NUEVO REPUESTO A LA TIENDA.
+     *
+     * @param info datos para la insercion a la base de datos.
+     * @return boolean Confirmacion de Exito de insercion
+     * @throws java.lang.Exception
+     */
+    public static boolean agregarRepuesto(Object[] info) throws Exception {
+        try (Connection conbd = ConexionBD.obtenerConexion()) {
+            
+            try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
+                    "insert into repuestos values (?, ?, ?, ?, ?, ?);")) {
+           
+                for (int i = 1; i <= info.length; i++) {
+                    if (i == 6) {
+                        if ((int) info[i - 1] > 0) {
+                            sentencia.setInt(i, (int) info[i - 1]);
+                        } else {
+                            sentencia.setNull(i, java.sql.Types.NULL);
+                        }
+                    } else {
+                        if (info[i - 1] == null) {
+                            sentencia.setNull(i, java.sql.Types.NULL);
+                        }
+                        else{
+                            sentencia.setString(i, info[i - 1].toString());
+                        }
+                    }
+                }
+                
+                return sentencia.executeUpdate() > 0;
+            }
+            
+        } catch (Exception e) {
+            throw new Exception("Problemas al intentar registrar el nuevo repuesto.\n" + e.toString());
+        }
+    }
+    
+    
+    //FIN REPUESTOS
     
 
 
@@ -635,6 +764,28 @@ public class ConsultaSQL {
             throw new Exception("Error al obtener el listado de la Orden de Produccion requerida.\n" + e.getMessage());
         }
     }
+    
+    
+    /**
+     * METODO PARA BORRAR EL REPUESTO VINCULADO A COMPONENTE.
+     *
+     * @param cod_rep codigo del repuesto a borrar de la base de datos.
+     * @return boolean Confirmacion de Exito de Borrado.
+     * @throws java.lang.Exception
+     */
+    public static boolean borrarRepuesto(String cod_rep) throws Exception {
+        try (Connection conbd = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
+                    "delete from repuestos where cod_rep = ?;")) {
+                sentencia.setString(1, cod_rep);
+                return sentencia.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            throw new Exception("Error al Eliminar la Orden de Produccion.\n" + e.getLocalizedMessage());
+        }
+    }
+    
+    
     
     /**
      * METODO QUE ME PERMITE BORRAR EL LISTADO DE REPUESTOS DESPACHADOS EN UNA
@@ -1053,12 +1204,17 @@ public class ConsultaSQL {
             //Object[] comps = new Object[]{"001", "003", "019"};
             //boolean f = modificarComponentesArticulo("RIN", comps);
             //boolean f = eliminarArticulo("RDP");
-            Object[] tallas = new Object[]{"16","20","26"};
-            Object[] detalles = new Object[]{"Ultraracer", "Bicicleta voladora.", tallas};
-            Object[] componentes = new Object[]{"001","076","003"};
-            boolean f = registrarNuevoArticulo(detalles, componentes);
+            //Object[] tallas = new Object[]{"16","20","26"};
+            //Object[] detalles = new Object[]{"Ultraracer", "Bicicleta voladora.", tallas};
+            //Object[] componentes = new Object[]{"001","076","003"};
+            //boolean f = registrarNuevoArticulo(detalles, componentes);
             //boolean f = modificarArticulo("TT", detalles);
-            System.out.println(f);
+            
+            Object[][] reps = obtenerRepuestosComponente("050");
+            for (Object[] rep : reps) {
+                System.out.println(rep[0]+" "+rep[1]+" "+rep[2]+" "+rep[3]+" "+rep[4]);
+            }
+            
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }

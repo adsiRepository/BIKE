@@ -17,13 +17,14 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import view.GestionRepuestos;
 
 // </editor-fold>
 
 /***/
 public class ComboBoxItem extends JComboBox<ItemDeLista> {
 
-    private transient ArrayList<ItemDeLista> items;
+    //private transient ArrayList<ItemDeLista> items;
     
     /**
      * Constructor.
@@ -35,13 +36,17 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    /**METODO ME PERMITE SELECCIONAR LOS ITEMS QUE LLEVARA EL COMBOBOX.
-     * @param nom_combo Se especifica un String que indicará los items del combobox.
+    /**
+     * METODO ME PERMITE SELECCIONAR LOS ITEMS QUE LLEVARA EL COMBOBOX.
+     *
+     * @param nom_combo Se especifica un String que indicará los items del
+     * combobox.
      * @throws java.lang.Exception
      */
     public void llenarme(String nom_combo) throws Exception {
         if (nom_combo != null) {
-            if(this.getItemCount() > 0){
+            ArrayList<ItemDeLista> items;
+            if (this.getItemCount() > 0) {
                 this.removeAllItems();
             }
             items = new ArrayList<>();
@@ -53,6 +58,12 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
                 //constructor(ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos());
                 items = ConsultaSQL.obtenerCatalogoArticulos();
             }
+
+            if (nom_combo.equals(GestionRepuestos.MODELO_COMBO_COMPONENTES)) {
+                //constructor(ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos());
+                items = ConsultaSQL.obtenerTodosComponentes();
+            }
+
             if (items.size() > 0) {
                 Iterator it = items.iterator();
                 while (it.hasNext()) {
@@ -75,8 +86,8 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
     public void seleccionarItem(String codItemDeLista) {
         ItemDeLista item;
         String cod;
-        for (int i = 0; i < items.size(); i++) {
-            item = items.get(i);
+        for (int i = 0; i < this.getItemCount(); i++) {
+            item = this.getItemAt(i);//items.get(i);
             cod = item.obtenerCodigoId();
             if (cod.equals(codItemDeLista)) {
                 this.setSelectedIndex(i);

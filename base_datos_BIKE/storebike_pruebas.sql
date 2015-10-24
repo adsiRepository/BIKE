@@ -512,6 +512,7 @@ SHOW WARNINGS$$
 USE `storebike`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `storebike`.`detalle_despacho_AFTER_INSERT` AFTER INSERT ON `detalle_despacho` FOR EACH ROW
 BEGIN
+ 
 	update repuestos set cant_disp = (cant_disp - new.cant_desp) where cod_rep = new.repuesto;
 END
 $$
