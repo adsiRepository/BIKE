@@ -3,7 +3,12 @@
 
 package view;
 
+import controller.ConsultaSQL;
+import controller.componentes.FormComponentes;
+import controller.componentes.FormComponentes.TablaFamilias;
 import controller.componentes.Paneles.VentanaInterna;
+import java.awt.Dimension;
+import static view.MenuPrincipal.escritorio;
 
 /**FORMULARIO OFRECIDO AL USUARIO PARA LA ADMINISTRACION DE COMPONENTES.
  * Consigna tu nombre si haces parte de la Autoría de este Documento.
@@ -12,7 +17,7 @@ import controller.componentes.Paneles.VentanaInterna;
 public class ControlComponentes extends VentanaInterna {
     
     /**NOMBRE ARCHIVO IMAGEN DE FONDO PARA ESTA VENTANA. Solo nombre sin extension (obligatorio archivos png)*/
-    private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_componentes";
+    private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_components";
     /***/
     
     /**
@@ -23,7 +28,20 @@ public class ControlComponentes extends VentanaInterna {
         //DE LA IMAGEN DE FONDO UBICADA EN LA CARPETA "mis_imagenes" EN EL DIRECTORIO PRINCIPAL DEL PROYECTO (fuera de todas las carpetas) 
         super(NOMBRE_MI_IMAGEN_FONDO);
         initComponents();
+        this.title = "Control y Edicion de Componentes y Familias";
         this.setIconifiable(true);
+        this.resizable = true;
+        this.closable = true;
+        Dimension tamaño_escritorio = escritorio.getSize(), mySpc = this.getSize();
+        this.setLocation(/*(tamaño_escritorio.width / 3)*/10, ((tamaño_escritorio.height - mySpc.height) / 4));
+        
+        try {
+            Object[][] componentes = ConsultaSQL.obtenerSoloComponentes();
+            ((TablaFamilias)tabla_familias_).actualizaTabla(componentes);
+        } catch (Exception e) {
+            
+        }
+        
     }
     
     /**
@@ -36,81 +54,371 @@ public class ControlComponentes extends VentanaInterna {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new controller.componentes.CheckBoxItem.ListadoCheckBox();
+        lbl_editor_nom_familia_ = new javax.swing.JLabel();
+        txt_nombre_familia_ = new javax.swing.JTextField();
+        scroll_tabla_familias_ = new javax.swing.JScrollPane();
+        tabla_familias_ = new FormComponentes.TablaFamilias();
+        scroll_tabla_componentes_ = new javax.swing.JScrollPane();
+        tabla_componentes_ = new FormComponentes.TablaComponentes();
+        btn_cancelar_familia_ = new javax.swing.JButton();
+        btn_editar_familia_ = new javax.swing.JButton();
+        scroll_txa_desc_familia_ = new javax.swing.JScrollPane();
+        txa_desc_familia_ = new javax.swing.JTextArea();
+        lbl_desc_familia_ = new javax.swing.JLabel();
+        check_familia_par_ = new javax.swing.JCheckBox();
+        txt_nombre_componente_ = new javax.swing.JTextField();
+        scroll_txa_desc_comp_ = new javax.swing.JScrollPane();
+        txa_descripcion_componente_ = new javax.swing.JTextArea();
+        btn_asignar_componentes_ = new javax.swing.JButton();
+        lbl_desc_comp_ = new javax.swing.JLabel();
+        lbl_nom_comp_ = new javax.swing.JLabel();
+        txt_familia_actual_ = new javax.swing.JTextField();
+        lbl_familia_actual_ = new javax.swing.JLabel();
+        btn_borrar_componente_ = new javax.swing.JButton();
+        btn_editar_componente_ = new javax.swing.JButton();
+        btn_nuevo_componente_ = new javax.swing.JButton();
+        btn_cancelar_asignacion_ = new javax.swing.JButton();
+        btn_nueva_familia_ = new javax.swing.JButton();
+        btn_borrar_familia_ = new javax.swing.JButton();
+        btn_cancelar_componente_ = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
         setName("GClientes"); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        lbl_editor_nom_familia_.setText("Nombre Familia:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        scroll_tabla_familias_.setViewportView(tabla_familias_);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        scroll_tabla_componentes_.setViewportView(tabla_componentes_);
 
-        jScrollPane1.setViewportView(jList1);
+        btn_cancelar_familia_.setText("cancelar");
+        btn_cancelar_familia_.setMaximumSize(new java.awt.Dimension(65, 25));
+        btn_cancelar_familia_.setMinimumSize(new java.awt.Dimension(65, 25));
+        btn_cancelar_familia_.setPreferredSize(new java.awt.Dimension(65, 25));
+        btn_cancelar_familia_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelar_familia_ActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        btn_editar_familia_.setText("editar");
+        btn_editar_familia_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editar_familia_ActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(617, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(244, Short.MAX_VALUE))
-        );
+        txa_desc_familia_.setColumns(20);
+        txa_desc_familia_.setLineWrap(true);
+        txa_desc_familia_.setRows(3);
+        txa_desc_familia_.setWrapStyleWord(true);
+        scroll_txa_desc_familia_.setViewportView(txa_desc_familia_);
+
+        lbl_desc_familia_.setText("Descripcion(opcional)");
+
+        check_familia_par_.setText("Viene x Par");
+
+        txa_descripcion_componente_.setColumns(20);
+        txa_descripcion_componente_.setLineWrap(true);
+        txa_descripcion_componente_.setRows(3);
+        txa_descripcion_componente_.setWrapStyleWord(true);
+        scroll_txa_desc_comp_.setViewportView(txa_descripcion_componente_);
+
+        btn_asignar_componentes_.setText("asignar componente/s");
+
+        lbl_desc_comp_.setText("Descripcion Componente(opcional)");
+
+        lbl_nom_comp_.setText("Nombre Componente");
+
+        txt_familia_actual_.setEnabled(false);
+
+        lbl_familia_actual_.setText("Familia Actual:");
+
+        btn_borrar_componente_.setText("borrar");
+        btn_borrar_componente_.setEnabled(false);
+        btn_borrar_componente_.setMaximumSize(new java.awt.Dimension(90, 23));
+        btn_borrar_componente_.setMinimumSize(new java.awt.Dimension(90, 23));
+        btn_borrar_componente_.setPreferredSize(new java.awt.Dimension(90, 23));
+        btn_borrar_componente_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_borrar_componente_ActionPerformed(evt);
+            }
+        });
+
+        btn_editar_componente_.setText("editar");
+        btn_editar_componente_.setMaximumSize(new java.awt.Dimension(90, 23));
+        btn_editar_componente_.setMinimumSize(new java.awt.Dimension(90, 23));
+        btn_editar_componente_.setPreferredSize(new java.awt.Dimension(90, 23));
+        btn_editar_componente_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editar_componente_ActionPerformed(evt);
+            }
+        });
+
+        btn_nuevo_componente_.setText("nuevo");
+        btn_nuevo_componente_.setMaximumSize(new java.awt.Dimension(90, 23));
+        btn_nuevo_componente_.setMinimumSize(new java.awt.Dimension(90, 23));
+        btn_nuevo_componente_.setPreferredSize(new java.awt.Dimension(90, 23));
+        btn_nuevo_componente_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_nuevo_componente_ActionPerformed(evt);
+            }
+        });
+
+        btn_cancelar_asignacion_.setText("cancelar asignacion");
+        btn_cancelar_asignacion_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelar_asignacion_ActionPerformed(evt);
+            }
+        });
+
+        btn_nueva_familia_.setText("nuevo");
+        btn_nueva_familia_.setMaximumSize(new java.awt.Dimension(90, 23));
+        btn_nueva_familia_.setMinimumSize(new java.awt.Dimension(90, 23));
+        btn_nueva_familia_.setPreferredSize(new java.awt.Dimension(90, 23));
+        btn_nueva_familia_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_nueva_familia_ActionPerformed(evt);
+            }
+        });
+
+        btn_borrar_familia_.setText("borrar");
+        btn_borrar_familia_.setEnabled(false);
+        btn_borrar_familia_.setMaximumSize(new java.awt.Dimension(65, 25));
+        btn_borrar_familia_.setMinimumSize(new java.awt.Dimension(65, 25));
+        btn_borrar_familia_.setPreferredSize(new java.awt.Dimension(65, 25));
+        btn_borrar_familia_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_borrar_familia_ActionPerformed(evt);
+            }
+        });
+
+        btn_cancelar_componente_.setText("cancelar");
+        btn_cancelar_componente_.setMaximumSize(new java.awt.Dimension(90, 23));
+        btn_cancelar_componente_.setMinimumSize(new java.awt.Dimension(90, 23));
+        btn_cancelar_componente_.setPreferredSize(new java.awt.Dimension(90, 23));
+        btn_cancelar_componente_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelar_componente_ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_editor_nom_familia_)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lbl_desc_familia_)
+                            .addComponent(scroll_txa_desc_familia_, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                            .addComponent(txt_nombre_familia_))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btn_nueva_familia_, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                    .addComponent(btn_editar_familia_, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(check_familia_par_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btn_cancelar_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_borrar_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btn_asignar_componentes_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(scroll_tabla_familias_, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lbl_nom_comp_)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_cancelar_asignacion_)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbl_familia_actual_)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_familia_actual_))
+                    .addComponent(scroll_tabla_componentes_, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lbl_desc_comp_)
+                            .addComponent(txt_nombre_componente_)
+                            .addComponent(scroll_txa_desc_comp_, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btn_borrar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_editar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_nuevo_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btn_cancelar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(lbl_editor_nom_familia_)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(check_familia_par_)
+                        .addComponent(txt_familia_actual_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbl_familia_actual_)
+                        .addComponent(btn_cancelar_asignacion_))
+                    .addComponent(txt_nombre_familia_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lbl_desc_familia_)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(scroll_txa_desc_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btn_cancelar_familia_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btn_nueva_familia_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btn_borrar_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_editar_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_asignar_componentes_)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scroll_tabla_familias_, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(lbl_nom_comp_)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(125, 125, 125)
+                                .addComponent(scroll_tabla_componentes_, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btn_nuevo_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_editar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_borrar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_cancelar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txt_nombre_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lbl_desc_comp_)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(scroll_txa_desc_comp_, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_nuevo_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevo_componente_ActionPerformed
+        
+        if(btn_nuevo_componente_.getText().equals("guardar")){
+        
+            //codigo de guardar
+        
+            btn_nuevo_componente_.setText("nuevo");
+            btn_borrar_componente_.setEnabled(false);
+            btn_editar_componente_.setEnabled(true);
+        }
+        else{
+            btn_editar_componente_.setEnabled(false);
+            btn_nuevo_componente_.setText("guardar");
+        }
+        txt_nombre_componente_.setText("");
+        txa_descripcion_componente_.setText("");
+        
+    }//GEN-LAST:event_btn_nuevo_componente_ActionPerformed
+
+    private void btn_nueva_familia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nueva_familia_ActionPerformed
+        
+        if(btn_nueva_familia_.getText().equals("guardar")){
+            
+           //codigo de guardar
+            
+            btn_nueva_familia_.setText("nuevo"); 
+            btn_borrar_familia_.setEnabled(false);
+            btn_editar_familia_.setEnabled(true);
+        }else{
+            btn_editar_familia_.setEnabled(false);
+            btn_nueva_familia_.setText("guardar"); 
+        }
+        txt_nombre_familia_.setText("");
+        txa_desc_familia_.setText("");
+        
+    }//GEN-LAST:event_btn_nueva_familia_ActionPerformed
+
+    private void btn_cancelar_familia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelar_familia_ActionPerformed
+        
+        txt_nombre_familia_.setText("");
+        txa_desc_familia_.setText("");
+        btn_nueva_familia_.setText("nuevo");
+        btn_borrar_familia_.setEnabled(false);
+        btn_editar_familia_.setEnabled(true);
+        
+    }//GEN-LAST:event_btn_cancelar_familia_ActionPerformed
+
+    private void btn_cancelar_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelar_componente_ActionPerformed
+        
+        txt_nombre_componente_.setText("");
+        txa_descripcion_componente_.setText("");
+        btn_nuevo_componente_.setText("nuevo");
+        btn_borrar_componente_.setEnabled(false);
+        btn_editar_componente_.setEnabled(true);
+        
+    }//GEN-LAST:event_btn_cancelar_componente_ActionPerformed
+
+    private void btn_cancelar_asignacion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelar_asignacion_ActionPerformed
+        
+        txt_familia_actual_.setText("");
+        txt_nombre_componente_.setText("");
+        txa_descripcion_componente_.setText("");
+        
+    }//GEN-LAST:event_btn_cancelar_asignacion_ActionPerformed
+
+    private void btn_borrar_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrar_componente_ActionPerformed
+        
+        //codigo de borrar
+        
+        btn_nuevo_componente_.setText("nuevo");
+        btn_borrar_componente_.setEnabled(false);
+        txt_nombre_componente_.setText("");
+        txa_descripcion_componente_.setText("");
+        btn_editar_componente_.setEnabled(true);
+        
+    }//GEN-LAST:event_btn_borrar_componente_ActionPerformed
+
+    private void btn_editar_familia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_familia_ActionPerformed
+        
+        btn_nueva_familia_.setText("guardar");
+        btn_borrar_familia_.setEnabled(true);
+        btn_editar_familia_.setEnabled(false);
+        
+    }//GEN-LAST:event_btn_editar_familia_ActionPerformed
+
+    private void btn_borrar_familia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrar_familia_ActionPerformed
+        
+        //borrar familia
+        
+        btn_nueva_familia_.setText("nuevo");
+        btn_borrar_familia_.setEnabled(false);
+        txt_nombre_familia_.setText("");
+        txa_desc_familia_.setText("");
+        btn_editar_familia_.setEnabled(true);
+        
+    }//GEN-LAST:event_btn_borrar_familia_ActionPerformed
+
+    private void btn_editar_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_componente_ActionPerformed
+        
+        btn_nuevo_componente_.setText("guardar");
+        btn_borrar_componente_.setEnabled(true);
+        btn_editar_componente_.setEnabled(false);
+        
+    }//GEN-LAST:event_btn_editar_componente_ActionPerformed
 
    
     /*public static void main(String[] args) {
@@ -119,12 +427,33 @@ public class ControlComponentes extends VentanaInterna {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_asignar_componentes_;
+    private javax.swing.JButton btn_borrar_componente_;
+    private javax.swing.JButton btn_borrar_familia_;
+    private javax.swing.JButton btn_cancelar_asignacion_;
+    private javax.swing.JButton btn_cancelar_componente_;
+    private javax.swing.JButton btn_cancelar_familia_;
+    private javax.swing.JButton btn_editar_componente_;
+    private javax.swing.JButton btn_editar_familia_;
+    private javax.swing.JButton btn_nueva_familia_;
+    private javax.swing.JButton btn_nuevo_componente_;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JList jList1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JCheckBox check_familia_par_;
+    private javax.swing.JLabel lbl_desc_comp_;
+    private javax.swing.JLabel lbl_desc_familia_;
+    private javax.swing.JLabel lbl_editor_nom_familia_;
+    private javax.swing.JLabel lbl_familia_actual_;
+    private javax.swing.JLabel lbl_nom_comp_;
+    private javax.swing.JScrollPane scroll_tabla_componentes_;
+    private javax.swing.JScrollPane scroll_tabla_familias_;
+    private javax.swing.JScrollPane scroll_txa_desc_comp_;
+    private javax.swing.JScrollPane scroll_txa_desc_familia_;
+    private javax.swing.JTable tabla_componentes_;
+    private javax.swing.JTable tabla_familias_;
+    private javax.swing.JTextArea txa_desc_familia_;
+    private javax.swing.JTextArea txa_descripcion_componente_;
+    private javax.swing.JTextField txt_familia_actual_;
+    private javax.swing.JTextField txt_nombre_componente_;
+    private javax.swing.JTextField txt_nombre_familia_;
     // End of variables declaration//GEN-END:variables
 }

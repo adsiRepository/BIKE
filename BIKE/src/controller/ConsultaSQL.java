@@ -465,6 +465,51 @@ public class ConsultaSQL {
     }
     
     
+    
+    /**
+     * METODO QUE OBTIENE LA TOTALIDAD DE COMPONENTES.
+     *
+     * @return
+     * @throws java.lang.Exception
+     */
+    public static Object[][] obtenerSoloComponentes() throws Exception {
+        try (Connection con = ConexionBD.obtenerConexion()) {
+
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "select id_comp, componente, desc_comp from componentes order by familia;")) {
+                
+                try (ResultSet resultados = sentencia.executeQuery()) {
+                    ArrayList<Object[]> caja = new ArrayList<>();
+                    while (resultados.next()) {
+                        caja.add(new Object[]{
+                            resultados.getString(1), 
+                            resultados.getString(2), 
+                            resultados.getString(3)
+                        });
+                    }
+                    if (caja.size() > 0) {
+                        Object[][] retorno = new Object[caja.size()][3];
+                        Iterator it = caja.iterator();
+                        int i = 0;
+                        while (it.hasNext()) {
+                            retorno[i] = (Object[]) it.next();
+                            i++;
+                        }
+                        return retorno;
+                    } else {
+                        throw new Exception("No existen componentes registrados en el Sistema.");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new Exception("Problemas al obtener el listado de Componentes.\n"
+                    + "Error: " + e.getLocalizedMessage());
+        }
+    }
+    
+    
+    
     /**
      * METODO QUE OBTIENE LA TOTALIDAD DE COMPONENTES QUE HACEN PARTE DE 
      * LOS ARTICULOS.
@@ -601,11 +646,8 @@ public class ConsultaSQL {
         }
     }
     
-    
     //FIN REPUESTOS
     
-
-
     /**
      * Segunda Version Obtencion de Repuestos Disponibles por Articulo.
      *

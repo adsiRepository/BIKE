@@ -331,6 +331,7 @@ select * from ensambladores;
 
 desc familia_componente;
 
+use storebike;
 delete from familia_componente;
 select * from familia_componente;
 

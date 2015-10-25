@@ -197,6 +197,11 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
         lbl_plu_.setText("PLU:");
 
         txt_plu_.setToolTipText("plu o codigo del repuesto");
+        txt_plu_.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_plu_KeyTyped(evt);
+            }
+        });
 
         check_generar_cod_.setText("Generar PLU");
         check_generar_cod_.setToolTipText("autogenerar codigo del repuesto");
@@ -350,6 +355,8 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
             btn_nuevo_repuesto_.setEnabled(false);
             decision_boton_guardar = OP_BOTON_GUARDAR_NUEVO;
             ((TablaRepuestos)tabla_repuestos_).limpiarTabla();
+            combo_articulos_.setEnabled(true);
+            check_articulo_repuesto_.setEnabled(true);
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "nuevo_repuesto", 0);
@@ -376,26 +383,21 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
     private void btn_guardar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardar_ActionPerformed
         try {
             if (decision_boton_guardar.equals(OP_BOTON_GUARDAR_NUEVO)) {
-            // <editor-fold defaultstate="collapsed" desc=" DESCRIPTION ">
+            // <editor-fold defaultstate="collapsed" desc="OP_BOTON_GUARDAR_NUEVO">
                 String plu = txt_plu_.getText();
                 String ref_nom_repuesto = txa_ref_repuesto_.getText();
-                
                 String cod_comp = ((ItemDeLista) combo_componentes_.getSelectedItem()).obtenerCodigoId();
                 String talla = String.valueOf(combo_talla_.getSelectedItem());
                 if (talla.equals(OP_COMBO_TALLAS_NO_TALLA)) {
                     talla = null;
                 }
-                
                 int cant = 0;
                 if (txt_cant_stock_.getText().length() > 0) {
                     cant = Integer.parseInt(txt_cant_stock_.getText());
                 }
-                
                 if (!(plu.length() > 0)) {
                     if (check_generar_cod_.isSelected()) {
-                        
                         String cod_rep = Crypt.generarContraseña(Crypt.REPUESTOS);
-                        
                         if (check_articulo_repuesto_.isSelected()) {
                             // <editor-fold defaultstate="collapsed" desc="Sí SE SELECCIONO ARTICULO COMO REPUESTO">
                             ItemDeLista articulo = (ItemDeLista) combo_articulos_.getSelectedItem();
@@ -447,7 +449,6 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
                                         "Nuevo Repuesto", 0);
                             }
                         }
-                        
                     } else {
                         JOptionPane.showMessageDialog(null, "No haz consignado un PLU ni haz elegido la opcion de autogenerar.\n"
                                 + "No se puede registrar el producto sin un codigo.",
@@ -463,9 +464,7 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
                             ref_rep = String.valueOf(articulo.getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
                         }
                         String cod_articulo = articulo.obtenerCodigoId();
-
                         boolean hecho = registrarNuevoRepuesto(plu, ref_rep, cod_comp, cod_articulo, talla, cant);
-
                         if (hecho) {
                             JOptionPane.showMessageDialog(null, "El repuesto para el componente "
                                     + String.valueOf(((ItemDeLista) combo_componentes_.getSelectedItem()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO))
@@ -507,6 +506,15 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
                 }
             // </editor-fold>
             }
+            
+            
+            /*if(decision_boton_guardar.equals(OP_BOTON_EDITAR)){
+                
+                
+                
+            }*/
+            
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "guardar", 0);
             
@@ -535,11 +543,9 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
     
     private void btn_editar_seleccionado_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_seleccionado_ActionPerformed
         try {
-            
             txt_plu_.setText(String.valueOf(tabla_repuestos_.getValueAt(fila_tabla, 0)));
             txa_ref_repuesto_.setText(String.valueOf(tabla_repuestos_.getValueAt(fila_tabla, 1)));
             txt_cant_stock_.setText(String.valueOf(tabla_repuestos_.getValueAt(fila_tabla, 4)));
-            
             Object talla = tabla_repuestos_.getValueAt(fila_tabla, 3);
             Object aux;
             for (int i = 0; i < combo_talla_.getItemCount(); i++) {
@@ -552,6 +558,11 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
             panel_edicion_.setEnabled(true);
             btn_borrar_repuesto_.setEnabled(true);
             btn_nuevo_repuesto_.setEnabled(false);
+            decision_boton_guardar = OP_BOTON_EDITAR;
+            combo_articulos_.setEnabled(false);
+            check_articulo_repuesto_.setEnabled(false);
+            txt_plu_.setEnabled(false);
+            check_generar_cod_.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "editar", 0);
         }
@@ -559,7 +570,6 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
 
     private void btn_borrar_repuesto_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrar_repuesto_ActionPerformed
         try {
-            
             int decision = JOptionPane.showOptionDialog(
                     this,
                     "¿Estás seguro de eliminar este articulo?",
@@ -646,6 +656,14 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
         }*/
         
     }//GEN-LAST:event_check_articulo_repuesto_ActionPerformed
+
+    private void txt_plu_KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_plu_KeyTyped
+        
+        if(txt_plu_.getText().length() > 5){
+            evt.consume();
+        }
+        
+    }//GEN-LAST:event_txt_plu_KeyTyped
 
     
 

@@ -793,7 +793,6 @@ public class OrdenProduccion extends VentanaInterna {
     }//GEN-LAST:event_btn_borrar_Orden_Registrada_ActionPerformed
 
     private void txt_cant_ensamble_KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensamble_KeyTyped
-
         char typ = evt.getKeyChar();
         if (txt_cant_ensamble_.getText().isEmpty()) {
             if (typ < '1' || typ > '9') {
@@ -804,7 +803,6 @@ public class OrdenProduccion extends VentanaInterna {
                 evt.consume();
             }
         }
-
     }//GEN-LAST:event_txt_cant_ensamble_KeyTyped
 
     private void txt_cant_ensamble_KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cant_ensamble_KeyReleased

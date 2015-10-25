@@ -400,6 +400,7 @@ public class ControlArticulos extends Paneles.VentanaInterna {
                 String nom_articulo = txt_nombre_articulo_.getText();
                 String desc_articulo = txa_descripcion_articulo_.getText();
                 Object[] tallas = ((ComboCheckBox) combo_tamaños_articulo_).obtenerTallasSeleccionadas();
+                
                 if (decision_btn_hecho.equals(OP_BTN_HECHO_EDITAR)) {
                     if (!(tallas.length > 0)) {
                         int decision = JOptionPane.showOptionDialog(
@@ -452,6 +453,8 @@ public class ControlArticulos extends Paneles.VentanaInterna {
                         ((ComboBoxItem) combo_articulos_).llenarme(MODELO_COMBO_ARTICULOS);
                     }
                 }
+                
+                
                 
                 if (decision_btn_hecho.equals(OP_BTN_HECHO_NUEVO)) {
                     if (!(tallas.length > 0)) {
