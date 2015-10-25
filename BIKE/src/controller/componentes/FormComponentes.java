@@ -249,6 +249,7 @@ public class FormComponentes {
     }
     
     
+    /////////TABLA COMPONENTES ****
     
     
     /**
@@ -285,7 +286,7 @@ public class FormComponentes {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
                 limpiarTabla();
-                data_madre = new Object[componentes.length][3];
+                data_madre = new Object[componentes.length][4];
                 data = new Object[componentes.length][2];
                 String desc;
                 for (int i = 0; i < componentes.length; i++) {
@@ -298,6 +299,7 @@ public class FormComponentes {
                         componentes[i][0].toString(),
                         componentes[i][1].toString(),
                         desc,
+                        componentes[i][3]
                     };
                     data[i] = new Object[]{
                         componentes[i][1].toString(),
@@ -320,6 +322,17 @@ public class FormComponentes {
             mi_modelo_tabla.fireTableDataChanged();
         }
 
+        /**
+         * @param i indice del item a recuperar
+         * @return */
+        public Object obtenerCodigoComponente(int i){
+            return data_madre[i][0];
+        }
+        
+        public Object obtenerMiCodigoFamilia(int i){
+            return data_madre[i][3];
+        }
+        
         /**
          * @return 
          * @throws java.lang.Exception*/

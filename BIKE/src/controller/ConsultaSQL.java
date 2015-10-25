@@ -477,6 +477,49 @@ public class ConsultaSQL {
     
     //COMPONENTES
     
+    
+    /**
+     * METODO REGISTRAR UN NUEVO COMPONENTE.
+     *
+     * @param datos Arreglo de Objetos con los datos para el registro.
+     * @return boolean Confirmacion de Exito de insercion.
+     * @throws java.lang.Exception
+     */
+    public static boolean registrarComponente(Object[] datos) throws Exception {
+        try (Connection conbd = ConexionBD.obtenerConexion()) {
+            
+            String id_comp = Crypt.generarContraseña(Crypt.COMPONENTES);
+            boolean is = true;
+            while (is) {
+                try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
+                        "select id_comp from componentes where id_comp = ?;")) {
+                    sentencia.setString(1, id_comp);
+                    try (ResultSet resultados = sentencia.executeQuery()) {
+                        if (resultados.next()) {
+                            id_comp = Crypt.generarContraseña(Crypt.ARTICULOS);
+                        } else {
+                            is = false;
+                        }
+                    }
+                }
+            }
+            
+            try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
+                    "insert into componentes values (?, ?, ?, ?);")) {
+                sentencia.setString(1, id_comp);
+                sentencia.setString(2, datos[0].toString());
+                sentencia.setString(3, datos[1].toString());
+                sentencia.setString(4, datos[2].toString());
+                
+                return sentencia.executeUpdate() > 0;
+            }
+            
+        } catch (Exception e) {
+            throw new Exception("Problemas al intentar registrar el nuevo repuesto.\n" + e.toString());
+        }
+    }
+    
+    
     /**
      * METODO PARA OBTENER TODOS LOS COMPONENTES ACTUALES.
      * @return ArrayList con todos los componentes registrados.
@@ -502,6 +545,57 @@ public class ConsultaSQL {
         } catch (Exception e) {
             throw new Exception("Problemas al obtener el listado de Componentes del articulo.\n"
                     + "Error: " + e.getLocalizedMessage());
+        }
+    }
+    
+    /**
+     * METODO PARA MODIFICAR UN COMPONENTE
+     * @param info los datos del registro en un arreglo de objetos
+     * @return boolean con la confirmacion de la inserción
+     * @throws java.lang.Exception
+     */
+    public static boolean modificarComponente(Object[] info) throws Exception{
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "update componentes set componente = ?, "
+                    + "desc_comp = ?, familia = ? "
+                    + "where id_comp = ?;")) {
+                sentencia.setString(1, info[1].toString());
+                if(info[2] != null && (info[2].toString().length() > 0)){
+                    sentencia.setString(2, info[2].toString());
+                }
+                else{
+                    sentencia.setNull(2, java.sql.Types.NULL);
+                }
+                sentencia.setString(3, info[3].toString());
+                sentencia.setString(4, info[0].toString());
+                
+                return sentencia.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            throw new Exception("Problemas al modificar el registro de la familia.\n"
+                    + "Error: " + e.toString());
+        }
+    }
+    
+    
+    /**
+     * METODO PARA ELIMINAR EL REGISTRO DE UN COMPONENTE.
+     * @param cod_comp
+     * @return boolean con la confirmacion de la eliminación
+     * @throws java.lang.Exception
+     */
+    public static boolean eliminarComponente(String cod_comp) throws Exception{
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "delete from componentes where id_comp = ?;")) {
+                sentencia.setString(1, cod_comp);
+                
+                return sentencia.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            throw new Exception("Problemas para el registro de la familia .\n"
+                    + "Error: " + e.toString());
         }
     }
     
@@ -622,7 +716,7 @@ public class ConsultaSQL {
         try (Connection con = ConexionBD.obtenerConexion()) {
 
             try (java.sql.PreparedStatement sentencia = con.prepareStatement(
-                    "select id_comp, componente, desc_comp from componentes order by familia;")) {
+                    "select id_comp, componente, desc_comp, familia from componentes order by familia;")) {
                 
                 try (ResultSet resultados = sentencia.executeQuery()) {
                     ArrayList<Object[]> caja = new ArrayList<>();
@@ -630,11 +724,12 @@ public class ConsultaSQL {
                         caja.add(new Object[]{
                             resultados.getString(1), 
                             resultados.getString(2), 
-                            resultados.getString(3)
+                            resultados.getString(3),
+                            resultados.getString(4)
                         });
                     }
                     if (caja.size() > 0) {
-                        Object[][] retorno = new Object[caja.size()][3];
+                        Object[][] retorno = new Object[caja.size()][4];
                         Iterator it = caja.iterator();
                         int i = 0;
                         while (it.hasNext()) {
