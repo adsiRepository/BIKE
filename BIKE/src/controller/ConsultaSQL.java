@@ -51,6 +51,12 @@ public class ConsultaSQL {
         }
     }
     
+    
+    
+    
+    
+    
+    
     //FIN ENSAMBLADORES
     
     //ARTICULOS
@@ -327,6 +333,146 @@ public class ConsultaSQL {
             throw new Exception("Error Consulta de Catalogo\n" + ex.getLocalizedMessage());
         }
     }
+    
+    //FAMILIAS COMPONENTES
+    
+    /**
+     * METODO PARA OBTENER TODOS LOS REGISTROS DE FAMILIAS DE COMPONENTES.
+     * @return arreglo de objetos de dos dimensiones con los registros
+     * @throws java.lang.Exception
+     */
+    public static Object[][] obtenerFamilias() throws Exception{
+        try (Connection con = ConexionBD.obtenerConexion()) {
+
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "select cod_fam, familia, descripcion, comp_x_par from familia_componente;")) {
+                
+                try (ResultSet resultados = sentencia.executeQuery()) {
+                    ArrayList<Object[]> caja = new ArrayList<>();
+                    while (resultados.next()) {
+                        caja.add(new Object[]{
+                            resultados.getString(1), 
+                            resultados.getString(2), 
+                            resultados.getString(3),
+                            resultados.getBoolean(4)
+                        });
+                    }
+                    if (caja.size() > 0) {
+                        Object[][] retorno = new Object[caja.size()][4];
+                        Iterator it = caja.iterator();
+                        int i = 0;
+                        while (it.hasNext()) {
+                            retorno[i] = (Object[]) it.next();
+                            i++;
+                        }
+                        return retorno;
+                    } else {
+                        throw new Exception("No existen familias registradas.");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new Exception("Problemas al obtener las Familias de Componentes.\n"
+                    + "Error: " + e.getLocalizedMessage());
+        }
+    }
+    
+    
+    /**
+     * METODO PARA REGISTRAR UNA NUEVA FAMILIA.
+     * @param info los datos del registro en un arreglo de objetos
+     * @return boolean con la confirmacion de la inserción
+     * @throws java.lang.Exception
+     */
+    public static boolean insertarFamilia(Object[] info) throws Exception{
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            String s_cod_fami;
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "select max(cod_fam) from familia_componente limit 1;")) {
+                try (ResultSet resultados = sentencia.executeQuery()) {
+                    resultados.next();
+                    s_cod_fami = resultados.getString(1);
+                }
+            }
+            int cod = Integer.parseInt(s_cod_fami);
+            s_cod_fami = String.valueOf(cod + 1);
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "insert into familia_componente values (?, ?, ?, ?)")) {
+                sentencia.setString(1, s_cod_fami);
+                sentencia.setString(2, info[0].toString());
+                if(info[1] != null && (info[1].toString().length() > 0)){
+                    sentencia.setString(3, info[1].toString());
+                }
+                else{
+                    sentencia.setNull(3, java.sql.Types.NULL);
+                }
+                sentencia.setBoolean(4, (boolean)info[2]);
+                
+                return sentencia.executeUpdate() > 0;
+            }
+            
+        } catch (Exception e) {
+            throw new Exception("Problemas para registrar la nueva familia.\n"
+                    + "Error: " + e.toString());
+        }
+    }
+    
+    
+    /**
+     * METODO QUE ATUALIZA UN REGISTRO DE FAMILIAS DE COMPONENTES.
+     * @param info los datos del registro en un arreglo de objetos
+     * @return boolean con la confirmacion de la inserción
+     * @throws java.lang.Exception
+     */
+    public static boolean modificarFamilia(Object[] info) throws Exception{
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "update familia_componente set familia = ?, "
+                    + "descripcion = ?, comp_x_par = ? "
+                    + "where cod_fam = ?;")) {
+                sentencia.setString(1, info[1].toString());
+                if(info[2] != null && (info[2].toString().length() > 0)){
+                    sentencia.setString(2, info[2].toString());
+                }
+                else{
+                    sentencia.setNull(2, java.sql.Types.NULL);
+                }
+                sentencia.setBoolean(3, (boolean)info[3]);
+                sentencia.setString(4, info[0].toString());
+                
+                return sentencia.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            throw new Exception("Problemas al modificar el registro de la familia.\n"
+                    + "Error: " + e.toString());
+        }
+    }
+    
+    
+    /**
+     * METODO PARA ELIMINAR EL REGISTRO DE UNA FAMILIA.
+     * @param cod_fam
+     * @return boolean con la confirmacion de la eliminación
+     * @throws java.lang.Exception
+     */
+    public static boolean eliminarFamilia(String cod_fam) throws Exception{
+        try (Connection con = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "delete from familia_componente where cod_fam = ?;")) {
+                sentencia.setString(1, cod_fam);
+                
+                return sentencia.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            throw new Exception("Problemas para el registro de la familia .\n"
+                    + "Error: " + e.toString());
+        }
+    }
+    
+    
+    
+    //FIN FAMILIA ***
     
     
     //COMPONENTES
@@ -629,7 +775,7 @@ public class ConsultaSQL {
                             sentencia.setNull(i, java.sql.Types.NULL);
                         }
                     } else {
-                        if (info[i - 1] == null) {
+                        if (info[i - 1] == null || !(info[i - 1].toString().length() > 0)) {
                             sentencia.setNull(i, java.sql.Types.NULL);
                         }
                         else{
@@ -1251,11 +1397,14 @@ public class ConsultaSQL {
             //Object[] componentes = new Object[]{"001","076","003"};
             //boolean f = registrarNuevoArticulo(detalles, componentes);
             //boolean f = modificarArticulo("TT", detalles);
+            //Object[][] reps = obtenerRepuestosComponente("050");
+            //for (Object[] rep : reps) {
+            //    System.out.println(rep[0]+" "+rep[1]+" "+rep[2]+" "+rep[3]+" "+rep[4]);
+            //}
             
-            Object[][] reps = obtenerRepuestosComponente("050");
-            for (Object[] rep : reps) {
-                System.out.println(rep[0]+" "+rep[1]+" "+rep[2]+" "+rep[3]+" "+rep[4]);
-            }
+            Object[] g = new Object[]{"gonzalez", null, false};
+            boolean f = insertarFamilia(g);
+            System.out.println(f);
             
         } catch (Exception ex) {
             System.out.println(ex.toString());

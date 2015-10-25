@@ -87,9 +87,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         panel_fecha_ = new javax.swing.JPanel();
         txtview_fecha_actual = new javax.swing.JTextField();
         barra_menu_1 = new javax.swing.JMenuBar();
-        menu_archivo_ = new javax.swing.JMenu();
-        menu_item_parametrizacion_ = new javax.swing.JMenuItem();
-        menu_item_cerrar_ = new javax.swing.JMenuItem();
         menu_tareas_ = new javax.swing.JMenu();
         menu_item_nueva_orden_ = new javax.swing.JMenuItem();
         menu_almacen_ = new javax.swing.JMenu();
@@ -98,9 +95,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menuItem_controlRepuestos_ = new javax.swing.JMenuItem();
         menu_ensambladores_ = new javax.swing.JMenu();
         menuItem_registroEnsamblador_ = new javax.swing.JMenuItem();
-        menu_item_supervis_ensam_ = new javax.swing.JMenuItem();
-        menu_herramientas_ = new javax.swing.JMenu();
-        menu_item_servidores_ = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -238,26 +232,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorio.setLayer(panel_reloj_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(panel_fecha_, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        menu_archivo_.setText("Archivo");
-
-        menu_item_parametrizacion_.setText("Parametrizacion");
-        menu_item_parametrizacion_.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menu_item_parametrizacion_ActionPerformed(evt);
-            }
-        });
-        menu_archivo_.add(menu_item_parametrizacion_);
-
-        menu_item_cerrar_.setText("Cerrar");
-        menu_item_cerrar_.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menu_item_cerrar_ActionPerformed(evt);
-            }
-        });
-        menu_archivo_.add(menu_item_cerrar_);
-
-        barra_menu_1.add(menu_archivo_);
-
         menu_tareas_.setText("Produccion");
 
         menu_item_nueva_orden_.setText("Nueva Orden");
@@ -308,22 +282,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menu_ensambladores_.add(menuItem_registroEnsamblador_);
 
-        menu_item_supervis_ensam_.setText("Supervision");
-        menu_ensambladores_.add(menu_item_supervis_ensam_);
-
         barra_menu_1.add(menu_ensambladores_);
-
-        menu_herramientas_.setText("Herramientas");
-
-        menu_item_servidores_.setText("Servidor");
-        menu_item_servidores_.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menu_item_servidores_ActionPerformed(evt);
-            }
-        });
-        menu_herramientas_.add(menu_item_servidores_);
-
-        barra_menu_1.add(menu_herramientas_);
 
         setJMenuBar(barra_menu_1);
 
@@ -366,14 +325,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     }
     
-    private void menu_item_parametrizacion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_parametrizacion_ActionPerformed
-
-    }//GEN-LAST:event_menu_item_parametrizacion_ActionPerformed
-
-    private void menu_item_servidores_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_servidores_ActionPerformed
-
-    }//GEN-LAST:event_menu_item_servidores_ActionPerformed
-
     private void menu_item_nueva_orden_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_nueva_orden_ActionPerformed
         try {
             if (ordenProduccion != null && ordenProduccion.isVisible()) {
@@ -467,10 +418,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }    
     }//GEN-LAST:event_menu_item_gestion_produccion_ActionPerformed
 
-    private void menu_item_cerrar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_cerrar_ActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_menu_item_cerrar_ActionPerformed
-
     private void btn_empleados_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_empleados_ActionPerformed
         
         
@@ -512,16 +459,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItem_controlRepuestos_;
     private javax.swing.JMenuItem menuItem_registroEnsamblador_;
     private javax.swing.JMenu menu_almacen_;
-    private javax.swing.JMenu menu_archivo_;
     private javax.swing.JMenu menu_ensambladores_;
-    private javax.swing.JMenu menu_herramientas_;
-    private javax.swing.JMenuItem menu_item_cerrar_;
     private javax.swing.JMenuItem menu_item_componentes_;
     private javax.swing.JMenuItem menu_item_gestion_produccion_;
     private javax.swing.JMenuItem menu_item_nueva_orden_;
-    private javax.swing.JMenuItem menu_item_parametrizacion_;
-    private javax.swing.JMenuItem menu_item_servidores_;
-    private javax.swing.JMenuItem menu_item_supervis_ensam_;
     private javax.swing.JMenu menu_tareas_;
     private javax.swing.JPanel panel_fecha_;
     private javax.swing.JPanel panel_reloj_;

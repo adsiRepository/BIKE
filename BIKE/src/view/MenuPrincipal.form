@@ -4,29 +4,6 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="barra_menu_1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="menu_archivo_">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Archivo"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="menu_item_parametrizacion_">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Parametrizacion"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_item_parametrizacion_ActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menu_item_cerrar_">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Cerrar"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_item_cerrar_ActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
         <Menu class="javax.swing.JMenu" name="menu_tareas_">
           <Properties>
             <Property name="text" type="java.lang.String" value="Produccion"/>
@@ -84,26 +61,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItem_registroEnsamblador_ActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menu_item_supervis_ensam_">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Supervision"/>
-              </Properties>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="menu_herramientas_">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Herramientas"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="menu_item_servidores_">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Servidor"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_item_servidores_ActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

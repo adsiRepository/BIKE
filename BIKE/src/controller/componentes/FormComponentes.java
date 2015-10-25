@@ -22,6 +22,7 @@ public class FormComponentes {
     
     public static class TablaFamilias extends JTable {
 
+        Object[][] data_madre;
         private Object[][] data;
         private final MiModeloTabla mi_modelo_tabla;
 
@@ -50,18 +51,27 @@ public class FormComponentes {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
                 limpiarTabla();
-                data = new Object[componentes.length][5];
+                data_madre = new Object[componentes.length][4];
+                data = new Object[componentes.length][3];
                 String desc;
+                boolean par;
                 for (int i = 0; i < componentes.length; i++) {
-                    if (componentes[i][3] != null) {
-                        desc = componentes[i][3].toString();
+                    if (componentes[i][2] != null) {
+                        desc = componentes[i][2].toString();
                     } else {
                         desc = "No hay descripcion";
                     }
-                    data[i] = new Object[]{
+                    par = (boolean)componentes[i][3];
+                    data_madre[i] = new Object[]{
                         componentes[i][0],
                         componentes[i][1].toString(),
-                        componentes[i][2].toString(),
+                        desc,
+                        par
+                    };
+                    data[i] = new Object[]{
+                        componentes[i][1].toString(),
+                        desc,
+                        par
                     };
                 }
                 mi_modelo_tabla.fireTableDataChanged();
@@ -79,6 +89,14 @@ public class FormComponentes {
             mi_modelo_tabla.fireTableDataChanged();
         }
 
+        /**
+         * @param i indice
+         * @return Objeto
+         */
+        public Object obtenerCodigoFamilia(int i){
+            return data_madre[i][0];
+        }
+        
         /**
          * @return 
          * @throws java.lang.Exception*/
@@ -239,6 +257,7 @@ public class FormComponentes {
     public static class TablaComponentes extends JTable {
 
         private Object[][] data;
+        private Object[][] data_madre;
         private final MiModeloTabla mi_modelo_tabla;
 
         public TablaComponentes() {
@@ -247,7 +266,7 @@ public class FormComponentes {
             this.setModel(mi_modelo_tabla);
             this.setDefaultRenderer(Component.class, new RenderComponenteCelda());
             this.setDefaultEditor(Component.class, new EditorComponenteCelda());
-            int[] anchos = new int[]{150, 150};
+            int[] anchos = new int[]{180, 170};
             for (int i = 0; i < this.getColumnCount(); i++) {
                 this.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
                 this.getColumnModel().getColumn(i).setMinWidth(anchos[i]);
@@ -266,20 +285,26 @@ public class FormComponentes {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
                 limpiarTabla();
-                data = new Object[componentes.length][5];
+                data_madre = new Object[componentes.length][3];
+                data = new Object[componentes.length][2];
                 String desc;
                 for (int i = 0; i < componentes.length; i++) {
-                    if (componentes[i][3] != null) {
-                        desc = componentes[i][3].toString();
+                    if (componentes[i][2] != null) {
+                        desc = componentes[i][2].toString();
                     } else {
                         desc = "No hay descripcion";
                     }
-                    data[i] = new Object[]{
-                        componentes[i][0],
+                    data_madre[i] = new Object[]{
+                        componentes[i][0].toString(),
                         componentes[i][1].toString(),
-                        componentes[i][2].toString(),
+                        desc,
+                    };
+                    data[i] = new Object[]{
+                        componentes[i][1].toString(),
+                        desc,
                     };
                 }
+                //data = new Object[data_madre.length][2];
                 mi_modelo_tabla.fireTableDataChanged();
             } catch (Exception er) {
                 throw new Exception("Error al Actualizar la Tabla de Componentes.\nError: " + er.toString());
@@ -336,7 +361,7 @@ public class FormComponentes {
 
             private final Class[] CLASES_COLUMNAS = new Class[]{String.class, String.class};
             private final String[] TITULOS_COLUMNAS = new String[]{"Componente", "Descripcion"};
-            private final boolean[] COLS_EDITABLES = new boolean[]{false, false, false, false, true};
+            private final boolean[] COLS_EDITABLES = new boolean[]{false, false};
 
             /**
              * Constructor del Modelo de la TablaAlistamiento de Alistamiento.

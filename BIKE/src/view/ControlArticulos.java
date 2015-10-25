@@ -281,7 +281,7 @@ public class ControlArticulos extends Paneles.VentanaInterna {
             txt_nombre_articulo_.setText("" + articulo.getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
             txa_descripcion_articulo_.setText(""+articulo.getAtributos().get("descripcion"));
             Object[][] componentes = ConsultaSQL.obtenerComponentesDeArticulo(articulo.obtenerCodigoId());
-            ((TablaArticulos) tabla_articulos_).actualizaTabla(componentes);
+            ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
             decision_btn_hecho = OP_BTN_HECHO_EDITAR;
             btn_hecho_.setEnabled(true);
             btn_hecho_.setToolTipText("modificar el articulo actualmente seleccionado");
@@ -360,7 +360,7 @@ public class ControlArticulos extends Paneles.VentanaInterna {
             btn_hecho_.setEnabled(true);
             btn_hecho_.setToolTipText("guardar el nuevo articulo");
             Object[][] componentes = ConsultaSQL.obtenerTodosLosComponentes();
-            ((TablaArticulos) tabla_articulos_).actualizaTabla(componentes);
+            ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Despliegue de Componentes", 0);
         }
@@ -533,13 +533,13 @@ public class ControlArticulos extends Paneles.VentanaInterna {
                     );
                     if (decision == 0) {
                         Object[][] componentes = ConsultaSQL.obtenerTodosLosComponentes();
-                        ((TablaArticulos) tabla_articulos_).actualizaTabla(componentes);
+                        ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
                     }
                 //}
             } else {
                     
                 Object[][] componentes = ConsultaSQL.obtenerTodosLosComponentes();
-                ((TablaArticulos) tabla_articulos_).actualizaTabla(componentes);
+                ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Despliegue de Componentes", 0);

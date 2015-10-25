@@ -5,9 +5,11 @@ package view;
 
 import controller.ConsultaSQL;
 import controller.componentes.FormComponentes;
+import controller.componentes.FormComponentes.TablaComponentes;
 import controller.componentes.FormComponentes.TablaFamilias;
 import controller.componentes.Paneles.VentanaInterna;
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
 import static view.MenuPrincipal.escritorio;
 
 /**FORMULARIO OFRECIDO AL USUARIO PARA LA ADMINISTRACION DE COMPONENTES.
@@ -20,6 +22,15 @@ public class ControlComponentes extends VentanaInterna {
     private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_components";
     /***/
     
+    private static final String OP_GUARDAR_EDICION = "edicion";
+    private static final String OP_GUARDAR_NUEVO = "nuevo";
+    private String decision_btn_guardar_familia;
+    private String decision_btn_guardar_compo;
+    
+    private int fila_familias, col_familias;
+    private int fila_compos, col_compos;
+    private int index_cod_familia;
+    
     /**
      * Creates new form Clientes
      */
@@ -28,6 +39,7 @@ public class ControlComponentes extends VentanaInterna {
         //DE LA IMAGEN DE FONDO UBICADA EN LA CARPETA "mis_imagenes" EN EL DIRECTORIO PRINCIPAL DEL PROYECTO (fuera de todas las carpetas) 
         super(NOMBRE_MI_IMAGEN_FONDO);
         initComponents();
+        // <editor-fold defaultstate="collapsed" desc="PERSONALIZACIONES DE LA VENTANA">
         this.title = "Control y Edicion de Componentes y Familias";
         this.setIconifiable(true);
         this.resizable = true;
@@ -36,12 +48,16 @@ public class ControlComponentes extends VentanaInterna {
         this.setLocation(/*(tamaño_escritorio.width / 3)*/10, ((tamaño_escritorio.height - mySpc.height) / 4));
         
         try {
+            Object[][] familias = ConsultaSQL.obtenerFamilias();
+            ((TablaFamilias) tabla_familias_).actualizaTabla(familias);
             Object[][] componentes = ConsultaSQL.obtenerSoloComponentes();
-            ((TablaFamilias)tabla_familias_).actualizaTabla(componentes);
+            ((TablaComponentes) tabla_componentes_).actualizaTabla(componentes);
         } catch (Exception e) {
-            
+            JOptionPane.showMessageDialog(null, e.toString());
         }
-        
+        decision_btn_guardar_familia = "";
+
+// </editor-fold>
     }
     
     /**
@@ -88,8 +104,20 @@ public class ControlComponentes extends VentanaInterna {
 
         lbl_editor_nom_familia_.setText("Nombre Familia:");
 
+        txt_nombre_familia_.setEnabled(false);
+
+        tabla_familias_.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_familias_MouseClicked(evt);
+            }
+        });
         scroll_tabla_familias_.setViewportView(tabla_familias_);
 
+        tabla_componentes_.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_componentes_MouseClicked(evt);
+            }
+        });
         scroll_tabla_componentes_.setViewportView(tabla_componentes_);
 
         btn_cancelar_familia_.setText("cancelar");
@@ -113,6 +141,7 @@ public class ControlComponentes extends VentanaInterna {
         txa_desc_familia_.setLineWrap(true);
         txa_desc_familia_.setRows(3);
         txa_desc_familia_.setWrapStyleWord(true);
+        txa_desc_familia_.setEnabled(false);
         scroll_txa_desc_familia_.setViewportView(txa_desc_familia_);
 
         lbl_desc_familia_.setText("Descripcion(opcional)");
@@ -126,6 +155,11 @@ public class ControlComponentes extends VentanaInterna {
         scroll_txa_desc_comp_.setViewportView(txa_descripcion_componente_);
 
         btn_asignar_componentes_.setText("asignar componente/s");
+        btn_asignar_componentes_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_asignar_componentes_ActionPerformed(evt);
+            }
+        });
 
         lbl_desc_comp_.setText("Descripcion Componente(opcional)");
 
@@ -316,7 +350,6 @@ public class ControlComponentes extends VentanaInterna {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_nuevo_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevo_componente_ActionPerformed
-        
         if(btn_nuevo_componente_.getText().equals("guardar")){
         
             //codigo de guardar
@@ -331,25 +364,109 @@ public class ControlComponentes extends VentanaInterna {
         }
         txt_nombre_componente_.setText("");
         txa_descripcion_componente_.setText("");
-        
     }//GEN-LAST:event_btn_nuevo_componente_ActionPerformed
 
     private void btn_nueva_familia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nueva_familia_ActionPerformed
-        
-        if(btn_nueva_familia_.getText().equals("guardar")){
-            
-           //codigo de guardar
-            
-            btn_nueva_familia_.setText("nuevo"); 
-            btn_borrar_familia_.setEnabled(false);
-            btn_editar_familia_.setEnabled(true);
-        }else{
-            btn_editar_familia_.setEnabled(false);
-            btn_nueva_familia_.setText("guardar"); 
+        try {
+            if (btn_nueva_familia_.getText().equals("guardar")) {
+                if (decision_btn_guardar_familia.equals(OP_GUARDAR_NUEVO)) {
+                    // <editor-fold defaultstate="collapsed" desc="//codigo para guardar nueva familia">
+                    if (txt_nombre_familia_.getText().length() > 0) {
+
+                        Object[] datos = new Object[3];
+                        datos[0] = txt_nombre_familia_.getText();
+                        String desc = "";
+                        if (txa_desc_familia_.getText().length() > 0) {
+                            desc = txa_desc_familia_.getText();
+                        }
+                        datos[1] = desc;
+                        datos[2] = check_familia_par_.isSelected();
+
+                        boolean hecho = ConsultaSQL.insertarFamilia(datos);
+                        if (hecho) {
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Nueva Familia de Componentes Registrada con éxito.",
+                                    "Insercion de Nueva Familia",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );
+                            btn_nueva_familia_.setText("nuevo");
+                            btn_borrar_familia_.setEnabled(false);
+                            btn_editar_familia_.setEnabled(true);
+                            txt_nombre_familia_.setText("");
+                            txa_desc_familia_.setText("");
+                            txt_nombre_familia_.setEnabled(false);
+                            txa_desc_familia_.setEnabled(false);
+                            Object[][] familias = ConsultaSQL.obtenerFamilias();
+                            ((TablaFamilias) tabla_familias_).actualizaTabla(familias);
+                            decision_btn_guardar_familia = "";
+                        } else {
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Hubo un problema que no permitio la insercion de la Familia, intentalo nuevamente.",
+                                    "Insercion de Nueva Familia",
+                                    JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+
+                    } else {
+                        JOptionPane.showMessageDialog(
+                                ControlComponentes.this,
+                                "Debes seleccionar un Nombre para la Familia de componentes que crearás. "
+                                + "También puedes seleccionar si los componentes de esta familia vienen por par.");
+                    }
+                    // </editor-fold>
+                }
+                if (decision_btn_guardar_familia.equals(OP_GUARDAR_EDICION)) {
+                    // <editor-fold defaultstate="collapsed" desc="//codigo para editar una familia">
+                    Object[] datos = new Object[4];
+                    datos[0] = ((TablaFamilias)tabla_familias_).obtenerCodigoFamilia(index_cod_familia);
+                    datos[1] = txt_nombre_familia_.getText();
+                    String desc = "";
+                    if ((txa_desc_familia_.getText().length() > 0) && !(txa_desc_familia_.getText().equals("No hay descripcion"))) {
+                        desc = txa_desc_familia_.getText();
+                    }
+                    datos[2] = desc;
+                    datos[3] = check_familia_par_.isSelected();
+                    boolean hecho = ConsultaSQL.modificarFamilia(datos);
+                    if (hecho) {
+                        JOptionPane.showMessageDialog(
+                                    null,
+                                    "Familia Editada Correctamente.",
+                                    "Edicion de Familia",
+                                    JOptionPane.INFORMATION_MESSAGE
+                        );
+                        btn_nueva_familia_.setText("nuevo");
+                        btn_borrar_familia_.setEnabled(false);
+                        btn_editar_familia_.setEnabled(true);
+                        txt_nombre_familia_.setText("");
+                        txa_desc_familia_.setText("");
+                        txt_nombre_familia_.setEnabled(false);
+                        txa_desc_familia_.setEnabled(false);
+                        Object[][] familias = ConsultaSQL.obtenerFamilias();
+                        ((TablaFamilias) tabla_familias_).actualizaTabla(familias);
+                        decision_btn_guardar_familia = "";
+                    } else {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "No se pudo Editar la Familia.",
+                                "Edicion de Familia",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                    // </editor-fold>
+                }
+            } 
+            else {
+                btn_editar_familia_.setEnabled(false);
+                btn_nueva_familia_.setText("guardar");
+                txt_nombre_familia_.setEnabled(true);
+                txa_desc_familia_.setEnabled(true);
+                decision_btn_guardar_familia = OP_GUARDAR_NUEVO;
+            }
+        } catch (Exception er) {
+            JOptionPane.showMessageDialog(ControlComponentes.this, er.toString());
         }
-        txt_nombre_familia_.setText("");
-        txa_desc_familia_.setText("");
-        
     }//GEN-LAST:event_btn_nueva_familia_ActionPerformed
 
     private void btn_cancelar_familia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelar_familia_ActionPerformed
@@ -359,6 +476,7 @@ public class ControlComponentes extends VentanaInterna {
         btn_nueva_familia_.setText("nuevo");
         btn_borrar_familia_.setEnabled(false);
         btn_editar_familia_.setEnabled(true);
+        decision_btn_guardar_familia = "";
         
     }//GEN-LAST:event_btn_cancelar_familia_ActionPerformed
 
@@ -393,23 +511,55 @@ public class ControlComponentes extends VentanaInterna {
     }//GEN-LAST:event_btn_borrar_componente_ActionPerformed
 
     private void btn_editar_familia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_familia_ActionPerformed
-        
+
+        index_cod_familia = fila_familias;
+        txt_nombre_familia_.setText(tabla_familias_.getValueAt(fila_familias, 0).toString());
+        txa_desc_familia_.setText(tabla_familias_.getValueAt(fila_familias, 1).toString());
+        check_familia_par_.setSelected((boolean)tabla_familias_.getValueAt(fila_familias, 2));
         btn_nueva_familia_.setText("guardar");
         btn_borrar_familia_.setEnabled(true);
         btn_editar_familia_.setEnabled(false);
+        txt_nombre_familia_.setEnabled(true);
+        txa_desc_familia_.setEnabled(true);
+        decision_btn_guardar_familia = OP_GUARDAR_EDICION;
         
     }//GEN-LAST:event_btn_editar_familia_ActionPerformed
 
     private void btn_borrar_familia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrar_familia_ActionPerformed
-        
-        //borrar familia
-        
-        btn_nueva_familia_.setText("nuevo");
-        btn_borrar_familia_.setEnabled(false);
-        txt_nombre_familia_.setText("");
-        txa_desc_familia_.setText("");
-        btn_editar_familia_.setEnabled(true);
-        
+        try {
+            // <editor-fold defaultstate="collapsed" desc="//borrar familia">
+            String cod_fam = (String) ((TablaFamilias) tabla_familias_).obtenerCodigoFamilia(index_cod_familia);
+            
+            boolean hecho = ConsultaSQL.eliminarFamilia(cod_fam);
+            
+            if (hecho) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Registro Borrado Correctamente.",
+                        "Borrar Familia",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                Object[][] familias = ConsultaSQL.obtenerFamilias();
+                ((TablaFamilias) tabla_familias_).actualizaTabla(familias);
+                decision_btn_guardar_familia = "";
+                btn_nueva_familia_.setText("nuevo");
+                btn_borrar_familia_.setEnabled(false);
+                txt_nombre_familia_.setText("");
+                txa_desc_familia_.setText("");
+                btn_editar_familia_.setEnabled(true);
+                decision_btn_guardar_familia = "";
+            } else {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "No se Ha podido borrar el registro.",
+                        "Borrar Familia",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+            // </editor-fold>
+        } catch (Exception er) {
+            JOptionPane.showMessageDialog(ControlComponentes.this, er.toString());
+        }
     }//GEN-LAST:event_btn_borrar_familia_ActionPerformed
 
     private void btn_editar_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_componente_ActionPerformed
@@ -419,6 +569,26 @@ public class ControlComponentes extends VentanaInterna {
         btn_editar_componente_.setEnabled(false);
         
     }//GEN-LAST:event_btn_editar_componente_ActionPerformed
+
+    private void tabla_familias_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_familias_MouseClicked
+        
+        fila_familias = tabla_familias_.rowAtPoint(evt.getPoint());
+        col_familias = tabla_familias_.columnAtPoint(evt.getPoint());
+        
+    }//GEN-LAST:event_tabla_familias_MouseClicked
+
+    private void tabla_componentes_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_componentes_MouseClicked
+        
+        fila_compos = tabla_componentes_.rowAtPoint(evt.getPoint());
+        col_compos = tabla_componentes_.columnAtPoint(evt.getPoint());
+        
+    }//GEN-LAST:event_tabla_componentes_MouseClicked
+
+    private void btn_asignar_componentes_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_asignar_componentes_ActionPerformed
+        
+        
+        
+    }//GEN-LAST:event_btn_asignar_componentes_ActionPerformed
 
    
     /*public static void main(String[] args) {

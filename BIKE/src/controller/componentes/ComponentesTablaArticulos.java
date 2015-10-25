@@ -46,15 +46,7 @@ public class ComponentesTablaArticulos {
             this.setRowHeight(55);
         }
 
-        
-        
-        
-        /**
-         * Método publico utizado para cambiar la informacion de la tabla
-         * @param componentes
-         * @throws java.lang.Exception
-         */
-        public void actualizaTabla(Object[][] componentes) throws Exception {
+        public void actualizarTabla(Object[][] componentes) throws Exception {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
                 limpiarTabla();

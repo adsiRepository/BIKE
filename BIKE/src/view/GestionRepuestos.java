@@ -429,7 +429,8 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
                         } else {
                             if (ref_nom_repuesto.length() > 0) {
                                 //crear nuevo desde 0 
-                                boolean hecho = registrarNuevoRepuesto(cod_rep, ref_nom_repuesto, cod_comp, null, talla, cant);
+                                //String g = null;
+                                boolean hecho = registrarNuevoRepuesto(cod_rep, ref_nom_repuesto, cod_comp, "", talla, cant);
                                 if (hecho) {
                                     JOptionPane.showMessageDialog(null, "El repuesto para el componente "
                                             + String.valueOf(((ItemDeLista) combo_componentes_.getSelectedItem()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO))
@@ -506,15 +507,11 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
                 }
             // </editor-fold>
             }
-            
-            
             /*if(decision_boton_guardar.equals(OP_BOTON_EDITAR)){
                 
                 
                 
             }*/
-            
-            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "guardar", 0);
             
