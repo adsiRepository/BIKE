@@ -105,11 +105,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         escritorio.setBackground(new java.awt.Color(204, 204, 204));
-        escritorio.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+        escritorio.setBorder(javax.swing.BorderFactory.createEtchedBorder(0));
         escritorio.setAutoscrolls(true);
         escritorio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        scroll_tabla_acts.setViewportBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(220, 218, 218), new java.awt.Color(0, 153, 204), null, null));
+        scroll_tabla_acts.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PRODUCCION", 0, 0, new java.awt.Font("Impact", 0, 14), new java.awt.Color(204, 0, 0))); // NOI18N
+        scroll_tabla_acts.setViewportBorder(new javax.swing.border.SoftBevelBorder(0, new java.awt.Color(220, 218, 218), new java.awt.Color(0, 153, 204), null, null));
         scroll_tabla_acts.setAutoscrolls(true);
         scroll_tabla_acts.setMaximumSize(new java.awt.Dimension(1000, 1000));
         scroll_tabla_acts.setMinimumSize(new java.awt.Dimension(452, 402));
@@ -124,6 +125,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         scroll_tabla_acts.setViewportView(tabla_actividades);
 
+        btn_empleados_.setBackground(new java.awt.Color(0, 0, 204));
+        btn_empleados_.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        btn_empleados_.setForeground(new java.awt.Color(255, 255, 255));
         btn_empleados_.setText("Empleados");
         btn_empleados_.setMaximumSize(new java.awt.Dimension(150, 80));
         btn_empleados_.setMinimumSize(new java.awt.Dimension(150, 80));
@@ -134,23 +138,32 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btn_produccion_.setBackground(new java.awt.Color(0, 51, 153));
+        btn_produccion_.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        btn_produccion_.setForeground(new java.awt.Color(255, 255, 255));
         btn_produccion_.setText("Produccion");
         btn_produccion_.setMaximumSize(new java.awt.Dimension(150, 80));
         btn_produccion_.setMinimumSize(new java.awt.Dimension(150, 80));
         btn_produccion_.setPreferredSize(new java.awt.Dimension(150, 80));
 
+        btn_inventario_.setBackground(new java.awt.Color(0, 51, 153));
+        btn_inventario_.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        btn_inventario_.setForeground(new java.awt.Color(255, 255, 255));
         btn_inventario_.setText("Inventario");
         btn_inventario_.setMaximumSize(new java.awt.Dimension(150, 80));
         btn_inventario_.setMinimumSize(new java.awt.Dimension(150, 80));
         btn_inventario_.setPreferredSize(new java.awt.Dimension(150, 80));
 
+        btn_revision_.setBackground(new java.awt.Color(0, 51, 153));
+        btn_revision_.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        btn_revision_.setForeground(new java.awt.Color(255, 255, 255));
         btn_revision_.setText("Revisiones");
         btn_revision_.setMaximumSize(new java.awt.Dimension(150, 80));
         btn_revision_.setMinimumSize(new java.awt.Dimension(150, 80));
         btn_revision_.setPreferredSize(new java.awt.Dimension(150, 80));
 
         panel_reloj_.setBackground(new java.awt.Color(204, 204, 204));
-        panel_reloj_.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        panel_reloj_.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
         panel_reloj_.setEnabled(false);
         panel_reloj_.setPreferredSize(new java.awt.Dimension(210, 210));
 
@@ -195,24 +208,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(escritorioLayout.createSequentialGroup()
                 .addGap(99, 99, 99)
                 .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addGap(96, 96, 96)
                 .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addGap(85, 85, 85)
                 .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(193, Short.MAX_VALUE))
+                .addGap(48, 48, 48))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(escritorioLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(escritorioLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(escritorioLayout.createSequentialGroup()
-                        .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 974, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,15 +231,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51)
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addGap(83, 83, 83))
         );
         escritorio.setLayer(scroll_tabla_acts, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_empleados_, javax.swing.JLayeredPane.DEFAULT_LAYER);
