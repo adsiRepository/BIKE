@@ -96,11 +96,9 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         ));
         jScrollPane1.setViewportView(tablaEmpleados);
 
-<<<<<<< HEAD
+
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, 950, 100));
 
-=======
->>>>>>> fb3becf7662f8ae4b2d7befce1c62d57e06e7008
         btnregistrar.setBackground(new java.awt.Color(255, 0, 0));
         btnregistrar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnregistrar.setText("REGISTRAR");
