@@ -55,14 +55,16 @@ public class ClaseTablaRepuestos {
                 limpiarTabla();
                 data = new Object[repuestos.length][5];
                 //String aux = "";
+                int ax;
                 for (int i = 0; i < repuestos.length; i++) {
                     //if()
+                    ax = (int)repuestos[i][4];
                     data[i] = new Object[]{
                         repuestos[i][0].toString(),
                         repuestos[i][1].toString(),
                         repuestos[i][2],
                         repuestos[i][3],
-                        (int)repuestos[i][4]
+                        ax
                     };
                 }
                 mi_modelo_tabla.fireTableDataChanged();

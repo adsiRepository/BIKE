@@ -368,6 +368,9 @@
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="plu o codigo del repuesto"/>
           </Properties>
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_plu_KeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="check_generar_cod_">
           <Properties>
