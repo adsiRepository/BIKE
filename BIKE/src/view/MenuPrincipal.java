@@ -34,8 +34,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
     
     //VENTANAS INTERNAS
-    public ControlArticulos controlArticulos;
-    public ControlComponentes controlComponentes;
+    public GestionArticulos controlArticulos;
+    public GestionComponentes controlComponentes;
     public GestionRepuestos gestionRepuestos;
     public OrdenProduccion ordenProduccion;
     public RegistroEmpleados registroEmpleados;
@@ -82,7 +82,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_empleados_ = new javax.swing.JButton();
         btn_produccion_ = new javax.swing.JButton();
         btn_inventario_ = new javax.swing.JButton();
-        btn_revision_ = new javax.swing.JButton();
         panel_reloj_ = new controller.PanelReloj();
         panel_fecha_ = new javax.swing.JPanel();
         txtview_fecha_actual = new javax.swing.JTextField();
@@ -99,12 +98,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         escritorio.setBackground(new java.awt.Color(204, 204, 204));
-        escritorio.setBorder(javax.swing.BorderFactory.createEtchedBorder(0));
+        escritorio.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         escritorio.setAutoscrolls(true);
         escritorio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        scroll_tabla_acts.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PRODUCCION", 0, 0, new java.awt.Font("Impact", 0, 14), new java.awt.Color(204, 0, 0))); // NOI18N
-        scroll_tabla_acts.setViewportBorder(new javax.swing.border.SoftBevelBorder(0, new java.awt.Color(220, 218, 218), new java.awt.Color(0, 153, 204), null, null));
+        scroll_tabla_acts.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PRODUCCION", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Impact", 0, 14), new java.awt.Color(204, 0, 0))); // NOI18N
+        scroll_tabla_acts.setViewportBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(220, 218, 218), new java.awt.Color(0, 153, 204), null, null));
         scroll_tabla_acts.setAutoscrolls(true);
         scroll_tabla_acts.setMaximumSize(new java.awt.Dimension(1000, 1000));
         scroll_tabla_acts.setMinimumSize(new java.awt.Dimension(452, 402));
@@ -139,6 +138,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_produccion_.setMaximumSize(new java.awt.Dimension(150, 80));
         btn_produccion_.setMinimumSize(new java.awt.Dimension(150, 80));
         btn_produccion_.setPreferredSize(new java.awt.Dimension(150, 80));
+        btn_produccion_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_produccion_ActionPerformed(evt);
+            }
+        });
 
         btn_inventario_.setBackground(new java.awt.Color(0, 51, 153));
         btn_inventario_.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
@@ -148,16 +152,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_inventario_.setMinimumSize(new java.awt.Dimension(150, 80));
         btn_inventario_.setPreferredSize(new java.awt.Dimension(150, 80));
 
-        btn_revision_.setBackground(new java.awt.Color(0, 51, 153));
-        btn_revision_.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
-        btn_revision_.setForeground(new java.awt.Color(255, 255, 255));
-        btn_revision_.setText("Revisiones");
-        btn_revision_.setMaximumSize(new java.awt.Dimension(150, 80));
-        btn_revision_.setMinimumSize(new java.awt.Dimension(150, 80));
-        btn_revision_.setPreferredSize(new java.awt.Dimension(150, 80));
-
         panel_reloj_.setBackground(new java.awt.Color(204, 204, 204));
-        panel_reloj_.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
+        panel_reloj_.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         panel_reloj_.setEnabled(false);
         panel_reloj_.setPreferredSize(new java.awt.Dimension(210, 210));
 
@@ -165,11 +161,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         panel_reloj_.setLayout(panel_reloj_Layout);
         panel_reloj_Layout.setHorizontalGroup(
             panel_reloj_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 166, Short.MAX_VALUE)
+            .addGap(0, 201, Short.MAX_VALUE)
         );
         panel_reloj_Layout.setVerticalGroup(
             panel_reloj_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 166, Short.MAX_VALUE)
+            .addGap(0, 199, Short.MAX_VALUE)
         );
 
         txtview_fecha_actual.setEditable(false);
@@ -199,47 +195,44 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(escritorioLayout.createSequentialGroup()
-                .addGap(99, 99, 99)
-                .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(96, 96, 96)
-                .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(85, 85, 85)
-                .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(escritorioLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 974, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(escritorioLayout.createSequentialGroup()
+                        .addGap(127, 127, 127)
+                        .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(116, 116, 116)
+                        .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(125, 125, 125)
+                        .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(escritorioLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 1096, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(escritorioLayout.createSequentialGroup()
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
+                    .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_revision_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(83, 83, 83))
         );
         escritorio.setLayer(scroll_tabla_acts, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_empleados_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_produccion_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_inventario_, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        escritorio.setLayer(btn_revision_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(panel_reloj_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(panel_fecha_, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -368,7 +361,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     controlComponentes.setIcon(false);
                 }
             } else {
-                controlComponentes = new ControlComponentes();
+                controlComponentes = new GestionComponentes();
                 escritorio.add(controlComponentes);
                 controlComponentes.setVisible(true);
             }
@@ -419,7 +412,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     controlArticulos.setIcon(false);
                 }
             } else {
-                controlArticulos = new ControlArticulos();
+                controlArticulos = new GestionArticulos();
                 escritorio.add(controlArticulos);
                 controlArticulos.setVisible(true);
             }
@@ -430,9 +423,39 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menu_item_gestion_produccion_ActionPerformed
 
     private void btn_empleados_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_empleados_ActionPerformed
-        
-        
+        try {
+            if (registroEmpleados != null && registroEmpleados.isVisible()) {
+                if (registroEmpleados.isIcon()) {
+                    registroEmpleados.setIcon(false);
+                }
+            } else {
+                registroEmpleados = new RegistroEmpleados();
+                escritorio.add(registroEmpleados);
+                registroEmpleados.setVisible(true);
+            }
+            registroEmpleados.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(MenuPrincipal.this, "No Fue posible Abrir la Ventana.\nError: "+ex.toString());
+        }
     }//GEN-LAST:event_btn_empleados_ActionPerformed
+
+    private void btn_produccion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_produccion_ActionPerformed
+        try {
+            if (ordenProduccion != null && ordenProduccion.isVisible()) {
+                if (ordenProduccion.isIcon()) {
+                   ordenProduccion.setIcon(false);
+                }
+            } else {
+                ordenProduccion = new OrdenProduccion();
+                escritorio.add(ordenProduccion);
+                ordenProduccion.setVisible(true);
+            }
+            ordenProduccion.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.toString());
+            //System.out.print("Excepcion localizada en: MenuPrincipal.menu_item_nueva_orden_ActionPerformed => \n"+ex.toString());
+        }
+    }//GEN-LAST:event_btn_produccion_ActionPerformed
    
     // <editor-fold defaultstate="collapsed" desc="VOID MAIN O METODO PRINCIPAL">
     public static void main(String args[]) {
@@ -465,7 +488,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_empleados_;
     private javax.swing.JButton btn_inventario_;
     private javax.swing.JButton btn_produccion_;
-    private javax.swing.JButton btn_revision_;
     public static final javax.swing.JDesktopPane escritorio = new controller.componentes.Paneles.Escritorio();
     private javax.swing.JMenuItem menuItem_controlRepuestos_;
     private javax.swing.JMenuItem menuItem_registroEnsamblador_;

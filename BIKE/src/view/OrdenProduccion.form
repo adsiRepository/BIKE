@@ -45,20 +45,20 @@
                               <Component id="combo_ensambladores_" min="-2" pref="180" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btn_alistar_despacho_" min="-2" pref="35" max="-2" attributes="0"/>
-                          <Component id="btn_cancelar_despacho_" min="-2" pref="35" max="-2" attributes="0"/>
-                      </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="114" max="-2" attributes="0"/>
                               <Component id="btn_guardar_lista_" min="-2" pref="200" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btn_borrar_Orden_Registrada_" min="-2" pref="200" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="btn_alistar_despacho_" min="-2" pref="35" max="-2" attributes="0"/>
+                                  <Component id="btn_cancelar_despacho_" min="-2" pref="35" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="btn_refrecar_lista_edicion_" min="-2" pref="120" max="-2" attributes="0"/>
@@ -98,47 +98,44 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="btn_refrecar_lista_edicion_" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="btn_alistar_despacho_" min="-2" pref="35" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btn_cancelar_despacho_" min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="scroll_items_selec" min="-2" pref="262" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="btn_borrar_Orden_Registrada_" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
+                                  <Component id="btn_guardar_lista_" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="scroll_items_selec" min="-2" pref="262" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="btn_borrar_Orden_Registrada_" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
-                                          <Component id="btn_guardar_lista_" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="combo_ensambladores_" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lbl_ensamblador_" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="panel_primer_filtro_emsamble_" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="combo_ensambladores_" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbl_ensamblador_" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="btn_guardar_salir_" min="-2" pref="52" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="btn_cancelar_alistamiento_" min="-2" pref="52" max="-2" attributes="0"/>
+                                  <Component id="panel_primer_filtro_emsamble_" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="btn_alistar_despacho_" min="-2" pref="35" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="btn_cancelar_despacho_" min="-2" pref="35" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="scroll_tabla_produccion_" min="-2" pref="132" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="btn_guardar_salir_" min="-2" pref="52" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btn_cancelar_alistamiento_" min="-2" pref="52" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="scroll_tabla_produccion_" min="-2" pref="132" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="51" max="32767" attributes="0"/>
+              <EmptySpace pref="55" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -322,7 +319,6 @@
                 </Property>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="3"/>
-                <Property name="text" type="java.lang.String" value="Detalles:&#xa;Se Clasificar&#xe1; el tipo de Articulo&#xa;(Bicicleta / Aro / Otro)&#xa;en la lista de disponibilidad&#xa;para la venta, seg&#xfa;n los Componentes&#xa;elegidos en la siguiente lista.&#xa;Es decir (ejemplo):&#xa;Usted seleccionar&#xed;a Bicicleta &#xa;tipo Cross, al seleccionar el tipo&#xa;de Marco determinar&#xed;a&#xa;la caraster&#xed;stica de la Bicicleta&#xa;tipo Cross (marco GW, Nacional, etc) &#xa;y asi se clasificar&#xe1;n en la lista&#xa;de Articulos disponibles para&#xa;la Venta.   &#xa;&#xa; "/>
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[263, 293]"/>

@@ -31,7 +31,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="scroll_tabla_familias_" alignment="0" pref="464" max="32767" attributes="0"/>
+                  <Component id="scroll_tabla_familias_" alignment="0" pref="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
@@ -60,38 +60,37 @@
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lbl_nom_comp_" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="275" pref="275" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lbl_nom_comp_" min="-2" max="-2" attributes="0"/>
-                          <Component id="scroll_tabla_componentes_" alignment="0" pref="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="lbl_desc_comp_" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txt_nombre_componente_" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="scroll_txa_desc_comp_" alignment="0" min="-2" pref="280" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                      <Component id="btn_borrar_componente_" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btn_editar_componente_" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btn_nuevo_componente_" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="btn_cancelar_componente_" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                          <Component id="lbl_desc_comp_" min="-2" max="-2" attributes="0"/>
+                          <Component id="txt_nombre_componente_" alignment="0" max="32767" attributes="0"/>
+                          <Component id="scroll_txa_desc_comp_" alignment="0" min="-2" pref="280" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                              <Component id="btn_borrar_componente_" min="-2" max="-2" attributes="0"/>
+                              <Component id="btn_editar_componente_" min="-2" max="-2" attributes="0"/>
+                              <Component id="btn_nuevo_componente_" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="btn_cancelar_componente_" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="lbl_familia_actual_" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txt_familia_actual_" min="-2" pref="200" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="btn_mostrar_comps_familia_" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="scroll_tabla_componentes_" pref="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -103,11 +102,10 @@
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="check_familia_par_" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
-                              <Component id="txt_familia_actual_" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="lbl_familia_actual_" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="txt_familia_actual_" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbl_familia_actual_" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -117,18 +115,26 @@
                       </Group>
                   </Group>
               </Group>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                      <Component id="lbl_desc_familia_" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btn_mostrar_comps_familia_" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="lbl_desc_familia_" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="btn_cancelar_familia_" max="32767" attributes="0"/>
                                   <Component id="btn_nueva_familia_" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="btn_borrar_familia_" min="-2" max="-2" attributes="0"/>
                                   <Component id="btn_editar_familia_" min="-2" pref="25" max="-2" attributes="0"/>
@@ -140,14 +146,9 @@
                       <Component id="scroll_tabla_familias_" min="-2" pref="355" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                       <Component id="lbl_nom_comp_" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="125" max="-2" attributes="0"/>
-                              <Component id="scroll_tabla_componentes_" pref="0" max="32767" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="btn_nuevo_componente_" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -165,9 +166,11 @@
                               <Component id="scroll_txa_desc_comp_" min="-2" pref="66" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="scroll_tabla_componentes_" pref="285" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="38" max="32767" attributes="0"/>
+              <EmptySpace pref="22" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -210,7 +213,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabla_familias_MouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FormComponentes.TablaFamilias()"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new controller.componentes.ControlComponentes.TablaFamilias()"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -242,7 +245,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabla_componentes_MouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FormComponentes.TablaComponentes()"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new controller.componentes.ControlComponentes.TablaComponentes()"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -448,6 +451,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_cancelar_componente_ActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btn_mostrar_comps_familia_">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="desplegar componentes de esta familia"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_mostrar_comps_familia_ActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

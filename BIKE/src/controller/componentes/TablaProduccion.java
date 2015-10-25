@@ -35,30 +35,30 @@ import view.OrdenProduccion;
 // </editor-fold>
 
 /**
- *
+ * TABLA IMPLEMENTADA Y ADECUADA PARA LA VISUALIZACION Y CONTROL DE LAS ORDENES
+ * DE PRODUCCION. Constructor de tabla simple. Para formulario OrdenProduccion.
  * @author Miguel
  */
-public class TablaProduccion extends JTable{
+public class TablaProduccion extends JTable {
 
     // <editor-fold defaultstate="collapsed" desc="DECLARACION DE VARIABLES">
     private Class[] CLASES_COLUMNAS;
     private String[] TITULOS_COLUMNAS;
     private boolean[] COLS_EDITABLES;
-    
+
     private Object[][] data;
     private final ModeloTablaProduccion mi_modelo_tabla;
-    
-    /**ESTAS SON CONSTANTES QUE AYUDAN A CONTROLAR EL TIPO DE TABLA A CREAR*/
+
+    /**
+     * ESTAS SON CONSTANTES QUE AYUDAN A CONTROLAR EL TIPO DE TABLA A CREAR
+     */
     public static final String TABLA_VISUALIZACION = "tabla_de_visualizacion";
     public static final String TABLA_CONTROL = "tabla_de_control";
     private final String mi_modelo;
     // </editor-fold>
-    
-    /**TABLA IMPLEMENTADA Y ADECUADA PARA LA VISUALIZACION Y CONTROL DE LAS ORDENES DE PRODUCCION.
-     * Constructor de tabla simple. Para formulario OrdenProduccion.
-     */
+
     /*public TablaProduccion() {
-        super();
+     super();
     }*/
     
     /**TABLA IMPLEMENTADA Y ADECUADA PARA LA VISUALIZACION Y CONTROL DE LAS ORDENES DE PRODUCCION

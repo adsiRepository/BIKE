@@ -20,7 +20,7 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author Miguel
  */
-public class ComponentesTablaArticulos {
+public class ControlTablaArticulos {
 
     public static class TablaArticulos extends JTable {
 
@@ -46,6 +46,9 @@ public class ComponentesTablaArticulos {
             this.setRowHeight(55);
         }
 
+        /**
+         * @param componentes
+         * @throws java.lang.Exception*/
         public void actualizarTabla(Object[][] componentes) throws Exception {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
@@ -72,6 +75,37 @@ public class ComponentesTablaArticulos {
             }
             // </editor-fold>
         }
+        
+        /**
+         * @param componentes
+         * @throws java.lang.Exception*/
+        public void actualizarTablaNuevoArticulo(Object[][] componentes) throws Exception {
+            // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
+            try {
+                limpiarTabla();
+                data = new Object[componentes.length][5];
+                String desc;
+                for (int i = 0; i < componentes.length; i++) {
+                    if (componentes[i][3] != null) {
+                        desc = componentes[i][3].toString();
+                    } else {
+                        desc = "No hay descripcion";
+                    }
+                    data[i] = new Object[]{
+                        componentes[i][0],
+                        componentes[i][1].toString(),
+                        componentes[i][2].toString(),
+                        new ScrollMyTextArea(desc),
+                        false
+                    };
+                }
+                mi_modelo_tabla.fireTableDataChanged();
+            } catch (Exception er) {
+                throw new Exception("Error al Actualizar la Tabla de Alistamiento.\nError: " + er.toString());
+            }
+            // </editor-fold>
+        }
+        
 
         /**
          * 
@@ -106,7 +140,8 @@ public class ComponentesTablaArticulos {
                     return seleccion;
                 }
                 else{
-                    throw  new Exception("No se han seleccionado Componentes para este articulo.");
+                    return new Object[]{};
+                    //throw  new Exception("No se han seleccionado Componentes para este articulo.");
                 }
             } catch (Exception e) {
                 throw new Exception("No se ha podido obtener el listado seleccionado.\n"

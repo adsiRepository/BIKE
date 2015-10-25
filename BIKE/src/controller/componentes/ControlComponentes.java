@@ -18,7 +18,7 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author Miguel
  */
-public class FormComponentes {
+public class ControlComponentes {
     
     public static class TablaFamilias extends JTable {
 
@@ -39,7 +39,7 @@ public class FormComponentes {
                 this.getColumnModel().getColumn(i).setMaxWidth(anchos[i]);
                 this.getColumnModel().getColumn(i).setResizable(true);
             }
-            this.setRowHeight(55);
+            this.setRowHeight(35);
         }
 
         /**
@@ -82,6 +82,7 @@ public class FormComponentes {
         }
 
         /**
+         * metodo para vaciar la tabla
          * 
          */
         public void limpiarTabla() {
@@ -274,7 +275,7 @@ public class FormComponentes {
                 this.getColumnModel().getColumn(i).setMaxWidth(anchos[i]);
                 this.getColumnModel().getColumn(i).setResizable(true);
             }
-            this.setRowHeight(55);
+            this.setRowHeight(35);
         }
 
         /**

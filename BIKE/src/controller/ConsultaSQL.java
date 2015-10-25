@@ -150,7 +150,6 @@ public class ConsultaSQL {
                     }
                 }
             }
-            
             try (java.sql.PreparedStatement sentencia = con.prepareStatement(
                     "insert into articulos (id_articulo, articulo, descripcion) values "
                     + "(?, ?, ?);")) {
@@ -159,27 +158,27 @@ public class ConsultaSQL {
                 sentencia.setString(3, detalles[1].toString());
                 comprobante = comprobante * sentencia.executeUpdate();
             }
-
-            StringBuilder sb;
             
-            // <editor-fold defaultstate="collapsed" desc="Escritura de la Sentencia">
-            sb = new StringBuilder();
-            sb.append("insert into componente_articulo values ");
-            for (int i = 1; i <= componentes.length; i++) {
-                if (i == componentes.length) {
-                    sb.append("(?, ?);");
-                } else {
-                    sb.append("(?, ?), ");
-                }
-            }
-            // </editor-fold>
-            try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(sb.toString())) {
+            StringBuilder sb;
+            if (componentes.length > 0) {
+                // <editor-fold defaultstate="collapsed" desc="Escritura de la Sentencia">
+                sb = new StringBuilder();
+                sb.append("insert into componente_articulo values ");
                 for (int i = 1; i <= componentes.length; i++) {
-                    sentencia_insert.setString(((i * 2) - 1), cod_generado);
-                    sentencia_insert.setString((i * 2), (String) componentes[i - 1]);
+                    if (i == componentes.length) {
+                        sb.append("(?, ?);");
+                    } else {
+                        sb.append("(?, ?), ");
+                    }
                 }
-                comprobante = comprobante * sentencia_insert.executeUpdate();
-                //return comprobante > 0;
+                // </editor-fold>
+                try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(sb.toString())) {
+                    for (int i = 1; i <= componentes.length; i++) {
+                        sentencia_insert.setString(((i * 2) - 1), cod_generado);
+                        sentencia_insert.setString((i * 2), (String) componentes[i - 1]);
+                    }
+                    comprobante = comprobante * sentencia_insert.executeUpdate();
+                }
             }
             
             Object[] tallas = (Object[]) detalles[2];
@@ -193,7 +192,6 @@ public class ConsultaSQL {
                         JOptionPane.showMessageDialog(null, "No existian tallas asiganadas al articulo.");
                     }
                 }*/
-
                 sb = new StringBuilder();
                 sb.append("insert into talla_articulo values ");
                 for (int i = 1; i <= tallas.length; i++) {
@@ -372,6 +370,49 @@ public class ConsultaSQL {
                 }
             }
 
+        } catch (Exception e) {
+            throw new Exception("Problemas al obtener las Familias de Componentes.\n"
+                    + "Error: " + e.getLocalizedMessage());
+        }
+    }
+    
+    
+    /**
+     * METODO PARA OBTENER LOS COMPONENTES DE UNA FAMILIA ESPECIFICADA.
+     * @param cod_fam codigo de la familia de componentes
+     * @return arreglo de objetos de dos dimensiones con los registros
+     * @throws java.lang.Exception
+     */
+    public static Object[][] obtenerComponentesFamilia(String cod_fam) throws Exception{
+        try (Connection con = ConexionBD.obtenerConexion()) {
+
+            try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                    "select id_comp, componente, desc_comp, familia from componentes where familia = ?;")) {
+                sentencia.setString(1, cod_fam);
+                try (ResultSet resultados = sentencia.executeQuery()) {
+                    ArrayList<Object[]> caja = new ArrayList<>();
+                    while (resultados.next()) {
+                        caja.add(new Object[]{
+                            resultados.getString(1), 
+                            resultados.getString(2), 
+                            resultados.getString(3),
+                            resultados.getString(4)
+                        });
+                    }
+                    if (caja.size() > 0) {
+                        Object[][] retorno = new Object[caja.size()][4];
+                        Iterator it = caja.iterator();
+                        int i = 0;
+                        while (it.hasNext()) {
+                            retorno[i] = (Object[]) it.next();
+                            i++;
+                        }
+                        return retorno;
+                    } else {
+                        throw new Exception("No existen componenentes registrados para esta familia.");
+                    }
+                }
+            }
         } catch (Exception e) {
             throw new Exception("Problemas al obtener las Familias de Componentes.\n"
                     + "Error: " + e.getLocalizedMessage());

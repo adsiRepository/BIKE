@@ -5,7 +5,7 @@ package view;
 
 import controller.ConsultaSQL;
 import controller.componentes.ComboBoxItem;
-import controller.componentes.ComponentesTablaArticulos.TablaArticulos;
+import controller.componentes.ControlTablaArticulos.TablaArticulos;
 import controller.componentes.MyCheckCombo;
 import controller.componentes.MyCheckCombo.ComboCheckBox;
 import controller.componentes.Paneles;
@@ -22,7 +22,7 @@ import static view.OrdenProduccion.MODELO_COMBO_ARTICULOS;
  * sobre los repuestos que maneja en su tienda vinculados a sus productos.
  * @author Miguel
  consigna tu nombre si compartes la autoría de este documento*/
-public class ControlArticulos extends Paneles.VentanaInterna {
+public class GestionArticulos extends Paneles.VentanaInterna {
 
     /**NOMBRE ARCHIVO IMAGEN DE FONDO PARA ESTA VENTANA. Solo nombre sin extension (obligatorio archivos png)*/
     private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_productos";
@@ -34,10 +34,10 @@ public class ControlArticulos extends Paneles.VentanaInterna {
     
     
     /***/
-    public ControlArticulos() {
+    public GestionArticulos() {
         super(NOMBRE_MI_IMAGEN_FONDO);
         initComponents();
-        this.title = "Registro y Edicion de Articulos y sus componentes.";
+        this.title = "Registro y Edicion de Articulos y sus Componentes";
         this.closable = true;
         this.iconable = true;
         this.resizable = true;
@@ -50,7 +50,6 @@ public class ControlArticulos extends Paneles.VentanaInterna {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Constructor Orden Produccion", 0);
         }
-        
         decision_btn_hecho = "";
     }
 
@@ -67,7 +66,7 @@ public class ControlArticulos extends Paneles.VentanaInterna {
         btn_editar_articulo_ = new javax.swing.JButton();
         btn_borrar_articulo_ = new javax.swing.JButton();
         scroll_tabla_articulos_ = new javax.swing.JScrollPane();
-        tabla_articulos_ = new controller.componentes.ComponentesTablaArticulos.TablaArticulos();
+        tabla_articulos_ = new controller.componentes.ControlTablaArticulos.TablaArticulos();
         panel_edicion_articulo_ = new Paneles.PanelContenedorControles();
         lbl_nombre_articulo_ = new javax.swing.JLabel();
         txt_nombre_articulo_ = new javax.swing.JTextField();
@@ -92,6 +91,7 @@ public class ControlArticulos extends Paneles.VentanaInterna {
         });
 
         btn_editar_articulo_.setText("editar");
+        btn_editar_articulo_.setEnabled(false);
         btn_editar_articulo_.setMaximumSize(new java.awt.Dimension(69, 23));
         btn_editar_articulo_.setMinimumSize(new java.awt.Dimension(69, 23));
         btn_editar_articulo_.setPreferredSize(new java.awt.Dimension(69, 23));
@@ -117,12 +117,15 @@ public class ControlArticulos extends Paneles.VentanaInterna {
 
         lbl_nombre_articulo_.setText("Nombre General del Articulo:");
 
+        txt_nombre_articulo_.setEnabled(false);
+
         lbl_desc_articulo_.setText("Descripcion:");
 
         txa_descripcion_articulo_.setColumns(1);
         txa_descripcion_articulo_.setLineWrap(true);
         txa_descripcion_articulo_.setRows(5);
         txa_descripcion_articulo_.setWrapStyleWord(true);
+        txa_descripcion_articulo_.setEnabled(false);
         scroll_txa_desc_articulo_.setViewportView(txa_descripcion_articulo_);
 
         lbl_tallas_articulo_.setText("Tallas Disponibles:");
@@ -206,6 +209,8 @@ public class ControlArticulos extends Paneles.VentanaInterna {
                     .addComponent(btn_hecho_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
+        lbl_lista_articulos_.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lbl_lista_articulos_.setForeground(new java.awt.Color(255, 51, 0));
         lbl_lista_articulos_.setText("Articulos Registrados:");
 
         btn_todos_componentes_.setText("desplegar todos los componentes");
@@ -270,9 +275,8 @@ public class ControlArticulos extends Paneles.VentanaInterna {
             ItemDeLista articulo = (ItemDeLista) combo_articulos_.getSelectedItem();
             txt_nombre_articulo_.setText("" + articulo.getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
             txa_descripcion_articulo_.setText(""+articulo.getAtributos().get("descripcion"));
-            Object[][] componentes = ConsultaSQL.obtenerComponentesDeArticulo(articulo.obtenerCodigoId());
-            ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
-            decision_btn_hecho = OP_BTN_HECHO_EDITAR;
+            txt_nombre_articulo_.setEnabled(true);
+            txa_descripcion_articulo_.setEnabled(true);
             btn_hecho_.setEnabled(true);
             btn_hecho_.setToolTipText("modificar el articulo actualmente seleccionado");
             btn_nuevo_articulo_.setEnabled(false);
@@ -346,11 +350,21 @@ public class ControlArticulos extends Paneles.VentanaInterna {
             decision_btn_hecho = OP_BTN_HECHO_NUEVO;
             btn_editar_articulo_.setEnabled(false);
             btn_borrar_articulo_.setEnabled(false);
+            txt_nombre_articulo_.setEnabled(true);
+            txa_descripcion_articulo_.setEnabled(true);
+            btn_nuevo_articulo_.setEnabled(false);
             combo_articulos_.setEnabled(false);
             btn_hecho_.setEnabled(true);
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Al nuevo articulo debe asignarle componentes si este lleva alguno.\n"
+                    + "Si no encuentra el componente que necesita puede registrarlo en la ventana de componentes.",
+                    "Nuevo Articulo o Producto",
+                    JOptionPane.INFORMATION_MESSAGE);
             btn_hecho_.setToolTipText("guardar el nuevo articulo");
             Object[][] componentes = ConsultaSQL.obtenerTodosLosComponentes();
-            ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
+            ((TablaArticulos) tabla_articulos_).actualizarTablaNuevoArticulo(componentes);
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Despliegue de Componentes", 0);
         }
@@ -361,13 +375,16 @@ public class ControlArticulos extends Paneles.VentanaInterna {
         ((TablaArticulos)tabla_articulos_).limpiarTabla();
         txt_nombre_articulo_.setText("");
         txa_descripcion_articulo_.setText("");
-        btn_editar_articulo_.setEnabled(true);
+        txt_nombre_articulo_.setEnabled(false);
+        txa_descripcion_articulo_.setEnabled(false);
+        btn_editar_articulo_.setEnabled(false);
         btn_borrar_articulo_.setEnabled(true);
         combo_articulos_.setEnabled(true);
         btn_hecho_.setEnabled(false);
         btn_hecho_.setToolTipText("modificar el articulo actualmente seleccionado");
         btn_nuevo_articulo_.setEnabled(true);
-        decision_btn_hecho = null;
+        decision_btn_hecho = "";
+        btn_nuevo_articulo_.setEnabled(true);
         
     }//GEN-LAST:event_btn_cancelar_ActionPerformed
 
@@ -386,29 +403,29 @@ public class ControlArticulos extends Paneles.VentanaInterna {
 
     private void btn_hecho_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hecho_ActionPerformed
         try {
-            if (decision_btn_hecho != null) {
+            //if (decision_btn_hecho != null) {
                 String nom_articulo = txt_nombre_articulo_.getText();
                 String desc_articulo = txa_descripcion_articulo_.getText();
                 Object[] tallas = ((ComboCheckBox) combo_tamaños_articulo_).obtenerTallasSeleccionadas();
+                Object[] comps = ((TablaArticulos) tabla_articulos_).obtenerSeleccion();
                 
                 if (decision_btn_hecho.equals(OP_BTN_HECHO_EDITAR)) {
-                    if (!(tallas.length > 0)) {
+                    if (!(tallas.length > 0) || !(comps.length > 0)) {
                         int decision = JOptionPane.showOptionDialog(
                                 this,
-                                "No haz seleccionado ninguna talla para el articulo, este es un dato importante.\n"
-                                + "¿Que deseas hacer?",
+                                "No haz seleccionado ninguna talla o componente para el articulo, ¿Que deseas hacer?",
                                 "Control de Articulos", // título del JOptionPane
                                 JOptionPane.OK_CANCEL_OPTION, // tipo input
                                 JOptionPane.QUESTION_MESSAGE, // tipo mensaje
                                 null, // icono, si es nulo aparecerá el por defecto
-                                new Object[]{"Desvincular tallas", "Regresar y seleccionar"}, //opciones => estos serán los botones
+                                new Object[]{"Desvincular tallas y/o componentes", "Regresar y seleccionar"}, //opciones => estos serán los botones
                                 new Object[]{}//dialogo o texto mostrado
                         );
                         if (decision == 0) {
                             ItemDeLista articulo = (ItemDeLista) combo_articulos_.getSelectedItem();
                             Object[] detalles = new Object[]{nom_articulo, desc_articulo, tallas};
                             boolean hecho_articulo = ConsultaSQL.modificarArticulo(articulo.obtenerCodigoId(), detalles);
-                            Object[] comps = ((TablaArticulos) tabla_articulos_).obtenerSeleccion();
+                            //Object[] comps = ((TablaArticulos) tabla_articulos_).obtenerSeleccion();
                             boolean hecho_comps = ConsultaSQL.modificarComponentesArticulo(articulo.obtenerCodigoId(), comps);
                             if (hecho_articulo && hecho_comps) {
                                 JOptionPane.showMessageDialog(null, "Articulo Modificado Correctamente",
@@ -420,6 +437,10 @@ public class ControlArticulos extends Paneles.VentanaInterna {
                             btn_nuevo_articulo_.setEnabled(true);
                             txt_nombre_articulo_.setText("");
                             txa_descripcion_articulo_.setText("");
+                            txt_nombre_articulo_.setEnabled(false);
+                            txa_descripcion_articulo_.setEnabled(false);
+                            decision_btn_hecho = "";
+                            btn_editar_articulo_.setEnabled(false);
                             ((TablaArticulos) tabla_articulos_).limpiarTabla();
                             //decision_btn_hecho = null;
                             ((ComboBoxItem) combo_articulos_).llenarme(MODELO_COMBO_ARTICULOS);
@@ -428,7 +449,7 @@ public class ControlArticulos extends Paneles.VentanaInterna {
                         ItemDeLista articulo = (ItemDeLista) combo_articulos_.getSelectedItem();
                         Object[] detalles = new Object[]{nom_articulo, desc_articulo, tallas};
                         boolean hecho_articulo = ConsultaSQL.modificarArticulo(articulo.obtenerCodigoId(), detalles);
-                        Object[] comps = ((TablaArticulos) tabla_articulos_).obtenerSeleccion();
+                        //Object[] comps = ((TablaArticulos) tabla_articulos_).obtenerSeleccion();
                         boolean hecho_comps = ConsultaSQL.modificarComponentesArticulo(articulo.obtenerCodigoId(), comps);
                         if (hecho_articulo && hecho_comps) {
                             JOptionPane.showMessageDialog(null, "Articulo Modificado Correctamente",
@@ -438,69 +459,109 @@ public class ControlArticulos extends Paneles.VentanaInterna {
                         }
                         txt_nombre_articulo_.setText("");
                         txa_descripcion_articulo_.setText("");
+                        txt_nombre_articulo_.setEnabled(false);
+                        txa_descripcion_articulo_.setEnabled(false);
+                        decision_btn_hecho = "";
+                        btn_editar_articulo_.setEnabled(false);
                         ((TablaArticulos) tabla_articulos_).limpiarTabla();
                         //decision_btn_hecho = null;
                         ((ComboBoxItem) combo_articulos_).llenarme(MODELO_COMBO_ARTICULOS);
                     }
                 }
-                
-                
                 
                 if (decision_btn_hecho.equals(OP_BTN_HECHO_NUEVO)) {
-                    if (!(tallas.length > 0)) {
-                        int decision = JOptionPane.showOptionDialog(
-                                this,
-                                "No haz seleccionado ninguna talla para el articulo, este es un dato importante.\n"
-                                + "¿Que deseas hacer?",
-                                "Control de Articulos", // título del JOptionPane
-                                JOptionPane.OK_CANCEL_OPTION, // tipo input
-                                JOptionPane.QUESTION_MESSAGE, // tipo mensaje
-                                null, // icono, si es nulo aparecerá el por defecto
-                                new Object[]{"Articulo sin Tallas Específicas", "Regresar y seleccionar"}, //opciones => estos serán los botones
-                                new Object[]{}//dialogo o texto mostrado
-                        );
-                        if (decision == 0) {
-                            Object[] detalles = new Object[]{nom_articulo, desc_articulo, tallas};
-                            Object[] comps = ((TablaArticulos) tabla_articulos_).obtenerSeleccion();
-                            boolean hecho_articulo = ConsultaSQL.registrarNuevoArticulo(detalles, comps);
-                            if (hecho_articulo) {
-                                JOptionPane.showMessageDialog(null, "Articulo Registrado Correctamente",
-                                        "Control Articulos", JOptionPane.INFORMATION_MESSAGE);
-                            } else {
-                                JOptionPane.showMessageDialog(null, "No se pudo Modificar el Articulo", "Confirmar Accion", 0);
-                            }
-                            btn_nuevo_articulo_.setEnabled(true);
-                            btn_editar_articulo_.setEnabled(true);
-                            btn_borrar_articulo_.setEnabled(true);
-                            combo_articulos_.setEnabled(true);
-                            txt_nombre_articulo_.setText("");
-                            txa_descripcion_articulo_.setText("");
-                            ((TablaArticulos) tabla_articulos_).limpiarTabla();
-                            //decision_btn_hecho = null;
-                            ((ComboBoxItem) combo_articulos_).llenarme(MODELO_COMBO_ARTICULOS);
-                        }
-                    } else {
+                    if (txt_nombre_articulo_.getText().length() > 0) {
                         Object[] detalles = new Object[]{nom_articulo, desc_articulo, tallas};
-                        Object[] comps = ((TablaArticulos) tabla_articulos_).obtenerSeleccion();
-                        boolean hecho_articulo = ConsultaSQL.registrarNuevoArticulo(detalles, comps);
-                        if (hecho_articulo) {
-                            JOptionPane.showMessageDialog(null, "Articulo Registrado Correctamente",
-                                    "Control Articulos", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        if (!(tallas.length > 0) || !(comps.length > 0)) {
+                            int decision = JOptionPane.showOptionDialog(
+                                    this,
+                                    "No haz seleccionado ninguna talla o componente para el articulo, son datos importantes.\n"
+                                    + "¿Que decides?",
+                                    "Control de Articulos", // título del JOptionPane
+                                    JOptionPane.OK_CANCEL_OPTION, // tipo input
+                                    JOptionPane.QUESTION_MESSAGE, // tipo mensaje
+                                    null, // icono, si es nulo aparecerá el por defecto
+                                    new Object[]{"Continuar", "Regresar y seleccionar"}, //opciones => estos serán los botones
+                                    new Object[]{}//dialogo o texto mostrado
+                            );
+                            if (decision == 0) {
+                                //Object[] detalles = new Object[]{nom_articulo, desc_articulo, tallas};
+                                //Object[] comps = ((TablaArticulos) tabla_articulos_).obtenerSeleccion();
+                                boolean hecho_articulo = ConsultaSQL.registrarNuevoArticulo(detalles, comps);
+                                if (hecho_articulo) {
+                                    JOptionPane.showMessageDialog(null, "Articulo Registrado Correctamente",
+                                            "Control Articulos", JOptionPane.INFORMATION_MESSAGE);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "No se pudo Modificar el Articulo", "Confirmar Accion", 0);
+                                }
+                                btn_nuevo_articulo_.setEnabled(true);
+                                btn_editar_articulo_.setEnabled(true);
+                                btn_borrar_articulo_.setEnabled(true);
+                                combo_articulos_.setEnabled(true);
+                                txt_nombre_articulo_.setText("");
+                                txa_descripcion_articulo_.setText("");
+                                txt_nombre_articulo_.setEnabled(false);
+                                txa_descripcion_articulo_.setEnabled(false);
+                                btn_nuevo_articulo_.setEnabled(true);
+                                decision_btn_hecho = "";
+                                ((TablaArticulos) tabla_articulos_).limpiarTabla();
+                                //decision_btn_hecho = null;
+                                ((ComboBoxItem) combo_articulos_).llenarme(MODELO_COMBO_ARTICULOS);
+                                
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(null, "No se pudo Modificar el Articulo", "Confirmar Accion", 0);
+                            //if (!(comps.length > 0)) {
+                                int decision = JOptionPane.showOptionDialog(
+                                        null,
+                                        "No haz asignado componentes para el articulo. ¿Estas seguro de tu elección?.",
+                                        "Control de Articulos", // título del JOptionPane
+                                        JOptionPane.OK_CANCEL_OPTION, // tipo input
+                                        JOptionPane.QUESTION_MESSAGE, // tipo mensaje
+                                        null, // icono, si es nulo aparecerá el por defecto
+                                        new Object[]{"No trae Componentes", "Regresar y seleccionar"}, //opciones => estos serán los botones
+                                        new Object[]{}//dialogo o texto mostrado
+                                );
+                                if (decision == 0) {
+                                    boolean hecho_articulo = ConsultaSQL.registrarNuevoArticulo(detalles, comps);
+                                    if (hecho_articulo) {
+                                        JOptionPane.showMessageDialog(
+                                                null,
+                                                "Articulo Registrado Correctamente",
+                                                "Control Articulos",
+                                                JOptionPane.INFORMATION_MESSAGE);
+                                    } else {
+                                        JOptionPane.showMessageDialog(
+                                                null,
+                                                "No se pudo Registrar el Articulo",
+                                                "Confirmar Accion",
+                                                0);
+                                    }
+                                    btn_nuevo_articulo_.setEnabled(true);
+                                    btn_editar_articulo_.setEnabled(true);
+                                    btn_borrar_articulo_.setEnabled(true);
+                                    combo_articulos_.setEnabled(true);
+                                    txt_nombre_articulo_.setText("");
+                                    txa_descripcion_articulo_.setText("");
+                                    txt_nombre_articulo_.setEnabled(false);
+                                    txa_descripcion_articulo_.setEnabled(false);
+                                    btn_nuevo_articulo_.setEnabled(true);
+                                    decision_btn_hecho = "";
+                                    ((TablaArticulos) tabla_articulos_).limpiarTabla();
+                                    //decision_btn_hecho = null;
+                                    ((ComboBoxItem) combo_articulos_).llenarme(MODELO_COMBO_ARTICULOS);
+                                }
+                            //}
                         }
-                        btn_nuevo_articulo_.setEnabled(true);
-                        btn_editar_articulo_.setEnabled(true);
-                        btn_borrar_articulo_.setEnabled(true);
-                        combo_articulos_.setEnabled(true);
-                        txt_nombre_articulo_.setText("");
-                        txa_descripcion_articulo_.setText("");
-                        ((TablaArticulos) tabla_articulos_).limpiarTabla();
-                        //decision_btn_hecho = null;
-                        ((ComboBoxItem) combo_articulos_).llenarme(MODELO_COMBO_ARTICULOS);
+                    }else{
+                        JOptionPane.showMessageDialog(
+                                null, 
+                                "No puedes Registrar un Articulo sin al menos haberle\nasignado un Nombre", 
+                                "Control de Articulos", 
+                                0);
                     }
                 }
-            }
+            //}
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Hecho", 0);
         }
@@ -509,27 +570,34 @@ public class ControlArticulos extends Paneles.VentanaInterna {
     private void btn_todos_componentes_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_todos_componentes_ActionPerformed
         try {
             //if (decision_btn_hecho != null) {
-                if (decision_btn_hecho != null && decision_btn_hecho.equals(OP_BTN_HECHO_EDITAR)) {
-                    int decision = JOptionPane.showOptionDialog(
-                            this,
-                            "Ten en cuenta que tendrás que elegir nuevamente los componentes\n"
-                            + "que ya pertenecían al artículo, ademas de poder seleccionar otros.",
-                            "Control de Articulos", // título del JOptionPane
-                            JOptionPane.OK_CANCEL_OPTION, // tipo input
-                            JOptionPane.WARNING_MESSAGE, // tipo mensaje
-                            null, // icono, si es nulo aparecerá el por defecto
-                            new Object[]{"Aceptar", "Cancelar"}, //opciones => estos serán los botones
-                            new Object[]{}//dialogo o texto mostrado
-                    );
-                    if (decision == 0) {
-                        Object[][] componentes = ConsultaSQL.obtenerTodosLosComponentes();
-                        ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
-                    }
+            if (decision_btn_hecho.equals(OP_BTN_HECHO_EDITAR)) {
+                int decision = JOptionPane.showOptionDialog(
+                        this,
+                        "Ten en cuenta que tendrás que elegir nuevamente los componentes\n"
+                        + "que ya pertenecían al artículo si los tenia, ademas de poder seleccionar otros.",
+                        "Control de Articulos", // título del JOptionPane
+                        JOptionPane.OK_CANCEL_OPTION, // tipo input
+                        JOptionPane.WARNING_MESSAGE, // tipo mensaje
+                        null, // icono, si es nulo aparecerá el por defecto
+                        new Object[]{"Aceptar", "Cancelar"}, //opciones => estos serán los botones
+                        new Object[]{}//dialogo o texto mostrado
+                );
+                if (decision == 0) {
+                    Object[][] componentes = ConsultaSQL.obtenerTodosLosComponentes();
+                    ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
+                }
                 //}
             } else {
-                    
-                Object[][] componentes = ConsultaSQL.obtenerTodosLosComponentes();
-                ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
+                if (decision_btn_hecho.equals(OP_BTN_HECHO_NUEVO)) {
+                    Object[][] componentes = ConsultaSQL.obtenerTodosLosComponentes();
+                    ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
+                } else {
+                    ItemDeLista articulo = (ItemDeLista) combo_articulos_.getSelectedItem();
+                    Object[][] componentes = ConsultaSQL.obtenerComponentesDeArticulo(articulo.obtenerCodigoId());
+                    ((TablaArticulos) tabla_articulos_).actualizarTabla(componentes);
+                    btn_editar_articulo_.setEnabled(true);
+                    decision_btn_hecho = OP_BTN_HECHO_EDITAR;
+                }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Despliegue de Componentes", 0);

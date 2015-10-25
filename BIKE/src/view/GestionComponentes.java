@@ -1,22 +1,22 @@
 
-//code
-
 package view;
 
+// <editor-fold defaultstate="collapsed" desc="imports">
+
 import controller.ConsultaSQL;
-import controller.componentes.FormComponentes;
-import controller.componentes.FormComponentes.TablaComponentes;
-import controller.componentes.FormComponentes.TablaFamilias;
+import controller.componentes.ControlComponentes.TablaComponentes;
+import controller.componentes.ControlComponentes.TablaFamilias;
 import controller.componentes.Paneles.VentanaInterna;
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import static view.MenuPrincipal.escritorio;
 
+// </editor-fold>
+
 /**FORMULARIO OFRECIDO AL USUARIO PARA LA ADMINISTRACION DE COMPONENTES.
- * Consigna tu nombre si haces parte de la Autoría de este Documento.
  * @author Miguel
  */
-public class ControlComponentes extends VentanaInterna {
+public class GestionComponentes extends VentanaInterna {
     
     /**NOMBRE ARCHIVO IMAGEN DE FONDO PARA ESTA VENTANA. Solo nombre sin extension (obligatorio archivos png)*/
     private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_components";
@@ -35,7 +35,7 @@ public class ControlComponentes extends VentanaInterna {
     /**
      * Creates new form Clientes
      */
-    public ControlComponentes() {
+    public GestionComponentes() {
         //AQUI AL LLAMAR A SUPER LLAMO AL CONSTRUCTOR DE VENTANA INTERNA QUE RECIBE UN STRING CON EL NOMBRE
         //DE LA IMAGEN DE FONDO UBICADA EN LA CARPETA "mis_imagenes" EN EL DIRECTORIO PRINCIPAL DEL PROYECTO (fuera de todas las carpetas) 
         super(NOMBRE_MI_IMAGEN_FONDO);
@@ -47,7 +47,7 @@ public class ControlComponentes extends VentanaInterna {
         this.closable = true;
         Dimension tamaño_escritorio = escritorio.getSize(), mySpc = this.getSize();
         this.setLocation(/*(tamaño_escritorio.width / 3)*/10, ((tamaño_escritorio.height - mySpc.height) / 4));
-        
+        decision_btn_guardar_familia = "";
         try {
             Object[][] familias = ConsultaSQL.obtenerFamilias();
             ((TablaFamilias) tabla_familias_).actualizaTabla(familias);
@@ -56,8 +56,6 @@ public class ControlComponentes extends VentanaInterna {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString());
         }
-        decision_btn_guardar_familia = "";
-
 // </editor-fold>
     }
     
@@ -74,9 +72,9 @@ public class ControlComponentes extends VentanaInterna {
         lbl_editor_nom_familia_ = new javax.swing.JLabel();
         txt_nombre_familia_ = new javax.swing.JTextField();
         scroll_tabla_familias_ = new javax.swing.JScrollPane();
-        tabla_familias_ = new FormComponentes.TablaFamilias();
+        tabla_familias_ = new controller.componentes.ControlComponentes.TablaFamilias();
         scroll_tabla_componentes_ = new javax.swing.JScrollPane();
-        tabla_componentes_ = new FormComponentes.TablaComponentes();
+        tabla_componentes_ = new controller.componentes.ControlComponentes.TablaComponentes();
         btn_cancelar_familia_ = new javax.swing.JButton();
         btn_editar_familia_ = new javax.swing.JButton();
         scroll_txa_desc_familia_ = new javax.swing.JScrollPane();
@@ -96,6 +94,7 @@ public class ControlComponentes extends VentanaInterna {
         btn_nueva_familia_ = new javax.swing.JButton();
         btn_borrar_familia_ = new javax.swing.JButton();
         btn_cancelar_componente_ = new javax.swing.JButton();
+        btn_mostrar_comps_familia_ = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -231,6 +230,13 @@ public class ControlComponentes extends VentanaInterna {
             }
         });
 
+        btn_mostrar_comps_familia_.setText("desplegar componentes de esta familia");
+        btn_mostrar_comps_familia_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_mostrar_comps_familia_ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -238,7 +244,7 @@ public class ControlComponentes extends VentanaInterna {
             .addGroup(layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scroll_tabla_familias_, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+                    .addComponent(scroll_tabla_familias_, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -259,30 +265,30 @@ public class ControlComponentes extends VentanaInterna {
                             .addComponent(btn_borrar_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(check_familia_par_, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lbl_nom_comp_)
-                            .addComponent(scroll_tabla_componentes_, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lbl_desc_comp_)
-                                    .addComponent(txt_nombre_componente_)
-                                    .addComponent(scroll_txa_desc_comp_, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(btn_borrar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btn_editar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btn_nuevo_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(btn_cancelar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(lbl_nom_comp_)
+                        .addGap(275, 275, 275))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lbl_desc_comp_)
+                            .addComponent(txt_nombre_componente_)
+                            .addComponent(scroll_txa_desc_comp_, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btn_borrar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_editar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_nuevo_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btn_cancelar_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(lbl_familia_actual_)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_familia_actual_, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26))
+                        .addComponent(txt_familia_actual_, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_mostrar_comps_familia_, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scroll_tabla_componentes_, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(24, 24, 24))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,25 +298,30 @@ public class ControlComponentes extends VentanaInterna {
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(check_familia_par_)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txt_familia_actual_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lbl_familia_actual_))))
+                            .addComponent(txt_familia_actual_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_familia_actual_))
+                        .addGap(3, 3, 3))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lbl_editor_nom_familia_)
                             .addComponent(txt_nombre_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(lbl_desc_familia_))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_mostrar_comps_familia_)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(lbl_desc_familia_)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btn_cancelar_familia_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btn_nueva_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(btn_borrar_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btn_editar_familia_, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -318,13 +329,9 @@ public class ControlComponentes extends VentanaInterna {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(scroll_tabla_familias_, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
                         .addComponent(lbl_nom_comp_)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(125, 125, 125)
-                                .addComponent(scroll_tabla_componentes_, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btn_nuevo_componente_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -338,8 +345,10 @@ public class ControlComponentes extends VentanaInterna {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lbl_desc_comp_)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(scroll_txa_desc_comp_, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(38, Short.MAX_VALUE))
+                                .addComponent(scroll_txa_desc_comp_, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scroll_tabla_componentes_, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -348,13 +357,11 @@ public class ControlComponentes extends VentanaInterna {
     private void btn_nuevo_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevo_componente_ActionPerformed
         try {
             if (btn_nuevo_componente_.getText().equals("guardar")) {
-
                 if (decision_btn_guardar_compo.equals(OP_GUARDAR_NUEVO)) {
                     // <editor-fold defaultstate="collapsed" desc="//guardar nuevo componente">
                     if (txt_nombre_componente_.getText().length() > 0) {
-                        
                         int decision = JOptionPane.showOptionDialog(
-                                ControlComponentes.this,
+                                null,
                                 "Haz elegido la familia " + tabla_familias_.getValueAt(fila_familias, 0).toString() + "."
                                 + " ¿Estas seguro de tu elección?",
                                 "Componentes y Familias", // título del JOptionPane
@@ -364,7 +371,6 @@ public class ControlComponentes extends VentanaInterna {
                                 new Object[]{"Es Correcto", "Regresar"}, //opciones => estos serán los botones
                                 new Object[]{}//dialogo o texto mostrado
                         );
-                        
                         if (decision == 0) {
                             String cod_fam = String.valueOf(((TablaFamilias) tabla_familias_).obtenerCodigoFamilia(fila_familias));
                             Object[] datos = new Object[3];
@@ -375,11 +381,10 @@ public class ControlComponentes extends VentanaInterna {
                             }
                             datos[1] = desc;
                             datos[2] = cod_fam;
-                            
                             boolean hecho = ConsultaSQL.registrarComponente(datos);
-                            
                             if (hecho) {
-                                JOptionPane.showMessageDialog(ControlComponentes.this,
+                                JOptionPane.showMessageDialog(
+                                        null,
                                         "El Componente ha sido registrado correctamente.", "Componentes", JOptionPane.INFORMATION_MESSAGE);
                                 Object[][] componentes = ConsultaSQL.obtenerSoloComponentes();
                                 ((TablaComponentes) tabla_componentes_).actualizaTabla(componentes);
@@ -393,15 +398,11 @@ public class ControlComponentes extends VentanaInterna {
                                 decision_btn_guardar_compo = "";
                             }
                         }
-
-// </editor-fold>
                     } else {
-                        JOptionPane.showMessageDialog(
-                                ControlComponentes.this,
+                        JOptionPane.showMessageDialog(null,
                                 "Debes seleccionar un Nombre de Referencia para el Componente que crearás.");
-                    }
+                    }// </editor-fold>
                 }
-                
                 if (decision_btn_guardar_compo.equals(OP_GUARDAR_EDICION)) {
                     // <editor-fold defaultstate="collapsed" desc="Modificar Componente">
                     Object[] datos = new Object[4];
@@ -432,15 +433,13 @@ public class ControlComponentes extends VentanaInterna {
                         txa_descripcion_componente_.setEnabled(false);
                         decision_btn_guardar_compo = "";
                     }
-
 // </editor-fold>
                 }
-                
             } else {
                 // <editor-fold defaultstate="collapsed" desc="//OPCION NUEVO">
                 JOptionPane.showMessageDialog(
-                        ControlComponentes.this,
-                        "Para asignar una familia al componente -obligatorio-que crearás debes\nsimplemente "
+                        null,
+                        "Para asignar una familia al componente -obligatorio- que crearás debes\nsimplemente "
                         + "seleccionar la fila en donde se encuentre esa familia.");
                 btn_editar_componente_.setEnabled(false);
                 btn_nuevo_componente_.setText("guardar");
@@ -450,7 +449,7 @@ public class ControlComponentes extends VentanaInterna {
                 // </editor-fold>
             }
         } catch (Exception er) {
-            JOptionPane.showMessageDialog(ControlComponentes.this, er.toString());
+            JOptionPane.showMessageDialog(null, er.toString());
         }
     }//GEN-LAST:event_btn_nuevo_componente_ActionPerformed
 
@@ -485,9 +484,9 @@ public class ControlComponentes extends VentanaInterna {
                             txa_desc_familia_.setText("");
                             txt_nombre_familia_.setEnabled(false);
                             txa_desc_familia_.setEnabled(false);
+                            decision_btn_guardar_familia = "";
                             Object[][] familias = ConsultaSQL.obtenerFamilias();
                             ((TablaFamilias) tabla_familias_).actualizaTabla(familias);
-                            decision_btn_guardar_familia = "";
                         } else {
                             JOptionPane.showMessageDialog(
                                     null,
@@ -499,7 +498,7 @@ public class ControlComponentes extends VentanaInterna {
 
                     } else {
                         JOptionPane.showMessageDialog(
-                                ControlComponentes.this,
+                                null,
                                 "Debes seleccionar un Nombre para la Familia de componentes que crearás. "
                                 + "También puedes seleccionar si los componentes de esta familia vienen por par.");
                     }
@@ -531,9 +530,9 @@ public class ControlComponentes extends VentanaInterna {
                         txa_desc_familia_.setText("");
                         txt_nombre_familia_.setEnabled(false);
                         txa_desc_familia_.setEnabled(false);
+                        decision_btn_guardar_familia = "";
                         Object[][] familias = ConsultaSQL.obtenerFamilias();
                         ((TablaFamilias) tabla_familias_).actualizaTabla(familias);
-                        decision_btn_guardar_familia = "";
                     } else {
                         JOptionPane.showMessageDialog(
                                 null,
@@ -553,7 +552,7 @@ public class ControlComponentes extends VentanaInterna {
                 decision_btn_guardar_familia = OP_GUARDAR_NUEVO;
             }
         } catch (Exception er) {
-            JOptionPane.showMessageDialog(ControlComponentes.this, er.toString());
+            JOptionPane.showMessageDialog(null, er.toString());
         }
     }//GEN-LAST:event_btn_nueva_familia_ActionPerformed
 
@@ -571,7 +570,6 @@ public class ControlComponentes extends VentanaInterna {
     }//GEN-LAST:event_btn_cancelar_familia_ActionPerformed
 
     private void btn_cancelar_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelar_componente_ActionPerformed
-        
         txt_nombre_componente_.setText("");
         txa_descripcion_componente_.setText("");
         txt_nombre_componente_.setEnabled(false);
@@ -580,7 +578,12 @@ public class ControlComponentes extends VentanaInterna {
         btn_borrar_componente_.setEnabled(false);
         btn_editar_componente_.setEnabled(true);
         decision_btn_guardar_compo = "";
-        
+        try {
+            Object[][] componentes = ConsultaSQL.obtenerSoloComponentes();
+            ((TablaComponentes) tabla_componentes_).actualizaTabla(componentes);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString());
+        }
     }//GEN-LAST:event_btn_cancelar_componente_ActionPerformed
 
     private void btn_borrar_componente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrar_componente_ActionPerformed
@@ -601,7 +604,7 @@ public class ControlComponentes extends VentanaInterna {
                 boolean hecho = ConsultaSQL.eliminarComponente(cod_comp);
                 if (hecho) {
                     JOptionPane.showMessageDialog(
-                            null,
+                            tabla_componentes_,
                             "Registro Borrado Correctamente.",
                             "Borrar Familia",
                             JOptionPane.INFORMATION_MESSAGE
@@ -618,10 +621,8 @@ public class ControlComponentes extends VentanaInterna {
                     btn_editar_componente_.setEnabled(true);
                 }
             }
-            
-            
         } catch (Exception er) {
-            JOptionPane.showMessageDialog(ControlComponentes.this, er.toString());
+            JOptionPane.showMessageDialog(tabla_componentes_, er.toString());
         }
     }//GEN-LAST:event_btn_borrar_componente_ActionPerformed
 
@@ -685,7 +686,7 @@ public class ControlComponentes extends VentanaInterna {
             }
             // </editor-fold>
         } catch (Exception er) {
-            JOptionPane.showMessageDialog(ControlComponentes.this, er.toString());
+            JOptionPane.showMessageDialog(null, er.toString());
         }
     }//GEN-LAST:event_btn_borrar_familia_ActionPerformed
 
@@ -719,6 +720,16 @@ public class ControlComponentes extends VentanaInterna {
         
     }//GEN-LAST:event_tabla_componentes_MouseClicked
 
+    private void btn_mostrar_comps_familia_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrar_comps_familia_ActionPerformed
+        try {
+            String cod_fam = ((TablaFamilias) tabla_familias_).obtenerCodigoFamilia(fila_familias).toString();
+            Object[][] componentes = ConsultaSQL.obtenerComponentesFamilia(cod_fam);
+            ((TablaComponentes) tabla_componentes_).actualizaTabla(componentes);
+        } catch (Exception er) {
+            JOptionPane.showMessageDialog(null, er.toString());
+        }
+    }//GEN-LAST:event_btn_mostrar_comps_familia_ActionPerformed
+
    
     /*public static void main(String[] args) {
         
@@ -732,6 +743,7 @@ public class ControlComponentes extends VentanaInterna {
     private javax.swing.JButton btn_cancelar_familia_;
     private javax.swing.JButton btn_editar_componente_;
     private javax.swing.JButton btn_editar_familia_;
+    private javax.swing.JButton btn_mostrar_comps_familia_;
     private javax.swing.JButton btn_nueva_familia_;
     private javax.swing.JButton btn_nuevo_componente_;
     private javax.swing.ButtonGroup buttonGroup1;
