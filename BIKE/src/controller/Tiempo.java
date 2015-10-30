@@ -16,19 +16,19 @@ public class Tiempo {
     private static Calendar calendario;
     
     public static String getStringFechaActual() {
-        actualizar();
+        actualizarFecha();
         return calendario.get(Calendar.DAY_OF_MONTH) + "/" + (calendario.get(Calendar.MONTH) + 1) + "/" + calendario.get(Calendar.YEAR);
     }
 
     public static Calendar getNow(){
-        actualizar();
+        actualizarFecha();
         return calendario;
     }
     
     /**FECHA FORMATEADA PARA LENGUAJE SQL
      * @return String*/
     public static String obtenerInstanteMySQL(){
-        actualizar();
+        actualizarFecha();
         Date hoy = calendario.getTime();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return formato.format(hoy);
@@ -54,6 +54,28 @@ public class Tiempo {
     }
 
     /**
+     * METODO PARA CASTEAR LA FECHA OBTENIDA DEL JDateChooser o control para seleccionar la fecha 
+     * a String válido para la base de datos.
+     * 
+     * @param date
+     * @return 
+     * @throws java.lang.Exception*/
+    public static String ingresarFechaSQL(Date date) throws Exception {
+        //fuentes formatos => http://www-01.ibm.com/support/knowledgecenter/SSHEB3_3.3.2/com.ibm.tap.doc_3.3.2/loc_topics/c_custom_date_formats.html?lang=es
+        if (date == null) {
+            actualizarFecha();
+            Date hoy = calendario.getTime();
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            return formato.format(hoy);
+        }
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        String r = formato.format(date);
+        return r;
+        //return calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
+    }
+    
+    
+    /**
      * RETORNA UN STRING CON LA HORA OBTENIDA DE LA CONSULTA SQL
      *
      * @param date
@@ -71,7 +93,25 @@ public class Tiempo {
         //return calendar.get(Calendar.HOUR_OF_DAY) +":"+calendar.get(Calendar.MINUTE);
     }
     
-    private static void actualizar(){
+    
+    /**
+     * METODO PARA CASTEAR LA FECHA OBTENIDA DE LA BASE DATOS ADECUADAMENTE PARA LA APLICACION.
+     * 
+     * @param date
+     * @return 
+     * @throws java.lang.Exception*/
+    public static String fechaObtenidaSQL(java.sql.Date date) throws Exception {
+        //fuentes formatos => http://www-01.ibm.com/support/knowledgecenter/SSHEB3_3.3.2/com.ibm.tap.doc_3.3.2/loc_topics/c_custom_date_formats.html?lang=es
+        if (date == null) {
+            return "";
+        }
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MMM/yyyy");
+        String r = formato.format(date);
+        return r;
+        //return calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
+    }
+    
+    private static void actualizarFecha(){
         calendario = GregorianCalendar.getInstance();
     }
       
@@ -80,7 +120,4 @@ public class Tiempo {
         System.out.println(Tiempo.getNow().get(Calendar.HOUR));*/
         System.out.println(Tiempo.obtenerInstanteMySQL());
     }
-    
-    
-    
 }

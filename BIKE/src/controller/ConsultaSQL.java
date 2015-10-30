@@ -52,10 +52,47 @@ public class ConsultaSQL {
     }
     
     
-    
-    
-    
-    
+    /**
+     * METODO QUE OBTIENE TODOS LOS DETALLES DE LOS ENSAMBLADORES ACTUALES.
+     *
+     * @return => retorna un Object[][]
+     * @throws java.lang.Exception
+     */
+    public static Object[][] obtenerTablaEnsambladores() throws Exception {
+        try (Connection miConexion = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement pstm = miConexion.prepareStatement("select * from ensambladores;")) {
+                try (ResultSet resultados = pstm.executeQuery()) {
+                    ArrayList<Object[]> caja = new ArrayList<>();
+                    while (resultados.next()) {
+                        caja.add(new Object[]{
+                            resultados.getString(1),
+                            resultados.getString(2),
+                            resultados.getString(3),
+                            resultados.getString(4),
+                            resultados.getString(5),
+                            resultados.getDate(6),
+                            resultados.getDate(7)
+                        });
+                    }
+                    if (caja.size() > 0) {
+                        Object[][] registros = new Object[caja.size()][7];
+                        Iterator it = caja.iterator();
+                        int i = 0;
+                        while (it.hasNext()) {
+                            registros[i] = (Object[]) it.next();
+                            i++;
+                        }
+                        return registros;
+                    } else {
+                        throw new Exception("No hay registros de empleados en este momento.");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
     
     //FIN ENSAMBLADORES
     
@@ -129,7 +166,7 @@ public class ConsultaSQL {
      * @return verdadero o falso segun el resultado.
      * @throws java.lang.Exception
      */
-    public static boolean registrarNuevoArticulo(Object[] detalles, Object[] componentes) throws Exception {
+    public static boolean registrarNuevoArticulo(Object[] detalles, /*Object[]*/ArrayList<Object> componentes) throws Exception {
         try (Connection con = ConexionBD.obtenerConexion()) {
             
             int comprobante = 1;
@@ -160,12 +197,12 @@ public class ConsultaSQL {
             }
             
             StringBuilder sb;
-            if (componentes.length > 0) {
+            if (componentes.size() > 0) {
                 // <editor-fold defaultstate="collapsed" desc="Escritura de la Sentencia">
                 sb = new StringBuilder();
                 sb.append("insert into componente_articulo values ");
-                for (int i = 1; i <= componentes.length; i++) {
-                    if (i == componentes.length) {
+                for (int i = 1; i <= componentes.size(); i++) {
+                    if (i == componentes.size()) {
                         sb.append("(?, ?);");
                     } else {
                         sb.append("(?, ?), ");
@@ -173,38 +210,33 @@ public class ConsultaSQL {
                 }
                 // </editor-fold>
                 try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(sb.toString())) {
-                    for (int i = 1; i <= componentes.length; i++) {
+                    for (int i = 1; i <= componentes.size(); i++) {
                         sentencia_insert.setString(((i * 2) - 1), cod_generado);
-                        sentencia_insert.setString((i * 2), (String) componentes[i - 1]);
+                        //sentencia_insert.setString((i * 2), (String) componentes[i - 1]);
+                        sentencia_insert.setString((i * 2), componentes.get(i - 1).toString());
                     }
                     comprobante = comprobante * sentencia_insert.executeUpdate();
                 }
             }
             
-            Object[] tallas = (Object[]) detalles[2];
+            //Object[] tallas = (Object[]) detalles[2];
+            ArrayList<String> tallas = (ArrayList<String>) detalles[2];
 
-            if (tallas.length > 0) {
-                /*try (java.sql.PreparedStatement borrar_tallas = con.prepareStatement(
-                        "delete from talla_articulo where articulo = ?;")) {
-                    borrar_tallas.setString(1, cod_articulo);
-                    //comprobante = comprobante * borrar_tallas.executeUpdate();
-                    if (!(borrar_tallas.executeUpdate() > 0)) {
-                        JOptionPane.showMessageDialog(null, "No existian tallas asiganadas al articulo.");
-                    }
-                }*/
+            if (tallas.size() > 0) {
                 sb = new StringBuilder();
                 sb.append("insert into talla_articulo values ");
-                for (int i = 1; i <= tallas.length; i++) {
-                    if (i == tallas.length) {
+                for (int i = 1; i <= tallas.size(); i++) {
+                    if (i == tallas.size()) {
                         sb.append("(?, ?);");
                     } else {
                         sb.append("(?, ?), ");
                     }
                 }
                 try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(sb.toString())) {
-                    for (int i = 1; i <= tallas.length; i++) {
+                    for (int i = 1; i <= tallas.size(); i++) {
                         sentencia_insert.setString(((i * 2) - 1), cod_generado);
-                        sentencia_insert.setString((i * 2), (String) tallas[i - 1]);
+                        //sentencia_insert.setString((i * 2), (String) tallas[i - 1]);
+                        sentencia_insert.setString((i * 2), tallas.get(i - 1));
                     }
                     comprobante = comprobante * sentencia_insert.executeUpdate();
                     return comprobante > 0;
@@ -243,32 +275,43 @@ public class ConsultaSQL {
                 comprobante = comprobante * sentencia.executeUpdate();
             }
             
-            Object[] tallas_nuevas = (Object[]) detalles[2];
+            //Object[] tallas_nuevas = (Object[]) detalles[2];
+            
+            try (java.sql.PreparedStatement borrar_tallas = con.prepareStatement(
+                    "delete from talla_articulo where articulo = ?;")) {
+                borrar_tallas.setString(1, cod_articulo);
+                //comprobante = comprobante * borrar_tallas.executeUpdate();
+                if (!(borrar_tallas.executeUpdate() > 0)) {
+                    JOptionPane.showMessageDialog(null, "No existian tallas asignadas al articulo.");
+                }
+            }
+            
+            ArrayList<String> tallas_nuevas = (ArrayList<String>) detalles[2];
+            if (tallas_nuevas.size() > 0) {
 
-            if (tallas_nuevas.length > 0) {
-
-                try (java.sql.PreparedStatement borrar_tallas = con.prepareStatement(
+                /*try (java.sql.PreparedStatement borrar_tallas = con.prepareStatement(
                         "delete from talla_articulo where articulo = ?;")) {
                     borrar_tallas.setString(1, cod_articulo);
                     //comprobante = comprobante * borrar_tallas.executeUpdate();
                     if (!(borrar_tallas.executeUpdate() > 0)) {
                         JOptionPane.showMessageDialog(null, "No existian tallas asiganadas al articulo.");
                     }
-                }
+                }*/
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("insert into talla_articulo values ");
-                for (int i = 1; i <= tallas_nuevas.length; i++) {
-                    if (i == tallas_nuevas.length) {
+                for (int i = 1; i <= tallas_nuevas.size(); i++) {
+                    if (i == tallas_nuevas.size()) {
                         sb.append("(?, ?);");
                     } else {
                         sb.append("(?, ?), ");
                     }
                 }
                 try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(sb.toString())) {
-                    for (int i = 1; i <= tallas_nuevas.length; i++) {
+                    for (int i = 1; i <= tallas_nuevas.size(); i++) {
                         sentencia_insert.setString(((i * 2) - 1), cod_articulo);
-                        sentencia_insert.setString((i * 2), (String) tallas_nuevas[i - 1]);
+                        //sentencia_insert.setString((i * 2), (String) tallas_nuevas[i - 1]);
+                        sentencia_insert.setString((i * 2), tallas_nuevas.get(i - 1));
                     }
                     comprobante = comprobante * sentencia_insert.executeUpdate();
                     return comprobante > 0;
@@ -332,7 +375,9 @@ public class ConsultaSQL {
         }
     }
     
-    //FAMILIAS COMPONENTES
+    
+    
+    //FAMILIAS DE COMPONENTES
     
     /**
      * METODO PARA OBTENER TODOS LOS REGISTROS DE FAMILIAS DE COMPONENTES.
@@ -409,7 +454,8 @@ public class ConsultaSQL {
                         }
                         return retorno;
                     } else {
-                        throw new Exception("No existen componenentes registrados para esta familia.");
+                        return null;
+                        //throw new Exception("No existen componenentes registrados para esta familia.");
                     }
                 }
             }
@@ -712,7 +758,7 @@ public class ConsultaSQL {
                     + "from componentes c inner join familia_componente f "
                     + "inner join componente_articulo ca "
                     + "where f.cod_fam = c.familia and c.id_comp = ca.componente "
-                    + "and ca.articulo = ?;")) {
+                    + "and ca.articulo = ? order by f.familia;")) {
                 sentencia.setString(1, cod_articulo);
                 try (ResultSet resultados = sentencia.executeQuery()) {
                     ArrayList<Object[]> caja = new ArrayList<>();
@@ -734,7 +780,8 @@ public class ConsultaSQL {
                         }
                         return retorno;
                     } else {
-                        throw new Exception("Al parecer este Articulo no Tiene Componentes Registrados.");
+                        return null;
+                        //throw new Exception("Al parecer este Articulo no Tiene Componentes Registrados.");
                     }
                 }
             }
@@ -799,7 +846,7 @@ public class ConsultaSQL {
      * @return
      * @throws java.lang.Exception
      */
-    public static Object[][] obtenerTodosLosComponentes() throws Exception {
+    public static Object[][] obtenerTodosCompsFlias() throws Exception {
         try (Connection con = ConexionBD.obtenerConexion()) {
 
             try (java.sql.PreparedStatement sentencia = con.prepareStatement(
@@ -843,11 +890,71 @@ public class ConsultaSQL {
     /**
      * METODO QUE MODIFICARÁ LOS COMPONENTES VINCULADOS A UN ARTICULO.
      * 
+     * @param poner
      * @param cod_articulo
      * @param componentes
      * @return
      * @throws java.lang.Exception */
-    public static boolean modificarComponentesArticulo(String cod_articulo, Object[] componentes) throws Exception{
+    public static int[]/*boolean*/ modificarComponentesArticulo(boolean poner, String cod_articulo, ArrayList<Object> componentes) throws Exception {
+        if (componentes.size() > 0) {
+            try (Connection con = ConexionBD.obtenerConexion()) {
+                Iterator it = componentes.iterator();
+                String code;
+                if (poner) {
+                    int inserciones = 0;
+                    int existentes = 0;
+                    while (it.hasNext()) {
+                        code = it.next().toString();
+                        try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                                "select * from componente_articulo where articulo = ? and componente = ?;")) {
+                            sentencia.setString(1, cod_articulo);
+                            sentencia.setString(2, code);
+                            try (ResultSet res = sentencia.executeQuery()) {
+                                if (res.first()) {
+                                    existentes++;
+                                } else {
+                                    try (java.sql.PreparedStatement sentencia_insert = con.prepareStatement(
+                                            "insert into componente_articulo values (?, ?);")) {
+                                        sentencia_insert.setString(1, cod_articulo);
+                                        sentencia_insert.setString(2, code);
+                                        inserciones = inserciones + sentencia_insert.executeUpdate();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return new int[]{inserciones, existentes};
+                }
+                else{
+                    int borrados = 0;
+                    while (it.hasNext()) {
+                        code = it.next().toString();
+                        try (java.sql.PreparedStatement sentencia = con.prepareStatement(
+                                "delete from componente_articulo where articulo = ? and componente = ?;")) {
+                            sentencia.setString(1, cod_articulo);
+                            sentencia.setString(2, code);
+                            borrados = borrados + sentencia.executeUpdate();
+                        }
+                    }
+                    return new int[]{borrados};
+                }
+            } catch (Exception e) {
+                throw new Exception("Problemas al modificar el listado de Componentes del articulo.\n"
+                        + "Error: " + e.toString());
+            }
+        } else {
+            throw new Exception("No hay componentes para asignar.");
+        }
+    }
+    
+    /**
+     * METODO QUE MODIFICARÁ LOS COMPONENTES VINCULADOS A UN ARTICULO.
+     * 
+     * @param cod_articulo
+     * @param componentes
+     * @return
+     * @throws java.lang.Exception */
+    /*public static boolean modificarComponentesArticulo(String cod_articulo, Object[] componentes) throws Exception{
         try (Connection con = ConexionBD.obtenerConexion()) {
             
             int comprobante = 1;
@@ -884,7 +991,7 @@ public class ConsultaSQL {
             throw new Exception("Problemas al obtener el listado de Componentes del articulo.\n"
                     + "Error: " + e.getLocalizedMessage());
         }
-    }
+    }*/
     
     //FIN COMPONENTES 
     

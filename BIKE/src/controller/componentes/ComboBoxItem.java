@@ -5,6 +5,7 @@ package controller.componentes;
 
 import model.componentes.ItemDeLista;
 import controller.ConsultaSQL;
+import java.awt.Color;
 import view.OrdenProduccion;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -17,6 +18,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import view.GestionArticulos;
 import view.GestionRepuestos;
 
 // </editor-fold>
@@ -64,6 +66,19 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
                 items = ConsultaSQL.obtenerTodosComponentes();
             }
 
+            if (nom_combo.equals(GestionArticulos.MODELO_COMBO_FAMILIAS_DE_COMPONENTES)) {
+                //constructor(ConsultaSQL.ConsultorBD.obtenerCatalogoArticulos());
+                Object[][] flias = ConsultaSQL.obtenerFamilias();
+                //ItemDeLista item;
+                HashMap<String, Object> atributos;
+                for (Object[] flia : flias) {
+                    atributos = new HashMap<>();
+                    atributos.put(ItemDeLista.TEXTO_MOSTRADO, flia[1]);
+                    items.add(new ItemDeLista(flia[0].toString(), atributos));
+                }
+                
+            }
+            
             if (items.size() > 0) {
                 Iterator it = items.iterator();
                 while (it.hasNext()) {
@@ -182,6 +197,11 @@ public class ComboBoxItem extends JComboBox<ItemDeLista> {
                 setText(String.valueOf(attrs.get(ItemDeLista.TEXTO_MOSTRADO)));
                 if(value.obtenerCodigoId() == null){
                     setHorizontalAlignment(JTextField.CENTER);
+                }
+                if (isSelected) {
+                    setBackground(getSelectionColor());
+                }else{
+                    setBackground(Color.WHITE);
                 }
             }
             return this;

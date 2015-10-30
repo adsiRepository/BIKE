@@ -1,11 +1,8 @@
 package controller.componentes;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
-import controller.ConsultaSQL;
-import static controller.ConsultaSQL.obtenerListadoDespachoOrden;
 import controller.componentes.ComboBoxItem.DibujoCombobox;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,7 +29,6 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.CellEditorListener;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;

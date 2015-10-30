@@ -4,10 +4,8 @@ import java.awt.Component;
 import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.EventObject;
-import java.util.Iterator;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -24,6 +22,7 @@ public class ControlTablaArticulos {
 
     public static class TablaArticulos extends JTable {
 
+        private Object[][] data_madre;
         private Object[][] data;
         private final MiModeloTabla mi_modelo_tabla;
 
@@ -34,7 +33,7 @@ public class ControlTablaArticulos {
             this.setDefaultRenderer(Component.class, new RenderComponenteCelda());
             this.setDefaultEditor(Component.class, new EditorComponenteCelda());
             //int anchoContenedor = scroll_items_selec.getWidth();
-            int[] anchos = new int[]{120, 55, 160, 210, 60};
+            int[] anchos = new int[]{120, 180, 210, 90};
             //int[] max_anchos = new int[]{200, 300, 38};
             /*int[] anchos = new int[]{ ((int)((anchoContenedor*30)/100)), ((int)((anchoContenedor*50)/100)), ((int)((anchoContenedor*20)/100)) };*/
             for (int i = 0; i < this.getColumnCount(); i++) {
@@ -43,7 +42,7 @@ public class ControlTablaArticulos {
                 this.getColumnModel().getColumn(i).setMaxWidth(anchos[i]);
                 this.getColumnModel().getColumn(i).setResizable(true);
             }
-            this.setRowHeight(55);
+            this.setRowHeight(35);
         }
 
         /**
@@ -53,23 +52,51 @@ public class ControlTablaArticulos {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
                 limpiarTabla();
-                data = new Object[componentes.length][5];
-                String desc;
-                for (int i = 0; i < componentes.length; i++) {
-                    if (componentes[i][3] != null) {
-                        desc = componentes[i][3].toString();
-                    } else {
-                        desc = "No hay descripcion";
+                if (componentes != null) {
+                    data_madre = new Object[componentes.length][5];
+                    String desc;
+                    for (int i = 0; i < componentes.length; i++) {
+                        if (componentes[i][3] != null) {
+                            desc = componentes[i][3].toString();
+                        } else {
+                            desc = "No hay descripcion";
+                        }
+                        data_madre[i] = new Object[]{
+                            componentes[i][0],
+                            componentes[i][1].toString(),
+                            componentes[i][2].toString(),
+                            new ScrollMyTextArea(desc),
+                            false
+                        };
                     }
-                    data[i] = new Object[]{
-                        componentes[i][0],
-                        componentes[i][1].toString(),
-                        componentes[i][2].toString(),
-                        new ScrollMyTextArea(desc),
-                        true
-                    };
+                    data = new Object[componentes.length][4];
+                    for (int i = 0; i < componentes.length; i++) {
+                        if (componentes[i][3] != null) {
+                            desc = componentes[i][3].toString();
+                        } else {
+                            desc = "No hay descripcion";
+                        }
+                        data[i] = new Object[]{
+                            componentes[i][0],
+                            //componentes[i][1].toString(),
+                            componentes[i][2].toString(),
+                            new ScrollMyTextArea(desc),
+                            false
+                        };
+                    }
+                    mi_modelo_tabla.fireTableDataChanged();
                 }
-                mi_modelo_tabla.fireTableDataChanged();
+                else {
+                    data = new Object[1][4];
+                    data[0] = new Object[]{
+                        "",
+                        //"",
+                        "",
+                        new ScrollMyTextArea("No hay Componentes vinculados a este Artículo"),
+                        false
+                    };
+                    mi_modelo_tabla.fireTableDataChanged();
+                }
             } catch (Exception er) {
                 throw new Exception("Error al Actualizar la Tabla de Alistamiento.\nError: " + er.toString());
             }
@@ -83,8 +110,23 @@ public class ControlTablaArticulos {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
                 limpiarTabla();
-                data = new Object[componentes.length][5];
+                data_madre = new Object[componentes.length][5];
                 String desc;
+                for (int i = 0; i < componentes.length; i++) {
+                    if (componentes[i][3] != null) {
+                        desc = componentes[i][3].toString();
+                    } else {
+                        desc = "No hay descripcion";
+                    }
+                    data_madre[i] = new Object[]{
+                        componentes[i][0],
+                        componentes[i][1].toString(),
+                        componentes[i][2].toString(),
+                        new ScrollMyTextArea(desc),
+                        false
+                    };
+                }
+                data = new Object[componentes.length][4];
                 for (int i = 0; i < componentes.length; i++) {
                     if (componentes[i][3] != null) {
                         desc = componentes[i][3].toString();
@@ -93,7 +135,7 @@ public class ControlTablaArticulos {
                     }
                     data[i] = new Object[]{
                         componentes[i][0],
-                        componentes[i][1].toString(),
+                        //componentes[i][1].toString(),
                         componentes[i][2].toString(),
                         new ScrollMyTextArea(desc),
                         false
@@ -118,18 +160,20 @@ public class ControlTablaArticulos {
         /**
          * @return 
          * @throws java.lang.Exception*/
-        public Object[] obtenerSeleccion() throws Exception{
+        public /*Object[]*/ArrayList<Object> obtenerSeleccion() throws Exception{
             try {
                 ArrayList<Object> caja = new ArrayList<>();
                 boolean selec;
                 int i;
                 for(i = 0; i < mi_modelo_tabla.getRowCount(); i++){
-                    selec = (boolean)mi_modelo_tabla.getValueAt(i, 4);
+                    selec = (boolean)mi_modelo_tabla.getValueAt(i, 3);
                     if(selec){
-                        caja.add(mi_modelo_tabla.getValueAt(i, 1));
+                        //caja.add(mi_modelo_tabla.getValueAt(i, 1));
+                        caja.add(data_madre[i][1]);
                     }
                 }
-                if(caja.size() > 0){
+                return caja;
+                /*if(caja.size() > 0){
                     Iterator it = caja.iterator();
                     i = 0;
                     Object[] seleccion = new Object[caja.size()];
@@ -142,7 +186,7 @@ public class ControlTablaArticulos {
                 else{
                     return new Object[]{};
                     //throw  new Exception("No se han seleccionado Componentes para este articulo.");
-                }
+                }*/
             } catch (Exception e) {
                 throw new Exception("No se ha podido obtener el listado seleccionado.\n"
                         + "Error: "+e.getLocalizedMessage());
@@ -156,22 +200,18 @@ public class ControlTablaArticulos {
         private class MiModeloTabla extends DefaultTableModel {
             // <editor-fold defaultstate="collapsed" desc="MODELO DE LA TABLA">
 
-            private final Class[] CLASES_COLUMNAS = new Class[]{String.class, String.class, String.class, ScrollMyTextArea.class, Boolean.class};
-            private final String[] TITULOS_COLUMNAS = new String[]{"Familia", "Codigo", "Componente", "Descripcion", "Usado"};
-            private final boolean[] COLS_EDITABLES = new boolean[]{false, false, false, false, true};
+            private final Class[] CLASES_COLUMNAS = new Class[]{String.class, /*String.class,*/ String.class, ScrollMyTextArea.class, Boolean.class};
+            private final String[] TITULOS_COLUMNAS = new String[]{"Familia", /*"Codigo",*/ "Componente", "Descripcion de Componente", "Seleccionar"};
+            private final boolean[] COLS_EDITABLES = new boolean[]{false, /*false,*/ false, true, true};
 
             /**
              * Constructor del Modelo de la TablaAlistamiento de Alistamiento.
              */
             public MiModeloTabla() {
                 super();
-                data = new Object[1][5];
-                data[0] = new Object[]{"familia","","componente",new ScrollMyTextArea("descripcion"),false};
-                try {
-                    this.setColumnIdentifiers(TITULOS_COLUMNAS);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Error al construir la tabla de Articulos.\n" + e.toString());
-                }
+                this.setColumnIdentifiers(TITULOS_COLUMNAS);
+                //data = new Object[1][5];
+                //data[0] = new Object[]{"familia","","componente",new ScrollMyTextArea("descripcion"),false};
             }
 
             @Override//determina la clase de componentes que iran en cada celda
@@ -307,6 +347,7 @@ public class ControlTablaArticulos {
                     super();
                     this.setLineWrap(true);
                     this.setWrapStyleWord(true);
+                    this.setEditable(false);
                 }
             }
 
