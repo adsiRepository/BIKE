@@ -226,6 +226,13 @@ from ordenes_produccion op inner join produccion p inner join articulos a inner 
 where op.ensamblador = e.id_emp and p.articulo = a.id_articulo and p.no_ord_prod = op.no_ord;/* and op.no_ord = 1;*/
 /***/
 
+select op.no_ord, e.nom_emp, e.ape_emp, op.hora_despacho, op.hora_entrega, 
+a.articulo, p.talla, p.cantidad 
+from ordenes_produccion op inner join produccion p 
+inner join articulos a inner join ensambladores e 
+where op.ensamblador = e.id_emp and p.articulo = a.id_articulo 
+and p.no_ord_prod = op.no_ord;
+
 /**OBTENER COMPONENTES DE ARTICULO*/
 select c.id_comp, c.componente from componentes c inner join componente_articulo ca 
 where ca.componente = c.id_comp and ca.articulo = 'MTB' order by c.familia;
@@ -270,18 +277,30 @@ from ordenes_produccion op inner join ensambladores e inner join articulos a
 inner join produccion p inner join componentes c inner join repuestos r inner join detalle_despacho dp 
 where op.ensamblador = e.id_emp and a.id_articulo = p.articulo and p.no_ord_prod = op.no_ord 
 and c.id_comp = r.componente and dp.orden = op.no_ord and r.cod_rep = dp.repuesto and op.no_ord = 2;
+
 /**Obtener solo el listado*/
 select c.componente, r.cod_rep, r.repuesto, r.cant_disp, dp.cant_desp 
 from detalle_despacho dp inner join repuestos r inner join componentes c 
 where c.id_comp = r.componente and r.cod_rep = dp.repuesto and dp.orden = 2;
 
-/***/
-
-
 /**GESTION DE ARTICULOS*/
 /**buscar componentes de articulo*/
-select c.componente, c.desc_comp from componentes c inner join componente_articulo ca 
+select c.componente from componentes c inner join componente_articulo ca 
 where c.id_comp = ca.componente and ca.articulo = 'MTB';
+
+select r.repuesto, dd.cant_desp from repuestos r inner join detalle_despacho dd 
+where r.cod_rep = dd.repuesto and r.componente = '423' and dd.orden = 2;
+
+select c.componente, r.cod_rep, r.repuesto, r.cant_disp, dp.cant_desp 
+from detalle_despacho dp inner join repuestos r inner join componentes c 
+where c.id_comp = r.componente and r.cod_rep = dp.repuesto and dp.orden = 1 order by c.familia;
+
+select c.id_comp, r.cod_rep, r.repuesto, r.cant_disp, dp.cant_desp 
+from detalle_despacho dp inner join repuestos r inner join componentes c 
+where c.id_comp = r.componente and r.cod_rep = dp.repuesto and dp.orden = 1 
+order by c.familia;
+
+/***/
 
 select * from componentes;
 

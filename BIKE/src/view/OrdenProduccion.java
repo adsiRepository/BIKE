@@ -42,6 +42,8 @@ public class OrdenProduccion extends VentanaInterna {
     public static final String OP_BTN_INSERT = "insertar";
     public static final String OP_BTN_UPDT = "actualizar";
     
+    private String talla_en_cuestion;
+    
     //private Object[] detalle_orden_actual;
     
     private int fila_tabla_produccion, col_tabla_produccion;
@@ -523,7 +525,7 @@ public class OrdenProduccion extends VentanaInterna {
             txt_n_orden_.setText("" + detalles_orden[0]);
             ((ComboBoxItem) combo_ensambladores_).seleccionarItem(detalles_orden[1].toString());
             ((ComboBoxItem) combo_articulos_).seleccionarItem(detalles_orden[2].toString());
-            ((ComboTallas)combo_ref_tamaño_).seleccionarItem(detalles_orden[3].toString());
+            ((ComboTallas) combo_ref_tamaño_).seleccionarItem(detalles_orden[3].toString());
             //((ModeloComboTallas)combo_ref_tamaño_.getModel()).seleccionarItem(detalles_orden[3].toString());
             //combo_ref_tamaño_.setSelectedItem(detalles_orden[3].toString());
             txt_cant_ensamble_.setText(detalles_orden[4].toString());
@@ -533,7 +535,7 @@ public class OrdenProduccion extends VentanaInterna {
             
             ((TablaAlistamiento) tabla_alistamiento_).actualizaTabla(stock_db, (int)detalles_orden[4]);
             
-            ((TablaAlistamiento)tabla_alistamiento_).actualizaTablaParaEdicion(detalles_orden, lista_despacho/*lista_despacho*/);
+            ((TablaAlistamiento) tabla_alistamiento_).actualizaTablaParaEdicion(detalles_orden, lista_despacho);
 
             //detalle_orden_actual = detalles_orden;
             
@@ -611,11 +613,11 @@ public class OrdenProduccion extends VentanaInterna {
     private void btn_refrecar_lista_edicion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refrecar_lista_edicion_ActionPerformed
         try {
             String cod_objeto_ensamble = ((ItemDeLista) combo_articulos_.getSelectedItem()).obtenerCodigoId();
-            String talla = combo_ref_tamaño_.getSelectedItem().toString();
+            talla_en_cuestion = combo_ref_tamaño_.getSelectedItem().toString();
             int cantidad = Integer.parseInt(txt_cant_ensamble_.getText());
 
             LinkedHashMap<Object[], ArrayList<ItemDeLista>>/**/ informacion_bd
-                    = ConsultaSQL.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla);
+                    = ConsultaSQL.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla_en_cuestion);
 
             ((TablaAlistamiento) tabla_alistamiento_).actualizaTabla(informacion_bd, cantidad);
             
@@ -643,7 +645,7 @@ public class OrdenProduccion extends VentanaInterna {
                 String ensamblador = ((ItemDeLista) combo_ensambladores_.getSelectedItem()).obtenerCodigoId();
                 Object[] produccion = new Object[3];
                 produccion[0] = ((ItemDeLista) combo_articulos_.getSelectedItem()).obtenerCodigoId();
-                produccion[1] = combo_ref_tamaño_.getSelectedItem().toString();
+                produccion[1] = talla_en_cuestion;//combo_ref_tamaño_.getSelectedItem().toString();
                 produccion[2] = Integer.parseInt(txt_cant_ensamble_.getText());
                 Object[][] listado = ((TablaAlistamiento) tabla_alistamiento_).obtenerListadoDespacho();
 
@@ -698,7 +700,7 @@ public class OrdenProduccion extends VentanaInterna {
                 Object[] produccion = new Object[4];
                 produccion[0] = ((ItemDeLista) combo_ensambladores_.getSelectedItem()).obtenerCodigoId();
                 produccion[1] = ((ItemDeLista) combo_articulos_.getSelectedItem()).obtenerCodigoId();
-                produccion[2] = combo_ref_tamaño_.getSelectedItem().toString();
+                produccion[2] = talla_en_cuestion;//combo_ref_tamaño_.getSelectedItem().toString();
                 produccion[3] = Integer.parseInt(txt_cant_ensamble_.getText());
                 
                 Object[][] listado = ((TablaAlistamiento) tabla_alistamiento_).obtenerListadoDespacho();
@@ -840,11 +842,11 @@ public class OrdenProduccion extends VentanaInterna {
                 if (decision == 0) { // como "Aceptar" está primero en el arreglo tiene el indice 0; -1 es la x de cerrar 
 
                     String cod_objeto_ensamble = ((ItemDeLista) combo_articulos_.getSelectedItem()).obtenerCodigoId();
-                    String talla = combo_ref_tamaño_.getSelectedItem().toString();
+                    talla_en_cuestion = combo_ref_tamaño_.getSelectedItem().toString();
                     int cantidad = Integer.parseInt(txt_cant_ensamble_.getText());
                     
                     LinkedHashMap<Object[], ArrayList<ItemDeLista>>/**/ informacion_bd 
-                            = ConsultaSQL.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla);
+                            = ConsultaSQL.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla_en_cuestion);
 
                     //if (informacion_bd != null) {
                     panel_primer_filtro_emsamble_.setEnabled(false);

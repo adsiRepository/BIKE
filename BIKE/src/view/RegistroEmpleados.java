@@ -13,7 +13,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.EventObject;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JLabel;

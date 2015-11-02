@@ -147,50 +147,83 @@ public class TablaAlistamiento extends JTable {
                 //Object[][] new_data = new Object[data.length + listado.size()][5];
 
                 int fila = 0;
-                Object[][]lista = new Object[listado.size()][5];
+                Object[][]lista = new Object[listado.size()][6];
                 for (HashMap.Entry eg : listado.entrySet()) {
                     int cant_desp = (int) ((ItemDeLista) eg.getValue()).getAtributos().get("cant_desp");
                     lista[fila] = new Object[]{
-                        /*0*/eg.getKey(),
+                        /*0*/eg.getKey().toString(),
                         //new My_ComboBox((ItemDeLista)eg.getValue()),
-                        /*1*/((ItemDeLista)eg.getValue()).obtenerCodigoId(),
+                        /*1*/((ItemDeLista) eg.getValue()).obtenerCodigoId(),
                         /*2*/((ItemDeLista) eg.getValue()).getAtributos().get("stock"),
                         /*3*/cant_desp,
-                        /*4*/new PanelBotonesCelda(true)
+                        /*4*/new PanelBotonesCelda(true),
+                        /*5*/(ItemDeLista) eg.getValue()                            
                     };
                     fila++;
                 }
                 
-                Object[][] new_data = new Object[data.length][5];
-                Object[] aux;
+                ArrayList<Object[]> nueva_lista = new ArrayList<>();
+                ArrayList<Object[]> aux;
+                //Object[] aux;
                 SpinnerNumberModel model_spinner;
+                int reps_mismo_compo; 
+                
                 for (fila = 0; fila < data.length; fila++) {
-                    aux = null;
-                    for (Object[] lst : lista) {
-                        if (data[fila][0].equals(lst[0])) {
-                            //aux = new Object[1][5];
-                            int max = (int)((SpinnerNumberModel)((JSpinner)data[fila][3]).getModel()).getMaximum();
-                            model_spinner = new SpinnerNumberModel((int)lst[3], 0, max, 1);
-                            aux = new Object[]{
-                                data[fila][0], 
-                                data[fila][1], 
-                                lst[2], 
-                                new SpinnerCeldaTabla(model_spinner), 
-                                lst[4]
-                            };
-                            //((My_ComboBox)data[fila][1]).seleccionarItem(lst[1].toString());
-                            break;
+                    
+                    aux = new ArrayList<>();
+                    reps_mismo_compo = 0;
+                    
+                    for (Object[] punto : lista) {
+                        
+                        if (data[fila][0].equals(punto[0])) {
+                            
+                            if(reps_mismo_compo <= 0){
+                                int max = (int)((SpinnerNumberModel)((JSpinner)data[fila][3]).getModel()).getMaximum();
+                                model_spinner = new SpinnerNumberModel((int)punto[3], 0, max, 1);
+                                aux.add(new Object[]{
+                                    data[fila][0], 
+                                    data[fila][1], 
+                                    punto[2], 
+                                    new SpinnerCeldaTabla(model_spinner), 
+                                    punto[4]
+                                });
+                                
+                            }else{
+                                int max = (int)((SpinnerNumberModel)((JSpinner)data[fila][3]).getModel()).getMaximum();
+                                model_spinner = new SpinnerNumberModel((int)punto[3], 0, max, 1);
+                                aux.add(new Object[]{
+                                    data[fila][0], 
+                                    new My_ComboBox((ItemDeLista)punto[5]), 
+                                    punto[2], 
+                                    new SpinnerCeldaTabla(model_spinner), 
+                                    new PanelBotonesCelda(false)
+                                });
+                            }
+                            //break;
+                            reps_mismo_compo++;
                         }
                     }
-                    if(aux != null){
-                        new_data[fila] = aux;
+                    if(aux.size() > 0){
+                        //new_data[fila] = aux;
+                        Iterator it = aux.iterator();
+                        while (it.hasNext()) {
+                            nueva_lista.add((Object[]) it.next());
+                        }
                     }
                     else{
-                        new_data[fila] = data[fila];
+                        //new_data[fila] = data[fila];
+                        nueva_lista.add(data[fila]);
                     }
                 }
                 
-                data = new_data;
+                data = new Object[nueva_lista.size()][5];
+                Iterator it = nueva_lista.iterator();
+                fila = 0;
+                while (it.hasNext()) {
+                    data[fila] = (Object[]) it.next();
+                    fila++;
+                }
+                //data = new_data;
                 modelo_tabla.fireTableDataChanged();
             }
         } catch (RuntimeException ex) {
@@ -416,7 +449,7 @@ public class TablaAlistamiento extends JTable {
                                                         new SpinnerCeldaTabla(
                                                         new SpinnerNumberModel(0, 0, (max_spinner - cant_elegida), 1)),
                                                         data[miFila][4]
-                                                    };
+                                                    };//
                                                     if (!((max_spinner - cant_elegida) > 0)) {
                                                         ((My_ComboBox) new_data[miFila][1]).setEnabled(false);
                                                         ((JSpinner) (new_data[miFila][3])).setEnabled(false);
@@ -505,15 +538,16 @@ public class TablaAlistamiento extends JTable {
             // </editor-fold>
         }
     }
-
-    private class SpinnerCeldaTabla extends JSpinner {
-        // <editor-fold defaultstate="collapsed" desc="Codigo de la Clase SpinnerCeldaTabla">
+    
+// <editor-fold defaultstate="collapsed" desc="Codigo de la Clase SpinnerCeldaTabla">
+    /*private class SpinnerCeldaTabla extends JSpinner {
+        
 
         private SpinnerModel myspinnerNumModel;
 
         /**
          * Constructor Spinner
-         */
+         /
         public SpinnerCeldaTabla() {
             super();
             myspinnerNumModel = new SpinnerNumberModel(1, 0, 10, 1);
@@ -524,7 +558,7 @@ public class TablaAlistamiento extends JTable {
          * Constructor Spinner con Modelo
          *
          * @param spinnerModel
-         */
+         /
         public SpinnerCeldaTabla(SpinnerModel spinnerModel) {
             super();
             if (spinnerModel == null) {
@@ -547,7 +581,7 @@ public class TablaAlistamiento extends JTable {
          * Esta clase redefine un spinner haciendo que no se le puedan ingresar
          * letras por ejemplo, o cuaquier configuracion que el programador
          * quiera dar.
-         */
+         /
         private void constructorGeneral() {
             this.setModel(myspinnerNumModel);
             JSpinner.DefaultEditor editor;
@@ -576,9 +610,10 @@ public class TablaAlistamiento extends JTable {
             }
             // </editor-fold>
         }
-        // </editor-fold>
-    }
-
+        
+    }*/
+// </editor-fold>
+    
     /**
      * COMBOBOX
      */

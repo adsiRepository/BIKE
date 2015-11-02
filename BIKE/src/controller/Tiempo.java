@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 /**
  * @author miguel
  */
-public class Tiempo {
+public abstract class Tiempo {
 
     private static Calendar calendario;
     

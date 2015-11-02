@@ -39,6 +39,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public GestionRepuestos gestionRepuestos;
     public OrdenProduccion ordenProduccion;
     public RegistroEmpleados registroEmpleados;
+    public GestionProduccion produccion_general;
     //----
     
     /** Creates new form MenuPrincipal */
@@ -66,7 +67,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
             };
             int alturaCol = 30;
             ((TablaProduccion) tabla_actividades).formatearTabla(anchos, alturaCol);
-
         }
     }
 
@@ -88,6 +88,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         barra_menu_1 = new javax.swing.JMenuBar();
         menu_tareas_ = new javax.swing.JMenu();
         menu_item_nueva_orden_ = new javax.swing.JMenuItem();
+        menu_item_observar_produccion_ = new javax.swing.JMenuItem();
         menu_almacen_ = new javax.swing.JMenu();
         menu_item_componentes_ = new javax.swing.JMenuItem();
         menu_item_gestion_produccion_ = new javax.swing.JMenuItem();
@@ -211,8 +212,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                         .addComponent(btn_inventario_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(escritorioLayout.createSequentialGroup()
                         .addGap(22, 22, 22)
-                        .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 1096, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(78, Short.MAX_VALUE))
+                        .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,6 +246,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
         menu_tareas_.add(menu_item_nueva_orden_);
+
+        menu_item_observar_produccion_.setText("Ensamble");
+        menu_item_observar_produccion_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_item_observar_produccion_ActionPerformed(evt);
+            }
+        });
+        menu_tareas_.add(menu_item_observar_produccion_);
 
         barra_menu_1.add(menu_tareas_);
 
@@ -456,6 +465,24 @@ public class MenuPrincipal extends javax.swing.JFrame {
             //System.out.print("Excepcion localizada en: MenuPrincipal.menu_item_nueva_orden_ActionPerformed => \n"+ex.toString());
         }
     }//GEN-LAST:event_btn_produccion_ActionPerformed
+
+    private void menu_item_observar_produccion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_observar_produccion_ActionPerformed
+        try {
+            if (produccion_general != null && produccion_general.isVisible()) {
+                if (produccion_general.isIcon()) {
+                   produccion_general.setIcon(false);
+                }
+            } else {
+                produccion_general = new GestionProduccion();
+                escritorio.add(produccion_general);
+                produccion_general.setVisible(true);
+            }
+            produccion_general.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.toString());
+            //System.out.print("Excepcion localizada en: MenuPrincipal.menu_item_nueva_orden_ActionPerformed => \n"+ex.toString());
+        }
+    }//GEN-LAST:event_menu_item_observar_produccion_ActionPerformed
    
     // <editor-fold defaultstate="collapsed" desc="VOID MAIN O METODO PRINCIPAL">
     public static void main(String args[]) {
@@ -496,6 +523,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem menu_item_componentes_;
     private javax.swing.JMenuItem menu_item_gestion_produccion_;
     private javax.swing.JMenuItem menu_item_nueva_orden_;
+    private javax.swing.JMenuItem menu_item_observar_produccion_;
     private javax.swing.JMenu menu_tareas_;
     private javax.swing.JPanel panel_fecha_;
     private javax.swing.JPanel panel_reloj_;

@@ -1437,7 +1437,7 @@ public class ConsultaSQL {
                     + "from ordenes_produccion op inner join produccion p "
                     + "inner join articulos a inner join ensambladores e "
                     + "where op.ensamblador = e.id_emp and p.articulo = a.id_articulo "
-                    + "and p.no_ord_prod = op.no_ord order by op.no_ord asc;")) {
+                    + "and p.no_ord_prod = op.no_ord;")) {// order by op.no_ord asc
 
                 ArrayList<Object[]> retorno = new ArrayList<>();
                 try (ResultSet resultados = sentencia.executeQuery()) {
@@ -1486,6 +1486,81 @@ public class ConsultaSQL {
         }
     }
 
+    
+    //PRODUCCION
+    
+      /**
+     * @param cod_art
+     * @param talla
+     * @return
+     * @throws java.lang.Exception
+     */
+    public static ArrayList<Object[]> obtenerProduccionDelArticulo(String cod_art, String talla) throws Exception {
+        try (Connection conbd = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
+                    "select op.no_ord, e.nom_emp, e.ape_emp, p.cantidad, op.hora_despacho, op.hora_entrega "
+                    + "from ordenes_produccion op inner join ensambladores e inner join produccion p "
+                    + "where op.ensamblador = e.id_emp and op.no_ord = p.no_ord_prod "
+                    + "and p.articulo = ? and p.talla = ?;")) {
+                sentencia.setString(1, cod_art);
+                sentencia.setString(2, talla);
+                try(ResultSet results = sentencia.executeQuery()){
+                    ArrayList<Object[]> items = new ArrayList<>();
+                    String nom_emp;
+                    while(results.next()){
+                        nom_emp = results.getString(2) + " " + results.getString(3);
+                        items.add(new Object[]{
+                            results.getString(1),
+                            nom_emp,
+                            results.getInt(4),
+                            results.getTimestamp(5),
+                            results.getTimestamp(6)
+                        });
+                    }
+                    if(items.size() > 0){
+                        return items;
+                    }
+                    else{
+                        return null;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Error al obtener los detalles de Produccion.\n" + e.getLocalizedMessage());
+        }
+    }
+
+     /**
+     * @param cod_art
+     * @param talla
+     * @return
+     * @throws java.lang.Exception
+     */
+    public static int totalProducidoArticulo(String cod_art, String talla) throws Exception {
+        try (Connection conbd = ConexionBD.obtenerConexion()) {
+            try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
+                    //PRODUCCION TOTAL DE UN ARTICULO
+                    "select p.cantidad from produccion p inner join ordenes_produccion op "
+                    + "where op.no_ord = p.no_ord_prod and not op.hora_entrega is null "
+                    + "and p.articulo = ? and p.talla = ?;")) {
+                sentencia.setString(1, cod_art);
+                sentencia.setString(2, talla);
+                try (ResultSet results = sentencia.executeQuery()){
+                    int total_producido = 0;
+                    while(results.next()){
+                        total_producido = total_producido + results.getInt(1);
+                    }
+                    return total_producido;
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Error al obtener los detalles de Produccion.\n" + e.getLocalizedMessage());
+        }
+    }
+    
+    
+    //FIN CONTROL DE PRODUCCION
+    
     /**
      * METODO PUBLICO QUE ME PERMITE CONFIGURAR SI SE LLEVA A CABO EL CONTEO DE
      * LOS REPUESTOS REGISTRADOS. Ejecuta las sentencias DDL respectivas que
