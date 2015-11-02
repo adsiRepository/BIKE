@@ -564,7 +564,7 @@ public class OrdenProduccion extends VentanaInterna {
                 String ensamblador = ((ItemDeLista) combo_ensambladores_.getSelectedItem()).obtenerCodigoId();
                 Object[] produccion = new Object[3];
                 produccion[0] = ((ItemDeLista) combo_articulos_.getSelectedItem()).obtenerCodigoId();
-                produccion[1] = combo_ref_tamaño_.getSelectedItem().toString();
+                produccion[1] = talla_en_cuestion;//combo_ref_tamaño_.getSelectedItem().toString();
                 produccion[2] = Integer.parseInt(txt_cant_ensamble_.getText());
                 Object[][] listado = ((TablaAlistamiento) tabla_alistamiento_).obtenerListadoDespacho();
 

@@ -70,12 +70,13 @@ public class ConsultaSQL {
                             resultados.getString(3),
                             resultados.getString(4),
                             resultados.getString(5),
-                            resultados.getDate(6),
-                            resultados.getDate(7)
+                            resultados.getString(6),
+                            resultados.getDate(7),
+                            resultados.getDate(8)
                         });
                     }
                     if (caja.size() > 0) {
-                        Object[][] registros = new Object[caja.size()][7];
+                        Object[][] registros = new Object[caja.size()][8];
                         Iterator it = caja.iterator();
                         int i = 0;
                         while (it.hasNext()) {
@@ -1497,17 +1498,27 @@ public class ConsultaSQL {
      */
     public static ArrayList<Object[]> obtenerProduccionDelArticulo(String cod_art, String talla) throws Exception {
         try (Connection conbd = ConexionBD.obtenerConexion()) {
-            try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
-                    "select op.no_ord, e.nom_emp, e.ape_emp, p.cantidad, op.hora_despacho, op.hora_entrega "
-                    + "from ordenes_produccion op inner join ensambladores e inner join produccion p "
-                    + "where op.ensamblador = e.id_emp and op.no_ord = p.no_ord_prod "
-                    + "and p.articulo = ? and p.talla = ?;")) {
+            StringBuilder sb = new StringBuilder();
+            if (talla != null) {
+                sb.append("select op.no_ord, e.nom_emp, e.ape_emp, p.cantidad, op.hora_despacho, op.hora_entrega "
+                        + "from ordenes_produccion op inner join ensambladores e inner join produccion p "
+                        + "where op.ensamblador = e.id_emp and op.no_ord = p.no_ord_prod "
+                        + "and p.articulo = ? and p.talla = ?;");
+            } else {
+                sb.append("select op.no_ord, e.nom_emp, e.ape_emp, p.cantidad, op.hora_despacho, op.hora_entrega "
+                        + "from ordenes_produccion op inner join ensambladores e inner join produccion p "
+                        + "where op.ensamblador = e.id_emp and op.no_ord = p.no_ord_prod "
+                        + "and p.articulo = ? and p.talla is null;");
+            }
+            try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(sb.toString())) {
                 sentencia.setString(1, cod_art);
-                sentencia.setString(2, talla);
-                try(ResultSet results = sentencia.executeQuery()){
+                if (talla != null) {
+                    sentencia.setString(2, talla);
+                }
+                try (ResultSet results = sentencia.executeQuery()) {
                     ArrayList<Object[]> items = new ArrayList<>();
                     String nom_emp;
-                    while(results.next()){
+                    while (results.next()) {
                         nom_emp = results.getString(2) + " " + results.getString(3);
                         items.add(new Object[]{
                             results.getString(1),
@@ -1517,10 +1528,9 @@ public class ConsultaSQL {
                             results.getTimestamp(6)
                         });
                     }
-                    if(items.size() > 0){
+                    if (items.size() > 0) {
                         return items;
-                    }
-                    else{
+                    } else {
                         return null;
                     }
                 }
@@ -1538,16 +1548,25 @@ public class ConsultaSQL {
      */
     public static int totalProducidoArticulo(String cod_art, String talla) throws Exception {
         try (Connection conbd = ConexionBD.obtenerConexion()) {
-            try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
-                    //PRODUCCION TOTAL DE UN ARTICULO
-                    "select p.cantidad from produccion p inner join ordenes_produccion op "
-                    + "where op.no_ord = p.no_ord_prod and not op.hora_entrega is null "
-                    + "and p.articulo = ? and p.talla = ?;")) {
+            //PRODUCCION TOTAL DE UN ARTICULO
+            StringBuilder sb = new StringBuilder();
+            if (talla != null) {
+                sb.append("select p.cantidad from produccion p inner join ordenes_produccion op "
+                        + "where op.no_ord = p.no_ord_prod and not op.hora_entrega is null "
+                        + "and p.articulo = ? and p.talla = ?;");
+            } else {
+                sb.append("select p.cantidad from produccion p inner join ordenes_produccion op "
+                        + "where op.no_ord = p.no_ord_prod and not op.hora_entrega is null "
+                        + "and p.articulo = ? and p.talla is null;");
+            }
+            try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(sb.toString())) {
                 sentencia.setString(1, cod_art);
-                sentencia.setString(2, talla);
-                try (ResultSet results = sentencia.executeQuery()){
+                if (talla != null) {
+                    sentencia.setString(2, talla);
+                }
+                try (ResultSet results = sentencia.executeQuery()) {
                     int total_producido = 0;
-                    while(results.next()){
+                    while (results.next()) {
                         total_producido = total_producido + results.getInt(1);
                     }
                     return total_producido;

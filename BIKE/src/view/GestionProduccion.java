@@ -28,6 +28,8 @@ public class GestionProduccion extends Paneles.VentanaInterna {
 
     private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_orden_prduccion";
     
+    private int fila_tabla;
+    
     /**
      * Creates new form Produccion
      */
@@ -79,6 +81,11 @@ public class GestionProduccion extends Paneles.VentanaInterna {
 
         jLabel2.setText("Cantidad Disponible:");
 
+        tabla_control_.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_control_MouseClicked(evt);
+            }
+        });
         scroll_tabla_control_.setViewportView(tabla_control_);
 
         btn_generar_informe_despacho_.setText("observar el detalle de despacho de la orden seleccionada");
@@ -91,6 +98,7 @@ public class GestionProduccion extends Paneles.VentanaInterna {
         jLabel3.setText("Talla:");
 
         btn_ver_prod_art_.setText("ver");
+        btn_ver_prod_art_.setToolTipText("ver las ordenes despachadas del articulo");
         btn_ver_prod_art_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_ver_prod_art_ActionPerformed(evt);
@@ -258,25 +266,51 @@ public class GestionProduccion extends Paneles.VentanaInterna {
     }//GEN-LAST:event_combo_articulos_ItemStateChanged
 
     private void btn_ver_prod_art_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ver_prod_art_ActionPerformed
+        
         try {
             ItemDeLista articulo = (ItemDeLista) combo_articulos_.getSelectedItem();
-            String talla = combo_tallas_.getSelectedItem().toString();
-            int cant_producida = ConsultaSQL.totalProducidoArticulo(articulo.obtenerCodigoId(), talla);
+            //String talla = combo_tallas_.getSelectedItem().toString();
+            Object talla;
+            talla = ((talla = combo_tallas_.getSelectedItem()) == null) ? null : talla;
+            int cant_producida;
+            ArrayList<Object[]> produccion_art;
+            if(talla != null){
+                cant_producida = ConsultaSQL.totalProducidoArticulo(articulo.obtenerCodigoId(), talla.toString());
+                produccion_art = ConsultaSQL.obtenerProduccionDelArticulo(articulo.obtenerCodigoId(), talla.toString());
+            }
+            else{
+                cant_producida = ConsultaSQL.totalProducidoArticulo(articulo.obtenerCodigoId(), null);
+                produccion_art = ConsultaSQL.obtenerProduccionDelArticulo(articulo.obtenerCodigoId(), null);
+            }
             txt_cant_producida_.setText(""+cant_producida);
-            ArrayList<Object[]> produccion_art = ConsultaSQL.obtenerProduccionDelArticulo(articulo.obtenerCodigoId(), talla);
             ((TablaControlProduccion) tabla_control_).actualizarTabla(produccion_art);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Ver producciones del Articulo.", 0);
         }
+        
     }//GEN-LAST:event_btn_ver_prod_art_ActionPerformed
 
     private void btn_generar_informe_despacho_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generar_informe_despacho_ActionPerformed
         try {
-           // GeneradorReportes.generarReporteProduccion();
+            Object no_orden;
+            no_orden = ((no_orden = tabla_control_.getValueAt(fila_tabla, 0)) == null) ? null : no_orden;
+            if (no_orden != null) {
+                GeneradorReportes.generarReporteProduccion(Integer.valueOf(no_orden.toString()));
+            } else {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "No hay ordenes que mostrar", "Ver producciones del Articulo.", 0);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Ver producciones del Articulo.", 0);
         }
     }//GEN-LAST:event_btn_generar_informe_despacho_ActionPerformed
+
+    private void tabla_control_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_control_MouseClicked
+        
+        fila_tabla = tabla_control_.rowAtPoint(evt.getPoint());
+        
+    }//GEN-LAST:event_tabla_control_MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

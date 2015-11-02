@@ -23,8 +23,14 @@ public class ModeloReporteProduccion implements JRDataSource{
         switch (jrf.getName()) {
             case "componente":
                 return registros.get(indice).getComponente();
-            case "detalle":
-                return registros.get(indice).getDetalle();
+            /*case "detalle":
+             return registros.get(indice).getDetalle();*/
+            case "repuesto":
+                return registros.get(indice).getRepuesto();
+            case "despachado":
+                return registros.get(indice).getDespachado();
+            case "stock":
+                return registros.get(indice).getStock();
             default:
                 return null;
         }

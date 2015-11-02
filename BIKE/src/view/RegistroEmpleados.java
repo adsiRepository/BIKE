@@ -103,6 +103,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         fecha_salida_ = new com.toedter.calendar.JDateChooser();
         txtbuscar = new javax.swing.JTextField();
         btn_modificar_ = new javax.swing.JButton();
+        combo_tipo_id_ = new javax.swing.JComboBox();
 
         txt_id_.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_id_.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -364,6 +365,8 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
             }
         });
 
+        combo_tipo_id_.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CC", "TI", "RC", "CE" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -388,16 +391,6 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                                     .addComponent(btn_buscar_, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(32, 32, 32))))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(txt_id_, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(txt_nombres_, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(btn_registrar_, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 933, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -416,7 +409,21 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btn_eliminar_, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_limpiar_, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btn_limpiar_, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(txt_nombres_, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(txt_id_, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_registrar_, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combo_tipo_id_, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -427,7 +434,9 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(txt_id_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_id_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combo_tipo_id_, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -483,7 +492,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                         .addComponent(btn_buscar_, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -491,28 +500,30 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_registrar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registrar_ActionPerformed
+        
         if ((txt_id_.getText().length() > 0) && (txt_nombres_.getText().length() > 0) && (txt_apellidos_.getText().length() > 0)) {
             try (Connection miConexion = ConexionBD.obtenerConexion()) {
                 try (java.sql.PreparedStatement sentencia = miConexion.prepareStatement(
-                        "insert into ensambladores values (?,?,?,?,?,?,?);")) {
+                        "insert into ensambladores values (?,?,?,?,?,?,?,?);")) {
                     sentencia.setString(1, txt_id_.getText());
-                    sentencia.setString(2, txt_nombres_.getText());
-                    sentencia.setString(3, txt_apellidos_.getText());
+                    sentencia.setString(2, combo_tipo_id_.getSelectedItem().toString());
+                    sentencia.setString(3, txt_nombres_.getText());
+                    sentencia.setString(4, txt_apellidos_.getText());
                     if(txt_telefono_.getText().length() > 0){
-                        sentencia.setString(4, txt_telefono_.getText());
-                    }
-                    else{
-                        sentencia.setNull(4, java.sql.Types.NULL);
-                    }
-                    if(txt_direccion_.getText().length() > 0){
-                        sentencia.setString(5, txt_direccion_.getText());
+                        sentencia.setString(5, txt_telefono_.getText());
                     }
                     else{
                         sentencia.setNull(5, java.sql.Types.NULL);
                     }
+                    if(txt_direccion_.getText().length() > 0){
+                        sentencia.setString(6, txt_direccion_.getText());
+                    }
+                    else{
+                        sentencia.setNull(6, java.sql.Types.NULL);
+                    }
                     String fecha_ing = Tiempo.ingresarFechaSQL(fecha_ingreso_.getDate());
-                    sentencia.setString(6, fecha_ing);
-                    sentencia.setNull(7, java.sql.Types.NULL);
+                    sentencia.setString(7, fecha_ing);
+                    sentencia.setNull(8, java.sql.Types.NULL);
                     if (sentencia.executeUpdate() > 0) {
                         JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
                         Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
@@ -529,9 +540,11 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                     + "consignado\nsu nombre, apellido e identificación; si no defines una fecha de ingreso\n"
                     + "el sistema registrará la actual. Los demás datos no son imprescindibles.");
         }
+        
     }//GEN-LAST:event_btn_registrar_ActionPerformed
 
     private void btn_eliminar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_ActionPerformed
+        
         try (Connection miConexion = ConexionBD.obtenerConexion()) {
             try (java.sql.PreparedStatement comando = miConexion.prepareStatement(
                     "delete from ensambladores where id_emp = ?;")) {
@@ -545,6 +558,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "error " + ex);
         }
+        
     }//GEN-LAST:event_btn_eliminar_ActionPerformed
 
     private void btn_buscar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscar_ActionPerformed
@@ -589,73 +603,75 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
     }//GEN-LAST:event_btn_buscar_ActionPerformed
 
     private void btn_modificar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_modificar_ActionPerformed
+        
         if ((txt_id_.getText().length() > 0) && (txt_nombres_.getText().length() > 0) && (txt_apellidos_.getText().length() > 0)) {
             try (Connection miConexion = ConexionBD.obtenerConexion()) {
                 int w_query;
                 StringBuilder query = new StringBuilder();
-                if(fecha_ingreso_.getDate() == null){
-                    query.append("update ensambladores set id_emp = ?, nom_emp = ?, ape_emp = ?, "
-                        + "tel_emp = ?, dir_emp = ?, fecha_salida = ?  "
-                        + "where id_emp = ?;");
+                if (fecha_ingreso_.getDate() == null) {
+                    query.append("update ensambladores set id_emp = ?, tipo_id = ?, nom_emp = ?, ape_emp = ?, "
+                            + "tel_emp = ?, dir_emp = ?, fecha_salida = ?  "
+                            + "where id_emp = ?;");
                     w_query = 1;
-                }
-                else{
-                    query.append("update ensambladores set id_emp = ?, nom_emp = ?, ape_emp = ?, "
-                        + "tel_emp = ?, dir_emp = ?, fecha_ing = ?, fecha_salida = ?  "
-                        + "where id_emp = ?;");
+                } else {
+                    query.append("update ensambladores set id_emp = ?, tipo_id = ?, nom_emp = ?, ape_emp = ?, "
+                            + "tel_emp = ?, dir_emp = ?, fecha_ing = ?, fecha_salida = ?  "
+                            + "where id_emp = ?;");
                     w_query = 2;
                 }
                 try (java.sql.PreparedStatement sentencia = miConexion.prepareStatement(query.toString())) {
                     if (w_query == 1) {
                         // <editor-fold defaultstate="collapsed" desc="sin cambiar fecha ingreso">
                         sentencia.setString(1, txt_id_.getText());
-                        sentencia.setString(2, txt_nombres_.getText());
-                        sentencia.setString(3, txt_apellidos_.getText());
+                        sentencia.setString(2, combo_tipo_id_.getSelectedItem().toString());
+                        sentencia.setString(3, txt_nombres_.getText());
+                        sentencia.setString(4, txt_apellidos_.getText());
                         if (txt_telefono_.getText().length() > 0) {
-                            sentencia.setString(4, txt_telefono_.getText());
-                        } else {
-                            sentencia.setNull(4, java.sql.Types.NULL);
-                        }
-                        
-                        if (txt_direccion_.getText().length() > 0) {
-                            sentencia.setString(5, txt_direccion_.getText());
+                            sentencia.setString(5, txt_telefono_.getText());
                         } else {
                             sentencia.setNull(5, java.sql.Types.NULL);
                         }
-                        if (fecha_salida_.getDate() != null) {
-                            String fecha_out = Tiempo.ingresarFechaSQL(fecha_salida_.getDate());
-                            sentencia.setString(6, fecha_out);
+                        
+                        if (txt_direccion_.getText().length() > 0) {
+                            sentencia.setString(6, txt_direccion_.getText());
                         } else {
                             sentencia.setNull(6, java.sql.Types.NULL);
                         }
+                        if (fecha_salida_.getDate() != null) {
+                            String fecha_out = Tiempo.ingresarFechaSQL(fecha_salida_.getDate());
+                            sentencia.setString(7, fecha_out);
+                        } else {
+                            sentencia.setNull(7, java.sql.Types.NULL);
+                        }
                         
-                        sentencia.setString(7, id_busqueda);
+                        sentencia.setString(8, id_busqueda);
 
 // </editor-fold>
                     }
                     if(w_query == 2){
                         sentencia.setString(1, txt_id_.getText());
-                        sentencia.setString(2, txt_nombres_.getText());
-                        sentencia.setString(3, txt_apellidos_.getText());
+                        sentencia.setString(2, combo_tipo_id_.getSelectedItem().toString());
+                        sentencia.setString(3, txt_nombres_.getText());
+                        sentencia.setString(4, txt_apellidos_.getText());
                         if (txt_telefono_.getText().length() > 0) {
-                            sentencia.setString(4, txt_telefono_.getText());
-                        } else {
-                            sentencia.setNull(4, java.sql.Types.NULL);
-                        }
-                        if (txt_direccion_.getText().length() > 0) {
-                            sentencia.setString(5, txt_direccion_.getText());
+                            sentencia.setString(5, txt_telefono_.getText());
                         } else {
                             sentencia.setNull(5, java.sql.Types.NULL);
                         }
+                        if (txt_direccion_.getText().length() > 0) {
+                            sentencia.setString(6, txt_direccion_.getText());
+                        } else {
+                            sentencia.setNull(6, java.sql.Types.NULL);
+                        }
                         String fecha_ing = Tiempo.ingresarFechaSQL(fecha_ingreso_.getDate());
-                        sentencia.setString(6, fecha_ing);
+                        sentencia.setString(7, fecha_ing);
                         if (fecha_salida_.getDate() != null) {
                             String fecha_out = Tiempo.ingresarFechaSQL(fecha_salida_.getDate());
-                            sentencia.setString(7, fecha_out);
+                            sentencia.setString(8, fecha_out);
                         }else{
-                            sentencia.setNull(7, java.sql.Types.NULL);
+                            sentencia.setNull(8, java.sql.Types.NULL);
                         }
-                        sentencia.setString(8, id_busqueda);
+                        sentencia.setString(9, id_busqueda);
                     }
                     if (sentencia.executeUpdate() > 0) {
                         JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
@@ -703,6 +719,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error " + ex.getMessage());
         }*/
+        
     }//GEN-LAST:event_btn_modificar_ActionPerformed
 
     private void btn_limpiar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_ActionPerformed
@@ -726,7 +743,6 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
 
     }//GEN-LAST:event_txt_id_KeyTyped
 
-    
     private static class TablaEmpleados extends JTable {
 
         private Object[][] data;
@@ -750,32 +766,32 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
 
         /**
          * Método publico utizado para cambiar la informacion de la tabla
-         * @param componentes
+         * @param ensambladores
          * @throws java.lang.Exception
          */
-        public void actualizaTabla(Object[][] componentes) throws Exception {
+        public void actualizaTabla(Object[][] ensambladores) throws Exception {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
                 limpiarTabla();
-                data = new Object[componentes.length][7];
+                data = new Object[ensambladores.length][7];
                 String tel, dir, fch_ing, fch_salida;
-                for (int i = 0; i < componentes.length; i++) {
-                    fch_ing = Tiempo.fechaObtenidaSQL((java.sql.Date)componentes[i][5]);
-                    fch_salida = Tiempo.fechaObtenidaSQL((java.sql.Date)componentes[i][6]);
-                    if (componentes[i][3] != null) {
-                        tel = componentes[i][3].toString();
+                for (int i = 0; i < ensambladores.length; i++) {
+                    fch_ing = Tiempo.fechaObtenidaSQL((java.sql.Date)ensambladores[i][6]);
+                    fch_salida = Tiempo.fechaObtenidaSQL((java.sql.Date)ensambladores[i][7]);
+                    if (ensambladores[i][4] != null) {
+                        tel = ensambladores[i][4].toString();
                     } else {
                         tel = "";
                     }
-                    if (componentes[i][4] != null) {
-                        dir = componentes[i][4].toString();
+                    if (ensambladores[i][5] != null) {
+                        dir = ensambladores[i][5].toString();
                     } else {
                         dir = "";
                     }
                     data[i] = new Object[]{
-                        componentes[i][0].toString(),
-                        componentes[i][1].toString(),
-                        componentes[i][2].toString(),
+                        ensambladores[i][1].toString() + " " + ensambladores[i][0].toString(),
+                        ensambladores[i][2].toString(),
+                        ensambladores[i][3].toString(),
                         tel,
                         dir,
                         fch_ing,
@@ -912,6 +928,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
     private javax.swing.JButton btn_limpiar_;
     private javax.swing.JButton btn_modificar_;
     private javax.swing.JButton btn_registrar_;
+    private javax.swing.JComboBox combo_tipo_id_;
     private com.toedter.calendar.JDateChooser fecha_ingreso_;
     private com.toedter.calendar.JDateChooser fecha_salida_;
     private javax.swing.JLabel jLabel1;

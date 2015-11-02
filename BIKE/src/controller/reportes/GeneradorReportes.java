@@ -2,14 +2,17 @@ package controller.reportes;
 
 //<editor-fold defaultstate="collapsed" desc="imports">
 import controller.ConexionBD;
-import controller.ConsultaSQL;
+import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.imageio.ImageIO;
 import model.DetalleProduccion;
 import model.ModeloReporteProduccion;
 import model.componentes.ItemDeLista;
@@ -47,33 +50,39 @@ public abstract class GeneradorReportes {
                 datos.put("id_empleado", detalles_generales[0].toString());
                 datos.put("ensamblador", detalles_generales[1].toString());
                 datos.put("articulo", detalles_generales[3].toString());
-                int cant = Integer.parseInt(detalles_generales[5].toString());
-                datos.put("cantidad", cant);
+                datos.put("cantidad", (int) detalles_generales[5]);
+                InputStream input = new FileInputStream("mis_imagenes/main_logo.png");
+                datos.put("logo_reporte", input);
+                datos.put("fecha_despacho", (java.sql.Timestamp) detalles_generales[6]);
+                datos.put("fecha_entrega", (java.sql.Timestamp) detalles_generales[7]);
 
                 ModeloReporteProduccion data_source = new ModeloReporteProduccion(despacho);
 
                 String path = "src/controller/reportes/ReporteProduccion.jasper";
                 JasperReport jasper = (JasperReport) JRLoader.loadObjectFromFile(path);
                 JasperPrint jasper_print = JasperFillManager.fillReport(jasper, datos, data_source);
-                JasperViewer visor = new JasperViewer(jasper_print);
+                JasperViewer visor = new JasperViewer(jasper_print, false);//el falso indica que no cerrará la aplicacion al cerrar el reporte
                 visor.setTitle("Detalle de la Orden de Producción");
+                Image icono = ImageIO.read(new File("mis_imagenes/icono_reporte.png"));
+                visor.setIconImage(icono);
                 visor.setVisible(true);
             }
 
-        } catch (SQLException | JRException e) {
+        } catch (Exception e) {
             throw new Exception("Error al generar el Reporte de Producción: \n" + e.toString());
         }
     }
 
     private static class MiConsultaMySQL {
-    //<editor-fold defaultstate="collapsed" desc="code">
+        //<editor-fold defaultstate="collapsed" desc="code">
         
         public static HashMap<Object[], ArrayList<DetalleProduccion>> obtenerDetallesOrdenProduccion(int no_orden) throws Exception {
 
             try (Connection conn = ConexionBD.obtenerConexion()) {
 
                 try (java.sql.PreparedStatement sentencia = conn.prepareStatement(
-                        "select e.id_emp, e.nom_emp, e.ape_emp, a.id_articulo, a.articulo, p.talla, p.cantidad "
+                        "select e.id_emp, e.nom_emp, e.ape_emp, a.id_articulo, a.articulo, p.talla, p.cantidad, "
+                        + "op.hora_despacho, op.hora_entrega "
                         + "from ordenes_produccion op inner join ensambladores e inner join articulos a "
                         + "inner join produccion p "
                         + "where op.ensamblador = e.id_emp and a.id_articulo = p.articulo "
@@ -85,13 +94,15 @@ public abstract class GeneradorReportes {
                         Object[] detalle_produccion = null; // es null por si no entra al while
                         
                         while (resultados.next()) {
-                            detalle_produccion = new Object[6]; // si entra al while, es decir si hay resultados, detalle_produccion ya no sera null
+                            detalle_produccion = new Object[8]; // si entra al while, es decir si hay resultados, detalle_produccion ya no sera null
                             detalle_produccion[0] = resultados.getString(1);//id empleado
                             detalle_produccion[1] = resultados.getString(2) + " " + resultados.getString(3);//nombre completo
                             detalle_produccion[2] = resultados.getString(4);//id articulo
                             detalle_produccion[3] = resultados.getString(5);//articulo
                             detalle_produccion[4] = resultados.getString(6);//talla
                             detalle_produccion[5] = resultados.getInt(7);//cantidad
+                            detalle_produccion[6] = resultados.getTimestamp(8);//fecha despacho
+                            detalle_produccion[7] = resultados.getTimestamp(9);//fecha entrega
                         }
                         
                         if (detalle_produccion != null && (detalle_produccion.length > 0)) {
@@ -175,10 +186,10 @@ public abstract class GeneradorReportes {
                 throw new Exception("Error al generar el Reporte de Producción: \n" + e.toString());
             }
         }
-//</editor-fold>
+        //</editor-fold>
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try {
             ConexionBD.setUsuario("user_storebike");
             ConexionBD.setPassword("user_storebike");
@@ -189,7 +200,7 @@ public abstract class GeneradorReportes {
             System.out.println(e.toString());
         }
 
-    }
+    }*/
 
     //FUENTES=>
     //https://community.jaspersoft.com/wiki/jasperreports-library-requirements#XLS

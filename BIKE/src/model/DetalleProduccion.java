@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import model.componentes.ItemDeLista;
 
 /**
@@ -11,23 +9,26 @@ import model.componentes.ItemDeLista;
 public class DetalleProduccion {
 
     private final String componente;
-    private final String detalle;
+    private final String repuesto;
+    private final int despachado;
+    private final int stock;
+    
+    //private final String detalle;
 
-    public DetalleProduccion(String componente, ItemDeLista repuesto) {
+    public DetalleProduccion(String componente, ItemDeLista repto) {
         this.componente = componente;
-        if (repuesto != null) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(repuesto.getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
-                sb.append("\t").append(repuesto.getAtributos().get("cant_desp")).append("\t")
-                        .append(repuesto.getAtributos().get("stock"));
-                sb.append("\n");
-            this.detalle = sb.toString();
+        if (repto != null) {
+            this.repuesto = repto.getAtributos().get(ItemDeLista.TEXTO_MOSTRADO).toString();
+            this.despachado = (int) repto.getAtributos().get("cant_desp");
+            this.stock = (int) repto.getAtributos().get("stock");
         } else {
-            this.detalle = "";
+            this.repuesto = "";
+            this.despachado = 0;
+            this.stock = 0;
         }
     }
     
-    public DetalleProduccion(String componente, ArrayList<ItemDeLista> lista) {
+    /*public DetalleProduccion(String componente, ArrayList<ItemDeLista> lista) {
         this.componente = componente;
         if (lista != null && lista.size() > 0) {
             Iterator it = lista.iterator();
@@ -46,14 +47,25 @@ public class DetalleProduccion {
         } else {
             this.detalle = "";
         }
-    }
+    }*/
 
     public String getComponente() {
         return componente;
     }
-
-    public String getDetalle() {
-        return detalle;
+    
+    public String getRepuesto() {
+        return repuesto;
     }
 
+    public int getDespachado() {
+        return despachado;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    /*public String getDetalle() {
+        return detalle;
+    }*/
 }
