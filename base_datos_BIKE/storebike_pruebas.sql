@@ -1,8 +1,8 @@
 USE `storebike`;
 
 insert into ensambladores values 
-('1107057722','Miguel','González','3173547440','Cra 29 no. 38-25','2015-01-07',null),
-('1190375460','Jose','Ortiz','3114445566','Calle falsa 123','1990-07-10',null);
+('1107057722','CC','Miguel','Gonz�lez','3173547440','Cra 29 no. 38-25','2015-01-07',null),
+('1190375460','CC','Jose','Ortiz','3114445566','Calle falsa 123','1990-07-10',null);
 
 desc familia_componente;
 insert into familia_componente values
@@ -12,38 +12,38 @@ insert into familia_componente values
 ('004','Potencia/Codo',			'Hay dos tipos básicos de potencia según la forma de unirla al cuadro:
  las de tipo roscado y las no roscadas, siendo este último tipo conocido como sistema «ahead».',false),
 ('005','Rodamiento Frontal',	null,false),
-('006','Tija/Caña',				null,false),
-('007','Seguro Caña',			null,false),
-('008','Sillín',				null,false),
+('006','Tija/Ca�a',				null,false),
+('007','Seguro Ca�a',			null,false),
+('008','Sill�n',				null,false),
 ('009','Centro',				null,false),
-('010','Relación',				null,false),
+('010','Relaci�n',				null,false),
 ('011','Pedal',					null,true),
-('012','Piñón',					null,false),
+('012','Pi��n',					null,false),
 ('013','Cadena',				null,false),
 ('014','Frenos',				null,false),
 ('015','Cambios',				null,false),
 ('016','Rines/Ruedas',			'Este componente consiste en un par de articulos no identicos.',true),
-('017','Neumáticos',			null,true),
+('017','Neum�ticos',			null,true),
 ('018','Llantas',				null,true),
 ('019','Suplementos',			'Tornilleria, balineras; elementos suplementarios.',false),
 ('020','Accesorios',			null,false)
 ;
 
 insert into componentes (id_comp, componente, familia) values 
-('081','Cuadro Suspensión','001'),	('001','Cuadro Tradicional','001'),		('883','Aro Sencillo','016'),				('015','Radios','016'),		
+('081','Cuadro Suspension','001'),	('001','Cuadro Tradicional','001'),		('883','Aro Sencillo','016'),				('015','Radios','016'),		
 ('557','Cuadro Ahead','001'),		('088','Cuadro BMX','001'),				('057','Cuadro Playero','001'),				('016','Caña/Tija 22.2','006'),
 ('020','Horquilla Roscada','002'),	('003','Manubrio MTB','003'),			('151','Manubrio Playero','003'),			('795','Manubrio Ahead','003'),
 ('244','Manubrio BMX','003'),		('095','Horquilla BMX','002'),			('019','Horquilla Ahead Suspensión','002'),
 ('004','Espigo MTB','004'),			('423','Copas Direccion Rosca','005'),	('222','Copas Direccion Ahead','005'),		('745','Horquilla Ahead','002'),
 ('005','Poste Delantero','003'),	('056','Codo MTB','003'),				('061','Codo BMX','003'),					('366','Abrazadera Marco','007'),
-('043','Pedal 9/16','011'),			('009','Compact Disc','010'),			('010','Piñón','012'),						('023','Pacha','012'),
+('043','Pedal 9/16','011'),			('009','Compact Disc','010'),			('010','Pi�on','012'),						('023','Pacha','012'),
 ('045','Pedal 1/2','011'),			('038','Juego Freno Disco','014'),		('013','Juego de Cambios','015'),			('076','Horquilla de Suspensión Roscada','002'),
 ('084','Espigo BMX','003'),			('127','Juego de Centro BMX','009'),	('613','Desviador Delantero','015'),			
 ('011','Cadena','013'),				('021','Cadenilla','013'),				('037','Sillin','008'),						('361','Abrazadera Marco Ahead','007'),							
 ('099','Tensor','015'),				('856','Eje Centro Cuña','009'),		('885','Aro Doble Pared','016'),
 ('006','Eje Centro MTB','009'),		('018','Copas de Centro','009'),		('331','Mangos','019'),						('030','Tornillo Marco','007'),
 ('026','Biela Enteriza','009'),		('022','Juego Manzanas','016'),			('024','Manzana Delantera','016'),			('031','Manzana Trasera','016'),
-('048','Triple-plato','010'),		('049','Relacion Cuadrante','010'),		('051','Relacion Cuña','010'),				('332','Cuña Plato','010'),
+('048','Triple-plato','010'),		('049','Relacion Cuadrante','010'),		('051','Relacion Cu�a','010'),				('332','Cu�a Plato','010'),
 ('014','Neumáticos','017'),			('046','Protector Rin','019'),			('050','Llanta','018')
 ;
 insert into componentes values 
@@ -57,12 +57,12 @@ insert into articulos (id_articulo, articulo, descripcion) values
 /*('ARJ','Juego de Rines',		'Par de Ruedas o Rines con componentes agrupados.','016'),*/
 ('RIN',	'Par Rines Sencillos',	'Pareja de rines de hoja sencilla.'),
 ('RDP',	'Par Rines Doble Pared','Rines con Aros doble pared, trasero y delantero.'),
-('BSC',	'Bicicleta S/Cambios',	'Bicicleta de Relacion Fija, Cualquier tipo de Modelo y Tamaño.'),
+('BSC',	'Bicicleta S/Cambios',	'Bicicleta de Relacion Fija, Cualquier tipo de Modelo y Tama�o.'),
 ('MTB',	'MTB/Todo-Terreno',		'Bicicleta con Cambios, amplio rango, su categoria se basa en sus componentes.'),
-('MTS',	'MTB Suspensión',		'Mountain Bike con Cuadro de Suspesión, esta clasificacion engloba cualquier tamaño.'),
+('MTS',	'MTB Suspension',		'Mountain Bike con Cuadro de Suspesión, esta clasificacion engloba cualquier tamaño.'),
 ('AMT',	'MTB Ahead',			'Downhill, Profesional o Semiprofesional; Bicicletas Ahead con componentes de Alta Gama.'),
 ('BMX',	'BMX o Cross',			'Bicicleta #20 o #16 de tipo BMX o Cross, Economica o Especial.'),
-('PLY',	'Playera',				'Direccion amplia o playera, postura erguida, por lo general para el género Femenino, utilitaria, con canasta y/o parrilla.'),
+('PLY',	'Playera',				'Direccion amplia o playera, postura erguida, por lo general para el g�nero Femenino, utilitaria, con canasta y/o parrilla.'),
 ('TUR',	'Turismo',				'Bicicleta Monomarcha o de Cambios Internos, ruedas de 28", frenos mediante accionamiento de varillas, muy utilitaria.'),
 ('IMP',	'Importado',			'Articulo pre-ensamblado.'),
 ('A01',	'Otro Articulo',		'Articulo ensamblado sin mucha Regularidad.');
@@ -104,7 +104,7 @@ insert into repuestos (cod_rep, repuesto, componente, cant_disp) values
 ('305337','CD MXR 12" 28D Negro Raleigh','009',12),
 ('305140','28x89 Negra Cuadrante','049',16),
 ('305309','BMX Aluminio PRO4-A530 Profnal Negro GW','009',21),
-('305126','Relacion 28x89mm Cuña, Biela Reforzada','051',37),
+('305126','Relacion 28x89mm Cu�a, Biela Reforzada','051',37),
 ('305451','Acero 24/34/42T-Biela Alum','048',42),
 ('305334','Acero 36T 314-1 (Estrella)','009',16),
 ('305438','Biela Acero Plastificada S/P','048',14),
@@ -125,7 +125,7 @@ insert into repuestos (cod_rep, repuesto, componente, cant_disp) values
 ('302209','Eje Cuadrante Tuercas','006',43),
 ('302210','Eje Cuadrante Tornillos','006',54),
 ('302411','Cartucho Acero Negro 910BK','006',54),
-('303326','Niño PVC Negro','043',53),
+('303326','Ni�o PVC Negro','043',53),
 ('303323','BMX PVC FP-808 Negro','045',24),
 ('303321','BMX FreeStyle Alum FP-965 Natural','045',34),
 ('303414','MTB PVC F-815 Negro','043',52),
@@ -150,7 +150,7 @@ insert into repuestos (cod_rep, repuesto, componente, cant_disp) values
 ('403435','Acero Parallex C/Eje Cromadas','022',54),
 ('403334','MTB A201 Eje 3/8 Alum Natural','022',65),
 ('403345','MTB A203 C/Puntilla Alum Natural','031',54),
-('311104','Cuña Relacion Hierro 9.3mm','332',64)
+('311104','Cu�a Relacion Hierro 9.3mm','332',64)
 /*las llantas se referenciran por tamaño, que necesariamente debe ir escrito de primero en el campo de descripcion. Al usuario debera indicarsele esta precuacion */
 ;
 insert into repuestos (cod_rep, repuesto, componente, talla, cant_disp) values 

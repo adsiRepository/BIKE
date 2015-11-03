@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteProduccion" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="40" uuid="ab8be04e-3015-4d19-8840-f444e3faafac">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="215"/>
+	<property name="ireport.y" value="155"/>
 	<parameter name="no_orden" class="java.lang.Integer"/>
 	<parameter name="id_empleado" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -199,7 +199,7 @@
 				<text><![CDATA[Repuesto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="188" y="20" width="125" height="20" uuid="91ee5325-8205-43f8-9de6-30723eafa0fd"/>
+				<reportElement x="239" y="20" width="125" height="20" uuid="91ee5325-8205-43f8-9de6-30723eafa0fd"/>
 				<textElement textAlignment="Center">
 					<font fontName="Calibri" size="11" isBold="true"/>
 				</textElement>
@@ -213,14 +213,14 @@
 				<text><![CDATA[Stock]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="8" y="51" width="100" height="20" uuid="89eedf7b-5eec-4908-86cb-648994454c1c"/>
+				<reportElement x="8" y="51" width="231" height="20" uuid="89eedf7b-5eec-4908-86cb-648994454c1c"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{repuesto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="188" y="51" width="100" height="20" uuid="6a4c7ec7-400f-4a6a-bb11-cb032a53ee83"/>
+				<reportElement x="252" y="51" width="100" height="20" uuid="6a4c7ec7-400f-4a6a-bb11-cb032a53ee83"/>
 				<textElement textAlignment="Center">
 					<font size="12"/>
 				</textElement>

@@ -339,6 +339,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_alistar_despacho_ActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btn_alistar_despacho_.setIcon(new ImageIcon(&quot;mis_imagenes/imgbtn_preparar_mercancia.png&quot;));"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btn_cancelar_despacho_">
       <Properties>
@@ -347,6 +350,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_cancelar_despacho_ActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btn_cancelar_despacho_.setIcon(new ImageIcon(&quot;mis_imagenes/imgbtn_cancelar_despacho.png&quot;));"/>
+      </AuxValues>
     </Component>
     <Container class="javax.swing.JScrollPane" name="scroll_items_selec">
       <Properties>

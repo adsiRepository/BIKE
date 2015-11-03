@@ -233,6 +233,7 @@ public class OrdenProduccion extends VentanaInterna {
                 .addContainerGap())
         );
 
+        btn_alistar_despacho_.setIcon(new ImageIcon("mis_imagenes/imgbtn_preparar_mercancia.png"));
         btn_alistar_despacho_.setToolTipText("Alistar Despacho");
         btn_alistar_despacho_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -240,6 +241,7 @@ public class OrdenProduccion extends VentanaInterna {
             }
         });
 
+        btn_cancelar_despacho_.setIcon(new ImageIcon("mis_imagenes/imgbtn_cancelar_despacho.png"));
         btn_cancelar_despacho_.setToolTipText("Cancelar Alistamiento");
         btn_cancelar_despacho_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -408,7 +410,8 @@ public class OrdenProduccion extends VentanaInterna {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-// <editor-fold defaultstate="collapsed" desc="METODOS DEL PROGRAMADOR">
+
+    // <editor-fold defaultstate="collapsed" desc="METODOS DEL PROGRAMADOR">
 
     private static class ComboTallas extends JComboBox<Object>{
 
@@ -555,6 +558,7 @@ public class OrdenProduccion extends VentanaInterna {
     }
 
 // </editor-fold>
+    
     private void btn_guardar_salir_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardar_salir_ActionPerformed
 
         // <editor-fold defaultstate="collapsed" desc="CODIGO PARA GUARDAR LA ORDEN ALISTADA Y/O SALIR">
