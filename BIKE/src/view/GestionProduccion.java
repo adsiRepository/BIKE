@@ -295,7 +295,7 @@ public class GestionProduccion extends Paneles.VentanaInterna {
             Object no_orden;
             no_orden = ((no_orden = tabla_control_.getValueAt(fila_tabla, 0)) == null) ? null : no_orden;
             if (no_orden != null) {
-                GeneradorReportes.generarReporteProduccion(Integer.valueOf(no_orden.toString()));
+                GeneradorReportes.generarReporteProduccion(Integer.valueOf(no_orden.toString()), GestionProduccion.this);
             } else {
                 throw new NumberFormatException();
             }

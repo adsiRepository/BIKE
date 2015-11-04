@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteProduccion" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="40" uuid="ab8be04e-3015-4d19-8840-f444e3faafac">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="155"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="no_orden" class="java.lang.Integer"/>
 	<parameter name="id_empleado" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -10,7 +10,7 @@
 	<parameter name="ensamblador" class="java.lang.String"/>
 	<parameter name="articulo" class="java.lang.String"/>
 	<parameter name="cantidad" class="java.lang.Integer"/>
-	<parameter name="logo_reporte" class="java.io.InputStream"/>
+	<parameter name="logo_reporte" class="java.lang.Object"/>
 	<parameter name="fecha_despacho" class="java.sql.Timestamp"/>
 	<parameter name="fecha_entrega" class="java.sql.Timestamp"/>
 	<field name="componente" class="java.lang.String"/>

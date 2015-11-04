@@ -8,9 +8,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -28,9 +26,10 @@ public class Paneles {
             super();  
             try {
                 //justo en la siguiente linea, mediante codigo se aplica el fondo del escritorio señalando la ruta, el nombre y la extension del archivo.
-                fondo_escritorio = ImageIO.read(new File("mis_imagenes/fondo_principal.png"));
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, ex.toString());
+                //fondo_escritorio = ImageIO.read(new File("mis_imagenes/fondo_principal.png"));
+                fondo_escritorio = new ImageIcon(Escritorio.class.getResource("/sources/mis_imagenes/fondo_principal.png")).getImage();
+            } catch (/*IO*/Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error "+ex.toString());
             }
         }
         
@@ -74,11 +73,13 @@ public class Paneles {
              }*/
             public PanelFondoVentanaInterna(String nombreImagen) {
                 try {
-                    this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
-                } catch (IOException ex) {
+                    //this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
+                    this.fondo = new ImageIcon(VentanaInterna.class.getResource("/sources/mis_imagenes/" + nombreImagen + ".png")).getImage();
+                } catch (/*IO*/Exception ex) {
                     try {
-                        this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
-                    } catch (IOException ex1) {
+                        //this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
+                        this.fondo = new ImageIcon(VentanaInterna.class.getResource("/sources/mis_imagenes/fondo_comun.png")).getImage();
+                    } catch (/*IO*/Exception ex1) {
                     }
                 }
             }
@@ -90,7 +91,7 @@ public class Paneles {
                 //super.paint(g);
             }
 
-            public void setImage(String nombreImagen) {
+            /*public void setImage(String nombreImagen) {
                 try {
                     if (nombreImagen != null) {
                         this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
@@ -101,7 +102,7 @@ public class Paneles {
                     JOptionPane.showMessageDialog(null, "No se ha podido cambiar la Imagen de Fondo Error: " + ex.toString());
                 }
                 repaint();
-            }
+            }*/
         }
     }
  
@@ -147,7 +148,5 @@ public class Paneles {
         }
         
     }
-    
-    
     
 }

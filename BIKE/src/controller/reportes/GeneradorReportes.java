@@ -2,17 +2,15 @@ package controller.reportes;
 
 //<editor-fold defaultstate="collapsed" desc="imports">
 import controller.ConexionBD;
+import java.awt.Container;
 import java.awt.Image;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import model.DetalleProduccion;
 import model.ModeloReporteProduccion;
 import model.componentes.ItemDeLista;
@@ -30,7 +28,7 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public abstract class GeneradorReportes {
 
-    public static void generarReporteProduccion(int no_orden) throws Exception {
+    public static void generarReporteProduccion(int no_orden, Container padre) throws Exception {
         try /*(Connection conn = ConexionBD.obtenerConexion()) */ {
 
             HashMap<Object[], ArrayList<DetalleProduccion>> detalles
@@ -51,19 +49,23 @@ public abstract class GeneradorReportes {
                 datos.put("ensamblador", detalles_generales[1].toString());
                 datos.put("articulo", detalles_generales[3].toString());
                 datos.put("cantidad", (int) detalles_generales[5]);
-                InputStream input = new FileInputStream("mis_imagenes/main_logo.png");
+                //InputStream input = new FileInputStream("src/sources/mis_imagenes/main_logo.png");//sin compilar
+                //InputStream input = new FileInputStream("/sources/mis_imagenes/main_logo.png");//compilado
+                Image input = new ImageIcon(padre.getClass().getResource("/sources/mis_imagenes/main_logo.png")).getImage();//compilado
                 datos.put("logo_reporte", input);
                 datos.put("fecha_despacho", (java.sql.Timestamp) detalles_generales[6]);
                 datos.put("fecha_entrega", (java.sql.Timestamp) detalles_generales[7]);
 
                 ModeloReporteProduccion data_source = new ModeloReporteProduccion(despacho);
 
-                String path = "src/controller/reportes/ReporteProduccion.jasper";
+                //String path = "src/controller/reportes/ReporteProduccion.jasper";//codigo usado en produccion
+                String path = "ReporteProduccion.jasper";//codigo usado en el .jar (o ejecutable final)
                 JasperReport jasper = (JasperReport) JRLoader.loadObjectFromFile(path);
                 JasperPrint jasper_print = JasperFillManager.fillReport(jasper, datos, data_source);
                 JasperViewer visor = new JasperViewer(jasper_print, false);//el falso indica que no cerrará la aplicacion al cerrar el reporte
                 visor.setTitle("Detalle de la Orden de Producción");
-                Image icono = ImageIO.read(new File("mis_imagenes/icono_reporte.png"));
+                //Image icono = ImageIO.read(new File("src/sources/mis_imagenes/icono_reporte.png"));
+                Image icono = new ImageIcon(padre.getClass().getResource("/sources/mis_imagenes/icono_reporte.png")).getImage();
                 visor.setIconImage(icono);
                 visor.setVisible(true);
             }

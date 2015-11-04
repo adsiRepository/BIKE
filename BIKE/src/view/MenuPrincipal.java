@@ -49,9 +49,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.setTitle("MT BIKE");
         try {
             Image iconoPrograma;
-            iconoPrograma = ImageIO.read(new File("mis_imagenes/icon_program.png"));
+            //iconoPrograma = ImageIO.read(new File("mis_imagenes/icon_program.png"));
+            iconoPrograma = new ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/icon_program.png")).getImage();
             this.setIconImage(iconoPrograma);
-        } catch (IOException e) {
+        } catch (/*IO*/Exception e) {
             JOptionPane.showMessageDialog(null, "No se pudo cargar el Icono de la aplicación." + e.toString());
         }
         this.setLocationRelativeTo(null);
@@ -123,7 +124,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_empleados_.setBackground(new java.awt.Color(0, 0, 204));
         btn_empleados_.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         btn_empleados_.setForeground(new java.awt.Color(255, 255, 255));
-        btn_empleados_.setIcon(new ImageIcon("mis_imagenes/btnempleados.png"));
+        btn_empleados_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/btnempleados.png")));
         btn_empleados_.setBorderPainted(false);
         btn_empleados_.setContentAreaFilled(false);
         btn_empleados_.setMaximumSize(new java.awt.Dimension(150, 80));
@@ -138,7 +139,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_produccion_.setBackground(new java.awt.Color(0, 51, 153));
         btn_produccion_.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         btn_produccion_.setForeground(new java.awt.Color(255, 255, 255));
-        btn_produccion_.setIcon(new ImageIcon("mis_imagenes/btnproduccion.png"));
+        btn_produccion_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/btnproduccion.png")));
         btn_produccion_.setBorderPainted(false);
         btn_produccion_.setContentAreaFilled(false);
         btn_produccion_.setMaximumSize(new java.awt.Dimension(150, 80));
@@ -192,7 +193,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btn_reportes_.setBackground(new java.awt.Color(0, 0, 204));
         btn_reportes_.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         btn_reportes_.setForeground(new java.awt.Color(255, 255, 255));
-        btn_reportes_.setIcon(new ImageIcon("mis_imagenes/btninventario.png"));
+        btn_reportes_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/btninventario.png")));
         btn_reportes_.setBorderPainted(false);
         btn_reportes_.setContentAreaFilled(false);
         btn_reportes_.setMaximumSize(new java.awt.Dimension(150, 80));
@@ -236,12 +237,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btn_produccion_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_reportes_, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
-                    .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btn_reportes_, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                    .addComponent(btn_produccion_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_empleados_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
         escritorio.setLayer(scroll_tabla_acts, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_empleados_, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -328,15 +328,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private Font getFuenteFecha(){
         Font letter;
-        String source = "../sources/fuentes/DS-DIGI.ttf";
+        String source = "sources/fuentes/DS-DIGI.ttf";//USADO EN PRODUCCION
+        //String source = "DS-DIGI.TTF";//USADO EN EL CODIGO FINAL PARA EL .jar (o ejecutable)
         try{
-            InputStream upload = MenuPrincipal.class.getResourceAsStream(source);
+            InputStream upload = MenuPrincipal.class.getClassLoader().getResourceAsStream(source);
             letter = Font.createFont(Font.TRUETYPE_FONT, upload);
             letter = letter.deriveFont(0, 52);
         }
         catch(FontFormatException | IOException ex){
-            System.out.println(ex.toString());
-            letter = new Font("cursive", Font.PLAIN, 18);
+            JOptionPane.showMessageDialog(MenuPrincipal.this, "No se pudo cargar la letra del calendario", 
+                    "Instanciación de la letra.\n"+ex.toString(), 0);
+            //System.out.println(ex.toString());
+            letter = new Font("cursive", Font.PLAIN, 52);
         }
         return letter;
     }
