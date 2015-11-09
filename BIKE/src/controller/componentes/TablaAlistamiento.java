@@ -6,8 +6,6 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -16,6 +14,7 @@ import java.util.LinkedHashMap;
 import javax.swing.AbstractCellEditor;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -26,7 +25,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableModel;
@@ -365,7 +363,7 @@ public class TablaAlistamiento extends JTable {
         public int miFila;//, miCol;
         public boolean soy_copia;
 
-        private MyLabel label;
+        //private MyLabel label;
 
         /**
          * Constructor
@@ -398,11 +396,12 @@ public class TablaAlistamiento extends JTable {
             try {
                 setLayout(new java.awt.GridLayout());
                 //btncell_new_rep.setText("Otro");
-                btncell_new_rep.setIcon(null);
+                btncell_new_rep.setIcon(new ImageIcon(TablaAlistamiento.class.getResource("/sources/mis_imagenes/add.png")));
                 btncell_new_rep.setPreferredSize(new java.awt.Dimension(20, 15));
                 add(btncell_new_rep);
 
                 //btncell_back_new_rep.setText("Atras");
+                btncell_back_new_rep.setIcon(new ImageIcon(TablaAlistamiento.class.getResource("/sources/mis_imagenes/remove.png")));
                 btncell_back_new_rep.setPreferredSize(new java.awt.Dimension(20, 15));
                 add(btncell_back_new_rep);
 

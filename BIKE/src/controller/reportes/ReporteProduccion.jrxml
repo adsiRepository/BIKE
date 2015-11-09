@@ -31,7 +31,7 @@
 				<textElement>
 					<font fontName="Arial Black" size="24" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Reporte de Produccion]]></text>
+				<text><![CDATA[Reporte de Producción]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="433" y="92" width="82" height="18" uuid="e242eba5-e6ba-41a9-b916-f9f5e3bca2ea"/>

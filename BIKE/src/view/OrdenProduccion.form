@@ -334,14 +334,14 @@
     </Container>
     <Component class="javax.swing.JButton" name="btn_alistar_despacho_">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new javax.swing.ImageIcon(OrdenProduccion.class.getResource(&quot;/sources/mis_imagenes/imgbtn_preparar_mercancia.png&quot;))" type="code"/>
+        </Property>
         <Property name="toolTipText" type="java.lang.String" value="Alistar Despacho"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_alistar_despacho_ActionPerformed"/>
       </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btn_alistar_despacho_.setIcon(new ImageIcon(&quot;mis_imagenes/imgbtn_preparar_mercancia.png&quot;));"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btn_cancelar_despacho_">
       <Properties>
@@ -351,7 +351,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_cancelar_despacho_ActionPerformed"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btn_cancelar_despacho_.setIcon(new ImageIcon(&quot;mis_imagenes/imgbtn_cancelar_despacho.png&quot;));"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btn_cancelar_despacho_.setIcon(new ImageIcon(OrdenProduccion.class.getResource(&quot;/sources/mis_imagenes/imgbtn_cancelar_despacho.png&quot;)));"/>
       </AuxValues>
     </Component>
     <Container class="javax.swing.JScrollPane" name="scroll_items_selec">

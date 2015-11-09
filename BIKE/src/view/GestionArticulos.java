@@ -19,8 +19,7 @@ import static view.MenuPrincipal.escritorio;
 /**FORMULARIO DE CONTROL Y SUPERVISION DE ARTICULOS O PRODUCTOS.
  * Este formulario se encargará de ofrecer control al usuario
  * sobre los repuestos que maneja en su tienda vinculados a sus productos.
- * @author Miguel
- consigna tu nombre si compartes la autoría de este documento*/
+ * @author Miguel */
 public class GestionArticulos extends Paneles.VentanaInterna {
 
     /**NOMBRE ARCHIVO IMAGEN DE FONDO PARA ESTA VENTANA. Solo nombre sin extension (obligatorio archivos png)*/
@@ -92,7 +91,7 @@ public class GestionArticulos extends Paneles.VentanaInterna {
 
         setTitle("Control de Productos o Articulos Producidos en mi Tienda");
 
-        combo_articulos_.setToolTipText("selecciona el articulo para editarlo");
+        combo_articulos_.setToolTipText("selecciona el articulo para editarlo o borrarlo");
         combo_articulos_.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 combo_articulos_ItemStateChanged(evt);
@@ -193,7 +192,7 @@ public class GestionArticulos extends Paneles.VentanaInterna {
         lbl_lista_articulos_.setText("Articulos Registrados:");
 
         panel_busqueda_comps_.setBorder(javax.swing.BorderFactory.createTitledBorder("Busqueda de Componentes"));
-        panel_busqueda_comps_.setToolTipText("puedes agregar el componente que selecciones al articulo");
+        panel_busqueda_comps_.setToolTipText("puedes agregar el componente que selecciones al articulo que crees o modifiques");
 
         jLabel1.setText("Familia de Componente");
 

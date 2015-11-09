@@ -90,7 +90,7 @@ public class OrdenProduccion extends VentanaInterna {
         ((TablaProduccion) tabla_produccion_).formatearTabla(anchos, alturaCol);
 
         op_boton_guardar_lista = OP_BTN_INSERT;
-        
+        talla_en_cuestion = null;
     }
 
     /**
@@ -233,7 +233,7 @@ public class OrdenProduccion extends VentanaInterna {
                 .addContainerGap())
         );
 
-        btn_alistar_despacho_.setIcon(new ImageIcon("mis_imagenes/imgbtn_preparar_mercancia.png"));
+        btn_alistar_despacho_.setIcon(new javax.swing.ImageIcon(OrdenProduccion.class.getResource("/sources/mis_imagenes/imgbtn_preparar_mercancia.png")));
         btn_alistar_despacho_.setToolTipText("Alistar Despacho");
         btn_alistar_despacho_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -241,7 +241,7 @@ public class OrdenProduccion extends VentanaInterna {
             }
         });
 
-        btn_cancelar_despacho_.setIcon(new ImageIcon("mis_imagenes/imgbtn_cancelar_despacho.png"));
+        btn_cancelar_despacho_.setIcon(new ImageIcon(OrdenProduccion.class.getResource("/sources/mis_imagenes/imgbtn_cancelar_despacho.png")));
         btn_cancelar_despacho_.setToolTipText("Cancelar Alistamiento");
         btn_cancelar_despacho_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -579,7 +579,7 @@ public class OrdenProduccion extends VentanaInterna {
                             "Orden de Producción", // título del JOptionPane
                             JOptionPane.OK_OPTION, // tipo input
                             JOptionPane.INFORMATION_MESSAGE, // tipo mensaje
-                            new ImageIcon("mis_imagenes/icon_jop_correcto.png"), // icono, si es nulo aparecerá el por defecto
+                            new ImageIcon(OrdenProduccion.class.getResource("/sources/mis_imagenes/icon_jop_correcto.png")), // icono, si es nulo aparecerá el por defecto
                             new Object[]{"Aceptar"}, //opciones => estos serán los botones
                             new Object[]{});
 
@@ -619,12 +619,9 @@ public class OrdenProduccion extends VentanaInterna {
             String cod_objeto_ensamble = ((ItemDeLista) combo_articulos_.getSelectedItem()).obtenerCodigoId();
             talla_en_cuestion = combo_ref_tamaño_.getSelectedItem().toString();
             int cantidad = Integer.parseInt(txt_cant_ensamble_.getText());
-
             LinkedHashMap<Object[], ArrayList<ItemDeLista>>/**/ informacion_bd
                     = ConsultaSQL.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla_en_cuestion);
-
             ((TablaAlistamiento) tabla_alistamiento_).actualizaTabla(informacion_bd, cantidad);
-            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Refrescar la Lista", 0);
         }
@@ -634,10 +631,6 @@ public class OrdenProduccion extends VentanaInterna {
 
         fila_tabla_produccion = tabla_alistamiento_.rowAtPoint(evt.getPoint());
         col_tabla_produccion = tabla_alistamiento_.columnAtPoint(evt.getPoint());
-        /*if( fila_tabla_produccion > -1 && col_tabla_produccion > -1 ){
-         this.obs = dtm.getValueAt(fila, 0);
-         txtcodpro.setText(""+obs);
-         }*/
 
     }//GEN-LAST:event_tabla_alistamiento_MouseClicked
 
@@ -670,10 +663,11 @@ public class OrdenProduccion extends VentanaInterna {
                             "Orden de Producción", // título del JOptionPane
                             JOptionPane.OK_OPTION, // tipo input
                             JOptionPane.INFORMATION_MESSAGE, // tipo mensaje
-                            new ImageIcon("mis_imagenes/icon_jop_correcto.png"), // icono, si es nulo aparecerá el por defecto
+                            new ImageIcon(OrdenProduccion.class.getResource("/sources/mis_imagenes/icon_jop_correcto.png")), // icono, si es nulo aparecerá el por defecto
                             new Object[]{"Aceptar"}, //opciones => estos serán los botones
                             new Object[]{});
 
+                    talla_en_cuestion = null;
                     combo_ensambladores_.setEnabled(true);
                     panel_primer_filtro_emsamble_.setEnabled(true);
                     txt_n_orden_.setText("");
@@ -681,26 +675,7 @@ public class OrdenProduccion extends VentanaInterna {
             }
             
             if (op_boton_guardar_lista.equals(OP_BTN_UPDT)) {
-                /*Object[] nueva_produccion = new Object[4];
-                if (detalle_orden_actual[1] != ensamblador) {
-                    /*ensamblador/
-                    nueva_produccion[0] = ensamblador;
-                }
-                else{
-                }
-                if (detalle_orden_actual[2] != produccion[0]) {
-                    /*articulo/
-                    nueva_produccion[1] = produccion[0];
-                }
-                if (detalle_orden_actual[3] != produccion[1]) {
-                    /*talla/
-                    nueva_produccion[2] = produccion[1];
-                }
-                if (detalle_orden_actual[4] != produccion[2]) {
-                    /*cantidad/
-                    nueva_produccion[3] = produccion[2];
-                }*/
-                //
+                
                 Object[] produccion = new Object[4];
                 produccion[0] = ((ItemDeLista) combo_ensambladores_.getSelectedItem()).obtenerCodigoId();
                 produccion[1] = ((ItemDeLista) combo_articulos_.getSelectedItem()).obtenerCodigoId();
@@ -728,6 +703,27 @@ public class OrdenProduccion extends VentanaInterna {
                         ((TablaProduccion) MenuPrincipal.getTabla_actividades()).actualizarTabla();
                     }
                 }
+                
+                /*Object[] nueva_produccion = new Object[4];
+                if (detalle_orden_actual[1] != ensamblador) {
+                    /*ensamblador/
+                    nueva_produccion[0] = ensamblador;
+                }
+                else{
+                }
+                if (detalle_orden_actual[2] != produccion[0]) {
+                    /*articulo/
+                    nueva_produccion[1] = produccion[0];
+                }
+                if (detalle_orden_actual[3] != produccion[1]) {
+                    /*talla/
+                    nueva_produccion[2] = produccion[1];
+                }
+                if (detalle_orden_actual[4] != produccion[2]) {
+                    /*cantidad/
+                    nueva_produccion[3] = produccion[2];
+                }*/
+                //
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Guardar Orden", 0);
@@ -846,25 +842,27 @@ public class OrdenProduccion extends VentanaInterna {
                 if (decision == 0) { // como "Aceptar" está primero en el arreglo tiene el indice 0; -1 es la x de cerrar 
 
                     String cod_objeto_ensamble = ((ItemDeLista) combo_articulos_.getSelectedItem()).obtenerCodigoId();
-                    talla_en_cuestion = combo_ref_tamaño_.getSelectedItem().toString();
-                    int cantidad = Integer.parseInt(txt_cant_ensamble_.getText());
-                    
-                    LinkedHashMap<Object[], ArrayList<ItemDeLista>>/**/ informacion_bd 
+                    Object talla;
+                    talla = ((talla = combo_ref_tamaño_.getSelectedItem()) == null) ? null : talla;
+                    if(talla != null){
+                        talla_en_cuestion = talla.toString();//"talla_en_cuestion" desde el inicio en null
+                    }   //asi que si no entra en este if, en la proxima linea se usara como null
+                    LinkedHashMap<Object[], ArrayList<ItemDeLista>> informacion_bd 
                             = ConsultaSQL.obtenerRepuestos_Articulo(cod_objeto_ensamble, talla_en_cuestion);
-
-                    //if (informacion_bd != null) {
-                    panel_primer_filtro_emsamble_.setEnabled(false);
-                    combo_ensambladores_.setEnabled(false);
-                    ((TablaAlistamiento) tabla_alistamiento_).actualizaTabla(informacion_bd, cantidad);
-                    int n_ord_actual = ConsultaSQL.obtenerUltimoNumProduccion();
-                    txt_n_orden_.setText("" + (n_ord_actual + 1));
-                    btn_guardar_lista_.setEnabled(true);
-                    /*} else {
-                     JOptionPane.showMessageDialog(this, "Al parecer no hay Componentes vinculados a este Articulo",
-                     "Alistar Orden de Producción", 0);
-                     }*/
+                    if (informacion_bd != null) {
+                        int cantidad = Integer.parseInt(txt_cant_ensamble_.getText());
+                        ((TablaAlistamiento) tabla_alistamiento_).actualizaTabla(informacion_bd, cantidad);
+                        int n_ord_actual = ConsultaSQL.obtenerUltimoNumProduccion();
+                        panel_primer_filtro_emsamble_.setEnabled(false);
+                        combo_ensambladores_.setEnabled(false);
+                        txt_n_orden_.setText("" + (n_ord_actual + 1));
+                        btn_guardar_lista_.setEnabled(true);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Al parecer no hay Componentes vinculados a este Articulo",
+                                "Alistar Orden de Producción", 0);
+                    }
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(this, "Antes, debe especificar la cantidad de Artículos.", "Orden de Producción", 0);
             }
@@ -904,12 +902,12 @@ public class OrdenProduccion extends VentanaInterna {
             btn_guardar_lista_.setText("aceptar y alistar otra");
             btn_guardar_lista_.setToolTipText("Despachar la orden actual y preparar otra");
             op_boton_guardar_lista = OP_BTN_INSERT;
+            talla_en_cuestion = null;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(OrdenProduccion.this, e.getMessage(), "Refrescar Ventana", 0);
         }
     }
 
-    
     private void btn_cancelar_despacho_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelar_despacho_ActionPerformed
 
         actualizarDesdeFuera();

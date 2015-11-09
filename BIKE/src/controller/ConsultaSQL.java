@@ -739,8 +739,7 @@ public class ConsultaSQL {
                 }
             }
         } catch (Exception e) {
-            throw new Exception("Problemas al obtener el listado de Componentes del articulo.\n"
-                    + "Error: " + e.getLocalizedMessage());
+            throw new Exception("Problemas al obtener el listado de Componentes del articulo.\n" + e.getLocalizedMessage());
         }
     }
     
@@ -1064,10 +1063,19 @@ public class ConsultaSQL {
                     LinkedHashMap<Object[], ArrayList<ItemDeLista>> retorno = new LinkedHashMap<>();
                     ArrayList<ItemDeLista> items_componente;//ESTE ARRAYLIST ALMACENA LOS ITEMS QUE APARECERAN EN EL COMBOBOX DE LA CELDA DE LA TABLA
                     HashMap<String, Object> atributos_item;
-                    //boolean hay_componentes = false;
+                    
+                    StringBuilder sb = new StringBuilder();
+                    if(talla != null){
+                        sb.append("select cod_rep, repuesto, cant_disp from repuestos "
+                                + "where componente = ? and talla is null "
+                                + "or componente = ? and talla = ?;");
+                    }
+                    else{
+                        sb.append("select cod_rep, repuesto, cant_disp from repuestos "
+                                + "where componente = ?;");
+                    }
                     
                     Object[] componente = null;
-                    //boolean par;
                     
                     while (result_componentes.next()) {
                         
@@ -1077,15 +1085,14 @@ public class ConsultaSQL {
                         componente[0] = result_componentes.getString(1);
                         componente[1] = result_componentes.getString(2);
                         componente[2] = result_componentes.getBoolean(3);
-
-                        try (java.sql.PreparedStatement sentencia_repuestos = connbd.prepareStatement(
-                                "select cod_rep, repuesto, cant_disp from repuestos "
-                                + "where componente = ? and talla is null "
-                                + "or componente = ? and talla = ?;")) {
-
+                        
+                        try (java.sql.PreparedStatement sentencia_repuestos = connbd.prepareStatement(sb.toString())) {
+                            
                             sentencia_repuestos.setString(1, result_componentes.getString(1));
-                            sentencia_repuestos.setString(2, result_componentes.getString(1));
-                            sentencia_repuestos.setString(3, talla);
+                            if (talla != null) {
+                                sentencia_repuestos.setString(2, result_componentes.getString(1));
+                                sentencia_repuestos.setString(3, talla);
+                            }
 
                             try (ResultSet results_repuestos = sentencia_repuestos.executeQuery()) {
                                 
@@ -1098,19 +1105,14 @@ public class ConsultaSQL {
                                 
                                 retorno.put(componente, items_componente);
                                 
-                                /*par = result_componentes.getBoolean(3);
-                                if (par) {
-                                    retorno.put(result_componentes.getString(2), new Object[]{items_componente, 1});
-                                } else {
-                                    retorno.put(result_componentes.getString(2), new Object[]{items_componente, 0});
-                                }*/
                             }
                         }
                     }
                     if (componente != null) {
                         return retorno;
                     } else {
-                        throw new Exception("Al parecer el Articulo no tiene ningun componente asignado aún.");
+                        return null;
+                        //throw new Exception("Al parecer el Articulo no tiene ningun componente asignado aún.");
                     }
                 }
             }
@@ -1373,7 +1375,11 @@ public class ConsultaSQL {
                         "insert into produccion values (?, ?, ?, ?);")) {
                     sentencia.setInt(1, no_orden);
                     sentencia.setString(2, produccion[0].toString());//cod articulo
-                    sentencia.setString(3, produccion[1].toString());//talla
+                    if(produccion[1] != null){
+                        sentencia.setString(3, produccion[1].toString());//talla
+                    }else{
+                        sentencia.setNull(3, java.sql.Types.NULL);//talla
+                    }
                     sentencia.setInt(4, (int) produccion[2]);//cantidad
 
                     comprobante = comprobante * sentencia.executeUpdate();
@@ -1474,16 +1480,25 @@ public class ConsultaSQL {
      */
     public static boolean registrarEntregaProduccion(int no_orden) throws Exception {
         try (Connection conbd = ConexionBD.obtenerConexion()) {
-
             try (java.sql.PreparedStatement sentencia = conbd.prepareStatement(
-                    "update ordenes_produccion set hora_entrega = ? where no_ord = ?;")) {
-                sentencia.setString(1, Tiempo.obtenerInstanteMySQL());
-                sentencia.setInt(2, no_orden);
-                return sentencia.executeUpdate() > 0;
+                    "select hora_entrega from ordenes_produccion where no_ord = ?;")) {
+                sentencia.setInt(1, no_orden);
+                try (ResultSet res = sentencia.executeQuery()) {
+                    res.next();
+                    if (res.getTimestamp(1) == null) {
+                        try (java.sql.PreparedStatement sentencia_b = conbd.prepareStatement(
+                                "update ordenes_produccion set hora_entrega = ? where no_ord = ?;")) {
+                            sentencia_b.setString(1, Tiempo.obtenerInstanteMySQL());
+                            sentencia_b.setInt(2, no_orden);
+                            return sentencia_b.executeUpdate() > 0;
+                        }
+                    }else{
+                        throw new Exception("Esta orden ya fue entregada.");
+                    }
+                }
             }
-
         } catch (Exception e) {
-            throw new Exception("Error al obtener los detalles de Produccion.\n" + e.getLocalizedMessage());
+            throw new Exception("Registro de Entrega de Orden:\n"+e.getLocalizedMessage());
         }
     }
 

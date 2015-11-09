@@ -32,10 +32,8 @@ public class MainClass {
         ConexionBD.setUsuario("user_storebike");
         ConexionBD.setPassword("user_storebike");
         ConexionBD.setHost("localhost");
-        ConexionBD.setPort("3306");
-        
-        usuario = "miguel";
-        password = "jjjj";
+        ConexionBD.setPort("3306");//phpMyAdmin por defecto para pruebas en xampp
+        //ConexionBD.setPort("3310");//Servidor MySQL PC-Mesa Miguel
         
         menu.setVisible(true);
         menu.iniciarTabla();

@@ -142,8 +142,8 @@
                           </Group>
                           <Component id="scroll_txa_desc_familia_" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="scroll_tabla_familias_" min="-2" pref="355" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="scroll_tabla_familias_" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="lbl_nom_comp_" min="-2" max="-2" attributes="0"/>
@@ -170,7 +170,7 @@
                       <Component id="scroll_tabla_componentes_" pref="285" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="22" max="32767" attributes="0"/>
+              <EmptySpace pref="26" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

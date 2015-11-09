@@ -4,6 +4,7 @@ desde los fondos de los menues hasta los graficos estadisticos y de reportes si 
  */
 package controller.componentes;
 
+//<editor-fold defaultstate="collapsed" desc="imports">
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
@@ -13,8 +14,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-/*@author bik*/
+//</editor-fold>
 
 public class Paneles {
     
@@ -68,27 +68,19 @@ public class Paneles {
 
             private transient Image fondo;
 
-            /*public PanelFondoVentanaInterna(){
-             this.fondo = new ImageIcon(getClass().getResource("../sources/imgs/fondo_ord_prod.png")).getImage();
-             }*/
             public PanelFondoVentanaInterna(String nombreImagen) {
                 try {
                     //this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
                     this.fondo = new ImageIcon(VentanaInterna.class.getResource("/sources/mis_imagenes/" + nombreImagen + ".png")).getImage();
-                } catch (/*IO*/Exception ex) {
-                    try {
-                        //this.fondo = ImageIO.read(new File("mis_imagenes/fondo_comun.png"));
-                        this.fondo = new ImageIcon(VentanaInterna.class.getResource("/sources/mis_imagenes/fondo_comun.png")).getImage();
-                    } catch (/*IO*/Exception ex1) {
-                    }
+                } catch (Exception ex) {
+                    this.fondo = new ImageIcon(VentanaInterna.class.getResource("/sources/mis_imagenes/fondo_comun.png")).getImage();
                 }
             }
 
             @Override
             public void paintComponent(Graphics g) {
-                super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+                super.paintComponent(g);
                 g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
-                //super.paint(g);
             }
 
             /*public void setImage(String nombreImagen) {

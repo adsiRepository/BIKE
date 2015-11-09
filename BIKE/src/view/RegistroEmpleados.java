@@ -137,6 +137,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         btn_eliminar_.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_eliminar_.setForeground(new java.awt.Color(255, 255, 255));
         btn_eliminar_.setText("ELIMINAR");
+        btn_eliminar_.setEnabled(false);
         btn_eliminar_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_eliminar_ActionPerformed(evt);
@@ -359,6 +360,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         btn_modificar_.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_modificar_.setForeground(new java.awt.Color(255, 255, 255));
         btn_modificar_.setText("MODIFICAR");
+        btn_modificar_.setEnabled(false);
         btn_modificar_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_modificar_ActionPerformed(evt);
@@ -551,6 +553,8 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                 comando.setString(1, txt_id_.getText());
                 if (comando.executeUpdate() > 0) {
                     JOptionPane.showMessageDialog(null, "Datos Eliminados Correctamente");
+                    btn_eliminar_.setEnabled(false);
+                    btn_modificar_.setEnabled(false);
                 } else {
                     JOptionPane.showMessageDialog(null, "No existe empleado " + txt_id_.getText());
                 }
@@ -591,6 +595,9 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                         fecha_ingreso_.setDate(registro.getDate("fecha_ing"));
                         fecha_salida_.setDate(registro.getDate("fecha_salida"));
 
+                        btn_eliminar_.setEnabled(true);
+                        btn_modificar_.setEnabled(true);
+                        
                     } else {
                         JOptionPane.showMessageDialog(null, "No existe ensamblador con esa Identificación en el Sistema." + txtbuscar.getText());
                     }
@@ -677,6 +684,8 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                         JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
                         Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
                         ((TablaEmpleados) tabla_empleados_).actualizaTabla(registros);
+                        btn_eliminar_.setEnabled(false);
+                        btn_modificar_.setEnabled(false);
                     } else {
                         JOptionPane.showMessageDialog(
                                 null, 
@@ -731,6 +740,8 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         txt_direccion_.setText(null);
         fecha_ingreso_.setDate(null);
         fecha_salida_.setDate(null);
+        btn_eliminar_.setEnabled(false);
+        btn_modificar_.setEnabled(false);
         
     }//GEN-LAST:event_btn_limpiar_ActionPerformed
 
@@ -823,7 +834,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
             private final Class[] CLASES_COLUMNAS = new Class[]{
                 String.class, String.class, String.class, String.class, String.class, String.class, String.class};
             private final String[] TITULOS_COLUMNAS = new String[]{
-                "IDENTIFICACION", "NOMBRE/S", "APELLIDO/S", "TELEFONO", "DIRECCIÓN", "FECHA CONTRATACIÓN", "FECHA SALIDA"};
+                "IDENTIFICACIÓN", "NOMBRE/S", "APELLIDO/S", "TELEFONO", "DIRECCIÓN", "FECHA CONTRATACIÓN", "FECHA SALIDA"};
             private final boolean[] COLS_EDITABLES = new boolean[]{false, false, false, false, false, false, false};
 
             /**

@@ -1,0 +1,4 @@
+Recuerde que antes de ejecutar el programa por primera vez
+debe haber establecido y dispuesto todas las conexiones y 
+credenciales necesarias para obtener la conexión al servidor 
+de base de datos y demás servicios. 

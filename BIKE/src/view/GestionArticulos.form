@@ -115,7 +115,7 @@
   <SubComponents>
     <Component class="javax.swing.JComboBox" name="combo_articulos_">
       <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="selecciona el articulo para editarlo"/>
+        <Property name="toolTipText" type="java.lang.String" value="selecciona el articulo para editarlo o borrarlo"/>
       </Properties>
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="combo_articulos_ItemStateChanged"/>
@@ -321,7 +321,7 @@
             <TitledBorder title="Busqueda de Componentes"/>
           </Border>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="puedes agregar el componente que selecciones al articulo"/>
+        <Property name="toolTipText" type="java.lang.String" value="puedes agregar el componente que selecciones al articulo que crees o modifiques"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Paneles.PanelContenedorControles()"/>

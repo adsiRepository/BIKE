@@ -42,7 +42,6 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
     public GestionRepuestos() {
         super(NOMBRE_MI_IMAGEN_FONDO);
         initComponents();
-        this.title = "Control de Repuestos y Productos";
         this.closable = true;
         this.iconable = true;
         Dimension tamaño_escritorio = escritorio.getSize(), mySpc = this.getSize();
@@ -61,6 +60,7 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
             JOptionPane.showMessageDialog(null, e.toString(), "Constructor Orden Produccion", 0);
         }
         panel_edicion_.setEnabled(false);
+        check_contar_.setVisible(false);
     }
 
     /**
@@ -99,6 +99,7 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
         lbl_talla_ = new javax.swing.JLabel();
         combo_talla_ = new javax.swing.JComboBox();
 
+        setTitle("Registro y Edición de Repuestos para Componentes");
         setEnabled(false);
 
         combo_componentes_.setToolTipText("el repuesto registrado o modificado será asignado al componente aqui seleccionado");
@@ -108,6 +109,8 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
             }
         });
 
+        lbl_componente_.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lbl_componente_.setForeground(new java.awt.Color(255, 0, 0));
         lbl_componente_.setText("Componente:");
 
         tabla_repuestos_.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -343,6 +346,13 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
 
     private void btn_nuevo_repuesto_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevo_repuesto_ActionPerformed
         try {
+            JOptionPane.showMessageDialog(
+                    null, 
+                    "Registrarás un nuevo Repuesto para el Componente "+
+                    String.valueOf(((ItemDeLista) combo_componentes_.getSelectedItem()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO)), 
+                    "Registrar Repuesto",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
             
             panel_edicion_.setEnabled(true);
             btn_borrar_repuesto_.setEnabled(false);
@@ -354,12 +364,11 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
             btn_borrar_repuesto_.setEnabled(false);
             btn_nuevo_repuesto_.setEnabled(false);
             decision_boton_guardar = OP_BOTON_GUARDAR_NUEVO;
-            ((TablaRepuestos)tabla_repuestos_).limpiarTabla();
             combo_articulos_.setEnabled(true);
             check_articulo_repuesto_.setEnabled(true);
-            
+            ((TablaRepuestos)tabla_repuestos_).limpiarTabla();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.toString(), "nuevo_repuesto", 0);
+            JOptionPane.showMessageDialog(null, e.toString(), "Nuevo Repuesto", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btn_nuevo_repuesto_ActionPerformed
 
@@ -614,7 +623,7 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
             }*/
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.toString(), "ver_reps_componente", 0);
+            JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Repuestos para el Componente", 0);
         }
     }//GEN-LAST:event_btn_ver_reps_componente_ActionPerformed
 

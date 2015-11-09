@@ -28,7 +28,7 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public abstract class GeneradorReportes {
 
-    public static void generarReporteProduccion(int no_orden, Container padre) throws Exception {
+    public static void generarReporteProduccion(int no_orden, Container contenedor) throws Exception {
         try /*(Connection conn = ConexionBD.obtenerConexion()) */ {
 
             HashMap<Object[], ArrayList<DetalleProduccion>> detalles
@@ -43,29 +43,27 @@ public abstract class GeneradorReportes {
 
             if (detalles_generales != null && despacho != null) {
 
-                Map<String, Object> datos = new HashMap<>();
-                datos.put("no_orden", no_orden);
-                datos.put("id_empleado", detalles_generales[0].toString());
-                datos.put("ensamblador", detalles_generales[1].toString());
-                datos.put("articulo", detalles_generales[3].toString());
-                datos.put("cantidad", (int) detalles_generales[5]);
-                //InputStream input = new FileInputStream("src/sources/mis_imagenes/main_logo.png");//sin compilar
-                //InputStream input = new FileInputStream("/sources/mis_imagenes/main_logo.png");//compilado
-                Image input = new ImageIcon(padre.getClass().getResource("/sources/mis_imagenes/main_logo.png")).getImage();//compilado
-                datos.put("logo_reporte", input);
-                datos.put("fecha_despacho", (java.sql.Timestamp) detalles_generales[6]);
-                datos.put("fecha_entrega", (java.sql.Timestamp) detalles_generales[7]);
+                Map<String, Object> parametros_reporte = new HashMap<>();
+                parametros_reporte.put("no_orden", no_orden);
+                parametros_reporte.put("id_empleado", detalles_generales[0].toString());
+                parametros_reporte.put("ensamblador", detalles_generales[1].toString());
+                parametros_reporte.put("articulo", detalles_generales[3].toString());
+                int cantidad_despachada = (int) detalles_generales[5];
+                parametros_reporte.put("cantidad", cantidad_despachada);
+                Image input = new ImageIcon(contenedor.getClass().getResource("/sources/mis_imagenes/main_logo.png")).getImage();//compilado
+                parametros_reporte.put("logo_reporte", input);
+                parametros_reporte.put("fecha_despacho", (java.sql.Timestamp) detalles_generales[6]);
+                parametros_reporte.put("fecha_entrega", (java.sql.Timestamp) detalles_generales[7]);
 
-                ModeloReporteProduccion data_source = new ModeloReporteProduccion(despacho);
+                ModeloReporteProduccion fuente_datos = new ModeloReporteProduccion(despacho);
 
-                //String path = "src/controller/reportes/ReporteProduccion.jasper";//codigo usado en produccion
-                String path = "ReporteProduccion.jasper";//codigo usado en el .jar (o ejecutable final)
-                JasperReport jasper = (JasperReport) JRLoader.loadObjectFromFile(path);
-                JasperPrint jasper_print = JasperFillManager.fillReport(jasper, datos, data_source);
+                //String ruta = "src/controller/reportes/ReporteProduccion.jasper";//codigo usado en desarrollo
+                String ruta = "ReporteProduccion.jasper";//codigo usado en el .jar (o ejecutable final)
+                JasperReport jasper = (JasperReport) JRLoader.loadObjectFromFile(ruta);
+                JasperPrint jasper_print = JasperFillManager.fillReport(jasper, parametros_reporte, fuente_datos);
                 JasperViewer visor = new JasperViewer(jasper_print, false);//el falso indica que no cerrará la aplicacion al cerrar el reporte
                 visor.setTitle("Detalle de la Orden de Producción");
-                //Image icono = ImageIO.read(new File("src/sources/mis_imagenes/icono_reporte.png"));
-                Image icono = new ImageIcon(padre.getClass().getResource("/sources/mis_imagenes/icono_reporte.png")).getImage();
+                Image icono = new ImageIcon(contenedor.getClass().getResource("/sources/mis_imagenes/icono_reporte.png")).getImage();
                 visor.setIconImage(icono);
                 visor.setVisible(true);
             }
@@ -201,7 +199,6 @@ public abstract class GeneradorReportes {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-
     }*/
 
     //FUENTES=>

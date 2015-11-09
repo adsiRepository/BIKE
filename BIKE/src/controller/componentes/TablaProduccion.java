@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import model.MainClass;
+import model.componentes.ItemDeLista;
 import static view.MenuPrincipal.escritorio;
 import view.OrdenProduccion;
 
@@ -289,15 +290,15 @@ public class TablaProduccion extends JTable {
             try {
                 setLayout(new java.awt.GridLayout());
                 
-                btncell_ok_orden_.setIcon(new ImageIcon("mis_imagenes/imgbtn_ok.png"));
+                btncell_ok_orden_.setIcon(new ImageIcon(TablaProduccion.class.getResource("/sources/mis_imagenes/imgbtn_ok.png")));
                 btncell_ok_orden_.setPreferredSize(new java.awt.Dimension(35, 35));
                 add(btncell_ok_orden_);
                 
-                btncell_edit_orden_.setIcon(new ImageIcon("mis_imagenes/imgbtn_edit.png")); 
+                btncell_edit_orden_.setIcon(new ImageIcon(TablaProduccion.class.getResource("/sources/mis_imagenes/imgbtn_edit.png"))); 
                 btncell_edit_orden_.setPreferredSize(new java.awt.Dimension(35, 35));
                 add(btncell_edit_orden_);
                 
-                btncell_cancel_orden_.setIcon(new ImageIcon("mis_imagenes/imgbtn_cancel.png"));
+                btncell_cancel_orden_.setIcon(new ImageIcon(TablaProduccion.class.getResource("/sources/mis_imagenes/imgbtn_cancel.png")));
                 btncell_cancel_orden_.setPreferredSize(new java.awt.Dimension(35, 35));
                 add(btncell_cancel_orden_);
 
@@ -336,28 +337,29 @@ public class TablaProduccion extends JTable {
             private void accionarBoton() {
 
                 switch (miAccion) {
-                    
+
                     case 1:
                         try {
-                            boolean hecho = ConsultaSQL.registrarEntregaProduccion((int)data[miFila][0]);
-                            if(hecho){
-                                data = new Object[][]{};
-                                mi_modelo_tabla.fireTableDataChanged();
+                            boolean hecho = ConsultaSQL.registrarEntregaProduccion((int) data[miFila][0]);
+                            if (hecho) {
+                                JOptionPane.showMessageDialog(
+                                        null,
+                                        "Se ha registrado correctamente la entrega de "
+                                        + "la orden de Producción no. " + (int) data[miFila][0],
+                                        "Entrega de Producción",
+                                        JOptionPane.INFORMATION_MESSAGE
+                                );
                                 TablaProduccion.this.actualizarTabla();
-                            }
-                            else{
+                            } else {
                                 JOptionPane.showMessageDialog(TablaProduccion.this, "No se pudo Borrar la Orden");
                             }
                         } catch (Exception e) {
-                            JOptionPane.showMessageDialog(TablaProduccion.this, e.getLocalizedMessage());
+                            JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
                         }
-                        //JOptionPane.showMessageDialog(null, "Haz Cancelado la orden de la fila " + (miFila + 1));
+                        //
                         break;
-     
+
                     case 2:
-                        
-                        //JOptionPane.showMessageDialog(null, "oprimiste en la fila "+(int)data[miFila][0],
-                          //          "Editar Orden", 0);
                         try {
                             if (MainClass.menu.ordenProduccion != null && MainClass.menu.ordenProduccion.isVisible()) {
                                 if (MainClass.menu.ordenProduccion.isIcon()) {
@@ -368,36 +370,51 @@ public class TablaProduccion extends JTable {
                                 escritorio.add(MainClass.menu.ordenProduccion);
                                 MainClass.menu.ordenProduccion.setVisible(true);
                             }
-                            MainClass.menu.ordenProduccion.editarOrdenProduccion((int)data[miFila][0]);
+                            MainClass.menu.ordenProduccion.editarOrdenProduccion((int) data[miFila][0]);
                             MainClass.menu.ordenProduccion.toFront();
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(null, "Error al abrir la ventana de Alistamiento.\n"
-                                    +ex.getMessage(), 
+                                    + ex.getMessage(),
                                     "Editar Orden", 0);
                         }
                         break;
 
                     case 3:
                         try {
-                            boolean hecho = ConsultaSQL.borrarOrdenProduccion((int)data[miFila][0]);
-                            if(hecho){
-                                data = new Object[][]{};
-                                mi_modelo_tabla.fireTableDataChanged();
-                                TablaProduccion.this.actualizarTabla();
-                                MainClass.menu.ordenProduccion.actualizarDesdeFuera();
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(TablaProduccion.this, "No se pudo Borrar la Orden");
+                            int decision = JOptionPane.showOptionDialog(
+                                    null,
+                                    "¿Estás seguro de cancelar la Orden de Producción no. " + (int) data[miFila][0] + "?",
+                                    "Cancelar Orden", // título del JOptionPane
+                                    JOptionPane.OK_CANCEL_OPTION, // tipo input
+                                    JOptionPane.QUESTION_MESSAGE, // tipo mensaje (determina el icono por defecto)
+                                    null, // icono, si es nulo aparecerá el por defecto
+                                    new Object[]{"Si", "No"}, //opciones => estos serán los botones
+                                    new Object[]{}//dialogo o texto mostrado
+                            );
+
+                            if (decision == 0) {
+                                boolean hecho = ConsultaSQL.borrarOrdenProduccion((int) data[miFila][0]);
+                                if (hecho) {
+                                    JOptionPane.showMessageDialog(
+                                            null,
+                                            "Se ha cancelado la Orden de Producción no. " + (int) data[miFila][0],
+                                            "Cancelar Orden",
+                                            JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                    TablaProduccion.this.actualizarTabla();
+                                    MainClass.menu.ordenProduccion.actualizarDesdeFuera();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "No se pudo Borrar la Orden");
+                                }
                             }
                         } catch (Exception e) {
-                            JOptionPane.showMessageDialog(TablaProduccion.this, e.getLocalizedMessage());
+                            JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
                         }
                         //JOptionPane.showMessageDialog(null, "Entregar la fila " + (miFila + 1));
                         break;
                     default:
                         break;
                 }
-
             }
 
             /*@Override
