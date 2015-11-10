@@ -4,7 +4,8 @@
 #define MyAppName "BikeVentory"
 #define MyAppVersion "1.0"
 #define MyAppPublisher "Miguel González & co."
-#define MyAppExeName "BIKE.jar"
+;#define MyAppExeName "BIKE.jar"
+#define MyAppExeName "BIKE.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -17,12 +18,12 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-AllowNoIcons=no
+AllowNoIcons=yes
 LicenseFile=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\complementos\Licencia BIKE.txt
 InfoBeforeFile=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\complementos\guia_inicial.txt
 OutputDir=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\Instalador_BIKE_Final
 OutputBaseFilename=bikeventory
-SetupIconFile=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\complementos\ico_exe.ico
+SetupIconFile=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\complementos\install_magic.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -35,10 +36,11 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\dependencias\bike.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\dependencias\dist\BIKE.jar"; DestDir: "{app}"; Flags: ignoreversion
-Source: "G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\dependencias\dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: "G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\dependencias\dist\BIKE.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\dependencias\ReporteProduccion.jasper"; DestDir: "{app}"; Flags: ignoreversion
-Source: "G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\base_datos_BIKE\storebike.sql"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
+Source: "G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\dependencias\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+;Source: "G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\base_datos_BIKE\storebike.sql"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
