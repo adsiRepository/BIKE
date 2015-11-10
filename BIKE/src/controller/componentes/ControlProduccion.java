@@ -70,6 +70,7 @@ public class ControlProduccion {
                             fecha_despacho + "  " + hora_despacho,
                             fecha_entrega + "  " + hora_entrega
                         };
+                        i++;
                     }
                     mi_modelo_tabla.fireTableDataChanged();
                 }

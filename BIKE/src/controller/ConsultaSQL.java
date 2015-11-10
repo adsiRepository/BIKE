@@ -219,7 +219,7 @@ public class ConsultaSQL {
                     comprobante = comprobante * sentencia_insert.executeUpdate();
                 }
             }
-            
+
             //Object[] tallas = (Object[]) detalles[2];
             ArrayList<String> tallas = (ArrayList<String>) detalles[2];
 
@@ -247,7 +247,7 @@ public class ConsultaSQL {
             return comprobante > 0;
 
         } catch (Exception ex) {
-            throw new Exception("Error Consulta de Catalogo\n" + ex.getLocalizedMessage());
+            throw new Exception("Error Al Registrar el Nuevo Articulo.\n" + ex.getLocalizedMessage());
         }
     }
     
@@ -1701,65 +1701,72 @@ public class ConsultaSQL {
     /**
      * @param args
      */
-    public static void main(String[] args) {
-        try {
-            //SETEO DE VARIABLES ENCARGADAS DE LA CONEXION A LA BASE DE DATOS
-            ConexionBD.setUsuario("user_storebike");
-            ConexionBD.setPassword("user_storebike");
-            ConexionBD.setHost("localhost");
-            ConexionBD.setPort("3306");
-
-            //PRUEBA REGISTRO ORDEN
-            /*Object[] detalle_produccion = new Object[3];
-             detalle_produccion[0] = "MTB";
-             detalle_produccion[1] = "26";
-             detalle_produccion[2] = 5;
-             Object[][] data = new Object[2][2];
-             data[0] = new Object[]{"403436", 4};
-             data[1] = new Object[]{"690733", 3};
-             boolean f = ConsultorBD.registrarNuevaOrden("1190375460", detalle_produccion, data);*/ //aqui va el astrisco
-            //boolean f = setConteoRepuestos(true);
-            //boolean f = obtenerListadoDespachoOrden(4);
-            /*LinkedHashMap<String, ItemDeLista> h;
-            Object[] ob;
-            for (HashMap.Entry reg : obtenerListadoDespachoOrden(2).entrySet()) {
-                ob = (Object[]) reg.getKey();
-                System.out.println(ob[0] + " " + ob[1] + " " + ob[2] + " " + ob[3] + " " + ob[4]);
-                h = (LinkedHashMap<String, ItemDeLista>) reg.getValue();
-                for (HashMap.Entry eg : h.entrySet()) {
-                    System.out.println(eg.getKey() + " : " + ((ItemDeLista) eg.getValue()).obtenerCodigoId() + " "
-                            + ((ItemDeLista) eg.getValue()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
-                }
-            }*/ // aca *
-
-            /*Object[] produccion = new Object[]{"RDP", "26", 5};
-            Object[][] listado = new Object[2][2];
-            listado[0] = new Object[]{"403436", 5};
-            listado[1] = new Object[]{"690733", 10};
-            boolean f = ConsultaSQL.actualizarListadoDespachoOrden(5, produccion, listado);*/
-            //Object[] f = tallasUsadas();
-            //Object[][] f = obtenerComponentesDeArticulo("MTB");
-            //System.out.println(f[1][0]+" "+f[1][1]);
-            
-            //Object[] comps = new Object[]{"001", "003", "019"};
-            //boolean f = modificarComponentesArticulo("RIN", comps);
-            //boolean f = eliminarArticulo("RDP");
-            //Object[] tallas = new Object[]{"16","20","26"};
-            //Object[] detalles = new Object[]{"Ultraracer", "Bicicleta voladora.", tallas};
-            //Object[] componentes = new Object[]{"001","076","003"};
-            //boolean f = registrarNuevoArticulo(detalles, componentes);
-            //boolean f = modificarArticulo("TT", detalles);
-            //Object[][] reps = obtenerRepuestosComponente("050");
-            //for (Object[] rep : reps) {
-            //    System.out.println(rep[0]+" "+rep[1]+" "+rep[2]+" "+rep[3]+" "+rep[4]);
-            //}
-            
-            Object[] g = new Object[]{"gonzalez", null, false};
-            boolean f = insertarFamilia(g);
-            System.out.println(f);
-            
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            //SETEO DE VARIABLES ENCARGADAS DE LA CONEXION A LA BASE DE DATOS
+//            ConexionBD.setUsuario("user_storebike");
+//            ConexionBD.setPassword("user_storebike");
+//            ConexionBD.setHost("localhost");
+//            ConexionBD.setPort("3310");
+//
+//            PRUEBA REGISTRO ORDEN
+//            Object[] detalle_produccion = new Object[3];
+//             detalle_produccion[0] = "MTB";
+//             detalle_produccion[1] = "26";
+//             detalle_produccion[2] = 5;
+//             Object[][] data = new Object[2][2];
+//             data[0] = new Object[]{"403436", 4};
+//             data[1] = new Object[]{"690733", 3};
+//             boolean f = ConsultorBD.registrarNuevaOrden("1190375460", detalle_produccion, data);*/ //aqui va el astrisco
+//            boolean f = setConteoRepuestos(true);
+//            boolean f = obtenerListadoDespachoOrden(4);
+//            LinkedHashMap<String, ItemDeLista> h;
+//            Object[] ob;
+//            for (HashMap.Entry reg : obtenerListadoDespachoOrden(2).entrySet()) {
+//                ob = (Object[]) reg.getKey();
+//                System.out.println(ob[0] + " " + ob[1] + " " + ob[2] + " " + ob[3] + " " + ob[4]);
+//                h = (LinkedHashMap<String, ItemDeLista>) reg.getValue();
+//                for (HashMap.Entry eg : h.entrySet()) {
+//                    System.out.println(eg.getKey() + " : " + ((ItemDeLista) eg.getValue()).obtenerCodigoId() + " "
+//                            + ((ItemDeLista) eg.getValue()).getAtributos().get(ItemDeLista.TEXTO_MOSTRADO));
+//                }
+//            }
+//
+//            /*Object[] produccion = new Object[]{"RDP", "26", 5};
+//            Object[][] listado = new Object[2][2];
+//            listado[0] = new Object[]{"403436", 5};
+//            listado[1] = new Object[]{"690733", 10};
+//            boolean f = ConsultaSQL.actualizarListadoDespachoOrden(5, produccion, listado);*/
+//            //Object[] f = tallasUsadas();
+//            //Object[][] f = obtenerComponentesDeArticulo("MTB");
+//            //System.out.println(f[1][0]+" "+f[1][1]);
+//            
+//            Object[] comps = new Object[]{"001", "003", "019"};
+//            boolean f = modificarComponentesArticulo("RIN", comps);
+//            boolean f = eliminarArticulo("RDP");
+//            Object[] tallas = new Object[]{"16","20","26"};
+//            Object[] detalles = new Object[]{"Ultraracer", "Bicicleta voladora.", tallas};
+//            Object[] componentes = new Object[]{"001","076","003"};
+//            boolean f = registrarNuevoArticulo(detalles, componentes);
+//            boolean f = modificarArticulo("TT", detalles);
+//            Object[][] reps = obtenerRepuestosComponente("050");
+//            for (Object[] rep : reps) {
+//                System.out.println(rep[0]+" "+rep[1]+" "+rep[2]+" "+rep[3]+" "+rep[4]);
+//            }
+//            
+//            Object[] g = new Object[]{"gonzalez", null, false};
+//            boolean f = insertarFamilia(g);
+//            System.out.println(f);
+//            
+//            ArrayList<Object[]> resp = obtenerProduccionDelArticulo("BMX", "20");
+//            for (Object[] next : resp) {
+//                for(Object ob : next){
+//                    System.out.print(ob + " ");
+//                }
+//                System.out.println("");
+//            }
+//        } catch (Exception ex) {
+//            System.out.println(ex.toString());
+//        }
+//    }
 }

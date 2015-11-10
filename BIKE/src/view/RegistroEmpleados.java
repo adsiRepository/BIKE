@@ -5,6 +5,7 @@
  */
 package view;
 
+//<editor-fold defaultstate="collapsed" desc="imports">
 import controller.ConexionBD;
 import controller.ConsultaSQL;
 import controller.Tiempo;
@@ -13,6 +14,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.EventObject;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JLabel;
@@ -23,6 +25,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import static view.MenuPrincipal.escritorio;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import javax.swing.ImageIcon;
+//</editor-fold>
 
 /**
  *
@@ -33,6 +38,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
     //String id,nombre,apellido,telefono,direccion,fechaI,fechaS;
     
     private String id_busqueda;
+    private int fila_tabla;
     
     //TableModel modelo;
     
@@ -56,11 +62,14 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         this.setLocation((tamaño_escritorio.width / 16), ((tamaño_escritorio.height - mySpc.height) / 6));
         //modelo = tabla_empleados_.getModel();
         try {
-            Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
-            ((TablaEmpleados) tabla_empleados_).actualizaTabla(registros);
+            if (tabla_empleados_ instanceof TablaEmpleados) {
+                Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
+                ((TablaEmpleados) tabla_empleados_).actualizaTabla(registros);
+            }
         } catch (Exception er) {
             JOptionPane.showMessageDialog(null, er.getMessage());
         }
+        fila_tabla = -1;        
     }
 
     /**
@@ -72,12 +81,15 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pop_ops_tabla_ = new javax.swing.JPopupMenu();
+        popitem_modificar_ = new javax.swing.JMenuItem();
+        popitem_borrar_ = new javax.swing.JMenuItem();
         txt_id_ = new javax.swing.JTextField();
         txt_nombres_ = new javax.swing.JTextField();
         txt_apellidos_ = new javax.swing.JTextField();
         txt_telefono_ = new javax.swing.JTextField();
         txt_direccion_ = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scroll_tabla_empleados_ = new javax.swing.JScrollPane();
         tabla_empleados_ = new TablaEmpleados();
         btn_registrar_ = new javax.swing.JButton();
         btn_eliminar_ = new javax.swing.JButton();
@@ -105,6 +117,22 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         btn_modificar_ = new javax.swing.JButton();
         combo_tipo_id_ = new javax.swing.JComboBox();
 
+        popitem_modificar_.setText("modificar");
+        popitem_modificar_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popitem_modificar_ActionPerformed(evt);
+            }
+        });
+        pop_ops_tabla_.add(popitem_modificar_);
+
+        popitem_borrar_.setText("borrar");
+        popitem_borrar_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popitem_borrar_ActionPerformed(evt);
+            }
+        });
+        pop_ops_tabla_.add(popitem_borrar_);
+
         txt_id_.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_id_.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -121,7 +149,13 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         txt_direccion_.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         tabla_empleados_.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204)));
-        jScrollPane1.setViewportView(tabla_empleados_);
+        tabla_empleados_.setComponentPopupMenu(pop_ops_tabla_);
+        tabla_empleados_.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_empleados_MouseClicked(evt);
+            }
+        });
+        scroll_tabla_empleados_.setViewportView(tabla_empleados_);
 
         btn_registrar_.setBackground(new java.awt.Color(0, 0, 0));
         btn_registrar_.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -137,7 +171,6 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         btn_eliminar_.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_eliminar_.setForeground(new java.awt.Color(255, 255, 255));
         btn_eliminar_.setText("ELIMINAR");
-        btn_eliminar_.setEnabled(false);
         btn_eliminar_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_eliminar_ActionPerformed(evt);
@@ -261,7 +294,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
 
         jLabel7.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("FECHA INGRESO");
+        jLabel7.setText("FECHA CONTRATACIÓN");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -270,7 +303,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,9 +383,9 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        fecha_ingreso_.setDateFormatString("yyyy/MM/d");
+        fecha_ingreso_.setDateFormatString("yyyy/MM/dd");
 
-        fecha_salida_.setDateFormatString("yyyy/MM/d");
+        fecha_salida_.setDateFormatString("yyyy/MM/dd");
 
         txtbuscar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
@@ -360,7 +393,6 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         btn_modificar_.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_modificar_.setForeground(new java.awt.Color(255, 255, 255));
         btn_modificar_.setText("MODIFICAR");
-        btn_modificar_.setEnabled(false);
         btn_modificar_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_modificar_ActionPerformed(evt);
@@ -393,7 +425,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                                     .addComponent(btn_buscar_, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(32, 32, 32))))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 933, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scroll_tabla_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 933, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -495,12 +527,74 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(scroll_tabla_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void eliminarRegistro(String id) {
+        if ((JOptionPane.showOptionDialog(
+                null,
+                "El registro será borrado, ¿Esta usted seguro?",
+                "Borrar Registro", // título del JOptionPane
+                JOptionPane.OK_CANCEL_OPTION, // tipo input
+                JOptionPane.QUESTION_MESSAGE, // tipo mensaje
+                null,
+                new Object[]{"Ok", "Cancelar"}, //opciones => estos serán los botones
+                new Object[]{})) == 0) {
+            try (Connection miConexion = ConexionBD.obtenerConexion()) {
+                try (java.sql.PreparedStatement comando = miConexion.prepareStatement(
+                        "delete from ensambladores where id_emp = ?;")) {
+                    comando.setString(1, id);
+                    if (comando.executeUpdate() > 0) {
+                        JOptionPane.showMessageDialog(null, "Datos Eliminados Correctamente");
+                        limpiarCampos();
+                        if (tabla_empleados_ instanceof TablaEmpleados) {
+                            Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
+                            ((TablaEmpleados) tabla_empleados_).actualizaTabla(registros);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No existe empleado " + id);
+                    }
+                }
+            } catch (MySQLIntegrityConstraintViolationException ex) {
+                JOptionPane.showOptionDialog(
+                        null,
+                        "El ensamblador posee una o varias ordenes de producción\n"
+                        + "a su nombre. Para mantener un buen control sobre el\n"
+                        + "historial de producción, el sistema se conserva la opción\n"
+                        + "de eliminación o borrado del registro del empleado.",
+                        "Borrar Registro", // título del JOptionPane
+                        JOptionPane.OK_OPTION, // tipo input
+                        JOptionPane.INFORMATION_MESSAGE, // tipo mensaje
+                        new ImageIcon(RegistroEmpleados.class.getResource("/sources/mis_imagenes/jop_no.png")),
+                        new Object[]{"Ok"}, //opciones => estos serán los botones
+                        new Object[]{}
+                );
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error al Eliminar el Registro\n" + ex.toString());
+            }
+        }
+    }
+
+    /**
+     * 
+     */
+    private void limpiarCampos() {
+        txt_id_.setText(null);
+        txt_nombres_.setText(null);
+        txt_apellidos_.setText(null);
+        txt_telefono_.setText(null);
+        txt_direccion_.setText(null);
+        fecha_ingreso_.setDate(null);
+        fecha_salida_.setDate(null);
+        fila_tabla = -1;
+        tabla_empleados_.clearSelection();
+        //btn_eliminar_.setEnabled(false);
+        //btn_modificar_.setEnabled(false);
+    }
+    
     private void btn_registrar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registrar_ActionPerformed
         
         if ((txt_id_.getText().length() > 0) && (txt_nombres_.getText().length() > 0) && (txt_apellidos_.getText().length() > 0)) {
@@ -528,8 +622,10 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                     sentencia.setNull(8, java.sql.Types.NULL);
                     if (sentencia.executeUpdate() > 0) {
                         JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
-                        Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
-                        ((TablaEmpleados) tabla_empleados_).actualizaTabla(registros);
+                        if (tabla_empleados_ instanceof TablaEmpleados) {
+                            Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
+                            ((TablaEmpleados) tabla_empleados_).actualizaTabla(registros);
+                        }
                     } else {
                         JOptionPane.showMessageDialog(null, "Hubo un problema que no ha permitido registrar al nuevo empleado.");
                     }
@@ -547,20 +643,16 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
 
     private void btn_eliminar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_ActionPerformed
         
-        try (Connection miConexion = ConexionBD.obtenerConexion()) {
-            try (java.sql.PreparedStatement comando = miConexion.prepareStatement(
-                    "delete from ensambladores where id_emp = ?;")) {
-                comando.setString(1, txt_id_.getText());
-                if (comando.executeUpdate() > 0) {
-                    JOptionPane.showMessageDialog(null, "Datos Eliminados Correctamente");
-                    btn_eliminar_.setEnabled(false);
-                    btn_modificar_.setEnabled(false);
-                } else {
-                    JOptionPane.showMessageDialog(null, "No existe empleado " + txt_id_.getText());
-                }
+        if (fila_tabla >= 0 && !(txt_id_.getText().length() > 0)) {
+            String aux = tabla_empleados_.getValueAt(fila_tabla, 0).toString();
+            String id = aux.substring(3, aux.length());
+            eliminarRegistro(id);
+        } else {
+            if(txt_id_.getText().length() > 0){
+                eliminarRegistro(txt_id_.getText());
+            }else{
+                JOptionPane.showMessageDialog(null, "No haz seleccionado ningun registro.");
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "error " + ex);
         }
         
     }//GEN-LAST:event_btn_eliminar_ActionPerformed
@@ -570,20 +662,12 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         //Que cobtiene el metodo que conecta a la base de datos.
         try (Connection miConexion = ConexionBD.obtenerConexion()) {
 
-            txt_id_.setText(null);
-            txt_nombres_.setText(null);
-            txt_apellidos_.setText(null);
-            txt_telefono_.setText(null);
-            txt_direccion_.setText(null);
-            fecha_ingreso_.setDate(null);
-            fecha_salida_.setDate(null);
-
-            try(java.sql.PreparedStatement comando = miConexion.prepareStatement(
-                    "select * from ensambladores where id_emp = ?;")){
+            try (java.sql.PreparedStatement comando = miConexion.prepareStatement(
+                    "select * from ensambladores where id_emp = ?;")) {
                 comando.setString(1, txtbuscar.getText());
-            //Registro almacena los datos de la tabla
-                try(ResultSet registro = comando.executeQuery()){
-                //Registro . next valida si registro tiene datos o no.
+                //Registro almacena los datos de la tabla
+                try (ResultSet registro = comando.executeQuery()) {
+                    //Registro . next valida si registro tiene datos o no.
                     if (registro.next()) {
                         //Ubicar los datos de registro en el formulario.
                         id_busqueda = registro.getString("id_emp");
@@ -594,18 +678,17 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                         txt_telefono_.setText(registro.getString("dir_emp"));
                         fecha_ingreso_.setDate(registro.getDate("fecha_ing"));
                         fecha_salida_.setDate(registro.getDate("fecha_salida"));
+                        if (tabla_empleados_ instanceof TablaEmpleados) {
+                            ((TablaEmpleados) tabla_empleados_).buscarEmpleado_enTabla(id_busqueda);
+                        }
 
-                        btn_eliminar_.setEnabled(true);
-                        btn_modificar_.setEnabled(true);
-                        
                     } else {
                         JOptionPane.showMessageDialog(null, "No existe ensamblador con esa Identificación en el Sistema." + txtbuscar.getText());
                     }
                 }
             }
-            //miConexion.close();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error " + ex);
+            JOptionPane.showMessageDialog(null, "Error " + ex.getLocalizedMessage());
         }
     }//GEN-LAST:event_btn_buscar_ActionPerformed
 
@@ -656,6 +739,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
 // </editor-fold>
                     }
                     if(w_query == 2){
+                        //<editor-fold defaultstate="collapsed" desc="con cambio de fecha">
                         sentencia.setString(1, txt_id_.getText());
                         sentencia.setString(2, combo_tipo_id_.getSelectedItem().toString());
                         sentencia.setString(3, txt_nombres_.getText());
@@ -679,69 +763,43 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                             sentencia.setNull(8, java.sql.Types.NULL);
                         }
                         sentencia.setString(9, id_busqueda);
+                        //</editor-fold>
                     }
                     if (sentencia.executeUpdate() > 0) {
-                        JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
-                        Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
-                        ((TablaEmpleados) tabla_empleados_).actualizaTabla(registros);
-                        btn_eliminar_.setEnabled(false);
-                        btn_modificar_.setEnabled(false);
+                        JOptionPane.showMessageDialog(null, "Registro Modificado Correctamente", "Modificación", JOptionPane.INFORMATION_MESSAGE);
+                        if (tabla_empleados_ instanceof TablaEmpleados) {
+                            Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
+                            ((TablaEmpleados) tabla_empleados_).actualizaTabla(registros);
+                        }
+                        limpiarCampos();
                     } else {
                         JOptionPane.showMessageDialog(
-                                null, 
-                                "Hubo un problema que no ha permitido modificar los datos del empleado.");
+                                null,
+                                "Al parecer ningun dato fue cambiado.",
+                                "Modificación",
+                                JOptionPane.PLAIN_MESSAGE
+                        );
                     }
                 }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Error " + ex.getMessage(), "Modificación", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(
+            if (fila_tabla >= 0) {
+                desplegarDatosDesdeTabla();
+                JOptionPane.showMessageDialog(null, "Edita antes y oprime de nuevo.", "Modificación", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(
                     null, 
-                    "No puedes guardar al empleado sin registrar su nombre, apellido e identificación;\n"
-                    + "si no modificas la fecha de ingreso, esta no .");
-        }
-        /*try (Connection miConexion = ConexionBD.obtenerConexion()) {
-
-            try (Statement statement = (Statement) miConexion.createStatement()) {
-                id = txt_id_.getText();
-                nombre = txt_nombres_.getText();
-                apellido = txtapellidos.getText();
-                telefono = txttelefono.getText();
-                direccion = txtdireccion.getText();
-                String fecha_ing = Tiempo.ingresarFechaSQL(jDateingreso.getDate());
-                //fechaI = jDateingreso.getDateFormatString();
-                String fecha_out = Tiempo.ingresarFechaSQL(jDatesalida.getDate());
-                //fechaS = jDatesalida.getDateFormatString();
-
-                statement.execute("update ensambladores set id_emp ='" + id + "', " 
-                        + " nom_emp ='" + nombre + "', " + " ape_emp ='" + apellido + "', " 
-                        + " tel_emp ='" + telefono + "', " + " dir_emp ='" + direccion + "', " 
-                        + " fecha_ing ='" + fecha_ing + "', " + " fecha_salida ='" + fecha_out 
-                        + "' where id_emp=" + id);
-                //SQL QUERY
-                JOptionPane.showMessageDialog(this, "Datos actualizados correctamente");
-                Object[][] registros = ConsultaSQL.obtenerTablaEnsambladores();
-                ((TablaEmpleados) tabla_empleados_).actualizaTabla(registros);
+                    "Antes debes seleccionar el registro a modificar");
             }
-            miConexion.close();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error " + ex.getMessage());
-        }*/
+        }
         
     }//GEN-LAST:event_btn_modificar_ActionPerformed
 
     private void btn_limpiar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_ActionPerformed
         
-        txt_id_.setText(null);
-        txt_nombres_.setText(null);
-        txt_apellidos_.setText(null);
-        txt_telefono_.setText(null);
-        txt_direccion_.setText(null);
-        fecha_ingreso_.setDate(null);
-        fecha_salida_.setDate(null);
-        btn_eliminar_.setEnabled(false);
-        btn_modificar_.setEnabled(false);
+        limpiarCampos();
         
     }//GEN-LAST:event_btn_limpiar_ActionPerformed
 
@@ -754,12 +812,83 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
 
     }//GEN-LAST:event_txt_id_KeyTyped
 
+    private void tabla_empleados_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_empleados_MouseClicked
+        
+        fila_tabla = tabla_empleados_.rowAtPoint(evt.getPoint());
+        
+    }//GEN-LAST:event_tabla_empleados_MouseClicked
+
+    /**
+     * METODO PARA DESPLEGAR LOS DATOS DE LA TABLA EN LOS CAMPOS.
+     */
+    private void desplegarDatosDesdeTabla(){
+        //<editor-fold defaultstate="collapsed" desc="code">
+        if (fila_tabla >= 0) {
+            try {
+                String aux = tabla_empleados_.getValueAt(fila_tabla, 0).toString();
+                String tipo_id = aux.substring(0, 2);
+                for (int i = 0; i < combo_tipo_id_.getItemCount(); i++) {
+                    if (combo_tipo_id_.getItemAt(i).toString().equals(tipo_id)) {
+                        combo_tipo_id_.setSelectedIndex(i);
+                        break;
+                    }
+                }
+                String id = aux.substring(3, aux.length());
+                id_busqueda = id;
+                txt_id_.setText(id);
+                txt_nombres_.setText(tabla_empleados_.getValueAt(fila_tabla, 1).toString());
+                txt_apellidos_.setText(tabla_empleados_.getValueAt(fila_tabla, 2).toString());
+                txt_telefono_.setText(tabla_empleados_.getValueAt(fila_tabla, 3).toString());
+                txt_direccion_.setText(tabla_empleados_.getValueAt(fila_tabla, 4).toString());
+                SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yyyy");
+                fecha_ingreso_.setDate(format.parse(tabla_empleados_.getValueAt(fila_tabla, 5).toString()));
+                if (tabla_empleados_.getValueAt(fila_tabla, 6).toString().length() > 0) {
+                    fecha_salida_.setDate(format.parse(tabla_empleados_.getValueAt(fila_tabla, 6).toString()));
+                }
+                //btn_eliminar_.setEnabled(true);
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Error menu pop modificar.\n" + e.toString(),
+                        "",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Antes debes seleccionar la fila de la tabla.",
+                    "",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+//</editor-fold>
+    }
+    
+    private void popitem_modificar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popitem_modificar_ActionPerformed
+
+        desplegarDatosDesdeTabla();
+        
+    }//GEN-LAST:event_popitem_modificar_ActionPerformed
+
+    private void popitem_borrar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popitem_borrar_ActionPerformed
+        
+        String aux = tabla_empleados_.getValueAt(fila_tabla, 0).toString();
+        String id = aux.substring(3, aux.length());
+        eliminarRegistro(id);
+        
+    }//GEN-LAST:event_popitem_borrar_ActionPerformed
+
+    /**
+     * PRIVATE TABLE FOR EMPLOYEES MANAGE.
+     */
     private static class TablaEmpleados extends JTable {
 
-        private Object[][] data;
+        private Object[][] data_tabla;
         private final MiModeloTabla mi_modelo_tabla;
 
+        /***/
         public TablaEmpleados() {
+            //<editor-fold defaultstate="collapsed" desc="constructor">
             super();
             mi_modelo_tabla = new MiModeloTabla();
             this.setModel(mi_modelo_tabla);
@@ -773,6 +902,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                 this.getColumnModel().getColumn(i).setResizable(true);
             }
             this.setRowHeight(20);
+//</editor-fold>
         }
 
         /**
@@ -784,7 +914,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
             // <editor-fold defaultstate="collapsed" desc="CODIGO DEL METODO">
             try {
                 limpiarTabla();
-                data = new Object[ensambladores.length][7];
+                data_tabla = new Object[ensambladores.length][7];
                 String tel, dir, fch_ing, fch_salida;
                 for (int i = 0; i < ensambladores.length; i++) {
                     fch_ing = Tiempo.fechaObtenidaSQL((java.sql.Date)ensambladores[i][6]);
@@ -799,7 +929,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
                     } else {
                         dir = "";
                     }
-                    data[i] = new Object[]{
+                    data_tabla[i] = new Object[]{
                         ensambladores[i][1].toString() + " " + ensambladores[i][0].toString(),
                         ensambladores[i][2].toString(),
                         ensambladores[i][3].toString(),
@@ -816,15 +946,36 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
             // </editor-fold>
         }
 
+        /***/
+        public void buscarEmpleado_enTabla(String id_busq) throws Exception {
+            //<editor-fold defaultstate="collapsed" desc="code">
+            try {
+                String ob, comp;
+                int indice = 0;
+                for (Object[] emp : data_tabla) {//para cada empleado de la tabla de registros
+                    ob = emp[0].toString();
+                    comp = ob.substring(3, ob.length());
+                    if (id_busq.equals(comp)) {
+                        TablaEmpleados.this.changeSelection(indice, 1, false, false);
+                        break;
+                    }
+                    indice++;
+                }
+            } catch (Exception e) {
+                throw new Exception("Error al buscar empleado en la tabla:\n" + e.toString());
+            }
+//</editor-fold>
+        }
+        
         /**
          * metodo para vaciar la tabla
          * 
          */
         public void limpiarTabla() {
-            data = new Object[][]{};
+            data_tabla = new Object[][]{};
             mi_modelo_tabla.fireTableDataChanged();
         }
-      
+        
         /**
          * 
          */
@@ -842,7 +993,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
              */
             public MiModeloTabla() {
                 super();
-                data = new Object[][]{};
+                data_tabla = new Object[][]{};
                 this.setColumnIdentifiers(TITULOS_COLUMNAS);
             }
             @Override//determina la clase de componentes que iran en cada celda
@@ -865,21 +1016,21 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
             }
             @Override
             public Object getValueAt(int row, int col) {
-                if (data != null) {
-                    return data[row][col];
+                if (data_tabla != null) {
+                    return data_tabla[row][col];
                 }
                 return null;
             }
             @Override
             public int getRowCount() {
-                if (data == null) {
+                if (data_tabla == null) {
                     return 0;
                 }
-                return data.length;
+                return data_tabla.length;
             }
             @Override
             public void setValueAt(Object value, int row, int col) {
-                data[row][col] = value;
+                data_tabla[row][col] = value;
                 fireTableCellUpdated(row, col);//notifica a todos los listeners que el valor de la celda ha sido editado
             }
         }
@@ -958,7 +1109,10 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPopupMenu pop_ops_tabla_;
+    private javax.swing.JMenuItem popitem_borrar_;
+    private javax.swing.JMenuItem popitem_modificar_;
+    private javax.swing.JScrollPane scroll_tabla_empleados_;
     private javax.swing.JTable tabla_empleados_;
     private javax.swing.JTextField txt_apellidos_;
     private javax.swing.JTextField txt_direccion_;
