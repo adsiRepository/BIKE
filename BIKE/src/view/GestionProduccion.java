@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import model.componentes.ItemDeLista;
@@ -42,6 +43,7 @@ public class GestionProduccion extends Paneles.VentanaInterna {
         this.resizable = true;
         Dimension ScreenSpace = escritorio.getSize(), mySpc = this.getSize();
         this.setLocation((ScreenSpace.width / 16), ((ScreenSpace.height - mySpc.height) / 15));
+        this.setFrameIcon(new ImageIcon(GestionProduccion.class.getResource("/sources/mis_imagenes/iconInventario.png")));
         try {
             ((ComboBoxItem) combo_articulos_).llenarme(MODELO_COMBO_ARTICULOS);
         } catch (Exception e) {

@@ -56,6 +56,7 @@ public class RegistroEmpleados extends Paneles.VentanaInterna  {
         this.iconable = true;
         Dimension tamaño_escritorio = escritorio.getSize(), mySpc = this.getSize();
         this.setLocation((tamaño_escritorio.width / 16), ((tamaño_escritorio.height - mySpc.height) / 6));
+        this.setFrameIcon(new ImageIcon(RegistroEmpleados.class.getResource("/sources/mis_imagenes/iconEmpleado.png")));
         //modelo = tabla_empleados_.getModel();
         try {
             if (tabla_empleados_ instanceof TablaEmpleados) {

@@ -17,7 +17,7 @@ import javax.swing.JTable;
 public class MenuPrincipal extends javax.swing.JFrame {
 
     //private DefaultTableModel dtm_tabla_actividades;
-    private int fila_tabla, col_tabla;
+    private int /*fila_tabla,*/ col_tabla;
 
     public void setCol_tabla(int col_tabla) {
         this.col_tabla = col_tabla;
@@ -40,16 +40,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public MenuPrincipal() {
         initComponents();
         this.setTitle("MT BIKE");
-        try {
-            Image iconoPrograma;
-            //iconoPrograma = ImageIO.read(new File("mis_imagenes/icon_program.png"));
-            iconoPrograma = new ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/icon_program.png")).getImage();
-            this.setIconImage(iconoPrograma);
-        } catch (/*IO*/Exception e) {
-            JOptionPane.showMessageDialog(null, "No se pudo cargar el Icono de la aplicación." + e.toString());
-        }
+        this.setIconImage(new ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/bike_ico.png")).getImage());
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
+        this.setResizable(true);
         if (tabla_actividades instanceof TablaProduccion) {
             //ArrayList<Object[]> data = ConsultaSQL.revisarProduccionActual();
             int anchoContenedor = scroll_tabla_acts.getWidth();
@@ -74,12 +68,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        scroll_escritorio_ = new javax.swing.JScrollPane();
         btn_empleados_ = new javax.swing.JButton();
         btn_produccion_ = new javax.swing.JButton();
         panel_reloj_ = new controller.PanelReloj();
         panel_fecha_ = new javax.swing.JPanel();
         txtview_fecha_actual = new javax.swing.JTextField();
         btn_reportes_ = new javax.swing.JButton();
+        btn_cerrar_aplicacion_ = new javax.swing.JButton();
         barra_menu_1 = new javax.swing.JMenuBar();
         menu_tareas_ = new javax.swing.JMenu();
         menu_item_nueva_orden_ = new javax.swing.JMenuItem();
@@ -92,13 +88,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menuItem_registroEnsamblador_ = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(30, 20));
+        setMaximumSize(new java.awt.Dimension(2000, 1400));
+        setMinimumSize(new java.awt.Dimension(100, 50));
         setPreferredSize(new java.awt.Dimension(1440, 900));
 
         escritorio.setBackground(new java.awt.Color(204, 204, 204));
         escritorio.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         escritorio.setAutoscrolls(true);
         escritorio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        escritorio.setMaximumSize(new java.awt.Dimension(2000, 1400));
+        escritorio.setMinimumSize(new java.awt.Dimension(100, 50));
 
         scroll_tabla_acts.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PRODUCCION", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Impact", 0, 14), new java.awt.Color(204, 0, 0))); // NOI18N
         scroll_tabla_acts.setViewportBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(220, 218, 218), new java.awt.Color(0, 153, 204), null, null));
@@ -146,7 +145,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        panel_reloj_.setBackground(new java.awt.Color(204, 204, 204));
+        panel_reloj_.setBackground(new java.awt.Color(255, 255, 255));
         panel_reloj_.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         panel_reloj_.setEnabled(false);
         panel_reloj_.setPreferredSize(new java.awt.Dimension(210, 210));
@@ -155,14 +154,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         panel_reloj_.setLayout(panel_reloj_Layout);
         panel_reloj_Layout.setHorizontalGroup(
             panel_reloj_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 215, Short.MAX_VALUE)
+            .addGap(0, 201, Short.MAX_VALUE)
         );
         panel_reloj_Layout.setVerticalGroup(
             panel_reloj_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 215, Short.MAX_VALUE)
+            .addGap(0, 201, Short.MAX_VALUE)
         );
 
         txtview_fecha_actual.setEditable(false);
+        txtview_fecha_actual.setBackground(new java.awt.Color(255, 255, 255));
         txtview_fecha_actual.setFont(new java.awt.Font("DS-Digital", 0, 58)); // NOI18N
         txtview_fecha_actual.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtview_fecha_actual.setText(controller.Tiempo.getStringFechaActual());
@@ -200,44 +200,59 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btn_cerrar_aplicacion_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/cerrar.png")));
+        btn_cerrar_aplicacion_.setBorderPainted(false);
+        btn_cerrar_aplicacion_.setContentAreaFilled(false);
+        btn_cerrar_aplicacion_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cerrar_aplicacion_ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(escritorioLayout.createSequentialGroup()
-                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(escritorioLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(escritorioLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(escritorioLayout.createSequentialGroup()
-                .addGap(130, 130, 130)
+                .addGap(86, 86, 86)
+                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 1250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 96, Short.MAX_VALUE))
+            .addGroup(escritorioLayout.createSequentialGroup()
+                .addGap(145, 145, 145)
                 .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(149, 149, 149)
                 .addComponent(btn_produccion_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(154, 154, 154)
                 .addComponent(btn_reportes_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(553, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_cerrar_aplicacion_, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(145, 145, 145))
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(escritorioLayout.createSequentialGroup()
                 .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panel_reloj_, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(escritorioLayout.createSequentialGroup()
-                        .addComponent(panel_fecha_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(104, 104, 104)
-                        .addComponent(scroll_tabla_acts, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(79, 79, 79)
-                .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btn_reportes_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_produccion_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(176, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addGroup(escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btn_reportes_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_produccion_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_empleados_, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(132, 132, 132))
+                    .addGroup(escritorioLayout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addComponent(btn_cerrar_aplicacion_, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         escritorio.setLayer(scroll_tabla_acts, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_empleados_, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -245,11 +260,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorio.setLayer(panel_reloj_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(panel_fecha_, javax.swing.JLayeredPane.DEFAULT_LAYER);
         escritorio.setLayer(btn_reportes_, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        escritorio.setLayer(btn_cerrar_aplicacion_, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        scroll_escritorio_.setViewportView(escritorio);
 
         menu_tareas_.setText("Produccion");
+        menu_tareas_.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        menu_item_nueva_orden_.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sources/mis_imagenes/itmnu_nueva_orden.png"))); // NOI18N
+        menu_item_nueva_orden_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/itmnu_nueva_orden.png")));
         menu_item_nueva_orden_.setText("Nueva Orden");
+        menu_item_nueva_orden_.setMinimumSize(new java.awt.Dimension(185, 22));
+        menu_item_nueva_orden_.setPreferredSize(new java.awt.Dimension(185, 22));
         menu_item_nueva_orden_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menu_item_nueva_orden_ActionPerformed(evt);
@@ -257,7 +278,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menu_tareas_.add(menu_item_nueva_orden_);
 
+        menu_item_observar_produccion_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/icmnu_inventario.png")));
         menu_item_observar_produccion_.setText("Inventario");
+        menu_item_observar_produccion_.setMinimumSize(new java.awt.Dimension(185, 22));
+        menu_item_observar_produccion_.setPreferredSize(new java.awt.Dimension(185, 22));
         menu_item_observar_produccion_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menu_item_observar_produccion_ActionPerformed(evt);
@@ -269,7 +293,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         menu_almacen_.setText("Almacen");
 
+        menu_item_gestion_produccion_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/icmnu_articulos.png")));
         menu_item_gestion_produccion_.setText("Articulos Ensamblados");
+        menu_item_gestion_produccion_.setMinimumSize(new java.awt.Dimension(185, 22));
+        menu_item_gestion_produccion_.setPreferredSize(new java.awt.Dimension(185, 22));
         menu_item_gestion_produccion_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menu_item_gestion_produccion_ActionPerformed(evt);
@@ -277,7 +304,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menu_almacen_.add(menu_item_gestion_produccion_);
 
+        menu_item_componentes_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/icmnu_comps.png")));
         menu_item_componentes_.setText("Gestion de Componentes");
+        menu_item_componentes_.setMinimumSize(new java.awt.Dimension(185, 22));
+        menu_item_componentes_.setPreferredSize(new java.awt.Dimension(185, 22));
         menu_item_componentes_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menu_item_componentes_ActionPerformed(evt);
@@ -285,7 +315,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menu_almacen_.add(menu_item_componentes_);
 
+        menuItem_controlRepuestos_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/icmnu_repuestos.png")));
         menuItem_controlRepuestos_.setText("Gestion de Repuestos");
+        menuItem_controlRepuestos_.setMinimumSize(new java.awt.Dimension(185, 22));
+        menuItem_controlRepuestos_.setPreferredSize(new java.awt.Dimension(185, 22));
         menuItem_controlRepuestos_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItem_controlRepuestos_ActionPerformed(evt);
@@ -297,7 +330,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         menu_ensambladores_.setText("Ensambladores");
 
+        menuItem_registroEnsamblador_.setIcon(new javax.swing.ImageIcon(MenuPrincipal.class.getResource("/sources/mis_imagenes/icmnu_empleados.png")));
         menuItem_registroEnsamblador_.setText("Registro");
+        menuItem_registroEnsamblador_.setMinimumSize(new java.awt.Dimension(185, 22));
+        menuItem_registroEnsamblador_.setPreferredSize(new java.awt.Dimension(185, 22));
         menuItem_registroEnsamblador_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItem_registroEnsamblador_ActionPerformed(evt);
@@ -313,13 +349,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(escritorio)
+            .addComponent(scroll_escritorio_, javax.swing.GroupLayout.DEFAULT_SIZE, 1436, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(escritorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(scroll_escritorio_, javax.swing.GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
         );
 
         pack();
@@ -373,7 +407,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void tabla_actividadesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_actividadesMouseClicked
         
-        fila_tabla = tabla_actividades.rowAtPoint(evt.getPoint());
+        //fila_tabla = tabla_actividades.rowAtPoint(evt.getPoint());
         col_tabla = tabla_actividades.columnAtPoint(evt.getPoint());
         
     }//GEN-LAST:event_tabla_actividadesMouseClicked
@@ -515,35 +549,42 @@ public class MenuPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex.toString());
         }
     }//GEN-LAST:event_btn_reportes_ActionPerformed
+
+    private void btn_cerrar_aplicacion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cerrar_aplicacion_ActionPerformed
+        
+        this.dispose();
+        
+    }//GEN-LAST:event_btn_cerrar_aplicacion_ActionPerformed
    
     // <editor-fold defaultstate="collapsed" desc="VOID MAIN O METODO PRINCIPAL">
-    public static void main(String args[]) {
-     // Set the Nimbus look and feel
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        // If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-        // For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        // Create and display the form
-        java.awt.EventQueue.invokeLater(() -> {
-            MenuPrincipal menu = new MenuPrincipal();
-            menu.setVisible(true);
-        });
-    }
+//    public static void main(String args[]) {
+//     // Set the Nimbus look and feel
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        // If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//        // For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        // Create and display the form
+//        java.awt.EventQueue.invokeLater(() -> {
+//            MenuPrincipal menu = new MenuPrincipal();
+//            menu.setVisible(true);
+//        });
+//    }
     // </editor-fold>
    
      
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barra_menu_1;
+    private javax.swing.JButton btn_cerrar_aplicacion_;
     private javax.swing.JButton btn_empleados_;
     private javax.swing.JButton btn_produccion_;
     private javax.swing.JButton btn_reportes_;
@@ -559,6 +600,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menu_tareas_;
     private javax.swing.JPanel panel_fecha_;
     private javax.swing.JPanel panel_reloj_;
+    private javax.swing.JScrollPane scroll_escritorio_;
     private static final javax.swing.JScrollPane scroll_tabla_acts = new javax.swing.JScrollPane();
     private static final javax.swing.JTable tabla_actividades = new TablaProduccion(TablaProduccion.TABLA_CONTROL);
     private javax.swing.JTextField txtview_fecha_actual;

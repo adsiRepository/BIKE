@@ -2,7 +2,6 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JInternalFrameFormInfo">
   <Properties>
-    <Property name="title" type="java.lang.String" value="Registro y Edici&#xf3;n de Repuestos para Componentes"/>
     <Property name="enabled" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>

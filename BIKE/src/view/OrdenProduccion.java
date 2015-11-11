@@ -46,7 +46,7 @@ public class OrdenProduccion extends VentanaInterna {
     
     //private Object[] detalle_orden_actual;
     
-    private int fila_tabla_produccion, col_tabla_produccion;
+    //private int fila_tabla_produccion, col_tabla_produccion;
 
     /**
      * Constructor.
@@ -63,8 +63,9 @@ public class OrdenProduccion extends VentanaInterna {
         Dimension ScreenSpace = escritorio.getSize(), mySpc = this.getSize();
         this.setLocation((ScreenSpace.width / 18), ((ScreenSpace.height - mySpc.height) / 2));
         this.setToolTipText("Modulo de Control de Ordenes de Ensamble");
-        fila_tabla_produccion = 0;
-        col_tabla_produccion = 0;        
+        this.setFrameIcon(new ImageIcon(OrdenProduccion.class.getResource("/sources/mis_imagenes/itmnu_nueva_ordenb.png")));
+        //fila_tabla_produccion = 0;
+        //col_tabla_produccion = 0;        
         
         try {
             ((ComboBoxItem) combo_ensambladores_).llenarme(MODELO_COMBO_ENSAMBLADORES);
@@ -629,8 +630,8 @@ public class OrdenProduccion extends VentanaInterna {
 
     private void tabla_alistamiento_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_alistamiento_MouseClicked
 
-        fila_tabla_produccion = tabla_alistamiento_.rowAtPoint(evt.getPoint());
-        col_tabla_produccion = tabla_alistamiento_.columnAtPoint(evt.getPoint());
+        //fila_tabla_produccion = tabla_alistamiento_.rowAtPoint(evt.getPoint());
+        //col_tabla_produccion = tabla_alistamiento_.columnAtPoint(evt.getPoint());
 
     }//GEN-LAST:event_tabla_alistamiento_MouseClicked
 
@@ -818,8 +819,8 @@ public class OrdenProduccion extends VentanaInterna {
 
     private void tabla_produccion_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_produccion_MouseClicked
         
-        fila_tabla_produccion = tabla_produccion_.rowAtPoint(evt.getPoint());
-        col_tabla_produccion = tabla_produccion_.columnAtPoint(evt.getPoint());
+//        fila_tabla_produccion = tabla_produccion_.rowAtPoint(evt.getPoint());
+//        col_tabla_produccion = tabla_produccion_.columnAtPoint(evt.getPoint());
         
     }//GEN-LAST:event_tabla_produccion_MouseClicked
 

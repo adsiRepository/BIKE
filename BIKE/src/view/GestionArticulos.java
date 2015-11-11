@@ -10,6 +10,7 @@ import controller.componentes.ControlTablaArticulos.TablaArticulos;
 import controller.componentes.Paneles;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import model.componentes.ItemDeLista;
 import static view.MenuPrincipal.escritorio;
@@ -43,6 +44,7 @@ public class GestionArticulos extends Paneles.VentanaInterna {
         this.resizable = true;
         Dimension tamaño_escritorio = escritorio.getSize(), mySpc = this.getSize();
         this.setLocation((tamaño_escritorio.width / 64), ((tamaño_escritorio.height - mySpc.height) / 3));
+        this.setFrameIcon(new ImageIcon(GestionArticulos.class.getResource("/sources/mis_imagenes/iconArticulos.png")));
         
         decision_btn_hecho = "";
         try {
@@ -88,8 +90,6 @@ public class GestionArticulos extends Paneles.VentanaInterna {
         btn_hecho_ = new javax.swing.JButton();
         btn_desvincular_comps_ = new javax.swing.JButton();
         btn_asignar_comp_selec_ = new javax.swing.JButton();
-
-        setTitle("Control de Productos o Articulos Producidos en mi Tienda");
 
         combo_articulos_.setToolTipText("selecciona el articulo para editarlo o borrarlo");
         combo_articulos_.addItemListener(new java.awt.event.ItemListener() {

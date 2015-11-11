@@ -1,0 +1,12 @@
+ESTOS SON ARCHIVOS Y COMPLEMENTOS DE LOS QUE PUEDE DEPENDER LA APLICACION PERO QUE SE 
+CONFIGURAN O INSTALAN A PARTE DEL PROGRAMA BIKE INVENTORY. 
+
+
+ARCHIVOS Y SUS FUNCIONES:
+
+DS-DIGI.TTF => equivale al archivo de tipo fuente (.ttf) que debe ser instalado en el 
+		sistema anfitrión (o equipo en que se instale) del programa para que 
+		al ejecutarlo, algunos campos de texto con este formato de letra se
+		muestren correctamente.
+NOTA: 
+Esta instalación se realiza en el panel de control -> fuentes (en windows)

@@ -2,18 +2,16 @@
 package view;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
-
 import controller.ConsultaSQL;
 import controller.Crypt;
 import controller.componentes.ClaseTablaRepuestos.TablaRepuestos;
 import controller.componentes.ComboBoxItem;
 import controller.componentes.Paneles;
 import java.awt.Dimension;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import model.componentes.ItemDeLista;
 import static view.MenuPrincipal.escritorio;
-
 // </editor-fold>
 
 /**FORMULARIO DE CONTROL Y SUPERVISION DE REPUESTOS Y OBJETOS DIRECTOS.
@@ -35,8 +33,8 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
     public static final String OP_BOTON_EDITAR = "editar_repuesto";
     private String decision_boton_guardar;
     
-    private int fila_tabla, col_tabla;
-    private String codigo_seleccionado;
+    private int fila_tabla;//, col_tabla;
+    //private String codigo_seleccionado;
     
     /***/
     public GestionRepuestos() {
@@ -44,8 +42,10 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
         initComponents();
         this.closable = true;
         this.iconable = true;
+        this.title = "Registro y Edición de Repuestos para Componentes";
         Dimension tamaño_escritorio = escritorio.getSize(), mySpc = this.getSize();
         this.setLocation(/*(tamaño_escritorio.width / 3)*/10, ((tamaño_escritorio.height - mySpc.height) / 4));
+        this.setFrameIcon(new ImageIcon(GestionRepuestos.class.getResource("/sources/mis_imagenes/iconRepuestos.png")));
         try {
             ((ComboBoxItem) combo_componentes_).llenarme(MODELO_COMBO_COMPONENTES);
             ((ComboBoxItem) combo_articulos_).llenarme(OrdenProduccion.MODELO_COMBO_ARTICULOS);
@@ -99,7 +99,6 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
         lbl_talla_ = new javax.swing.JLabel();
         combo_talla_ = new javax.swing.JComboBox();
 
-        setTitle("Registro y Edición de Repuestos para Componentes");
         setEnabled(false);
 
         combo_componentes_.setToolTipText("el repuesto registrado o modificado será asignado al componente aqui seleccionado");
@@ -630,8 +629,8 @@ public class GestionRepuestos extends Paneles.VentanaInterna {
     private void tabla_repuestos_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_repuestos_MouseClicked
         
         fila_tabla = tabla_repuestos_.rowAtPoint(evt.getPoint());
-        col_tabla = tabla_repuestos_.columnAtPoint(evt.getPoint());
-        codigo_seleccionado = String.valueOf(tabla_repuestos_.getValueAt(fila_tabla, 0));
+        //col_tabla = tabla_repuestos_.columnAtPoint(evt.getPoint());
+        //codigo_seleccionado = String.valueOf(tabla_repuestos_.getValueAt(fila_tabla, 0));
         
     }//GEN-LAST:event_tabla_repuestos_MouseClicked
 

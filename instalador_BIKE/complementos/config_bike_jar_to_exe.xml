@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\complementos\exe2.ico</icon>
+  <icon>G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\complementos\bike_ico.ico</icon>
   <jre>
     <path>C:\Program Files\Java\jre1.8.0_65</path>
     <bundledJre64Bit>false</bundledJre64Bit>

@@ -8,6 +8,7 @@ import controller.componentes.ControlComponentes.TablaComponentes;
 import controller.componentes.ControlComponentes.TablaFamilias;
 import controller.componentes.Paneles.VentanaInterna;
 import java.awt.Dimension;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import static view.MenuPrincipal.escritorio;
 
@@ -19,7 +20,7 @@ import static view.MenuPrincipal.escritorio;
 public class GestionComponentes extends VentanaInterna {
     
     /**NOMBRE ARCHIVO IMAGEN DE FONDO PARA ESTA VENTANA. Solo nombre sin extension (obligatorio archivos png)*/
-    private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_components";
+    private static final String NOMBRE_MI_IMAGEN_FONDO = "fondo_componentes";
     /***/
     
     private static final String OP_GUARDAR_EDICION = "edicion";
@@ -47,6 +48,7 @@ public class GestionComponentes extends VentanaInterna {
         this.closable = true;
         Dimension tamaño_escritorio = escritorio.getSize(), mySpc = this.getSize();
         this.setLocation(/*(tamaño_escritorio.width / 3)*/10, ((tamaño_escritorio.height - mySpc.height) / 4));
+        this.setFrameIcon(new ImageIcon(GestionComponentes.class.getResource("/sources/mis_imagenes/iconComponentes.png")));
         decision_btn_guardar_familia = "";
         try {
             Object[][] familias = ConsultaSQL.obtenerFamilias();
@@ -100,6 +102,8 @@ public class GestionComponentes extends VentanaInterna {
         setIconifiable(true);
         setName("GClientes"); // NOI18N
 
+        lbl_editor_nom_familia_.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lbl_editor_nom_familia_.setForeground(new java.awt.Color(255, 0, 0));
         lbl_editor_nom_familia_.setText("Nombre Familia:");
 
         txt_nombre_familia_.setEnabled(false);
@@ -146,8 +150,12 @@ public class GestionComponentes extends VentanaInterna {
         txa_desc_familia_.setEnabled(false);
         scroll_txa_desc_familia_.setViewportView(txa_desc_familia_);
 
+        lbl_desc_familia_.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lbl_desc_familia_.setForeground(new java.awt.Color(255, 0, 0));
         lbl_desc_familia_.setText("Descripcion(opcional)");
 
+        check_familia_par_.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        check_familia_par_.setForeground(new java.awt.Color(255, 0, 0));
         check_familia_par_.setText("Viene x Par");
 
         txt_nombre_componente_.setEnabled(false);
@@ -160,12 +168,18 @@ public class GestionComponentes extends VentanaInterna {
         txa_descripcion_componente_.setMargin(new java.awt.Insets(5, 5, 5, 5));
         scroll_txa_desc_comp_.setViewportView(txa_descripcion_componente_);
 
+        lbl_desc_comp_.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lbl_desc_comp_.setForeground(new java.awt.Color(255, 0, 0));
         lbl_desc_comp_.setText("Descripcion Componente(opcional)");
 
+        lbl_nom_comp_.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lbl_nom_comp_.setForeground(new java.awt.Color(255, 0, 0));
         lbl_nom_comp_.setText("Nombre Componente");
 
         txt_familia_actual_.setEditable(false);
 
+        lbl_familia_actual_.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lbl_familia_actual_.setForeground(new java.awt.Color(255, 0, 0));
         lbl_familia_actual_.setText("Familia Asignada:");
 
         btn_borrar_componente_.setText("borrar");

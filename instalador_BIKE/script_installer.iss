@@ -23,7 +23,7 @@ LicenseFile=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\comp
 InfoBeforeFile=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\complementos\guia_inicial.txt
 OutputDir=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\Instalador_BIKE_Final
 OutputBaseFilename=bikeventory
-SetupIconFile=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\complementos\install_magic.ico
+SetupIconFile=G:\ADSI\FINAL\ETAPA__PRODUCTIVA\APLICACION_BIKE\instalador_BIKE\complementos\img_bike_installer.ico
 Compression=lzma
 SolidCompression=yes
 
