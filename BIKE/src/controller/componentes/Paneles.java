@@ -72,6 +72,8 @@ public class Paneles {
                 try {
                     //this.fondo = ImageIO.read(new File("mis_imagenes/" + nombreImagen + ".png"));
                     this.fondo = new ImageIcon(VentanaInterna.class.getResource("/sources/mis_imagenes/" + nombreImagen + ".png")).getImage();
+                } catch (RuntimeException ex) {
+                    throw ex;
                 } catch (Exception ex) {
                     this.fondo = new ImageIcon(VentanaInterna.class.getResource("/sources/mis_imagenes/fondo_comun.png")).getImage();
                 }
